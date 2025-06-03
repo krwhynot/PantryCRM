@@ -1,0 +1,84 @@
+# Task ID: 6
+# Title: Implement Contact Management
+# Status: pending
+# Dependencies: 5
+# Priority: high
+# Description: Develop the contact management functionality including database schema, API endpoints, list and detail views, forms, and food service role hierarchy.
+# Details:
+1. Implement Contact Database Schema with Food Service Roles
+   - Execute Prisma migrations for contact relationships
+   - Include support for Exec Chef, Buyer, Manager, Owner, Kitchen Manager roles
+   - Add primary contact designation capability
+
+2. Develop Contact API Endpoints
+   - Create CRUD operations for contact management
+   - Implement relationship integrity with organizations
+   - Add endpoints for primary contact designation
+
+3. Create Contact List and Detail Views
+   - Build contact management interface within organization context
+   - Implement role-based filtering and primary contact indicators
+   - Design for quick access during organization visits
+
+4. Implement Contact Forms with Role Hierarchy
+   - Create contact creation/editing forms with food service roles
+   - Add primary contact designation functionality
+   - Design for quick contact addition during field visits
+
+5. Add Primary Contact Designation System
+   - Implement single primary contact per organization
+   - Add visual indicators for primary contacts
+   - Create business logic for automatic primary contact suggestion
+
+6. Build Contact Duplicate Prevention
+   - Implement name and email matching algorithms
+   - Add fuzzy matching for similar names
+   - Create merge suggestions for potential duplicates
+
+7. Create Contact Search and Auto-complete
+   - Implement contact search within organization and global contexts
+   - Add auto-complete for quick contact selection
+   - Optimize for sub-second response time
+
+Technical considerations:
+- Use Fuse.js for fuzzy search capabilities
+- Implement React Context for sharing contact state
+- Use React Hook Form for validation and submission
+- Optimize queries with proper indexing for performance
+- Consider using React Window for virtualized lists with large contact datasets
+
+# Test Strategy:
+1. Test contact CRUD operations with organization relationships
+2. Verify food service roles are properly implemented
+3. Test primary contact designation and business logic
+4. Verify duplicate prevention and fuzzy matching
+5. Test contact search and auto-complete performance
+6. Verify multi-device usability for contact workflows
+7. Test performance with large contact databases
+8. Verify form usability on both touch and mouse interfaces
+
+# Subtasks:
+## 1. Design Contact Data Model [pending]
+### Dependencies: None
+### Description: Create a comprehensive data model for contacts, including role hierarchy, market segments, and food service industry specifics.
+### Details:
+Define contact schema with fields for personal info, company details, role, market segment, and priority level (A-D). Include relationships for distributors and the 5-stage sales pipeline. Ensure compatibility with Azure SQL Database and migration from MongoDB.
+
+## 2. Implement Role Hierarchy System [pending]
+### Dependencies: 6.1
+### Description: Develop a role hierarchy system for contacts within organizations.
+### Details:
+Create a tree-like structure for roles, allowing parent-child relationships. Implement methods for adding, removing, and updating roles. Ensure TypeScript strict mode compliance and optimize for iPad with 44px touch targets.
+
+## 3. Develop Duplicate Prevention Logic [pending]
+### Dependencies: 6.1
+### Description: Create algorithms and processes to prevent duplicate contacts in the system.
+### Details:
+Implement fuzzy matching algorithms for contact details. Create a system for merging potential duplicates. Design user interfaces for reviewing and resolving duplicate entries, ensuring iPad optimization.
+
+## 4. Integrate Contact Management with Sales Pipeline [pending]
+### Dependencies: 6.1, 6.2, 6.3
+### Description: Connect the contact management system with the 5-stage sales pipeline.
+### Details:
+Develop functionality to associate contacts with specific pipeline stages. Create views and reports to track contact progression through the sales process. Ensure all features are optimized for food service industry workflows and iPad usage.
+

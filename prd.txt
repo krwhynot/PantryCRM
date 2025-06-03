@@ -1,0 +1,1427 @@
+# Food Service CRM - Complete Implementation Guide with Quality Gates
+
+This comprehensive guide combines implementation tasks with blocking quality gate checkpoints. **🚨 DO NOT PROCEED TO NEXT PHASE UNTIL ALL QUALITY GATES PASS 100%**
+
+---
+
+## Phase 1: Foundation Setup (Weeks 1-2) [CDiP]
+
+### Task #1: Set up NextCRM foundation [SF]
+**Priority: Critical | Complexity Score: 6 | Dependencies: None**
+
+- [ ] 1.1 Clone NextCRM Repository
+  - Details: Clone from pdovhomilja/nextcrm-app GitHub repository
+  - Validation: Verify all files and branches are successfully cloned
+  - Tools: Git CLI or GitHub Desktop
+
+- [ ] 1.2 Install Dependencies
+  - Details: Run npm install to install all packages
+  - Validation: Verify no installation errors or conflicts
+  - Dependencies: 1.1
+
+- [ ] 1.3 Set Up Environment Variables
+  - Details: Create .env.local with Next.js, Prisma, and Auth.js configurations
+  - Validation: Ensure all required variables are set correctly
+  - Dependencies: 1.1
+  - Azure Consideration: Include Azure SQL connection string format
+
+- [ ] 1.4 Analyze NextCRM Architecture
+  - Details: Document component structure, data flow, and integration points
+  - Validation: Create architecture diagram with customization notes
+  - Risk Assessment: Identify potential modification challenges
+
+- [ ] 1.5 Enable TypeScript Strict Mode
+  - Details: Update tsconfig.json to enable strict mode and other compiler options
+  - Validation: Verify all TypeScript files compile without errors
+  - Dependencies: 1.2
+  - Note: May require fixing existing type errors in NextCRM
+
+- [ ] 1.6 Verify shadcn/ui Integration
+  - Details: Confirm all shadcn/ui components render correctly with touch optimizations
+  - Validation: Check component library documentation integration
+  - Touch Consideration: Verify minimum 44px touch targets in component library
+
+- [ ] 1.7 Verify Tremor Charts Integration
+  - Details: Confirm Tremor chart components render correctly with test data
+  - Validation: Create sample chart to verify integration
+  - Responsive Consideration: Test responsiveness on different screen sizes
+
+### Task #2: Configure Azure Infrastructure [CA]
+**Priority: Critical | Complexity Score: 7 | Dependencies: None**
+
+- [ ] 2.1 Create Azure SQL Database (Basic tier, $5/month)
+  - Details: Provision Basic tier database in Azure Portal
+  - Validation: Verify creation and accessibility
+  - Azure Consideration: Document DTU limits and storage caps (2GB)
+  - Performance: Test connection speed and query performance
+
+- [ ] 2.2 Create Azure App Service (Basic B1 tier, $13/month)
+  - Details: Provision Basic B1 tier App Service
+  - Validation: Verify Node.js runtime configuration
+  - Azure Consideration: Document memory and CPU limitations
+  - Cost Verification: Confirm total monthly cost = $18
+
+- [ ] 2.3 Configure Azure Firewall Rules
+  - Details: Set up appropriate firewall rules for development and production
+  - Validation: Test connectivity from all required environments
+  - Security Note: Use least privilege principle for access control
+
+- [ ] 2.4 Set Up Database Authentication
+  - Details: Configure SQL authentication for database access
+  - Validation: Test connection using credentials
+  - Security Note: Document connection string security practices
+
+- [ ] 2.5 Configure Backup Strategy
+  - Details: Configure automated backups and point-in-time restore
+  - Validation: Test restore process in development environment
+  - Azure Consideration: Document backup storage impact on costs
+  - Recovery: Document disaster recovery procedures
+
+- [ ] 2.6 Setup Cost Monitoring
+  - Details: Configure Azure Cost Management and alerts
+  - Validation: Set up $18/month budget alerts
+  - Monitoring: Create dashboard for daily cost tracking
+
+### Task #3: Database Schema Design [RVA]
+**Priority: High | Complexity Score: 8 | Dependencies: 1, 2**
+
+- [ ] 3.1 Design Organizations Schema with Food Service Fields
+  - Details: Create Prisma schema for organization entities with food service requirements
+  - Validation: Support priority (A-D), segments, distributors
+  - Industry Fields: Priority levels, market segments, distributor relationships
+
+- [ ] 3.2 Design Contacts Schema with Role Hierarchy
+  - Details: Create schema for multiple contacts per organization
+  - Validation: Support role categorization and primary contact designation
+  - Industry Fields: Exec Chef, Buyer, Manager, Owner, Kitchen Manager roles
+
+- [ ] 3.3 Design Interactions Schema with 6 Types
+  - Details: Create schema for 6 interaction types with relationships
+  - Validation: Support Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+  - Performance: Optimize for frequent inserts and queries
+
+- [ ] 3.4 Design Opportunities Schema with 5-Stage Pipeline
+  - Details: Create schema for 5-stage pipeline with 11 principals
+  - Validation: Support pipeline stages and principal associations
+  - Business Logic: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
+
+- [ ] 3.5 Design Settings Management Schema for 9 Categories
+  - Details: Create SettingCategory and SettingOption tables
+  - Validation: Support 9 configurable categories with dynamic values
+  - Categories: Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction
+
+- [ ] 3.6 Configure Database Migration from MongoDB
+  - Details: Plan Prisma provider migration (mongodb → sqlserver)
+  - Validation: Map NextCRM entities to new SQL schema
+  - Migration Strategy: Document data transformation requirements
+
+- [ ] 3.7 Optimize Schema for Azure SQL Basic Tier
+  - Details: Design indexes and relationships for performance
+  - Validation: Test with sample data volume
+  - Performance Check: Ensure queries work within DTU limits
+
+- [ ] 3.8 Document Database Schema
+  - Details: Create comprehensive ER diagrams and documentation
+  - Validation: Verify accuracy of all entity relationships
+  - Maintenance Note: Establish update procedure for schema changes
+
+### Task #4: Multi-Device UI Framework Setup [SF]
+**Priority: High | Complexity Score: 6 | Dependencies: 1**
+
+- [ ] 4.1 Research Multi-Device UI Best Practices
+  - Details: Document iPad-specific design requirements
+  - Validation: Verify 44px touch target compliance
+  - Accessibility: Research Safari-specific considerations
+
+- [ ] 4.2 Configure Responsive Design System
+  - Details: Setup breakpoints for iPad Pro, Air, Mini
+  - Validation: Test on actual devices
+  - Orientation: Optimize for landscape primary usage
+
+- [ ] 4.3 Customize shadcn/ui Components
+  - Details: Modify NextCRM components for iPad touch targets
+  - Validation: Verify all interactive elements meet 44px minimum
+  - Food Service Branding: Apply color scheme (A=Green, B=Yellow, C=Orange, D=Red)
+
+- [ ] 4.4 Setup Testing Environment
+  - Details: Configure development server for iPad testing
+  - Validation: Test connectivity from iPad Safari
+  - Performance: Ensure acceptable load times over 3G
+
+- [ ] 4.5 Create Component Documentation
+  - Details: Document iPad-optimized component usage
+  - Validation: Include examples and best practices
+  - Training: Create guidelines for developers
+
+---
+
+## 🚨 PHASE 1 QUALITY GATE: Foundation Readiness
+**DEADLINE**: End of Week 2 | **BLOCKING**: All Phase 2 tasks depend on these passing
+
+### **Checkpoint 1.1: NextCRM Foundation Verification** ✅
+**PASS CRITERIA**: All tests must return SUCCESS
+
+- [ ] **NextCRM Clone Test**
+  - Command: `git clone https://github.com/pdovhomilja/nextcrm-app.git`
+  - Test: Repository clones without errors
+  - Verification: All NextCRM files present, no missing dependencies
+  - **PASS**: ✅ Repository cloned successfully, all files present
+
+- [ ] **Dependency Installation Test**
+  - Command: `npm install`
+  - Test: All packages install without conflicts or errors
+  - Verification: `node_modules` populated, no error messages
+  - **PASS**: ✅ All dependencies installed successfully
+
+- [ ] **TypeScript Compilation Test**
+  - Command: `npm run build`
+  - Test: TypeScript compiles without errors in strict mode
+  - Verification: Build completes successfully, no type errors
+  - **PASS**: ✅ TypeScript builds successfully with no errors
+
+- [ ] **NextCRM Components Test**
+  - Command: `npm run dev`
+  - Test: Development server starts, shadcn/ui components render
+  - Verification: http://localhost:3000 loads, no console errors
+  - **PASS**: ✅ All NextCRM components render correctly
+
+- [ ] **Tremor Charts Integration Test**
+  - Test: Create sample chart component, verify rendering
+  - Verification: Charts display correctly, no library conflicts
+  - **PASS**: ✅ Tremor charts integrate and render properly
+
+### **Checkpoint 1.2: Azure Infrastructure Verification** ✅
+**PASS CRITERIA**: All Azure services operational within budget
+
+- [ ] **Azure SQL Database Creation Test**
+  - Test: Create Basic tier database, verify accessibility
+  - Command: Test connection string from local environment
+  - Verification: Database accessible, queries execute successfully
+  - **Cost Check**: Monthly cost = $5.00 exactly
+  - **PASS**: ✅ Database operational, cost verified
+
+- [ ] **Azure App Service Creation Test**
+  - Test: Create Basic B1 tier App Service
+  - Verification: Service provisions successfully, Node.js runtime configured
+  - **Cost Check**: Monthly cost = $13.00 exactly
+  - **PASS**: ✅ App Service operational, runtime configured
+
+- [ ] **Total Cost Verification Test**
+  - Test: Check Azure Cost Management dashboard
+  - Verification: Total projected monthly cost = $18.00
+  - **CRITICAL**: Must not exceed $18/month
+  - **PASS**: ✅ Total cost confirmed at $18/month
+
+- [ ] **Database Connection Test**
+  - Test: Connect to Azure SQL from local development
+  - Command: `npx prisma db push --preview-feature`
+  - Verification: Connection successful, basic queries work
+  - **PASS**: ✅ Database connection working from dev environment
+
+### **Checkpoint 1.3: Database Schema Implementation** ✅
+**PASS CRITERIA**: All food service schemas created and tested
+
+- [ ] **Organizations Schema Test**
+  - Test: Create organization with all food service fields
+  - Required Fields: name, priority_id, segment_id, distributor_id, account_manager_id
+  - Verification: Record creation succeeds, foreign keys work
+  - **PASS**: ✅ Organizations schema working correctly
+
+- [ ] **Contacts Schema Test**
+  - Test: Create contact linked to organization
+  - Required Fields: organization_id, first_name, last_name, position_id, is_primary
+  - Verification: Foreign key constraints work, primary contact logic functions
+  - **PASS**: ✅ Contacts schema working correctly
+
+- [ ] **Interactions Schema Test**
+  - Test: Create interaction linked to organization and contact
+  - Required Fields: organization_id, contact_id, interaction_type_id, interaction_date
+  - Verification: All 6 interaction types supported
+  - **PASS**: ✅ Interactions schema supports all 6 types
+
+- [ ] **Opportunities Schema Test**
+  - Test: Create opportunity with pipeline stage and principal
+  - Required Fields: organization_id, principal, stage_id, status_id, probability
+  - Verification: 5-stage pipeline and 11 principals supported
+  - **PASS**: ✅ Opportunities schema supports pipeline and principals
+
+- [ ] **Settings Schema Test**
+  - Test: Create settings for all 9 categories
+  - Categories: Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction
+  - Verification: Dynamic values can be added/removed
+  - **PASS**: ✅ Settings system fully functional
+
+### **Checkpoint 1.4: Multi-Device UI Framework** ✅
+**PASS CRITERIA**: Interface works on both touch and mouse input
+
+- [ ] **Touch Target Size Test**
+  - Test: Measure all interactive elements
+  - Tool: Browser DevTools element inspector
+  - Verification: All buttons/links minimum 44px x 44px
+  - **Device**: Test on your touch laptop with finger input
+  - **PASS**: ✅ All touch targets meet 44px minimum
+
+- [ ] **Responsive Design Test**
+  - Test: Resize browser window from 320px to 1920px width
+  - Verification: Layout adapts properly at all breakpoints
+  - **Device**: Test both portrait and landscape orientations
+  - **PASS**: ✅ Responsive design works across all screen sizes
+
+- [ ] **Input Method Switching Test**
+  - Test: Use touch input, then switch to mouse input mid-task
+  - Verification: No functionality lost when switching input methods
+  - **Device**: Test on your touch laptop switching between touch and mouse
+  - **PASS**: ✅ Seamless switching between input methods
+
+- [ ] **Browser Compatibility Test**
+  - Test: Load application in Chrome, Edge, Firefox
+  - Verification: Consistent appearance and functionality
+  - **Device**: Test each browser with both touch and mouse
+  - **PASS**: ✅ Works consistently across all browsers
+
+**🚨 PHASE 1 GATE: ALL CHECKPOINTS MUST PASS BEFORE STARTING PHASE 2**
+
+---
+
+## Phase 2: Core CRM Implementation (Weeks 3-5) [CDiP]
+
+### Task #5: Organization Management Implementation [RVA]
+**Priority: Critical | Complexity Score: 8 | Dependencies: 3, 4**
+
+- [ ] 5.1 Implement Organization Database Schema
+  - Details: Execute Prisma migrations for organization schema with food service fields
+  - Validation: Verify successful creation in Azure SQL with all industry-specific fields
+  - Performance Check: Test with sample data volume and query performance
+
+- [ ] 5.2 Develop Organization API Endpoints
+  - Details: Create Next.js API routes for organization CRUD operations
+  - Validation: Test all endpoints for correct behavior and data validation
+  - Security: Implement proper input validation and error handling
+  - Performance: Optimize queries for Azure SQL Basic tier
+
+- [ ] 5.3 Create Organization List View with Multi-Device Support
+  - Details: Build responsive organization listing with search and filtering
+  - Validation: Test usability on both touch and mouse interfaces
+  - Features: Sub-second search, priority color coding, segment filtering
+  - Accessibility: Ensure keyboard navigation and screen reader compatibility
+
+- [ ] 5.4 Create Organization Detail View
+  - Details: Build comprehensive organization profile display
+  - Validation: Test relationship display with contacts and interactions
+  - Navigation: Implement intuitive navigation for both input methods
+  - Industry Data: Display priority levels, segments, distributors prominently
+
+- [ ] 5.5 Implement Organization Form with Industry Fields
+  - Details: Create organization creation/editing forms
+  - Validation: Test form usability on touch and traditional interfaces
+  - Industry Fields: Priority levels (A-D with colors), market segments, distributors
+  - Data Quality: Implement validation for required fields and business rules
+
+- [ ] 5.6 Add Priority Level System with Visual Indicators
+  - Details: Implement color-coded priority system (A=Green, B=Yellow, C=Orange, D=Red)
+  - Validation: Test visual indicators and filtering throughout application
+  - Accessibility: Ensure color contrast compliance and non-color alternatives
+  - Consistency: Apply color coding across all organization references
+
+- [ ] 5.7 Implement Market Segment and Distributor Tracking
+  - Details: Add dropdowns for Fine Dining, Fast Food, Healthcare, Catering, Institutional segments
+  - Validation: Test segment and distributor assignment and filtering
+  - Business Logic: Support for Sysco, USF, PFG, Direct, Other distributor relationships
+  - Reporting: Enable segment and distributor-based analytics
+
+- [ ] 5.8 Add Account Manager Assignment System
+  - Details: Create assignment system preserving existing Excel data
+  - Validation: Test assignment workflows and filtering capabilities
+  - Data Migration: Plan preservation of existing account manager assignments
+  - Business Rules: Implement assignment validation and change tracking
+
+### Task #6: Contact Management Implementation [SF]
+**Priority: Critical | Complexity Score: 7 | Dependencies: 5**
+
+- [ ] 6.1 Implement Contact Database Schema with Food Service Roles
+  - Details: Execute Prisma migrations for contact relationships
+  - Validation: Verify foreign key constraints to organizations
+  - Industry Roles: Support Exec Chef, Buyer, Manager, Owner, Kitchen Manager roles
+  - Performance: Test with multiple contacts per organization scenarios
+
+- [ ] 6.2 Develop Contact API Endpoints
+  - Details: Create CRUD operations for contact management
+  - Validation: Test relationship integrity with organizations
+  - Business Logic: Implement primary contact designation and role validation
+  - Performance: Optimize for contact search and auto-complete
+
+- [ ] 6.3 Create Contact List and Detail Views
+  - Details: Build contact management interface within organization context
+  - Validation: Test multi-device usability for contact workflows
+  - Features: Role-based filtering, primary contact indicators
+  - Navigation: Quick contact creation during organization visits
+
+- [ ] 6.4 Implement Contact Forms with Role Hierarchy
+  - Details: Create contact creation/editing forms with food service roles
+  - Validation: Test role assignment and primary contact designation
+  - Industry Focus: Ensure roles match food service decision-making hierarchy
+  - Usability: Design for quick contact addition during field visits
+
+- [ ] 6.5 Add Primary Contact Designation System
+  - Details: Implement single primary contact per organization
+  - Validation: Test visual indicators and business logic enforcement
+  - User Experience: Provide clear primary contact identification across application
+  - Business Rules: Automatic primary contact suggestion for new organizations
+
+- [ ] 6.6 Build Contact Duplicate Prevention
+  - Details: Prevent duplicate contacts within same organization
+  - Validation: Test name and email matching algorithms
+  - Data Quality: Implement fuzzy matching for similar names
+  - User Experience: Provide merge suggestions for potential duplicates
+
+- [ ] 6.7 Create Contact Search and Auto-complete
+  - Details: Implement contact search within organization and global contexts
+  - Validation: Test performance with large contact databases
+  - User Experience: Enable quick contact selection during interaction logging
+  - Performance: Sub-second response for auto-complete suggestions
+
+### Task #7: Interaction Tracking Implementation [SF][CA]
+**Priority: Critical | Complexity Score: 7 | Dependencies: 5, 6**
+
+- [ ] 7.1 Implement Interaction Database Schema with 6 Types
+  - Details: Execute migrations for interaction tracking with relationships
+  - Validation: Verify entity relationships and constraint enforcement
+  - Interaction Types: Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+  - Data Integrity: Ensure proper relationship tracking to organizations/contacts
+
+- [ ] 7.2 Develop Interaction API Endpoints
+  - Details: Create CRUD operations for interaction management
+  - Validation: Test performance and data validation for all 6 types
+  - Business Logic: Support type-specific validation and categorization
+  - Performance: Optimize for frequent interaction logging
+
+- [ ] 7.3 Create Multi-Device Optimized Interaction Forms
+  - Details: Design single-screen forms for each interaction type
+  - Validation: Test 30-second completion target on both touch and mouse
+  - User Experience: Minimize steps for common interaction recording
+  - Input Flexibility: Support both touch and keyboard entry methods
+
+- [ ] 7.4 Implement 6 Food Service Interaction Types
+  - Details: Support Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+  - Validation: Test type-specific form fields and validation rules
+  - Industry Focus: Ensure types match food service sales workflow patterns
+  - Flexibility: Design for future addition of new interaction types
+
+- [ ] 7.5 Build Auto-complete Functionality
+  - Details: Implement predictive text for organization and contact fields
+  - Validation: Test performance with large datasets on Azure SQL Basic tier
+  - User Experience: Enable quick selection without extensive typing
+  - Performance: Sub-500ms response for auto-complete suggestions
+
+- [ ] 7.6 Add Auto-save and Form Recovery
+  - Details: Implement periodic saving to prevent data loss
+  - Validation: Test form recovery after browser interruption
+  - User Experience: Provide visual feedback for save status
+  - Reliability: Handle network interruptions gracefully
+
+- [ ] 7.7 Create Interaction History and Timeline Views
+  - Details: Build comprehensive interaction history displays
+  - Validation: Test performance with large interaction volumes
+  - Analytics: Support filtering and search within interaction history
+  - Business Value: Enable interaction pattern analysis
+
+### Task #8: Settings Management System Implementation [RVA]
+**Priority: High | Complexity Score: 8 | Dependencies: 3**
+
+- [ ] 8.1 Implement Settings Database Schema for 9 Categories
+  - Details: Execute migrations for SettingCategory and SettingOption tables
+  - Validation: Verify support for all 9 categories and relationship integrity
+  - Categories: Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction
+  - Flexibility: Test dynamic value addition and modification
+
+- [ ] 8.2 Develop Settings API Endpoints
+  - Details: Create CRUD operations for settings management
+  - Validation: Test category and option management operations
+  - Security: Implement proper validation for settings changes
+  - Cache Management: Implement settings cache invalidation
+
+- [ ] 8.3 Create Settings Management Admin Interface
+  - Details: Build admin interface for managing all 9 setting categories
+  - Validation: Test multi-device usability for settings configuration
+  - Organization: Provide intuitive interface for each category type
+  - User Experience: Clear indication of system vs. user-defined settings
+
+- [ ] 8.4 Implement Dynamic Dropdowns Throughout Application
+  - Details: Replace static enums with dynamic settings-driven dropdowns
+  - Validation: Test real-time updates when settings change
+  - Performance: Ensure fast dropdown population and caching
+  - Consistency: Update all forms to use dynamic settings values
+
+- [ ] 8.5 Add Color Coding Support for Priority and Status
+  - Details: Implement color coding for priority levels and status indicators
+  - Validation: Test visual indicators throughout application
+  - Accessibility: Ensure color contrast compliance and alternative indicators
+  - Customization: Allow administrators to modify color schemes
+
+- [ ] 8.6 Create Settings Cache and Context Provider
+  - Details: Implement React context for settings with caching
+  - Validation: Test settings propagation and real-time updates
+  - Performance: Optimize settings retrieval and minimize API calls
+  - Developer Experience: Provide easy-to-use hooks for settings access
+
+- [ ] 8.7 Implement System Protection and Data Validation
+  - Details: Prevent deletion of core system settings
+  - Validation: Test protection mechanisms for critical values
+  - Safety: Implement confirmation dialogs for destructive actions
+  - Data Integrity: Validate setting changes against business rules
+
+- [ ] 8.8 Create Default Settings Data for Food Service
+  - Details: Populate initial settings data for all 9 categories
+  - Validation: Verify completeness of default data
+  - Industry Standards: Include industry-standard values for food service
+  - Migration: Support import of existing Excel dropdown values
+
+### Task #9: Search and Authentication Implementation [CA]
+**Priority: Medium | Complexity Score: 6 | Dependencies: 5, 6, 7, 8**
+
+- [ ] 9.1 Build Global Search System
+  - Details: Implement search across organizations, contacts, and interactions
+  - Validation: Test search performance and accuracy within Azure constraints
+  - User Experience: Provide search suggestions and intelligent filtering
+  - Performance: Sub-second search response requirement
+
+- [ ] 9.2 Optimize Search Performance for Azure SQL Basic
+  - Details: Implement proper indexing and query optimization for search
+  - Validation: Measure query performance within DTU limits
+  - Caching: Implement search result caching where appropriate
+  - Scalability: Design for growth in data volume
+
+- [ ] 9.3 Set Up Simple Email/Password Authentication
+  - Details: Configure Auth.js with email/password login (no Azure AD)
+  - Validation: Test login flow and session management
+  - Security: Implement password requirements and session security
+  - Cost Optimization: Use simple auth to avoid Azure AD costs
+
+- [ ] 9.4 Create Basic User Management
+  - Details: Implement basic user creation and management
+  - Validation: Test user creation and authentication workflows
+  - Access Control: All users have same access level (simplified model)
+  - Administration: Basic user management for team members
+
+- [ ] 9.5 Implement Session Management and Security
+  - Details: Configure secure session handling
+  - Validation: Test session persistence and timeout behavior
+  - Security: Implement proper logout and session cleanup
+  - Performance: Optimize session storage and validation
+
+---
+
+## 🚨 PHASE 2 QUALITY GATE: Core CRM Functionality
+**DEADLINE**: End of Week 5 | **BLOCKING**: Phase 3 pipeline and reporting depend on these
+
+### **Checkpoint 2.1: Organization Management Verification** ✅
+**PASS CRITERIA**: Complete CRUD operations working
+
+- [ ] **Organization CRUD Test**
+  - Test: Create, Read, Update, Delete organization records
+  - Verification: All operations complete successfully
+  - **Performance**: Create/Update operations complete in <2 seconds
+  - **PASS**: ✅ All CRUD operations working correctly
+
+- [ ] **Food Service Fields Test**
+  - Test: Set priority (A-D), segment, distributor for organization
+  - Verification: All dropdowns populated from settings system
+  - **Food Service**: Test Fine Dining, Fast Food, Healthcare, Catering, Institutional
+  - **Distributors**: Test Sysco, USF, PFG, Direct, Other
+  - **PASS**: ✅ All food service fields working correctly
+
+- [ ] **Priority Color Coding Test**
+  - Test: Create organizations with priorities A, B, C, D
+  - Verification: Colors display correctly (A=Green, B=Yellow, C=Orange, D=Red)
+  - **Accessibility**: Verify color contrast meets WCAG standards
+  - **PASS**: ✅ Priority color coding working correctly
+
+- [ ] **Organization Search Performance Test**
+  - Test: Search with 100+ test organizations
+  - Verification: Search results return in <1 second
+  - **Performance**: Test fuzzy matching and filtering
+  - **PASS**: ✅ Search performance meets <1 second requirement
+
+### **Checkpoint 2.2: Contact Management Verification** ✅
+**PASS CRITERIA**: Contact relationships and roles working
+
+- [ ] **Contact CRUD Test**
+  - Test: Create, Read, Update, Delete contacts within organizations
+  - Verification: All operations work, foreign keys maintained
+  - **Relationships**: Test multiple contacts per organization
+  - **PASS**: ✅ Contact CRUD operations working correctly
+
+- [ ] **Food Service Roles Test**
+  - Test: Assign roles Exec Chef, Buyer, Manager, Owner, Kitchen Manager
+  - Verification: All roles selectable from settings system
+  - **Business Logic**: Test role-based filtering and display
+  - **PASS**: ✅ All food service roles working correctly
+
+- [ ] **Primary Contact Test**
+  - Test: Designate primary contact per organization
+  - Verification: Only one primary contact allowed per organization
+  - **Business Logic**: Test primary contact visual indicators
+  - **PASS**: ✅ Primary contact designation working correctly
+
+- [ ] **Duplicate Prevention Test**
+  - Test: Attempt to create duplicate contacts within same organization
+  - Verification: System prevents duplicates, shows appropriate warnings
+  - **Data Quality**: Test fuzzy matching for similar names
+  - **PASS**: ✅ Duplicate prevention working correctly
+
+### **Checkpoint 2.3: Interaction Tracking Verification** ✅
+**PASS CRITERIA**: All 6 interaction types working with 30-second entry goal
+
+- [ ] **6 Interaction Types Test**
+  - Test: Create interactions for Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+  - Verification: All types create successfully with appropriate fields
+  - **Data Integrity**: Verify proper relationships to organizations/contacts
+  - **PASS**: ✅ All 6 interaction types working correctly
+
+- [ ] **30-Second Entry Speed Test**
+  - Test: Time interaction creation from start to completion
+  - Verification: Complete interaction entry in <30 seconds
+  - **Multi-Device**: Test on both touch and mouse input
+  - **User Experience**: Test with realistic data entry scenarios
+  - **PASS**: ✅ 30-second entry target achieved
+
+- [ ] **Auto-Complete Performance Test**
+  - Test: Type organization/contact names, verify suggestions appear
+  - Verification: Suggestions appear within 500ms
+  - **Performance**: Test with 100+ organizations and contacts
+  - **PASS**: ✅ Auto-complete meets 500ms performance requirement
+
+- [ ] **Auto-Save Functionality Test**
+  - Test: Start interaction entry, simulate browser interruption
+  - Verification: Form data recovered when returning to form
+  - **Reliability**: Test recovery from various interruption scenarios
+  - **PASS**: ✅ Auto-save and form recovery working correctly
+
+### **Checkpoint 2.4: Settings Management Verification** ✅
+**PASS CRITERIA**: All 9 settings categories fully functional
+
+- [ ] **9 Settings Categories Test**
+  - Test: Add/edit/delete options in Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction categories
+  - Verification: All categories support CRUD operations
+  - **System Protection**: Verify core system settings cannot be deleted
+  - **PASS**: ✅ All 9 settings categories working correctly
+
+- [ ] **Dynamic Dropdown Update Test**
+  - Test: Add new setting option, verify it appears in relevant dropdowns immediately
+  - Verification: Real-time updates across all forms using that setting
+  - **Performance**: Updates propagate within 5 seconds
+  - **PASS**: ✅ Dynamic dropdown updates working correctly
+
+- [ ] **Color Coding Settings Test**
+  - Test: Modify priority colors, verify changes appear throughout application
+  - Verification: Color changes update in all organization displays
+  - **Consistency**: Test color coding across all components
+  - **PASS**: ✅ Color coding settings working correctly
+
+- [ ] **Settings Cache Performance Test**
+  - Test: Load forms using settings, measure loading time
+  - Verification: Settings load within 1 second on form display
+  - **Caching**: Verify settings are cached appropriately
+  - **PASS**: ✅ Settings performance meets requirements
+
+### **Checkpoint 2.5: Multi-Device Functionality Verification** ✅
+**PASS CRITERIA**: All features work perfectly on both touch and mouse
+
+- [ ] **Touch Input Complete Workflow Test**
+  - Test: Complete entire workflow (create org → add contact → log interaction) using only touch
+  - Verification: All tasks completable with finger input on your touch laptop
+  - **User Experience**: Smooth, intuitive touch navigation
+  - **PASS**: ✅ Complete touch workflow working correctly
+
+- [ ] **Mouse Input Complete Workflow Test**
+  - Test: Complete entire workflow using only mouse and keyboard
+  - Verification: All tasks completable with traditional input methods
+  - **Precision**: Test detailed data entry and navigation
+  - **PASS**: ✅ Complete mouse workflow working correctly
+
+- [ ] **Input Method Switching Test**
+  - Test: Start task with touch, switch to mouse mid-task, complete with touch
+  - Verification: No data loss or functionality issues when switching
+  - **Seamless**: Transition should be transparent to user
+  - **PASS**: ✅ Input method switching working seamlessly
+
+**🚨 PHASE 2 GATE: ALL CHECKPOINTS MUST PASS BEFORE STARTING PHASE 3**
+
+---
+
+## Phase 3: Pipeline and Reporting (Weeks 6-7) [CDiP]
+
+### Task #10: Sales Pipeline Implementation with 11 Principals [SF]
+**Priority: Critical | Complexity Score: 8 | Dependencies: 5, 6, 7, 8**
+
+- [ ] 10.1 Implement Pipeline Database Schema with 5 Stages
+  - Details: Execute migrations for opportunity tracking with 5-stage progression
+  - Validation: Verify stage transitions and business rule enforcement
+  - Pipeline Stages: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
+  - Flexibility: Design for future addition of pipeline stages
+
+- [ ] 10.2 Develop Pipeline API Endpoints with 11 Principal Support
+  - Details: Create CRUD operations for opportunity management
+  - Validation: Test pipeline progression and principal assignment
+  - Principals: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
+  - Performance: Optimize for pipeline visualizations and reporting
+
+- [ ] 10.3 Create Visual Pipeline Dashboard for Multi-Device
+  - Details: Build responsive pipeline visualization interface
+  - Validation: Test usability on both touch and mouse interfaces
+  - User Experience: Intuitive stage progression and opportunity management
+  - Performance: Fast loading and responsive interaction
+
+- [ ] 10.4 Implement 5-Stage Pipeline with Business Rules
+  - Details: Support Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close progression
+  - Validation: Test stage transition logic and validation rules
+  - Business Logic: Implement appropriate stage progression requirements
+  - Flexibility: Allow for stage skipping where business rules permit
+
+- [ ] 10.5 Add 11 Principal Associations and Filtering
+  - Details: Integrate all 11 principals with opportunity tracking
+  - Validation: Test principal assignment and filtering capabilities
+  - Principals: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
+  - Reporting: Enable principal-specific pipeline analysis and forecasting
+
+- [ ] 10.6 Implement Probability Tracking and Status Management
+  - Details: Add 0-100% probability assignment and status tracking
+  - Validation: Test probability calculation and status transitions
+  - Status Options: Open, Closed-Won, Closed-Lost, On Hold
+  - Analytics: Support probability-based forecasting and reporting
+
+- [ ] 10.7 Create Opportunity Detail Views and Forms
+  - Details: Build comprehensive opportunity management interface
+  - Validation: Test multi-device usability for opportunity workflows
+  - Integration: Connect with organization and contact data seamlessly
+  - User Experience: Enable quick opportunity creation and updates
+
+- [ ] 10.8 Build Pipeline Filtering and Search
+  - Details: Create filtering by principal, stage, status, and account manager
+  - Validation: Test filter combinations and performance
+  - User Experience: Provide intuitive filter interface for both input methods
+  - Performance: Maintain sub-second response for filtered views
+
+### Task #11: Reporting Engine Implementation with 4 Core Types [RVA][SF]
+**Priority: Critical | Complexity Score: 8 | Dependencies: 10**
+
+- [ ] 11.1 Implement Report Data Layer with Azure SQL Optimization
+  - Details: Create optimized queries for report generation within DTU limits
+  - Validation: Test query performance with expected data volumes
+  - Caching: Implement caching strategy for expensive aggregations
+  - Performance: Ensure <10 second report generation requirement
+
+- [ ] 11.2 Build Weekly Activity Reports by Account Manager
+  - Details: Create reports showing interaction volume and type breakdown by account manager
+  - Validation: Verify data accuracy and performance benchmarks
+  - Metrics: Include visit frequency, interaction types, and activity summaries
+  - Export: Support print-friendly formatting for stakeholder sharing
+
+- [ ] 11.3 Create Pipeline Status by Principal Reports
+  - Details: Build reports showing opportunities by stage and principal
+  - Validation: Test principal-specific conversion rates and accuracy
+  - Analytics: Include stage duration analysis and progression metrics
+  - Principals: Coverage for all 11 principals with growth projections
+
+- [ ] 11.4 Implement Interaction Volume Analysis Reports
+  - Details: Create reports showing time-based interaction trends
+  - Validation: Test interaction type effectiveness metrics
+  - Comparison: Enable account manager activity comparison
+  - Insights: Identify patterns and optimization opportunities
+
+- [ ] 11.5 Build Organization Performance Tracking Reports
+  - Details: Create reports for priority level and segment analysis
+  - Validation: Test performance metrics and trend analysis accuracy
+  - Insights: Include account manager assignment effectiveness
+  - Business Value: Support strategic account management decisions
+
+- [ ] 11.6 Integrate Tremor Charts for Multi-Device Visualization
+  - Details: Implement NextCRM Tremor charts for all report visualizations
+  - Validation: Test chart responsiveness on different screen sizes and input methods
+  - User Experience: Ensure charts are touch-friendly and readable
+  - Interactivity: Support drill-down and filtering within charts
+
+- [ ] 11.7 Add Date Range Filtering and Export Capabilities
+  - Details: Implement Last 7 days, Last 30 days, Custom range options
+  - Validation: Test filter accuracy and performance impact
+  - User Experience: Provide intuitive date selection interface
+  - Export: Create print-optimized layouts for stakeholder presentations
+
+- [ ] 11.8 Create Report Dashboard with Navigation
+  - Details: Build main reporting dashboard with access to all 4 report types
+  - Validation: Test multi-device navigation and usability
+  - Overview: Provide quick access and summary metrics
+  - Performance: Ensure dashboard loads quickly with summary data
+
+- [ ] 11.9 Optimize Report Performance for Azure Basic Tier
+  - Details: Ensure all reports generate within 10-second requirement
+  - Validation: Test with production-scale data volumes
+  - Azure Optimization: Minimize DTU usage during report generation
+  - Caching: Implement intelligent caching for frequently accessed reports
+
+### Task #12: Advanced CRM Features [SF]
+**Priority: Medium | Complexity Score: 6 | Dependencies: 9, 10, 11**
+
+- [ ] 12.1 Implement Advanced Search and Filtering
+  - Details: Add cross-entity search and advanced filtering capabilities
+  - Validation: Test search performance across all entity types
+  - User Experience: Provide powerful yet intuitive search interface
+  - Performance: Maintain sub-second response for complex searches
+
+- [ ] 12.2 Create Dashboard Summary Views
+  - Details: Build executive dashboard with key metrics and trends
+  - Validation: Test dashboard performance and data accuracy
+  - Metrics: Include key performance indicators for sales activities
+  - Real-time: Provide up-to-date information for decision making
+
+- [ ] 12.3 Add Data Export and Import Capabilities
+  - Details: Implement CSV export for reports and data backup
+  - Validation: Test export accuracy and file formatting
+  - Business Value: Support data sharing and external analysis
+  - Import: Basic import capabilities for ongoing data updates
+
+- [ ] 12.4 Implement Audit Trail and Activity Logging
+  - Details: Add comprehensive activity logging for compliance
+  - Validation: Test logging accuracy and performance impact
+  - Compliance: Support audit requirements and troubleshooting
+  - Performance: Ensure logging doesn't impact user experience
+
+---
+
+## 🚨 PHASE 3 QUALITY GATE: Pipeline and Reporting
+**DEADLINE**: End of Week 7 | **BLOCKING**: Data migration and production launch depend on these
+
+### **Checkpoint 3.1: Sales Pipeline Verification** ✅
+**PASS CRITERIA**: 5-stage pipeline with 11 principals fully operational
+
+- [ ] **5-Stage Pipeline Test**
+  - Test: Create opportunity, move through Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
+  - Verification: Each stage transition works, business rules enforced
+  - **Validation**: Stage progression logic works correctly
+  - **PASS**: ✅ 5-stage pipeline working correctly
+
+- [ ] **11 Principals Integration Test**
+  - Test: Create opportunities for each principal: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
+  - Verification: All principals selectable and filterable
+  - **Reporting**: Principal-based filtering works correctly
+  - **PASS**: ✅ All 11 principals integrated correctly
+
+- [ ] **Pipeline Visualization Test**
+  - Test: View pipeline dashboard with opportunities in different stages
+  - Verification: Visual representation clear and functional on both touch and mouse
+  - **Multi-Device**: Test pipeline board usability on your touch laptop
+  - **PASS**: ✅ Pipeline visualization working correctly
+
+- [ ] **Opportunity Management Test**
+  - Test: Create, update, delete opportunities with all required fields
+  - Verification: Probability tracking (0-100%), status management working
+  - **Business Logic**: Status transitions (Open, Closed-Won, Closed-Lost, On Hold) working
+  - **PASS**: ✅ Opportunity management working correctly
+
+### **Checkpoint 3.2: Reporting Engine Verification** ✅
+**PASS CRITERIA**: All 4 report types generate in <10 seconds with accurate data
+
+- [ ] **Weekly Activity Reports by Account Manager Test**
+  - Test: Generate report with test data for each account manager
+  - Verification: Report shows interaction volume and type breakdown accurately
+  - **Performance**: Report generates in <10 seconds
+  - **Data Accuracy**: Cross-reference with actual interaction data
+  - **PASS**: ✅ Weekly Activity reports working correctly
+
+- [ ] **Pipeline Status by Principal Test**
+  - Test: Generate report showing opportunities by stage for each of 11 principals
+  - Verification: Report shows correct opportunity counts and conversion rates
+  - **Performance**: Report generates in <10 seconds
+  - **Principal Coverage**: All 11 principals represented correctly
+  - **PASS**: ✅ Pipeline Status reports working correctly
+
+- [ ] **Interaction Volume Analysis Test**
+  - Test: Generate report showing interaction trends over time
+  - Verification: Report shows correct interaction counts by type and date
+  - **Performance**: Report generates in <10 seconds
+  - **Trend Analysis**: Time-based analysis working correctly
+  - **PASS**: ✅ Interaction Volume analysis working correctly
+
+- [ ] **Organization Performance Tracking Test**
+  - Test: Generate report showing priority level and segment analysis
+  - Verification: Report shows correct organization distribution and metrics
+  - **Performance**: Report generates in <10 seconds
+  - **Insights**: Account manager effectiveness data accurate
+  - **PASS**: ✅ Organization Performance tracking working correctly
+
+### **Checkpoint 3.3: Tremor Charts Integration Verification** ✅
+**PASS CRITERIA**: All charts responsive and interactive
+
+- [ ] **Chart Rendering Test**
+  - Test: All reports display charts correctly using Tremor components
+  - Verification: Charts render without errors, data displays accurately
+  - **Visual Quality**: Charts are clear and professional
+  - **PASS**: ✅ Tremor charts rendering correctly
+
+- [ ] **Chart Responsiveness Test**
+  - Test: View charts on different screen sizes and orientations
+  - Verification: Charts adapt properly to screen size changes
+  - **Multi-Device**: Test chart interaction with both touch and mouse
+  - **PASS**: ✅ Chart responsiveness working correctly
+
+- [ ] **Chart Interactivity Test**
+  - Test: Click/tap chart elements, use filters, drill down into data
+  - Verification: All interactive features work with both input methods
+  - **User Experience**: Chart interactions intuitive and responsive
+  - **PASS**: ✅ Chart interactivity working correctly
+
+### **Checkpoint 3.4: Performance Under Load Verification** ✅
+**PASS CRITERIA**: System performs well with production-scale data
+
+- [ ] **Azure SQL Performance Test**
+  - Test: Create 500+ organizations, 1000+ contacts, 2000+ interactions
+  - Verification: All operations maintain performance requirements
+  - **Search**: <1 second search with large dataset
+  - **Reports**: <10 second generation with production data volume
+  - **PASS**: ✅ Performance maintained with production-scale data
+
+- [ ] **Concurrent User Simulation Test**
+  - Test: Simulate 4 concurrent users performing typical workflows
+  - Verification: No performance degradation with multiple users
+  - **Azure Constraints**: Performance within Basic tier DTU limits
+  - **PASS**: ✅ Concurrent user performance acceptable
+
+- [ ] **Azure Cost Verification Test**
+  - Test: Monitor Azure costs during performance testing
+  - Verification: Costs remain under $18/month during peak usage
+  - **Resource Usage**: Monitor DTU and storage usage patterns
+  - **PASS**: ✅ Costs remain within $18/month budget
+
+**🚨 PHASE 3 GATE: ALL CHECKPOINTS MUST PASS BEFORE STARTING PHASE 4**
+
+---
+
+## Phase 4: Data Migration and Production Launch (Week 8) [CDiP]
+
+### Task #13: Excel Data Migration Pipeline [SF]
+**Priority: Critical | Complexity Score: 9 | Dependencies: 5, 6, 7, 8, 10**
+
+- [ ] 13.1 Analyze Current Excel Data Structure
+  - Details: Document current Excel workbook structure and data relationships
+  - Validation: Identify all data sources and relationship patterns
+  - Mapping: Create mapping strategy from Excel to CRM schema
+  - Quality Assessment: Document data quality issues and cleanup requirements
+
+- [ ] 13.2 Create Excel Parser Service for .xlsx and .csv
+  - Details: Build robust parsing for Excel files with error handling
+  - Validation: Test with actual Excel files from current system
+  - Formats: Support both .xlsx and .csv formats
+  - Error Handling: Provide comprehensive error reporting and recovery
+
+- [ ] 13.3 Implement Data Validation and Quality Checks
+  - Details: Create validation rules for all entity types and relationships
+  - Validation: Test boundary conditions and data quality enforcement
+  - Business Rules: Implement food service industry-specific validation
+  - Data Quality: Identify and flag potential data quality issues
+
+- [ ] 13.4 Build Relationship Preservation and Account Manager Migration
+  - Details: Maintain organization-contact-interaction-opportunity relationships during import
+  - Validation: Verify relationship integrity post-import
+  - Account Managers: Preserve existing account manager assignments accurately
+  - Data Integrity: Test with complex relationship scenarios
+
+- [ ] 13.5 Create Import Progress Tracking and Preview System
+  - Details: Implement real-time progress indicators and import preview
+  - Validation: Test with maximum expected data volumes
+  - User Experience: Provide clear feedback and error reporting
+  - Safety: Enable preview of import results before final commitment
+
+- [ ] 13.6 Implement Duplicate Detection and Conflict Resolution
+  - Details: Prevent duplicate organizations and contacts during import
+  - Validation: Test fuzzy matching algorithms and conflict resolution
+  - Business Rules: Provide merge options for similar records
+  - Data Quality: Ensure high-quality data post-migration
+
+- [ ] 13.7 Create Migration Verification and Audit System
+  - Details: Verify completeness and accuracy of migrated data
+  - Validation: Compare imported data with original Excel sources
+  - Audit Trail: Track all import activities with detailed logging
+  - Rollback: Implement rollback capabilities for failed imports
+
+- [ ] 13.8 Execute Historical Data Migration with Validation
+  - Details: Perform complete migration of all historical data
+  - Validation: Verify data integrity and completeness
+  - Testing: Conduct full end-to-end migration testing
+  - Documentation: Document migration process and results
+
+### Task #14: Production Deployment and Infrastructure [RVA]
+**Priority: Critical | Complexity Score: 7 | Dependencies: 13**
+
+- [ ] 14.1 Configure Production Azure Environment
+  - Details: Setup production Azure App Service and SQL Database
+  - Validation: Test production deployment process and configuration
+  - Security: Implement production security hardening and best practices
+  - Performance: Configure production environment for optimal performance
+
+- [ ] 14.2 Setup CI/CD Pipeline with GitHub Actions
+  - Details: Configure automated deployment pipeline from GitHub to Azure
+  - Validation: Test deployment automation and rollback procedures
+  - Safety: Implement deployment rollback and hotfix procedures
+  - Quality Gates: Include automated testing in deployment pipeline
+
+- [ ] 14.3 Configure SSL, Domain, and Security
+  - Details: Setup SSL certificates and custom domain configuration
+  - Validation: Test HTTPS enforcement and certificate renewal
+  - Security: Implement production security headers and configuration
+  - Compliance: Ensure security best practices are implemented
+
+- [ ] 14.4 Implement Production Monitoring and Alerting
+  - Details: Setup Azure Application Insights and comprehensive monitoring
+  - Validation: Test monitoring coverage and alert delivery
+  - Performance: Monitor application performance and resource utilization
+  - Alerting: Configure alerts for critical issues and performance degradation
+
+- [ ] 14.5 Configure Database Backup and Disaster Recovery
+  - Details: Verify production backup procedures and disaster recovery
+  - Validation: Test backup restoration and recovery procedures
+  - Documentation: Document complete disaster recovery procedures
+  - Business Continuity: Ensure minimal downtime in case of issues
+
+- [ ] 14.6 Setup Performance Monitoring and Optimization
+  - Details: Implement comprehensive performance tracking
+  - Validation: Verify performance meets all requirements
+  - Optimization: Monitor and optimize Azure resource utilization
+  - Cost Management: Ensure production costs remain within $18/month budget
+
+### Task #15: User Acceptance Testing and Launch Preparation [RBT]
+**Priority: Critical | Complexity Score: 6 | Dependencies: 14**
+
+- [ ] 15.1 Prepare Production-Ready Test Environment
+  - Details: Setup production-like environment with complete migrated data
+  - Validation: Verify environment matches production configuration exactly
+  - Data: Create realistic test scenarios with actual historical data
+  - Performance: Ensure test environment represents production performance
+
+- [ ] 15.2 Conduct Comprehensive Multi-Device Testing
+  - Details: Test all functionality on touch laptops, traditional laptops, and tablets
+  - Validation: Verify all interactive elements work with both touch and mouse input
+  - Coverage: Test all major workflows and edge cases across device types
+  - Performance: Validate performance requirements on all supported devices
+
+- [ ] 15.3 Execute Real-World User Workflow Testing
+  - Details: Test complete sales workflows with actual sales team members
+  - Validation: Measure task completion times and user satisfaction
+  - Scenarios: Include typical daily workflows and edge cases
+  - Feedback: Collect comprehensive feedback on usability and functionality
+
+- [ ] 15.4 Validate Data Migration Accuracy and Completeness
+  - Details: Verify historical data accuracy and relationship preservation
+  - Validation: Compare migrated data with original Excel sources
+  - Integrity: Test all data relationships and business rule enforcement
+  - Quality: Ensure data quality meets business requirements
+
+- [ ] 15.5 Performance and Load Testing
+  - Details: Verify sub-second search and 10-second report generation requirements
+  - Validation: Test under realistic load conditions with multiple users
+  - Azure Constraints: Ensure performance within Basic tier limitations
+  - Optimization: Address any performance issues identified
+
+- [ ] 15.6 User Training and Documentation Validation
+  - Details: Test training materials and documentation with actual users
+  - Validation: Verify users can successfully complete all major tasks
+  - Feedback: Gather feedback on training materials and documentation
+  - Refinement: Update materials based on user feedback
+
+- [ ] 15.7 Go-Live Readiness Assessment
+  - Details: Comprehensive assessment of system readiness for production launch
+  - Validation: Verify all success criteria are met
+  - Risk Assessment: Identify and mitigate any remaining risks
+  - Sign-off: Obtain formal approval from stakeholders for production launch
+
+### Task #16: Team Training and Production Launch [SF]
+**Priority: High | Complexity Score: 5 | Dependencies: 15**
+
+- [ ] 16.1 Create Comprehensive Training Materials
+  - Details: Develop user guides, quick reference cards, and video tutorials
+  - Validation: Test materials with actual users for clarity and completeness
+  - Multi-Device: Emphasize workflows for both touch and traditional interfaces
+  - Food Service: Include industry-specific workflow examples
+
+- [ ] 16.2 Execute Team Training Program
+  - Details: Conduct hands-on training sessions with sales team
+  - Validation: Verify user competency with all major functions
+  - Individual Support: Provide one-on-one assistance as needed
+  - Certification: Ensure all users are comfortable with the system
+
+- [ ] 16.3 Coordinate Production Launch
+  - Details: Execute coordinated cutover from Excel system to CRM
+  - Validation: Verify all systems operational and users can access
+  - Communication: Notify all stakeholders of successful launch
+  - Support: Provide immediate assistance during launch period
+
+- [ ] 16.4 Implement Go-Live Support Strategy
+  - Details: Establish comprehensive support procedures for launch week
+  - Validation: Test support procedures and escalation paths
+  - Availability: Plan for immediate issue resolution during critical period
+  - Monitoring: Continuous monitoring of system performance and user adoption
+
+- [ ] 16.5 Monitor Initial Performance and User Adoption
+  - Details: Track system performance and user adoption metrics
+  - Validation: Monitor key performance indicators and user satisfaction
+  - Feedback: Collect and address immediate user feedback
+  - Optimization: Implement quick fixes for any identified issues
+
+- [ ] 16.6 Create Post-Launch Documentation and Handover
+  - Details: Document lessons learned and create ongoing support procedures
+  - Validation: Review documentation with team and stakeholders
+  - Knowledge Transfer: Ensure ongoing support capabilities
+  - Future Planning: Document opportunities for post-MVP enhancements
+
+---
+
+## 🚨 PHASE 4 QUALITY GATE: Production Readiness
+**DEADLINE**: End of Week 8 | **BLOCKING**: Production launch depends on these
+
+### **Checkpoint 4.1: Data Migration Verification** ✅
+**PASS CRITERIA**: 100% successful migration with zero data loss
+
+- [ ] **Excel Parsing Test**
+  - Test: Parse actual Excel files from current system
+  - Verification: All data extracted correctly, no parsing errors
+  - **File Formats**: Test both .xlsx and .csv formats
+  - **PASS**: ✅ Excel parsing working correctly
+
+- [ ] **Data Validation Test**
+  - Test: Import Excel data with validation rules
+  - Verification: All validation rules enforced, errors reported clearly
+  - **Business Rules**: Food service industry validation working
+  - **PASS**: ✅ Data validation working correctly
+
+- [ ] **Relationship Preservation Test**
+  - Test: Import complete dataset, verify all relationships maintained
+  - Verification: Organization-Contact-Interaction-Opportunity relationships intact
+  - **Data Integrity**: No orphaned records, all foreign keys valid
+  - **PASS**: ✅ Relationship preservation working correctly
+
+- [ ] **Account Manager Assignment Test**
+  - Test: Import data with account manager assignments
+  - Verification: All assignments preserved accurately
+  - **Business Continuity**: No disruption to existing assignments
+  - **PASS**: ✅ Account manager assignments preserved correctly
+
+- [ ] **Duplicate Detection Test**
+  - Test: Import data with intentional duplicates
+  - Verification: Duplicates detected and resolution options provided
+  - **Data Quality**: Final dataset has no unwanted duplicates
+  - **PASS**: ✅ Duplicate detection working correctly
+
+- [ ] **Migration Audit Test**
+  - Test: Compare imported data with original Excel data
+  - Verification: 100% data accuracy, no missing records
+  - **Completeness**: Record counts match between Excel and CRM
+  - **PASS**: ✅ Migration audit confirms 100% accuracy
+
+### **Checkpoint 4.2: Production Environment Verification** ✅
+**PASS CRITERIA**: Production environment fully operational and secure
+
+- [ ] **Azure Production Deployment Test**
+  - Test: Deploy application to production Azure App Service
+  - Verification: Application loads and functions correctly in production
+  - **Configuration**: Production configuration working correctly
+  - **PASS**: ✅ Production deployment successful
+
+- [ ] **SSL and Security Test**
+  - Test: Access application via HTTPS, verify certificate validity
+  - Verification: All connections encrypted, security headers present
+  - **Security**: No security warnings or vulnerabilities
+  - **PASS**: ✅ SSL and security configuration correct
+
+- [ ] **Production Database Test**
+  - Test: Connect to production Azure SQL Database
+  - Verification: All operations work correctly in production
+  - **Performance**: Production database meets performance requirements
+  - **PASS**: ✅ Production database operational
+
+- [ ] **Backup and Recovery Test**
+  - Test: Verify database backup creation and restoration process
+  - Verification: Backup/restore procedures work correctly
+  - **Disaster Recovery**: Complete recovery procedures documented and tested
+  - **PASS**: ✅ Backup and recovery procedures working
+
+- [ ] **Monitoring and Alerting Test**
+  - Test: Trigger monitoring alerts, verify notification delivery
+  - Verification: All monitoring systems operational
+  - **Observability**: Application insights and logging working
+  - **PASS**: ✅ Monitoring and alerting operational
+
+### **Checkpoint 4.3: User Acceptance Testing Verification** ✅
+**PASS CRITERIA**: Sales team approves system for production use
+
+- [ ] **Complete Workflow Test with Real Users**
+  - Test: Sales team members complete typical daily workflows
+  - Verification: All users can complete tasks efficiently
+  - **User Satisfaction**: Users prefer CRM over Excel system
+  - **Time Measurement**: Tasks completed faster than Excel
+  - **PASS**: ✅ User acceptance testing successful
+
+- [ ] **Multi-Device User Testing**
+  - Test: Users test system on their actual devices (touch laptop, etc.)
+  - Verification: System works correctly on all user devices
+  - **Real Devices**: Test on actual hardware users will use
+  - **PASS**: ✅ Multi-device user testing successful
+
+- [ ] **Training Effectiveness Test**
+  - Test: Users complete training, demonstrate competency
+  - Verification: All users can use system independently
+  - **Competency**: Users comfortable with all major functions
+  - **PASS**: ✅ Training effectiveness confirmed
+
+- [ ] **Data Accuracy Verification with Users**
+  - Test: Users verify migrated data matches their Excel records
+  - Verification: Users confirm data is complete and accurate
+  - **Business Validation**: Users approve data migration quality
+  - **PASS**: ✅ Users confirm data accuracy
+
+### **Checkpoint 4.4: Performance Requirements Final Verification** ✅
+**PASS CRITERIA**: All performance targets met consistently
+
+- [ ] **Search Performance Final Test**
+  - Test: Search operations with full production dataset
+  - Verification: All searches complete in <1 second
+  - **Consistency**: Performance consistent across all search types
+  - **PASS**: ✅ Search performance requirements met
+
+- [ ] **Report Generation Final Test**
+  - Test: Generate all 4 report types with full production data
+  - Verification: All reports generate in <10 seconds
+  - **Reliability**: Consistent performance across multiple runs
+  - **PASS**: ✅ Report generation requirements met
+
+- [ ] **Data Entry Speed Final Test**
+  - Test: Time typical data entry tasks (organization, contact, interaction)
+  - Verification: 50% faster than Excel-based workflow
+  - **User Validation**: Users confirm speed improvement
+  - **PASS**: ✅ Data entry speed requirements met
+
+- [ ] **Overall System Performance Test**
+  - Test: Complete system under realistic production load
+  - Verification: System responsive and stable under normal usage
+  - **Stability**: No crashes or errors during extended testing
+  - **PASS**: ✅ Overall system performance acceptable
+
+### **Checkpoint 4.5: Go-Live Readiness Verification** ✅
+**PASS CRITERIA**: System ready for immediate production use
+
+- [ ] **Production Cutover Test**
+  - Test: Simulate complete cutover from Excel to CRM system
+  - Verification: Cutover process works smoothly without data loss
+  - **Business Continuity**: No disruption to sales operations
+  - **PASS**: ✅ Production cutover procedures ready
+
+- [ ] **Support Procedures Test**
+  - Test: Support escalation and issue resolution procedures
+  - Verification: Support procedures effective and responsive
+  - **Response Time**: Critical issues addressed within defined timeframes
+  - **PASS**: ✅ Support procedures operational
+
+- [ ] **Documentation Completeness Test**
+  - Test: Verify all user and technical documentation complete
+  - Verification: Documentation accurate and comprehensive
+  - **Usability**: Users can complete tasks using documentation alone
+  - **PASS**: ✅ Documentation complete and effective
+
+**🚨 PHASE 4 GATE: ALL CHECKPOINTS MUST PASS BEFORE PRODUCTION LAUNCH**
+
+---
+
+## Continuous Tasks (Weeks 1-8) [CDiP]
+
+### Task #17: Multi-Device Testing Protocol [RBT]
+**Priority: High | Complexity Score: 6 | Dependencies: 1, 4**
+
+- [ ] 17.1 Configure Multi-Device Testing Environment
+  - Details: Setup testing framework for touch laptop, traditional laptop, tablet simulation
+  - Validation: Verify testing environment covers all supported device types
+  - Tools: Configure browser DevTools, testing frameworks, and real device access
+
+- [ ] 17.2 Develop Touch Input Testing Suite
+  - Details: Create comprehensive test cases for touch interactions
+  - Validation: Verify 44px minimum touch targets and gesture support
+  - Coverage: Test all interactive elements with finger input
+
+- [ ] 17.3 Implement Mouse/Keyboard Testing Suite
+  - Details: Create test cases for traditional mouse and keyboard interactions
+  - Validation: Test precision interactions and keyboard navigation
+  - Accessibility: Verify full keyboard accessibility compliance
+
+- [ ] 17.4 Create Input Method Switching Tests
+  - Details: Test seamless switching between touch and mouse input
+  - Validation: Verify no functionality is lost when switching input methods
+  - User Experience: Ensure consistent behavior across input methods
+
+- [ ] 17.5 Implement Browser Compatibility Testing
+  - Details: Test across Chrome, Edge, Firefox, and Safari browsers
+  - Validation: Verify consistent functionality across all supported browsers
+  - Performance: Test performance consistency across browser platforms
+
+- [ ] 17.6 Develop Responsive Design Testing
+  - Details: Test layouts and functionality across different screen sizes
+  - Validation: Verify proper responsive behavior and layout adaptation
+  - Orientation: Test both landscape and portrait orientations
+
+- [ ] 17.7 Create Real-World Scenario Test Cases
+  - Details: Develop test cases based on actual sales team workflows
+  - Validation: Test complete user journeys and task completion
+  - Performance: Measure task completion times and user satisfaction
+
+- [ ] 17.8 Document Testing Results and Guidelines
+  - Details: Maintain comprehensive testing documentation
+  - Validation: Document all testing procedures and results
+  - Knowledge Transfer: Create guidelines for ongoing testing
+
+### Task #18: Azure Cost Monitoring and Optimization [TVA]
+**Priority: Medium | Complexity Score: 5 | Dependencies: 2**
+
+- [ ] 18.1 Configure Azure Resource Usage Tracking
+  - Details: Setup detailed monitoring of SQL Database and App Service usage
+  - Validation: Verify accurate tracking of all Azure resources
+  - Budget Focus: Monitor costs against $18/month target ($5 SQL + $13 App Service)
+
+- [ ] 18.2 Implement Budget Alert System
+  - Details: Configure automated alerts for budget thresholds
+  - Validation: Test alert triggering and delivery mechanisms
+  - Thresholds: Set alerts at 70% ($12.60) and 90% ($16.20) of budget
+
+- [ ] 18.3 Conduct Weekly Cost Reviews
+  - Details: Establish regular cost review and optimization procedures
+  - Validation: Document cost trends and optimization opportunities
+  - Accountability: Maintain cost optimization accountability
+
+- [ ] 18.4 Implement Cost Optimization Strategies
+  - Details: Apply cost optimization techniques and monitor impact
+  - Validation: Measure cost reduction effectiveness
+  - Documentation: Document successful optimization strategies
+
+### Task #19: NextCRM Integration and Quality Assurance [RVA][RBT]
+**Priority: Medium | Complexity Score: 7 | Dependencies: 1**
+
+- [ ] 19.1 Setup NextCRM Component Testing Framework
+  - Details: Configure testing for NextCRM foundation components
+  - Validation: Verify core NextCRM functionality after customizations
+  - Coverage: Test shadcn/ui components, Tremor charts, authentication
+
+- [ ] 19.2 Implement Food Service Customization Testing
+  - Details: Test all food service-specific customizations
+  - Validation: Verify seamless integration with NextCRM foundation
+  - Quality: Ensure customizations don't break core functionality
+
+- [ ] 19.3 Create Performance Testing Under Azure Constraints
+  - Details: Test performance within Azure Basic tier limitations
+  - Validation: Compare performance against baseline requirements
+  - Optimization: Identify and address performance bottlenecks
+
+- [ ] 19.4 Implement Regression Testing for Updates
+  - Details: Create comprehensive regression testing procedures
+  - Validation: Ensure updates don't break existing functionality
+  - Automation: Implement automated testing where possible
+
+---
+
+## 📈 CONTINUOUS QUALITY GATES (Weekly)
+
+### **Weekly Azure Cost Gate** ✅
+**PASS CRITERIA**: Costs remain under $18/month
+
+- [ ] **Weekly Cost Review**
+  - Test: Review Azure Cost Management dashboard
+  - Verification: Monthly projected cost ≤ $18.00
+  - **Alert Threshold**: If >$16 (90%), immediate optimization required
+  - **Action Required**: If over budget, optimize before continuing
+  - **PASS**: ✅ Weekly cost verification
+
+### **Weekly Multi-Device Testing Gate** ✅
+**PASS CRITERIA**: All new features work on both touch and mouse
+
+- [ ] **New Feature Multi-Device Test**
+  - Test: All features developed this week on your touch laptop
+  - Verification: Features work with both touch and mouse input
+  - **Consistency**: No functionality differences between input methods
+  - **PASS**: ✅ Multi-device compatibility maintained
+
+### **Weekly Performance Gate** ✅
+**PASS CRITERIA**: Performance requirements maintained
+
+- [ ] **Performance Regression Test**
+  - Test: Key performance metrics (search <1s, reports <10s)
+  - Verification: Performance requirements still met as data grows
+  - **Optimization**: If performance degrades, optimize before continuing
+  - **PASS**: ✅ Performance requirements maintained
+
+---
+
+## 🎯 FINAL LAUNCH GATE: Complete System Verification
+
+### **Launch Readiness Checklist** ✅
+**ALL MUST PASS FOR PRODUCTION LAUNCH**
+
+- [ ] ✅ **Phase 1 Complete**: Foundation solid, Azure operational
+- [ ] ✅ **Phase 2 Complete**: Core CRM functional, multi-device working
+- [ ] ✅ **Phase 3 Complete**: Pipeline and reporting operational
+- [ ] ✅ **Phase 4 Complete**: Data migration successful, production ready
+- [ ] ✅ **User Acceptance**: Sales team approves system
+- [ ] ✅ **Performance**: All targets met consistently
+- [ ] ✅ **Budget**: Azure costs ≤ $18/month
+- [ ] ✅ **Training**: Team competent and confident
+- [ ] ✅ **Support**: Support procedures tested and ready
+
+### **Success Metrics Verification** ✅
+**FINAL VALIDATION BEFORE LAUNCH**
+
+- [ ] ✅ **50% Faster Data Entry**: Measured and confirmed by users
+- [ ] ✅ **80% Faster Reports**: Measured and confirmed (<10 seconds vs. manual)
+- [ ] ✅ **100% User Adoption**: All sales team members ready to use system
+- [ ] ✅ **Sub-second Search**: Consistently achieved with production data
+- [ ] ✅ **Multi-device Success**: Working perfectly on all user devices
+- [ ] ✅ **Data Integrity**: 100% accurate migration confirmed
+- [ ] ✅ **Cost Compliance**: Azure costs within $18/month budget
+
+---
+
+## Implementation Statistics and Success Metrics
+
+### Project Overview
+- **Total Tasks**: 19
+- **Total Subtasks**: 184
+- **Timeline**: 8 weeks (flexible, not hard deadline)
+- **Budget**: $18/month Azure ($5 SQL Database + $13 App Service)
+
+### Task Distribution by Priority
+- **Critical Priority**: 12 tasks (63%)
+- **High Priority**: 5 tasks (26%)
+- **Medium Priority**: 2 tasks (11%)
+
+### Phase Distribution
+- **Phase 1 (Foundation)**: 4 tasks, 29 subtasks
+- **Phase 2 (Core CRM)**: 5 tasks, 51 subtasks  
+- **Phase 3 (Pipeline/Reporting)**: 3 tasks, 42 subtasks
+- **Phase 4 (Migration/Launch)**: 4 tasks, 38 subtasks
+- **Continuous Tasks**: 3 tasks, 24 subtasks
+
+### Food Service Industry Requirements
+- **11 Principals**: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
+- **6 Interaction Types**: Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+- **5 Pipeline Stages**: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
+- **9 Settings Categories**: Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction
+- **4 Core Report Types**: Weekly Activity by Account Manager, Pipeline Status by Principal, Interaction Volume Analysis, Organization Performance Tracking
+
+### Critical Success Factors
+- ✅ Complete Excel system replacement
+- ✅ 50% faster data entry across all device types
+- ✅ 80% faster report generation (<10 seconds)
+- ✅ Sub-second search performance
+- ✅ 100% user adoption within 3 months
+- ✅ Monthly costs under $18
+- ✅ Multi-device compatibility (touch laptop primary testing)
+
+### High-Risk Areas and Mitigation
+1. **Data Migration Integrity** - Comprehensive validation and rollback procedures
+2. **Multi-Device Compatibility** - Extensive testing on touch laptop and device simulation
+3. **Azure Performance Constraints** - Query optimization and caching strategies
+4. **User Adoption** - Extensive training and real-world testing with sales team
+
+**🚀 LAUNCH AUTHORIZATION: Only proceed to production launch when ALL quality gates pass 100%**

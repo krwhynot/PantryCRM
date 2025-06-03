@@ -1,0 +1,113 @@
+# Task ID: 11
+# Title: Implement Reporting Engine
+# Status: pending
+# Dependencies: 10
+# Priority: high
+# Description: Develop the reporting engine with 4 core report types, including data layer, visualizations, filtering, and export capabilities.
+# Details:
+1. Implement Report Data Layer with Azure SQL Optimization
+   - Create optimized queries for report generation within DTU limits
+   - Add caching strategy for expensive aggregations
+   - Ensure <10 second report generation requirement
+
+2. Build Weekly Activity Reports by Account Manager
+   - Create reports showing interaction volume and type breakdown
+   - Include visit frequency, interaction types, and activity summaries
+   - Add print-friendly formatting for stakeholder sharing
+
+3. Create Pipeline Status by Principal Reports
+   - Build reports showing opportunities by stage and principal
+   - Add principal-specific conversion rates and metrics
+   - Include stage duration analysis and progression metrics
+
+4. Implement Interaction Volume Analysis Reports
+   - Create reports showing time-based interaction trends
+   - Add interaction type effectiveness metrics
+   - Enable account manager activity comparison
+
+5. Build Organization Performance Tracking Reports
+   - Create reports for priority level and segment analysis
+   - Add account manager assignment effectiveness metrics
+   - Support strategic account management decisions
+
+6. Integrate Tremor Charts for Multi-Device Visualization
+   - Implement NextCRM Tremor charts for all report visualizations
+   - Ensure charts are touch-friendly and readable
+   - Add drill-down and filtering within charts
+
+7. Add Date Range Filtering and Export Capabilities
+   - Implement Last 7 days, Last 30 days, Custom range options
+   - Provide intuitive date selection interface
+   - Create print-optimized layouts for stakeholder presentations
+
+8. Create Report Dashboard with Navigation
+   - Build main reporting dashboard with access to all 4 report types
+   - Add quick access and summary metrics
+   - Ensure dashboard loads quickly with summary data
+
+9. Optimize Report Performance for Azure Basic Tier
+   - Ensure all reports generate within 10-second requirement
+   - Minimize DTU usage during report generation
+   - Implement intelligent caching for frequently accessed reports
+
+Technical considerations:
+- Use Tremor v3.0+ for chart visualizations
+- Implement server-side data aggregation to minimize client processing
+- Use React Query/SWR for data fetching with caching
+- Consider using PDF.js or similar for export capabilities
+- Implement query optimization techniques like materialized views or pre-aggregation
+- Use date-fns for date manipulation and formatting
+
+# Test Strategy:
+1. Test report generation for all 4 core types
+2. Verify report accuracy with test data
+3. Test report generation performance (<10 seconds)
+4. Verify Tremor charts rendering and responsiveness
+5. Test date range filtering functionality
+6. Verify export capabilities and formatting
+7. Test report dashboard navigation and usability
+8. Verify performance with production-scale data volumes
+
+# Subtasks:
+## 1. Design query optimization strategy [pending]
+### Dependencies: None
+### Description: Develop a strategy for optimizing queries in the reporting engine, considering Azure SQL Database migration from MongoDB
+### Details:
+Focus on food service industry-specific queries, including priority system (A-D levels), market segments, and the 5-stage sales pipeline. Implement indexing and caching mechanisms for improved performance.
+
+## 2. Implement data visualization components [pending]
+### Dependencies: 11.1
+### Description: Create reusable data visualization components optimized for iPad with 44px touch targets
+### Details:
+Develop charts, graphs, and tables that effectively display food service industry data, including distributor information and contact roles. Ensure components are responsive and adhere to TypeScript strict mode requirements.
+
+## 3. Develop export capabilities [pending]
+### Dependencies: 11.1, 11.2
+### Description: Implement export functionality for various report formats
+### Details:
+Create export options for PDF, CSV, and Excel formats. Ensure exported reports maintain data integrity and formatting, especially for food service industry-specific information.
+
+## 4. Integrate reporting engine with NextCRM foundation [pending]
+### Dependencies: 11.1, 11.2, 11.3
+### Description: Incorporate the reporting engine into the existing NextCRM architecture
+### Details:
+Ensure seamless integration with NextCRM's existing modules, maintaining TypeScript strict mode compliance and optimizing for iPad usage.
+
+## 5. Implement food service industry-specific reports [pending]
+### Dependencies: 11.4
+### Description: Create report templates tailored to the food service industry
+### Details:
+Develop reports for priority levels, market segments, distributor performance, and sales pipeline stages. Ensure reports are customizable and provide actionable insights.
+
+## 6. Optimize report generation performance [pending]
+### Dependencies: 11.4, 11.5
+### Description: Enhance the speed and efficiency of report generation
+### Details:
+Implement caching mechanisms, parallel processing, and lazy loading techniques to improve report generation performance, especially for complex food service industry reports.
+
+## 7. Conduct user acceptance testing [pending]
+### Dependencies: 11.5, 11.6
+### Description: Perform thorough testing of the reporting engine with end-users
+### Details:
+Test the reporting engine on iPads, ensuring 44px touch targets are effective. Validate industry-specific reports, export capabilities, and overall performance. Gather feedback for potential improvements.
+

@@ -1,0 +1,92 @@
+# Task ID: 5
+# Title: Implement Organization Management
+# Status: pending
+# Dependencies: 3, 4
+# Priority: high
+# Description: Develop the organization management functionality including database schema, API endpoints, list and detail views, forms, and industry-specific features.
+# Details:
+1. Implement Organization Database Schema
+   - Execute Prisma migrations for organization schema with food service fields
+   - Create indexes for efficient searching and filtering
+
+2. Develop Organization API Endpoints
+   - Create Next.js API routes for organization CRUD operations
+   - Implement proper validation, error handling, and response formatting
+   - Optimize queries for Azure SQL Basic tier performance
+
+3. Create Organization List View with Multi-Device Support
+   - Build responsive organization listing with search and filtering
+   - Implement priority color coding (A=Green, B=Yellow, C=Orange, D=Red)
+   - Add segment and distributor filtering capabilities
+
+4. Create Organization Detail View
+   - Build comprehensive organization profile display
+   - Show relationships with contacts and interactions
+   - Implement intuitive navigation for both touch and mouse input
+
+5. Implement Organization Form with Industry Fields
+   - Create organization creation/editing forms
+   - Include fields for priority levels, market segments, distributors
+   - Implement validation for required fields and business rules
+
+6. Add Priority Level System with Visual Indicators
+   - Implement color-coded priority system
+   - Ensure color contrast compliance and non-color alternatives
+   - Apply consistent color coding across all organization references
+
+7. Implement Market Segment and Distributor Tracking
+   - Add dropdowns for Fine Dining, Fast Food, Healthcare, Catering, Institutional segments
+   - Support Sysco, USF, PFG, Direct, Other distributor relationships
+   - Enable segment and distributor-based filtering and analytics
+
+8. Add Account Manager Assignment System
+   - Create assignment system preserving existing Excel data
+   - Implement assignment workflows and filtering capabilities
+
+Technical considerations:
+- Use React Query/SWR for efficient data fetching and caching
+- Implement optimistic UI updates for better user experience
+- Use React Hook Form for form validation and submission
+- Implement debounced search for performance optimization
+
+# Test Strategy:
+1. Test organization CRUD operations for correctness and performance
+2. Verify all industry-specific fields are properly implemented
+3. Test search and filtering capabilities with large datasets
+4. Verify priority color coding and visual indicators
+5. Test market segment and distributor tracking functionality
+6. Verify account manager assignment system
+7. Test multi-device usability on both touch and mouse interfaces
+8. Verify performance meets sub-second search requirement
+
+# Subtasks:
+## 1. Design API endpoints for organization management [pending]
+### Dependencies: None
+### Description: Create RESTful API endpoints for CRUD operations on organizations, including food service industry specifics
+### Details:
+Define endpoints for managing organizations, priority levels (A-D), market segments, distributors, contact roles, and 5-stage sales pipeline. Ensure TypeScript strict mode compliance and Azure SQL Database compatibility.
+
+## 2. Implement backend logic for organization management [pending]
+### Dependencies: 5.1
+### Description: Develop server-side logic to handle organization-related operations and data management
+### Details:
+Create controllers and services for organization management, including priority system, market segments, distributors, and sales pipeline stages. Implement data migration from MongoDB to Azure SQL Database.
+
+## 3. Design UI components for organization management [pending]
+### Dependencies: None
+### Description: Create reusable UI components for organization-related features, optimized for iPad
+### Details:
+Design components for organization list, detail view, priority selection, market segment assignment, distributor management, and sales pipeline visualization. Ensure 44px touch targets for iPad optimization.
+
+## 4. Implement frontend logic for organization management [pending]
+### Dependencies: 5.1, 5.3
+### Description: Develop client-side logic to interact with the API and manage organization data
+### Details:
+Create services and state management for organization-related features. Implement TypeScript strict mode compliance and integrate with NextCRM foundation.
+
+## 5. Integrate and test organization management features [pending]
+### Dependencies: 5.2, 5.4
+### Description: Combine frontend and backend implementations, perform integration testing
+### Details:
+Integrate API calls with frontend components, implement error handling, and conduct thorough testing of all organization management features, including food service industry specifics.
+

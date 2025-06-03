@@ -1,0 +1,231 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+// Settings Management System
+model Setting {
+  id        String   @id @default(cuid())
+  category  String   // Priority, Segment, Distributor, etc.
+  key       String   // Actual value (e.g., "A", "Fine Dining", "Sysco")
+  label     String   // Display name
+  color     String?  // For priority colors and UI highlighting
+  sortOrder Int      // For maintaining specific order in dropdowns
+  active    Boolean  @default(true)
+  metadata  Json?    // For category-specific additional data
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([category, key])
+  @@index([category, active])
+}
+
+// User model for authentication
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  isActive      Boolean   @default(true)
+  role          String    @default("user") // admin, user
+  lastLoginAt   DateTime?
+
+  accounts      Account[]
+  sessions      Session[]
+  organizations OrganizationUser[]
+  interactions  Interaction[]
+  opportunities Opportunity[]
+
+  @@index([email])
+  @@index([isActive])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Kitchen Pantry CRM Models
+
+model Organization {
+  id            String   @id @default(cuid())
+  name          String
+  priority      String   // References Setting (category: "Priority")
+  segment       String   // References Setting (category: "Segment")
+  distributor   String   // References Setting (category: "Distributor")
+  address       String?
+  phone         String?
+  email         String?
+  website       String?
+  notes         String?  @db.Text
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  contacts      Contact[]
+  interactions  Interaction[]
+  opportunities Opportunity[]
+  users         OrganizationUser[]
+  tags          OrganizationTag[]
+
+  @@unique([name])
+  @@index([priority])
+  @@index([segment])
+  @@index([distributor])
+  @@index([isActive])
+}
+
+// Many-to-many relationship between Organizations and Users
+model OrganizationUser {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String
+  role           String       // References Setting (category: "Position")
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@index([isActive])
+}
+
+// Tags for flexible organization categorization
+model OrganizationTag {
+  id             String       @id @default(cuid())
+  organizationId String
+  name           String
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, name])
+  @@index([name])
+}
+
+model Contact {
+  id             String   @id @default(cuid())
+  organizationId String
+  firstName      String
+  lastName       String
+  role           String   // References Setting (category: "Position")
+  isPrimary      Boolean  @default(false)
+  phone          String?
+  email          String?
+  notes          String?  @db.Text
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization  Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  interactions  Interaction[]
+  opportunities Opportunity[]
+
+  @@index([organizationId])
+  @@index([role])
+  @@index([isActive])
+  @@index([firstName, lastName])
+}
+
+model Interaction {
+  id               String    @id @default(cuid())
+  organizationId   String
+  contactId        String?
+  userId           String    // Account manager who logged the interaction
+  interactionType  String    // References Setting (category: "InteractionType")
+  interactionDate  DateTime
+  notes            String?   @db.Text
+  followUpDate     DateTime?
+  isCompleted      Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contact          Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([contactId])
+  @@index([userId])
+  @@index([interactionType])
+  @@index([interactionDate])
+  @@index([followUpDate])
+  @@index([isCompleted])
+}
+
+model Opportunity {
+  id                String    @id @default(cuid())
+  organizationId    String
+  contactId         String?
+  userId            String    // Account manager responsible
+  principal         String    // References Setting (category: "Principal")
+  stage            String     // References Setting (category: "Stage")
+  status           String     // References Setting (category: "Status")
+  source           String?    // References Setting (category: "Source")
+  reason           String?    // References Setting (category: "Reason")
+  probability      Int        // 0-100
+  expectedRevenue  Decimal?   @db.Decimal(10, 2)
+  expectedCloseDate DateTime?
+  notes            String?    @db.Text
+  isActive         Boolean    @default(true)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contact          Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([contactId])
+  @@index([userId])
+  @@index([principal])
+  @@index([stage])
+  @@index([status])
+  @@index([isActive])
+  @@index([expectedCloseDate])
+}

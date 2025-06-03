@@ -1,0 +1,152 @@
+<svg viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1000" height="800" fill="#f8fafc"/>
+  
+  <!-- Frontend Layer -->
+  <rect x="50" y="50" width="900" height="150" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2" rx="10"/>
+  <text x="500" y="80" text-anchor="middle" font-size="18" font-weight="bold" fill="#0c4a6e">Frontend Layer - iPad/Desktop Interface</text>
+  
+  <!-- Frontend Components -->
+  <rect x="80" y="100" width="180" height="80" fill="#bae6fd" stroke="#0284c7" rx="5"/>
+  <text x="170" y="125" text-anchor="middle" font-size="12" font-weight="bold">Next.js 15 App</text>
+  <text x="170" y="140" text-anchor="middle" font-size="10">TypeScript + shadcn/ui</text>
+  <text x="170" y="155" text-anchor="middle" font-size="10">iPad Optimized</text>
+  
+  <rect x="280" y="100" width="180" height="80" fill="#bae6fd" stroke="#0284c7" rx="5"/>
+  <text x="370" y="125" text-anchor="middle" font-size="12" font-weight="bold">Auto-Complete</text>
+  <text x="370" y="140" text-anchor="middle" font-size="10">Organizations</text>
+  <text x="370" y="155" text-anchor="middle" font-size="10">Contacts Search</text>
+  
+  <rect x="480" y="100" width="180" height="80" fill="#bae6fd" stroke="#0284c7" rx="5"/>
+  <text x="570" y="125" text-anchor="middle" font-size="12" font-weight="bold">Quick Entry Forms</text>
+  <text x="570" y="140" text-anchor="middle" font-size="10">Interactions</text>
+  <text x="570" y="155" text-anchor="middle" font-size="10">Touch Optimized</text>
+  
+  <rect x="680" y="100" width="180" height="80" fill="#bae6fd" stroke="#0284c7" rx="5"/>
+  <text x="770" y="125" text-anchor="middle" font-size="12" font-weight="bold">Dashboard</text>
+  <text x="770" y="140" text-anchor="middle" font-size="10">Tremor Charts</text>
+  <text x="770" y="155" text-anchor="middle" font-size="10">Responsive Reports</text>
+  
+  <!-- API Layer -->
+  <rect x="50" y="250" width="900" height="150" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" rx="10"/>
+  <text x="500" y="280" text-anchor="middle" font-size="18" font-weight="bold" fill="#14532d">API Layer - Next.js Backend</text>
+  
+  <!-- API Components -->
+  <rect x="80" y="300" width="160" height="80" fill="#dcfce7" stroke="#15803d" rx="5"/>
+  <text x="160" y="325" text-anchor="middle" font-size="12" font-weight="bold">CRUD APIs</text>
+  <text x="160" y="340" text-anchor="middle" font-size="10">Organizations</text>
+  <text x="160" y="355" text-anchor="middle" font-size="10">Contacts, Interactions</text>
+  
+  <rect x="260" y="300" width="160" height="80" fill="#dcfce7" stroke="#15803d" rx="5"/>
+  <text x="340" y="325" text-anchor="middle" font-size="12" font-weight="bold">Auth Middleware</text>
+  <text x="340" y="340" text-anchor="middle" font-size="10">Azure AD B2C</text>
+  <text x="340" y="355" text-anchor="middle" font-size="10">Role-based Access</text>
+  
+  <rect x="440" y="300" width="160" height="80" fill="#dcfce7" stroke="#15803d" rx="5"/>
+  <text x="520" y="325" text-anchor="middle" font-size="12" font-weight="bold">Import/Export</text>
+  <text x="520" y="340" text-anchor="middle" font-size="10">Excel Processing</text>
+  <text x="520" y="355" text-anchor="middle" font-size="10">Data Validation</text>
+  
+  <rect x="620" y="300" width="160" height="80" fill="#dcfce7" stroke="#15803d" rx="5"/>
+  <text x="700" y="325" text-anchor="middle" font-size="12" font-weight="bold">Report Generator</text>
+  <text x="700" y="340" text-anchor="middle" font-size="10">Weekly Activity</text>
+  <text x="700" y="355" text-anchor="middle" font-size="10">Pipeline Status</text>
+  
+  <rect x="800" y="300" width="120" height="80" fill="#dcfce7" stroke="#15803d" rx="5"/>
+  <text x="860" y="325" text-anchor="middle" font-size="12" font-weight="bold">Search APIs</text>
+  <text x="860" y="340" text-anchor="middle" font-size="10">Auto-complete</text>
+  <text x="860" y="355" text-anchor="middle" font-size="10">Fuzzy Matching</text>
+  
+  <!-- Data Layer -->
+  <rect x="50" y="450" width="600" height="150" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="10"/>
+  <text x="350" y="480" text-anchor="middle" font-size="18" font-weight="bold" fill="#92400e">Data Layer - Azure SQL Database</text>
+  
+  <!-- Database Tables -->
+  <rect x="80" y="500" width="100" height="80" fill="#fbbf24" stroke="#d97706" rx="5"/>
+  <text x="130" y="520" text-anchor="middle" font-size="11" font-weight="bold">Organizations</text>
+  <text x="130" y="535" text-anchor="middle" font-size="9">Priority A-D</text>
+  <text x="130" y="550" text-anchor="middle" font-size="9">Segments</text>
+  <text x="130" y="565" text-anchor="middle" font-size="9">Distributors</text>
+  
+  <rect x="200" y="500" width="100" height="80" fill="#fbbf24" stroke="#d97706" rx="5"/>
+  <text x="250" y="520" text-anchor="middle" font-size="11" font-weight="bold">Contacts</text>
+  <text x="250" y="535" text-anchor="middle" font-size="9">Roles</text>
+  <text x="250" y="550" text-anchor="middle" font-size="9">Contact Info</text>
+  <text x="250" y="565" text-anchor="middle" font-size="9">Relationships</text>
+  
+  <rect x="320" y="500" width="100" height="80" fill="#fbbf24" stroke="#d97706" rx="5"/>
+  <text x="370" y="520" text-anchor="middle" font-size="11" font-weight="bold">Interactions</text>
+  <text x="370" y="535" text-anchor="middle" font-size="9">Types</text>
+  <text x="370" y="550" text-anchor="middle" font-size="9">Dates</text>
+  <text x="370" y="565" text-anchor="middle" font-size="9">Notes</text>
+  
+  <rect x="440" y="500" width="100" height="80" fill="#fbbf24" stroke="#d97706" rx="5"/>
+  <text x="490" y="520" text-anchor="middle" font-size="11" font-weight="bold">Opportunities</text>
+  <text x="490" y="535" text-anchor="middle" font-size="9">5-Stage Pipeline</text>
+  <text x="490" y="550" text-anchor="middle" font-size="9">Probability</text>
+  <text x="490" y="565" text-anchor="middle" font-size="9">Principals</text>
+  
+  <rect x="560" y="500" width="80" height="80" fill="#fbbf24" stroke="#d97706" rx="5"/>
+  <text x="600" y="520" text-anchor="middle" font-size="11" font-weight="bold">Principals</text>
+  <text x="600" y="535" text-anchor="middle" font-size="9">Kaufholds</text>
+  <text x="600" y="550" text-anchor="middle" font-size="9">Frites Street</text>
+  <text x="600" y="565" text-anchor="middle" font-size="9">Better Balance</text>
+  
+  <!-- Azure Services -->
+  <rect x="700" y="450" width="250" height="150" fill="#e5e7eb" stroke="#6b7280" stroke-width="2" rx="10"/>
+  <text x="825" y="480" text-anchor="middle" font-size="18" font-weight="bold" fill="#374151">Azure Services</text>
+  
+  <rect x="720" y="500" width="100" height="35" fill="#d1d5db" stroke="#4b5563" rx="3"/>
+  <text x="770" y="522" text-anchor="middle" font-size="10" font-weight="bold">AD B2C Auth</text>
+  
+  <rect x="830" y="500" width="100" height="35" fill="#d1d5db" stroke="#4b5563" rx="3"/>
+  <text x="880" y="522" text-anchor="middle" font-size="10" font-weight="bold">Blob Storage</text>
+  
+  <rect x="720" y="545" width="100" height="35" fill="#d1d5db" stroke="#4b5563" rx="3"/>
+  <text x="770" y="567" text-anchor="middle" font-size="10" font-weight="bold">App Service</text>
+  
+  <rect x="830" y="545" width="100" height="35" fill="#d1d5db" stroke="#4b5563" rx="3"/>
+  <text x="880" y="567" text-anchor="middle" font-size="10" font-weight="bold">App Insights</text>
+  
+  <!-- Connection Lines -->
+  <!-- Frontend to API -->
+  <line x1="500" y1="200" x2="500" y2="250" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- API to Database -->
+  <line x1="350" y1="400" x2="350" y2="450" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- API to Azure Services -->
+  <line x1="620" y1="350" x2="700" y2="525" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+  </defs>
+  
+  <!-- Cost and Performance Indicators -->
+  <rect x="50" y="650" width="900" height="100" fill="#f1f5f9" stroke="#64748b" stroke-width="1" rx="5"/>
+  <text x="500" y="680" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e293b">Architecture Summary</text>
+  
+  <text x="150" y="705" text-anchor="middle" font-size="12" font-weight="bold" fill="#059669">Cost Optimized</text>
+  <text x="150" y="720" text-anchor="middle" font-size="10">~$20/month Azure</text>
+  <text x="150" y="735" text-anchor="middle" font-size="10">Basic tiers, scalable</text>
+  
+  <text x="350" y="705" text-anchor="middle" font-size="12" font-weight="bold" fill="#dc2626">iPad Optimized</text>
+  <text x="350" y="720" text-anchor="middle" font-size="10">Touch-first design</text>
+  <text x="350" y="735" text-anchor="middle" font-size="10">Responsive layout</text>
+  
+  <text x="550" y="705" text-anchor="middle" font-size="12" font-weight="bold" fill="#7c3aed">Type Safe</text>
+  <text x="550" y="720" text-anchor="middle" font-size="10">TypeScript + Prisma</text>
+  <text x="550" y="735" text-anchor="middle" font-size="10">Database consistency</text>
+  
+  <text x="750" y="705" text-anchor="middle" font-size="12" font-weight="bold" fill="#ea580c">Food Service Ready</text>
+  <text x="750" y="720" text-anchor="middle" font-size="10">Industry-specific schema</text>
+  <text x="750" y="735" text-anchor="middle" font-size="10">Principal/distributor tracking</text>
+  
+  <text x="850" y="705" text-anchor="middle" font-size="12" font-weight="bold" fill="#0891b2">Proven Foundation</text>
+  <text x="850" y="720" text-anchor="middle" font-size="10">NextCRM base</text>
+  <text x="850" y="735" text-anchor="middle" font-size="10">Battle-tested stack</text>
+</svg>
