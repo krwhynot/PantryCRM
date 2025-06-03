@@ -1,36 +1,49 @@
 import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'util';
+
+// Add global types for test utilities
+declare global {
+  namespace NodeJS {
+    interface Global {
+      testUtils: {
+        createMockOrganization: (overrides?: Record<string, any>) => any;
+        createMockContact: (overrides?: Record<string, any>) => any;
+        createMockInteraction: (overrides?: Record<string, any>) => any;
+      };
+    }
+  }
+}
 
 // Mock Next.js router
 jest.mock('next/router', () => ({
-  useRouter: () => ({
-    route: '/',
-    pathname: '/',
-    query: '',
-    asPath: '',
-    push: jest.fn(),
-    pop: jest.fn(),
-    reload: jest.fn(),
-    back: jest.fn(),
-    prefetch: jest.fn().mockResolvedValue(undefined),
-    beforePopState: jest.fn(),
-    events: {
-      on: jest.fn(),
-      off: jest.fn(),
-      emit: jest.fn(),
-    },
-    isFallback: false,
-  }),
+  useRouter() {
+    return {
+      route: '/',
+      pathname: '/',
+      query: '',
+      asPath: '',
+      push: jest.fn(),
+      pop: jest.fn(),
+      reload: jest.fn(),
+      back: jest.fn(),
+      prefetch: jest.fn().mockResolvedValue(undefined),
+      beforePopState: jest.fn(),
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+        emit: jest.fn(),
+      },
+      isFallback: false,
+    };
+  },
 }));
 
-// Mock Next.js Image component WITHOUT JSX
+// Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  // Use createElement instead of JSX
-  default: function Image(props) {
-    return Object.assign(
-      document.createElement('img'),
-      props
-    );
+  default: (props: any) => {
+    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
+    return <img {...props} />;
   },
 }));
 
@@ -51,12 +64,12 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   thresholds: [],
 }));
 
+// Mock window.matchMedia for responsive testing
 // Mock Element.prototype.getBoundingClientRect unconditionally for JSDOM
-// This is critical for iPad touch target size compliance testing (44px minimum)
 if (typeof Element !== 'undefined') {
   Element.prototype.getBoundingClientRect = jest.fn(() => ({
-    width: 44, // iPad minimum touch target width
-    height: 44, // iPad minimum touch target height
+    width: 44, // Default mock width for iPad touch target compliance
+    height: 44, // Default mock height for iPad touch target compliance
     top: 0,
     left: 0,
     bottom: 0,
@@ -67,6 +80,7 @@ if (typeof Element !== 'undefined') {
   }));
 } else {
   // Fallback for environments where Element might not be defined (e.g. pure Node.js tests without JSDOM)
+  // Using TypeScript syntax with proper type assertion
   global.Element = { 
     prototype: { 
       getBoundingClientRect: jest.fn(() => ({ 
@@ -78,12 +92,13 @@ if (typeof Element !== 'undefined') {
         right: 0, 
         x: 0, 
         y: 0 
-      }))
+      })) 
     } 
-  };
+  } as any;
 }
 
-// Mock window.matchMedia for responsive testing
+// Note: next-themes is mocked per-test to avoid conflicts with test-specific mocks
+
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: jest.fn().mockImplementation(query => ({
@@ -97,6 +112,10 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
+
+// Polyfill for TextEncoder/TextDecoder for Node.js environments
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder as any;
 
 // Mock Prisma client
 jest.mock('@/lib/prisma', () => ({
@@ -160,48 +179,35 @@ jest.mock('next-auth/react', () => {
   };
 });
 
-// Mock Tremor UI components WITHOUT JSX
-jest.mock('@tremor/react', () => {
-  // Factory function to create component mocks without JSX
-  const createMockComponent = (testId) => {
-    return function MockComponent(props) {
-      const el = document.createElement('div');
-      el.setAttribute('data-testid', testId);
-      // Copy props to element
-      Object.entries(props).forEach(([key, value]) => {
-        if (key !== 'children') {
-          el.setAttribute(key, value);
-        }
-      });
-      // Handle children if provided
-      if (props.children) {
-        if (typeof props.children === 'string') {
-          el.textContent = props.children;
-        } else {
-          // For non-string children, we'll just append as text as a simplification
-          el.textContent = 'Mock child content';
-        }
-      }
-      return el;
-    };
-  };
-
-  // Return mocked components
-  return {
-    Card: createMockComponent('tremor-card'),
-    Title: createMockComponent('tremor-title'),
-    Text: createMockComponent('tremor-text'),
-    Metric: createMockComponent('tremor-metric'),
-    Flex: createMockComponent('tremor-flex'),
-    Grid: createMockComponent('tremor-grid'),
-    Col: createMockComponent('tremor-col')
-  };
-});
+// Mock Tremor UI components
+jest.mock('@tremor/react', () => ({
+  Card: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <div data-testid="tremor-card" {...props}>{children}</div>
+  ),
+  Title: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <h3 data-testid="tremor-title" {...props}>{children}</h3>
+  ),
+  Text: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <p data-testid="tremor-text" {...props}>{children}</p>
+  ),
+  Metric: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <div data-testid="tremor-metric" {...props}>{children}</div>
+  ),
+  Flex: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <div data-testid="tremor-flex" {...props}>{children}</div>
+  ),
+  Grid: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <div data-testid="tremor-grid" {...props}>{children}</div>
+  ),
+  Col: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <div data-testid="tremor-col" {...props}>{children}</div>
+  )
+}));
 
 // Console error suppression for React Testing Library
 const originalError = console.error;
 beforeAll(() => {
-  console.error = (...args) => {
+  console.error = (...args: any[]) => {
     if (
       typeof args[0] === 'string' &&
       (args[0].includes('Warning: ReactDOM.render is no longer supported') ||
@@ -219,7 +225,7 @@ afterAll(() => {
 });
 
 // Global test utilities for Kitchen Pantry CRM
-global.testUtils = {
+(global as any).testUtils = {
   // Helper to create mock food service data
   createMockOrganization: (overrides = {}) => ({
     id: 'test-org-1',

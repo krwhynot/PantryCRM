@@ -10,7 +10,7 @@ const customJestConfig = {
   // Test environment
   testEnvironment: 'jsdom',
   
-  // Setup files
+  // Setup files - using simplified JavaScript setup to avoid SWC transformer issues
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   
   // Module name mapping for path aliases
@@ -22,12 +22,8 @@ const customJestConfig = {
     '^~/(.*)$': '<rootDir>/$1'
   },
   
-  // Transform configuration for TypeScript and JSX
-  transform: {
-    '^.+\.(js|jsx|ts|tsx)$': ['babel-jest', { 
-      presets: ['next/babel'] 
-    }]
-  },
+  // Use Next.js SWC transformer for faster tests
+  // This leverages the same compiler that Next.js uses
   
   // Files to ignore during testing
   testPathIgnorePatterns: [
