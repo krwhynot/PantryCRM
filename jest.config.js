@@ -1,0 +1,95 @@
+const nextJest = require('next/jest')
+
+const createJestConfig = nextJest({
+  // Provide the path to your Next.js app to load next.config.js and .env files
+  dir: './',
+})
+
+// Add any custom config to be passed to Jest
+const customJestConfig = {
+  // Test environment
+  testEnvironment: 'jsdom',
+  
+  // Setup files
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  
+  // Module name mapping for path aliases
+  moduleNameMapper: {
+    '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/lib/prisma.ts$': '<rootDir>/lib/prisma.ts',
+    '^@/lib/(.*)$': '<rootDir>/lib/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^~/(.*)$': '<rootDir>/$1'
+  },
+  
+  // Transform configuration for TypeScript and JSX
+  transform: {
+    '^.+\.(js|jsx|ts|tsx)$': ['babel-jest', { 
+      presets: ['next/babel'] 
+    }]
+  },
+  
+  // Files to ignore during testing
+  testPathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '<rootDir>/cypress/',
+    '<rootDir>/build/'
+  ],
+  
+  // Coverage collection
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    'components/**/*.{js,jsx,ts,tsx}',
+    'lib/**/*.{js,jsx,ts,tsx}',
+    '!**/*.d.ts',
+    '!**/node_modules/**',
+    '!**/.next/**', 
+    '!**/coverage/**', 
+    '!**/*.config.js'
+  ],
+  
+  // Coverage thresholds for Kitchen Pantry CRM
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70
+    },
+    // Higher standards for critical components
+    './src/components/food-service/': {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  },
+  
+  // Test match patterns
+  testMatch: [
+    '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/src/**/*.{test,spec}.{js,jsx,ts,tsx}',
+    '<rootDir>/components/**/__tests__/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/components/**/*.{test,spec}.{js,jsx,ts,tsx}'
+  ],
+  
+  // Module file extensions
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  
+  // Global setup for Kitchen Pantry CRM specific needs
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.json'
+    }
+  },
+  
+  // Verbose output for debugging
+  verbose: true,
+  
+  // Timeout for async tests (important for database tests)
+  testTimeout: 10000
+}
+
+// CreateJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
+module.exports = createJestConfig(customJestConfig)

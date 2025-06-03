@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["cypress", "node", "@testing-library/cypress"],
+    "noEmit": true
+  },
+  "include": [
+    "../node_modules/cypress",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ]
+}

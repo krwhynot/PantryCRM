@@ -8,7 +8,7 @@
       "testStrategy": "1. Verify successful repository clone with all files and branches present\n2. Confirm all dependencies install without errors or conflicts\n3. Test environment variables by running the development server\n4. Verify TypeScript compilation with strict mode enabled\n5. Test shadcn/ui components rendering with proper touch targets (minimum 44px)\n6. Create sample Tremor charts to verify integration\n7. Test responsiveness on different screen sizes including iPad Pro, Air, and Mini in both orientations",
       "priority": "high",
       "dependencies": [],
-      "status": "pending",
+      "status": "in-progress",
       "subtasks": [
         {
           "id": 1,
@@ -35,7 +35,7 @@
           "dependencies": [
             2
           ],
-          "details": "Create .env.local file, configure environment variables for development/production, set up next.config.js with environment-specific settings, implement secure handling of sensitive information",
+          "details": "Create .env.local file, configure environment variables for development/production, set up next.config.js with environment-specific settings, implement secure handling of sensitive information\n<info added on 2025-06-03T01:34:14.489Z>\nRemoved internationalization complexity by eliminating next-intl variables from environment configuration and deleting next-intl.config.js file. Updated next.config.js to remove next-intl plugin dependency, streamlining configuration for English-only support. This optimization reduces bundle size and improves performance for the 4-iPad sales team deployment while staying within Azure budget constraints.\n</info added on 2025-06-03T01:34:14.489Z>",
           "status": "done"
         },
         {
@@ -46,8 +46,8 @@
             2,
             3
           ],
-          "details": "Set up a component library (e.g., Material-UI or Tailwind CSS), create basic layout components, implement responsive design, verify component rendering and styling",
-          "status": "pending"
+          "details": "Set up a component library (e.g., Material-UI or Tailwind CSS), create basic layout components, implement responsive design, verify component rendering and styling\n<info added on 2025-06-03T01:34:00.333Z>\nRemoved next-intl internationalization system and simplified to English-only implementation. Refactored app directory structure by eliminating [locale] dynamic routing segment and implementing direct routing without internationalization overhead. Fixed all import paths to work with simplified structure. Sign-in screen now functioning correctly with streamlined architecture. Changes reduce complexity and improve performance to meet $18/month Azure budget constraints while preserving iPad optimization for sales representatives.\n</info added on 2025-06-03T01:34:00.333Z>",
+          "status": "done"
         },
         {
           "id": 5,
@@ -59,8 +59,17 @@
             3,
             4
           ],
-          "details": "Set up Jest and React Testing Library, write unit tests for core components and utilities, perform integration tests for basic app functionality, validate build process and deployment pipeline",
-          "status": "pending"
+          "details": "Set up Jest and React Testing Library, write unit tests for core components and utilities, perform integration tests for basic app functionality, validate build process and deployment pipeline\n<info added on 2025-06-03T01:43:06.180Z>\nInitial testing and validation will include specific checks for iPad compatibility, such as touch target validation (44px minimum) for all interactive UI elements, ensuring optimal usability for sales representatives in the field.\n</info added on 2025-06-03T01:43:06.180Z>",
+          "status": "in-progress"
+        },
+        {
+          "id": 6,
+          "title": "Quality Gate: NextCRM Foundation Operational",
+          "description": "Verify that the NextCRM foundation is fully operational, including all core dependencies, environment configurations, and initial UI components, with a confirmed connection to Azure SQL Database.",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 1
         }
       ]
     },
@@ -159,7 +168,7 @@
           "title": "Configure Azure SQL with Prisma",
           "description": "Set up Azure SQL database and integrate it with Prisma ORM for the Food Service CRM",
           "dependencies": [],
-          "details": "Create Azure SQL instance, configure connection strings, install Prisma, initialize Prisma project, and set up database connection",
+          "details": "Create Azure SQL instance, configure connection strings, install Prisma, initialize Prisma project, and set up database connection\n<info added on 2025-06-03T01:34:24.528Z>\nSimplified database schema design by removing internationalization requirements. Eliminated the need for locale-specific fields and translations in the database, focusing exclusively on the Food Service industry's 9 key categories (Priority, Segment, Distributor, etc.). This English-only approach streamlines the database structure and improves query performance on Azure SQL Basic tier, optimizing within our $5/month database budget while still supporting all industry-specific validation rules, color coding (A=Green through D=Red), and the 5-stage pipeline workflow.\n</info added on 2025-06-03T01:34:24.528Z>",
           "status": "pending"
         },
         {
@@ -179,7 +188,7 @@
           "dependencies": [
             2
           ],
-          "details": "Include fields for contact information, role within organization, relationship type, and create associations with the organization schema",
+          "details": "Include fields for contact information, role within organization, relationship type, and create associations with the organization schema\n<info added on 2025-06-03T01:42:57.313Z>\nAdd 9 categorization fields: Priority (A-D levels with color coding), Segment (Fine Dining, Fast Food, Healthcare, Catering, Institutional), Distributor (Sysco, USF, PFG, Direct, Other), Account Manager assignment, Stage tracking, Position (Exec Chef, Buyer, Manager, Owner, Kitchen Manager), Reason classification, Source identification, and Interaction logging capabilities.\n</info added on 2025-06-03T01:42:57.313Z>",
           "status": "pending"
         },
         {
@@ -325,7 +334,7 @@
           "title": "Design API endpoints for organization management",
           "description": "Create RESTful API endpoints for CRUD operations on organizations, including food service industry specifics",
           "dependencies": [],
-          "details": "Define endpoints for managing organizations, priority levels (A-D), market segments, distributors, contact roles, and 5-stage sales pipeline. Ensure TypeScript strict mode compliance and Azure SQL Database compatibility.",
+          "details": "Define endpoints for managing organizations, priority levels (A-D), market segments, distributors, contact roles, and 5-stage sales pipeline. Ensure TypeScript strict mode compliance and Azure SQL Database compatibility.\n<info added on 2025-06-03T01:34:38.449Z>\nUpdated UI components to remove next-intl dependencies and internationalization layers, implementing direct English string usage for simplified architecture. Optimized rendering performance for iPad usage with enhanced touch targets (44px minimum) for field data entry by sales representatives. Implemented food service industry-specific priority color coding system: A=Green, B=Yellow, C=Orange, D=Red for consistent visual hierarchy across organization management interfaces.\n</info added on 2025-06-03T01:34:38.449Z>",
           "status": "pending"
         },
         {
@@ -343,7 +352,7 @@
           "title": "Design UI components for organization management",
           "description": "Create reusable UI components for organization-related features, optimized for iPad",
           "dependencies": [],
-          "details": "Design components for organization list, detail view, priority selection, market segment assignment, distributor management, and sales pipeline visualization. Ensure 44px touch targets for iPad optimization.",
+          "details": "Design components for organization list, detail view, priority selection, market segment assignment, distributor management, and sales pipeline visualization. Ensure 44px touch targets for iPad optimization.\n<info added on 2025-06-03T01:43:25.352Z>\nImplement A-D priority system with color coding: A priority organizations display in green indicating high-value status, B priority in yellow for medium-value, C priority in orange for low-priority accounts, and D priority in red for inactive or problem organizations. Apply this color scheme consistently across organization list views, detail cards, and priority selection interfaces.\n</info added on 2025-06-03T01:43:25.352Z>",
           "status": "pending"
         },
         {
@@ -365,8 +374,17 @@
             2,
             4
           ],
-          "details": "Integrate API calls with frontend components, implement error handling, and conduct thorough testing of all organization management features, including food service industry specifics.",
+          "details": "Integrate API calls with frontend components, implement error handling, and conduct thorough testing of all organization management features, including food service industry specifics.\n<info added on 2025-06-03T01:43:10.214Z>\nDevelop comprehensive data validation protocols that include rigorous testing of CRUD operations specifically on touch laptop devices, ensuring data integrity and seamless user experience for sales representatives utilizing touch-enabled interfaces in the field.\n</info added on 2025-06-03T01:43:10.214Z>",
           "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Quality Gate: All CRUD Operations Working on Touch Laptop",
+          "description": "Confirm that all Create, Read, Update, and Delete (CRUD) operations for core CRM modules (Organizations, Contacts, Interactions, Opportunities) are fully functional and tested on a touch laptop, ensuring seamless data management.",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 5
         }
       ]
     },
@@ -468,12 +486,12 @@
         {
           "id": 4,
           "title": "Create interaction analytics dashboard",
-          "description": "Develop a dashboard for analyzing interaction data specific to the food service industry",
+          "description": "Develop a dashboard for analyzing interaction data specific to the food service industry [Updated: 6/2/2025]",
           "dependencies": [
             1,
             3
           ],
-          "details": "Design and implement charts and graphs for visualizing interaction trends, priority levels, market segments, and sales pipeline progression. Ensure responsive design for iPad compatibility.",
+          "details": "Design and implement charts and graphs for visualizing interaction trends, priority levels, market segments, and sales pipeline progression. Ensure responsive design for iPad compatibility.\n<info added on 2025-06-03T01:42:39.173Z>\nDefine and implement 6 specific interaction types within the visualization system: Email, Call, In Person, Demo/sampled, Quoted price, and Follow-up. Each interaction type should have distinct visual representations in charts and graphs, with appropriate color coding and filtering capabilities to allow users to analyze trends by interaction type.\n</info added on 2025-06-03T01:42:39.173Z>",
           "status": "pending"
         },
         {
@@ -524,12 +542,12 @@
         {
           "id": 3,
           "title": "Implement Dynamic Dropdown Component",
-          "description": "Create a reusable dynamic dropdown component that can be used throughout the application for various settings.",
+          "description": "Create a reusable dynamic dropdown component that can be used throughout the application for various settings. [Updated: 6/2/2025]",
           "dependencies": [
             1,
             2
           ],
-          "details": "Develop a TypeScript component that fetches and displays settings data. Ensure it's optimized for iPad use. Implement caching to improve performance. Add support for filtering and searching within large datasets.",
+          "details": "Develop a TypeScript component that fetches and displays settings data. Ensure it's optimized for iPad use. Implement caching to improve performance. Add support for filtering and searching within large datasets.\n<info added on 2025-06-03T01:42:52.288Z>\nImplement a 5-stage pipeline workflow within the settings management interface: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close. Each stage should be configurable through the admin interface with customizable status labels, transition rules, and automated actions. Include visual pipeline representation with drag-and-drop functionality for moving items between stages.\n</info added on 2025-06-03T01:42:52.288Z>",
           "status": "pending"
         },
         {
@@ -541,7 +559,7 @@
             2,
             3
           ],
-          "details": "Update relevant modules to use the new settings system, including priority levels (A-D), market segments, distributors, contact roles, and the 5-stage sales pipeline. Ensure backwards compatibility and provide migration scripts if necessary.",
+          "details": "Update relevant modules to use the new settings system, including priority levels (A-D), market segments, distributors, contact roles, and the 5-stage sales pipeline. Ensure backwards compatibility and provide migration scripts if necessary.\n<info added on 2025-06-03T01:42:31.294Z>\nAdd support for 11 principals in the settings system: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, and Land Lovers. Configure these principals as selectable options in relevant dropdown components and ensure they are properly integrated with the existing priority levels, market segments, distributors, contact roles, and sales pipeline stages.\n</info added on 2025-06-03T01:42:31.294Z>",
           "status": "pending"
         }
       ]
@@ -566,7 +584,7 @@
           "title": "Design global search architecture",
           "description": "Create a high-performance global search architecture that efficiently queries across multiple entities in the food service industry context",
           "dependencies": [],
-          "details": "Consider indexing strategies for Azure SQL Database, optimize for iPad touch targets, implement TypeScript strict mode, and ensure search covers priority levels A-D, market segments, distributors, contact roles, and the 5-stage sales pipeline",
+          "details": "Consider indexing strategies for Azure SQL Database, optimize for iPad touch targets, implement TypeScript strict mode, and ensure search covers priority levels A-D, market segments, distributors, contact roles, and the 5-stage sales pipeline\n<info added on 2025-06-03T01:43:14.988Z>\nDesign Dashboard Layout will include specific considerations for touch-enabled devices, ensuring that pipeline visualizations and other interactive elements are optimized for touch interactions on iPads and touch laptops.\n</info added on 2025-06-03T01:43:14.988Z>",
           "status": "pending"
         },
         {
@@ -584,7 +602,7 @@
           "dependencies": [
             1
           ],
-          "details": "Migrate and optimize queries from MongoDB to Azure SQL Database, create efficient indexes for food service industry-specific data, and ensure fast retrieval across all relevant entities",
+          "details": "Migrate and optimize queries from MongoDB to Azure SQL Database, create efficient indexes for food service industry-specific data, and ensure fast retrieval across all relevant entities\n<info added on 2025-06-03T01:42:44.290Z>\nImplement 4 core reports: Weekly Activity by Account Manager showing client interactions and deal progress per manager, Pipeline Status by Principal tracking opportunities and conversion rates by principal, Interaction Volume Analysis measuring communication frequency and types across accounts, and Organization Performance Tracking monitoring key metrics and growth indicators for client organizations.\n</info added on 2025-06-03T01:42:44.290Z>",
           "status": "pending"
         },
         {
@@ -609,6 +627,15 @@
           ],
           "details": "Implement role-based access control for search results, optimize query performance based on user permissions, and ensure secure data transmission in the context of the food service industry",
           "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Quality Gate: All 4 Reports Generating in <10 seconds",
+          "description": "Verify that all 4 core reports (Weekly Activity by Account Manager, Pipeline Status by Principal, Interaction Volume Analysis, Organization Performance Tracking) generate and display data within 10 seconds, ensuring efficient data retrieval and reporting performance.",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 9
         }
       ]
     },
@@ -922,6 +949,15 @@
           ],
           "details": "Include progress tracking, pause/resume functionality, and a rollback mechanism in case of critical errors. Ensure compatibility with Azure SQL Database transaction management.",
           "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Quality Gate: 100% Data Migration Accuracy Validated",
+          "description": "Confirm that all migrated data from the Excel system to Azure SQL Database has 100% accuracy and integrity, validated through comprehensive reconciliation and testing procedures.",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 13
         }
       ]
     },
@@ -1032,7 +1068,7 @@
           "dependencies": [
             1
           ],
-          "details": "Configure test devices including iPads, ensuring 44px touch targets are properly implemented. Prepare test data that reflects food service industry specifics.",
+          "details": "Configure test devices including iPads, ensuring 44px touch targets are properly implemented. Prepare test data that reflects food service industry specifics.\n<info added on 2025-06-03T01:43:20.535Z>\nExecute UAT will involve full workflow validation on iPads and touch laptops, ensuring all end-to-end processes, from data entry to reporting, function seamlessly across devices for the sales team.\n</info added on 2025-06-03T01:43:20.535Z>",
           "status": "pending"
         },
         {

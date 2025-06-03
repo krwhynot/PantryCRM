@@ -55,6 +55,9 @@ Technical considerations:
 ### Description: Create a high-performance global search architecture that efficiently queries across multiple entities in the food service industry context
 ### Details:
 Consider indexing strategies for Azure SQL Database, optimize for iPad touch targets, implement TypeScript strict mode, and ensure search covers priority levels A-D, market segments, distributors, contact roles, and the 5-stage sales pipeline
+<info added on 2025-06-03T01:43:14.988Z>
+Design Dashboard Layout will include specific considerations for touch-enabled devices, ensuring that pipeline visualizations and other interactive elements are optimized for touch interactions on iPads and touch laptops.
+</info added on 2025-06-03T01:43:14.988Z>
 
 ## 2. Implement secure authentication system [pending]
 ### Dependencies: None
@@ -67,6 +70,9 @@ Utilize NextCRM foundation, implement multi-factor authentication, ensure GDPR c
 ### Description: Enhance database query performance for global search functionality in Azure SQL Database
 ### Details:
 Migrate and optimize queries from MongoDB to Azure SQL Database, create efficient indexes for food service industry-specific data, and ensure fast retrieval across all relevant entities
+<info added on 2025-06-03T01:42:44.290Z>
+Implement 4 core reports: Weekly Activity by Account Manager showing client interactions and deal progress per manager, Pipeline Status by Principal tracking opportunities and conversion rates by principal, Interaction Volume Analysis measuring communication frequency and types across accounts, and Organization Performance Tracking monitoring key metrics and growth indicators for client organizations.
+</info added on 2025-06-03T01:42:44.290Z>
 
 ## 4. Develop front-end search interface [pending]
 ### Dependencies: 9.1, 9.2
@@ -79,4 +85,10 @@ Implement TypeScript strict mode, ensure 44px touch targets for iPad optimizatio
 ### Description: Seamlessly integrate the authentication system with the global search functionality, ensuring secure and personalized search results
 ### Details:
 Implement role-based access control for search results, optimize query performance based on user permissions, and ensure secure data transmission in the context of the food service industry
+
+## 6. Quality Gate: All 4 Reports Generating in <10 seconds [pending]
+### Dependencies: None
+### Description: Verify that all 4 core reports (Weekly Activity by Account Manager, Pipeline Status by Principal, Interaction Volume Analysis, Organization Performance Tracking) generate and display data within 10 seconds, ensuring efficient data retrieval and reporting performance.
+### Details:
+
 

@@ -58,6 +58,9 @@ Technical considerations:
 ### Description: Set up Azure SQL database and integrate it with Prisma ORM for the Food Service CRM
 ### Details:
 Create Azure SQL instance, configure connection strings, install Prisma, initialize Prisma project, and set up database connection
+<info added on 2025-06-03T01:34:24.528Z>
+Simplified database schema design by removing internationalization requirements. Eliminated the need for locale-specific fields and translations in the database, focusing exclusively on the Food Service industry's 9 key categories (Priority, Segment, Distributor, etc.). This English-only approach streamlines the database structure and improves query performance on Azure SQL Basic tier, optimizing within our $5/month database budget while still supporting all industry-specific validation rules, color coding (A=Green through D=Red), and the 5-stage pipeline workflow.
+</info added on 2025-06-03T01:34:24.528Z>
 
 ## 2. Design Organization Schema [pending]
 ### Dependencies: 3.1
@@ -70,6 +73,9 @@ Define fields like organization name, type (restaurant, supplier, etc.), cuisine
 ### Description: Design the contact schema with roles and relationships to organizations
 ### Details:
 Include fields for contact information, role within organization, relationship type, and create associations with the organization schema
+<info added on 2025-06-03T01:42:57.313Z>
+Add 9 categorization fields: Priority (A-D levels with color coding), Segment (Fine Dining, Fast Food, Healthcare, Catering, Institutional), Distributor (Sysco, USF, PFG, Direct, Other), Account Manager assignment, Stage tracking, Position (Exec Chef, Buyer, Manager, Owner, Kitchen Manager), Reason classification, Source identification, and Interaction logging capabilities.
+</info added on 2025-06-03T01:42:57.313Z>
 
 ## 4. Create Interaction Schema [pending]
 ### Dependencies: 3.2, 3.3

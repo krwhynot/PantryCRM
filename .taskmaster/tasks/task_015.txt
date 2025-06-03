@@ -70,6 +70,9 @@ Include test cases for priority system (A-D levels), market segments, distributo
 ### Description: Set up testing environment for various devices, focusing on iPad optimization
 ### Details:
 Configure test devices including iPads, ensuring 44px touch targets are properly implemented. Prepare test data that reflects food service industry specifics.
+<info added on 2025-06-03T01:43:20.535Z>
+Execute UAT will involve full workflow validation on iPads and touch laptops, ensuring all end-to-end processes, from data entry to reporting, function seamlessly across devices for the sales team.
+</info added on 2025-06-03T01:43:20.535Z>
 
 ## 3. Conduct Functional Testing [pending]
 ### Dependencies: 15.1, 15.2

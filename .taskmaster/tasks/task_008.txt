@@ -77,13 +77,19 @@ Use NextCRM foundation and TypeScript strict mode. Implement CRUD operations for
 
 ## 3. Implement Dynamic Dropdown Component [pending]
 ### Dependencies: 8.1, 8.2
-### Description: Create a reusable dynamic dropdown component that can be used throughout the application for various settings.
+### Description: Create a reusable dynamic dropdown component that can be used throughout the application for various settings. [Updated: 6/2/2025]
 ### Details:
 Develop a TypeScript component that fetches and displays settings data. Ensure it's optimized for iPad use. Implement caching to improve performance. Add support for filtering and searching within large datasets.
+<info added on 2025-06-03T01:42:52.288Z>
+Implement a 5-stage pipeline workflow within the settings management interface: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close. Each stage should be configurable through the admin interface with customizable status labels, transition rules, and automated actions. Include visual pipeline representation with drag-and-drop functionality for moving items between stages.
+</info added on 2025-06-03T01:42:52.288Z>
 
 ## 4. Integrate Settings System with Existing Modules [pending]
 ### Dependencies: 8.1, 8.2, 8.3
 ### Description: Integrate the new settings management system with existing modules, focusing on food service industry specifics.
 ### Details:
 Update relevant modules to use the new settings system, including priority levels (A-D), market segments, distributors, contact roles, and the 5-stage sales pipeline. Ensure backwards compatibility and provide migration scripts if necessary.
+<info added on 2025-06-03T01:42:31.294Z>
+Add support for 11 principals in the settings system: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, and Land Lovers. Configure these principals as selectable options in relevant dropdown components and ensure they are properly integrated with the existing priority levels, market segments, distributors, contact roles, and sales pipeline stages.
+</info added on 2025-06-03T01:42:31.294Z>
 
