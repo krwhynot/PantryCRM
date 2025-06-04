@@ -74,11 +74,7 @@ const customJestConfig = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   
   // Global setup for Kitchen Pantry CRM specific needs
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json'
-    }
-  },
+
   
   // Verbose output for debugging
   verbose: true,

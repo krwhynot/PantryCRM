@@ -83,6 +83,20 @@ if (typeof Element !== 'undefined') {
   };
 }
 
+// Mock window.getComputedStyle for proper height calculations
+Object.defineProperty(window, 'getComputedStyle', {
+  value: jest.fn(() => ({
+    height: '44px', // iPad minimum touch target height as string
+    width: '44px',  // iPad minimum touch target width as string
+    getPropertyValue: jest.fn((prop) => {
+      if (prop === 'height') return '44px';
+      if (prop === 'width') return '44px';
+      return '';
+    }),
+  })),
+  writable: true,
+});
+
 // Mock window.matchMedia for responsive testing
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

@@ -1,80 +1,40 @@
 # Task ID: 16
-# Title: Execute Team Training and Production Launch
-# Status: pending
-# Dependencies: 15
-# Priority: high
-# Description: Develop training materials, conduct team training, coordinate production launch, and implement post-launch support.
+# Title: Azure Cost Monitoring [CONTINUOUS]
+# Status: active
+# Dependencies: 2
+# Priority: medium
+# Description: Continuous cost monitoring and optimization to maintain $18/month budget
 # Details:
-1. Create Comprehensive Training Materials
-   - Develop user guides, quick reference cards, and video tutorials
-   - Include workflows for both touch and traditional interfaces
-   - Add food service industry-specific workflow examples
+1. Resource Usage Tracking
+   - SQL Database and App Service monitoring
+   - DTU usage and storage tracking
+   - Performance vs cost optimization
 
-2. Execute Team Training Program
-   - Conduct hands-on training sessions with sales team
-   - Provide one-on-one assistance as needed
-   - Ensure all users are comfortable with the system
+2. Budget Alert System
+   - 70% threshold alert ($12.60)
+   - 90% threshold alert ($16.20)
+   - Daily cost tracking dashboard
 
-3. Coordinate Production Launch
-   - Execute coordinated cutover from Excel system to CRM
-   - Notify all stakeholders of successful launch
-   - Provide immediate assistance during launch period
+3. Weekly Cost Reviews
+   - Cost trend analysis
+   - Optimization opportunity identification
+   - Budget compliance verification
 
-4. Implement Go-Live Support Strategy
-   - Establish comprehensive support procedures for launch week
-   - Plan for immediate issue resolution during critical period
-   - Continuously monitor system performance and user adoption
-
-5. Monitor Initial Performance and User Adoption
-   - Track system performance and user adoption metrics
-   - Collect and address immediate user feedback
-   - Implement quick fixes for any identified issues
-
-6. Create Post-Launch Documentation and Handover
-   - Document lessons learned and create ongoing support procedures
-   - Ensure ongoing support capabilities
-   - Document opportunities for post-MVP enhancements
-
-Technical considerations:
-- Use Loom or similar for creating video tutorials
-- Implement a ticketing system for tracking support requests
-- Create a knowledge base for common issues and solutions
-- Set up monitoring dashboards for real-time performance tracking
-- Establish communication channels for user feedback
-- Document all post-launch changes and enhancements
+4. Cost Optimization Strategies
+   - Resource right-sizing
+   - Performance optimization
+   - Usage pattern analysis
 
 # Test Strategy:
-1. Test training materials with actual users
-2. Verify user competency after training sessions
-3. Test production launch procedures
-4. Verify go-live support strategy effectiveness
-5. Monitor system performance and user adoption
-6. Test post-launch documentation and support procedures
-7. Verify all launch criteria are met
-8. Document lessons learned for future improvements
+1. **WEEKLY**: Costs remain under $18/month
+2. Alert system functional
+3. Optimization strategies effective
+4. Budget compliance maintained
 
 # Subtasks:
-## 1. Prepare Team Training Materials [pending]
+## 1. Weekly Budget Review [active]
 ### Dependencies: None
-### Description: Develop comprehensive training materials for the NextCRM system, focusing on food service industry specifics
+### Description: 
 ### Details:
-Create training modules covering: priority system (A-D levels), market segments, distributors, contact roles, and the 5-stage sales pipeline. Include exercises for TypeScript strict mode usage and iPad optimization techniques with 44px touch targets.
-
-## 2. Conduct Team Training Sessions [pending]
-### Dependencies: 16.1
-### Description: Organize and execute training sessions for all team members on the new NextCRM system
-### Details:
-Schedule multiple training sessions, covering both technical aspects (TypeScript, iPad optimization) and food service industry specifics. Ensure all team members are proficient in using the new system before launch.
-
-## 3. Execute Production Launch [pending]
-### Dependencies: 16.2
-### Description: Perform the migration from MongoDB to Azure SQL Database and launch the NextCRM system in production
-### Details:
-Coordinate with IT team to execute the database migration. Implement final checks on TypeScript strict mode compliance and iPad optimization. Conduct a phased rollout, starting with non-critical modules before full system deployment.
-
-## 4. Establish Post-Launch Support [pending]
-### Dependencies: 16.3
-### Description: Set up a dedicated support team and processes for post-launch assistance and issue resolution
-### Details:
-Create a support ticketing system. Assign team members for immediate post-launch support. Develop FAQ and troubleshooting guides specific to food service industry use cases. Schedule regular check-ins with key stakeholders for feedback and continuous improvement.
+Monitor Azure costs against $18/month target
 

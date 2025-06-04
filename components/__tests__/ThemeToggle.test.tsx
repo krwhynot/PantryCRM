@@ -15,27 +15,49 @@ jest.mock('next-themes', () => ({
   ThemeProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
+// Mock shadcn/ui dropdown components to make them simple for testing
+jest.mock('@/components/ui/dropdown-menu', () => ({
+  DropdownMenu: ({ children }: { children: React.ReactNode }) => <div data-testid="dropdown-menu">{children}</div>,
+  DropdownMenuTrigger: ({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) => 
+    asChild ? children : <div data-testid="dropdown-trigger">{children}</div>,
+  DropdownMenuContent: ({ children }: { children: React.ReactNode }) => <div data-testid="dropdown-content">{children}</div>,
+  DropdownMenuItem: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => 
+    <div data-testid="dropdown-item" onClick={onClick}>{children}</div>,
+}));
+
 describe('ThemeToggle Component', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
-  it('toggles theme when clicked', () => {
-    render(<ThemeToggle />); // ThemeProvider is globally mocked or not strictly needed if useTheme is well-mocked
+  it('renders toggle button with correct accessibility', () => {
+    render(<ThemeToggle />);
     
-    const toggle = screen.getByRole('button');
-    // Initial state: mockSetTheme has not been called yet
-    // Depending on ThemeToggle's initial render logic, theme might be 'light' from mock
-    // No direct DOM check needed if we trust useTheme mock and ThemeToggle's behavior
+    const toggleButton = screen.getByRole('button', { name: /toggle theme/i });
+    expect(toggleButton).toBeInTheDocument();
+  });
+
+  it('displays theme options and calls setTheme', () => {
+    render(<ThemeToggle />);
     
-    fireEvent.click(toggle);
-    // After click: should call setTheme to toggle to 'dark'
-    // The actual theme value might cycle based on current theme, let's assume it tries to set 'dark'
+    // Check that theme options are rendered (with our simplified mock)
+    const darkOption = screen.getByText('Dark');
+    const lightOption = screen.getByText('Light');
+    const systemOption = screen.getByText('System');
+    
+    expect(darkOption).toBeInTheDocument();
+    expect(lightOption).toBeInTheDocument();
+    expect(systemOption).toBeInTheDocument();
+    
+    // Test clicking each option
+    fireEvent.click(darkOption);
     expect(mockSetTheme).toHaveBeenCalledWith('dark');
     
-    fireEvent.click(toggle);
-    // After another click: should call setTheme again (the exact value depends on component logic)
-    expect(mockSetTheme).toHaveBeenCalledTimes(2);
+    fireEvent.click(lightOption);
+    expect(mockSetTheme).toHaveBeenCalledWith('light');
+    
+    fireEvent.click(systemOption);
+    expect(mockSetTheme).toHaveBeenCalledWith('system');
   });
 });

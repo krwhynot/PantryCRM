@@ -1,107 +1,49 @@
 # Task ID: 5
-# Title: Implement Organization Management
+# Title: Interaction Tracking with 30-Second Entry Goal
 # Status: pending
 # Dependencies: 3, 4
-# Priority: high
-# Description: Develop the organization management functionality including database schema, API endpoints, list and detail views, forms, and industry-specific features.
+# Priority: critical
+# Description: Implement rapid interaction logging with 6 food service interaction types and auto-save functionality
 # Details:
-1. Implement Organization Database Schema
-   - Execute Prisma migrations for organization schema with food service fields
-   - Create indexes for efficient searching and filtering
+1. Interaction Database Schema (6 Types)
+   - Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+   - Relationships to organizations, contacts, account managers
+   - Performance optimization for frequent logging
 
-2. Develop Organization API Endpoints
-   - Create Next.js API routes for organization CRUD operations
-   - Implement proper validation, error handling, and response formatting
-   - Optimize queries for Azure SQL Basic tier performance
+2. Quick Entry Forms (30-Second Target)
+   - Single-screen forms optimized for touch
+   - Auto-complete for organizations/contacts (<500ms)
+   - Large form controls for iPad input
+   - Type-specific fields and quick-select options
 
-3. Create Organization List View with Multi-Device Support
-   - Build responsive organization listing with search and filtering
-   - Implement priority color coding (A=Green, B=Yellow, C=Orange, D=Red)
-   - Add segment and distributor filtering capabilities
+3. Auto-Save and Form Recovery
+   - Auto-save every 30 seconds with visual feedback
+   - Form recovery after browser interruption
+   - Network interruption handling
 
-4. Create Organization Detail View
-   - Build comprehensive organization profile display
-   - Show relationships with contacts and interactions
-   - Implement intuitive navigation for both touch and mouse input
-
-5. Implement Organization Form with Industry Fields
-   - Create organization creation/editing forms
-   - Include fields for priority levels, market segments, distributors
-   - Implement validation for required fields and business rules
-
-6. Add Priority Level System with Visual Indicators
-   - Implement color-coded priority system
-   - Ensure color contrast compliance and non-color alternatives
-   - Apply consistent color coding across all organization references
-
-7. Implement Market Segment and Distributor Tracking
-   - Add dropdowns for Fine Dining, Fast Food, Healthcare, Catering, Institutional segments
-   - Support Sysco, USF, PFG, Direct, Other distributor relationships
-   - Enable segment and distributor-based filtering and analytics
-
-8. Add Account Manager Assignment System
-   - Create assignment system preserving existing Excel data
-   - Implement assignment workflows and filtering capabilities
-
-Technical considerations:
-- Use React Query/SWR for efficient data fetching and caching
-- Implement optimistic UI updates for better user experience
-- Use React Hook Form for form validation and submission
-- Implement debounced search for performance optimization
+4. Interaction History and Timeline
+   - Comprehensive history displays
+   - Filtering and search capabilities
+   - Integration with reporting system
 
 # Test Strategy:
-1. Test organization CRUD operations for correctness and performance
-2. Verify all industry-specific fields are properly implemented
-3. Test search and filtering capabilities with large datasets
-4. Verify priority color coding and visual indicators
-5. Test market segment and distributor tracking functionality
-6. Verify account manager assignment system
-7. Test multi-device usability on both touch and mouse interfaces
-8. Verify performance meets sub-second search requirement
+1. All 6 interaction types functional
+2. **CRITICAL**: 30-second entry target achieved
+3. Auto-complete meets 500ms performance
+4. Auto-save and recovery working
+5. Multi-device workflow validation
+6. Performance with large interaction volumes
 
 # Subtasks:
-## 1. Design API endpoints for organization management [pending]
+## 1. 6 Food Service Interaction Types [pending]
 ### Dependencies: None
-### Description: Create RESTful API endpoints for CRUD operations on organizations, including food service industry specifics
+### Description: 
 ### Details:
-Define endpoints for managing organizations, priority levels (A-D), market segments, distributors, contact roles, and 5-stage sales pipeline. Ensure TypeScript strict mode compliance and Azure SQL Database compatibility.
-<info added on 2025-06-03T01:34:38.449Z>
-Updated UI components to remove next-intl dependencies and internationalization layers, implementing direct English string usage for simplified architecture. Optimized rendering performance for iPad usage with enhanced touch targets (44px minimum) for field data entry by sales representatives. Implemented food service industry-specific priority color coding system: A=Green, B=Yellow, C=Orange, D=Red for consistent visual hierarchy across organization management interfaces.
-</info added on 2025-06-03T01:34:38.449Z>
+Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
 
-## 2. Implement backend logic for organization management [pending]
-### Dependencies: 5.1
-### Description: Develop server-side logic to handle organization-related operations and data management
-### Details:
-Create controllers and services for organization management, including priority system, market segments, distributors, and sales pipeline stages. Implement data migration from MongoDB to Azure SQL Database.
-
-## 3. Design UI components for organization management [pending]
+## 2. 30-Second Entry Optimization [pending]
 ### Dependencies: None
-### Description: Create reusable UI components for organization-related features, optimized for iPad
+### Description: 
 ### Details:
-Design components for organization list, detail view, priority selection, market segment assignment, distributor management, and sales pipeline visualization. Ensure 44px touch targets for iPad optimization.
-<info added on 2025-06-03T01:43:25.352Z>
-Implement A-D priority system with color coding: A priority organizations display in green indicating high-value status, B priority in yellow for medium-value, C priority in orange for low-priority accounts, and D priority in red for inactive or problem organizations. Apply this color scheme consistently across organization list views, detail cards, and priority selection interfaces.
-</info added on 2025-06-03T01:43:25.352Z>
-
-## 4. Implement frontend logic for organization management [pending]
-### Dependencies: 5.1, 5.3
-### Description: Develop client-side logic to interact with the API and manage organization data
-### Details:
-Create services and state management for organization-related features. Implement TypeScript strict mode compliance and integrate with NextCRM foundation.
-
-## 5. Integrate and test organization management features [pending]
-### Dependencies: 5.2, 5.4
-### Description: Combine frontend and backend implementations, perform integration testing
-### Details:
-Integrate API calls with frontend components, implement error handling, and conduct thorough testing of all organization management features, including food service industry specifics.
-<info added on 2025-06-03T01:43:10.214Z>
-Develop comprehensive data validation protocols that include rigorous testing of CRUD operations specifically on touch laptop devices, ensuring data integrity and seamless user experience for sales representatives utilizing touch-enabled interfaces in the field.
-</info added on 2025-06-03T01:43:10.214Z>
-
-## 6. Quality Gate: All CRUD Operations Working on Touch Laptop [pending]
-### Dependencies: None
-### Description: Confirm that all Create, Read, Update, and Delete (CRUD) operations for core CRM modules (Organizations, Contacts, Interactions, Opportunities) are fully functional and tested on a touch laptop, ensuring seamless data management.
-### Details:
-
+Touch-optimized forms with auto-complete and quick-select
 

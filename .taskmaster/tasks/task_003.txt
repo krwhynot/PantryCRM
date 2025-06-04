@@ -1,103 +1,55 @@
 # Task ID: 3
-# Title: Design and Implement Database Schema
+# Title: Enhanced Organization Management with Revenue Tracking
 # Status: pending
 # Dependencies: 1, 2
-# Priority: high
-# Description: Design and implement the database schema for organizations, contacts, interactions, opportunities, and settings management with food service specific fields.
+# Priority: critical
+# Description: Implement organization management with food service fields, global search foundation, and revenue tracking capabilities
 # Details:
-1. Design Organizations Schema with Food Service Fields
-   - Include fields for name, priority_id (A-D), segment_id, distributor_id, account_manager_id
-   - Add food service specific fields for market segments and distributor relationships
+1. Enhanced Database Schema Implementation
+   - Execute Prisma migrations with revenue tracking fields
+   - Add food service fields: priority (A-D), segments, distributors
+   - **NEW**: Revenue tracking and organization value fields
 
-2. Design Contacts Schema with Role Hierarchy
-   - Create schema for multiple contacts per organization
-   - Include fields for organization_id, first_name, last_name, position_id, is_primary
-   - Support food service roles: Exec Chef, Buyer, Manager, Owner, Kitchen Manager
+2. Organization API Endpoints with Advanced Features
+   - Standard CRUD operations with audit trail
+   - **NEW**: Global search endpoint foundation
+   - Performance optimization for Azure SQL Basic
 
-3. Design Interactions Schema with 6 Types
-   - Create schema for Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
-   - Include fields for organization_id, contact_id, interaction_type_id, interaction_date
-   - Optimize for frequent inserts and queries
+3. Organization Management Interface (iPad Optimized)
+   - Responsive data table with server-side pagination
+   - Sub-second search with fuzzy matching
+   - **NEW**: URL-based state management for filters
+   - Priority color coding (A=Green, B=Yellow, C=Orange, D=Red)
 
-4. Design Opportunities Schema with 5-Stage Pipeline
-   - Support pipeline stages: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
-   - Include fields for organization_id, principal, stage_id, status_id, probability
-   - Support 11 principals association
-
-5. Design Settings Management Schema for 9 Categories
-   - Create SettingCategory and SettingOption tables
-   - Support 9 categories: Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction
-
-6. Configure Database Migration from MongoDB
-   - Plan Prisma provider migration from mongodb to sqlserver
-   - Map NextCRM entities to new SQL schema
-
-7. Optimize Schema for Azure SQL Basic Tier
-   - Design indexes for performance within DTU limits
-   - Implement appropriate relationships and constraints
-
-Technical considerations:
-- Use Prisma 5.0+ as the ORM with SQL Server provider
-- Implement proper indexing strategy for Azure SQL performance
-- Design with normalization principles while considering query performance
-- Use foreign key constraints for data integrity
+4. Settings Management System (9 Categories)
+   - Dynamic configuration for all dropdown values
+   - **NEW**: Drag-and-drop sort ordering
+   - Real-time updates across application
 
 # Test Strategy:
-1. Test organization schema with all food service fields
-2. Verify contact schema supports role hierarchy and primary contact designation
-3. Test interactions schema with all 6 interaction types
-4. Verify opportunities schema supports 5-stage pipeline and 11 principals
-5. Test settings schema with all 9 categories
-6. Verify foreign key constraints and relationships
-7. Test performance with sample data volume
-8. Create comprehensive ER diagrams and documentation
+1. Organization CRUD operations complete in <2 seconds
+2. Food service fields working with dynamic settings
+3. Priority color coding meets WCAG standards
+4. Search performance <1 second with 100+ records
+5. **NEW**: Global search foundation operational
+6. **NEW**: Settings system supports all 9 categories with real-time updates
 
 # Subtasks:
-## 1. Configure Azure SQL with Prisma [pending]
+## 1. Enhanced Database Schema with Revenue Fields [pending]
 ### Dependencies: None
-### Description: Set up Azure SQL database and integrate it with Prisma ORM for the Food Service CRM
+### Description: 
 ### Details:
-Create Azure SQL instance, configure connection strings, install Prisma, initialize Prisma project, and set up database connection
-<info added on 2025-06-03T01:34:24.528Z>
-Simplified database schema design by removing internationalization requirements. Eliminated the need for locale-specific fields and translations in the database, focusing exclusively on the Food Service industry's 9 key categories (Priority, Segment, Distributor, etc.). This English-only approach streamlines the database structure and improves query performance on Azure SQL Basic tier, optimizing within our $5/month database budget while still supporting all industry-specific validation rules, color coding (A=Green through D=Red), and the 5-stage pipeline workflow.
-</info added on 2025-06-03T01:34:24.528Z>
+Add revenue tracking, value fields, and optimize for Advanced features
 
-## 2. Design Organization Schema [pending]
-### Dependencies: 3.1
-### Description: Create the schema for organizations with food-service specific fields
+## 2. Global Search Foundation Implementation [NEW] [pending]
+### Dependencies: None
+### Description: 
 ### Details:
-Define fields like organization name, type (restaurant, supplier, etc.), cuisine specialties, operating hours, and location details
+Search endpoint architecture for cross-entity search capabilities
 
-## 3. Develop Contact Schema [pending]
-### Dependencies: 3.2
-### Description: Design the contact schema with roles and relationships to organizations
+## 3. Settings Management System (9 Categories) [pending]
+### Dependencies: None
+### Description: 
 ### Details:
-Include fields for contact information, role within organization, relationship type, and create associations with the organization schema
-<info added on 2025-06-03T01:42:57.313Z>
-Add 9 categorization fields: Priority (A-D levels with color coding), Segment (Fine Dining, Fast Food, Healthcare, Catering, Institutional), Distributor (Sysco, USF, PFG, Direct, Other), Account Manager assignment, Stage tracking, Position (Exec Chef, Buyer, Manager, Owner, Kitchen Manager), Reason classification, Source identification, and Interaction logging capabilities.
-</info added on 2025-06-03T01:42:57.313Z>
-
-## 4. Create Interaction Schema [pending]
-### Dependencies: 3.2, 3.3
-### Description: Develop the schema for tracking interactions and touchpoints
-### Details:
-Design fields for interaction type, date, duration, notes, and create relationships with contacts and organizations
-
-## 5. Design Opportunity/Pipeline Schema [pending]
-### Dependencies: 3.2, 3.3
-### Description: Create the schema for managing sales opportunities and pipeline
-### Details:
-Include fields for opportunity stage, value, probability, expected close date, and link to organizations and contacts
-
-## 6. Develop Settings Schema [pending]
-### Dependencies: 3.1
-### Description: Design a schema for storing dynamic configuration settings
-### Details:
-Create a flexible schema to store various system and user-specific settings, including customizable fields and preferences
-
-## 7. Implement Testing and Validation [pending]
-### Dependencies: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
-### Description: Develop and execute tests to validate the database schema design
-### Details:
-Create unit tests for each schema, perform integration tests, validate relationships and constraints, and optimize indexes for performance
+Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction
 

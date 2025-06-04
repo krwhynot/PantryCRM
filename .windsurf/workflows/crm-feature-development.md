@@ -2,200 +2,138 @@
 description: Implement Food Service CRM features incrementally using NextCRM foundation. Develops complete vertical slices from iPad UI through API to Azure SQL Database, ensuring each feature is fully tested before proceeding.
 ---
 
-# Food Service CRM - Feature Development
+# Kitchen Pantry CRM - Enhanced Feature Development
 
-## Description
-Implement individual CRM features as complete vertical slices from iPad UI through API to Azure SQL Database, ensuring NextCRM foundation compliance.
+## Current Status
+- **Phase 1**: ✅ COMPLETED (NextCRM + Azure SQL operational)
+- **Phase 2**: 🚀 READY (Core CRM + Enhanced Features)
+- **Budget**: $18/month Azure constraint
 
-## Prerequisites
-- Foundation setup completed
-- Blueprint planning approved
-- Development environment configured
-- Feature requirements prioritized
+## Implementation Steps
 
-## Steps
+### 1. Select Enhanced Feature
+**Phase 2**: Organizations (revenue tracking), Contacts (role hierarchy), Interactions (30-sec entry), Global Search, Settings (9 categories)
+**Phase 3**: Pipeline (drag-drop), Value Tracking, Enhanced Reporting
 
-### 1. Select Feature from Backlog
-Choose prioritized feature slice:
-- **Foundation**: Authentication, Navigation, Dashboard
-- **Core**: Organizations, Contacts, Interactions
-- **Advanced**: Pipeline, Reporting, Settings
-- **Migration**: Excel Import, Production Optimization
-
-### 2. Implement Database Layer
--- Example: Organization feature
+### 2. Database with Settings Integration
+```sql
 CREATE TABLE organizations (
-id INT IDENTITY(1,1) PRIMARY KEY,
-name NVARCHAR(255) UNIQUE NOT NULL,
-priority_id INT FOREIGN KEY REFERENCES setting_options(id),
-segment_id INT FOREIGN KEY REFERENCES setting_options(id),
-distributor_id INT FOREIGN KEY REFERENCES setting_options(id),
-account_manager_id INT FOREIGN KEY REFERENCES setting_options(id),
-created_at DATETIME2 DEFAULT GETDATE(),
-updated_at DATETIME2 DEFAULT GETDATE()
+  id INT IDENTITY(1,1) PRIMARY KEY,
+  name NVARCHAR(255) UNIQUE NOT NULL,
+  priority_id INT FOREIGN KEY REFERENCES setting_options(id),
+  revenue_tracking DECIMAL(10,2), -- NEW: Enhanced
+  created_at DATETIME2 DEFAULT GETDATE()
 );
+```
 
-text
-
-### 3. Create API Endpoints
+### 3. API with NextCRM Patterns
+```typescript
 // app/api/organizations/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { z } from 'zod';
-
-const organizationSchema = z.object({
-name: z.string().min(1).max(255),
-priorityId: z.number(),
-segmentId: z.number(),
-distributorId: z.number(),
-accountManagerId: z.number(),
-});
-
 export async function POST(request: NextRequest) {
-try {
-const body = await request.json();
-const validatedData = organizationSchema.parse(body);
-
-text
-const organization = await prisma.organization.create({
-  data: validatedData,
-});
-
-return NextResponse.json(organization);
-} catch (error) {
-return NextResponse.json({ error: 'Validation failed' }, { status: 400 });
+  const body = await request.json();
+  const org = await prisma.organization.create({
+    data: body,
+    include: { priority: true } // NextCRM pattern
+  });
+  return NextResponse.json(org);
 }
-}
+```
 
-text
-
-### 4. Build iPad-Optimized Components
-// components/OrganizationForm.tsx
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-
+### 4. Multi-Device Components
+```typescript
+// components/food-service/OrganizationForm.tsx
 export function OrganizationForm() {
-return (
-<form className="space-y-6">
-<Input
-placeholder="Organization Name"
-className="min-h-11 text-lg" // iPad optimization
-/>
-<Select>
-<SelectTrigger className="min-h-11">
-<SelectValue placeholder="Select Priority" />
-</SelectTrigger>
-</Select>
-<Button
-type="submit"
-className="min-h-11 min-w-24 text-lg" // iPad touch targets
->
-Save Organization
-</Button>
-</form>
-);
+  return (
+    <form className="space-y-6">
+      <Input className="min-h-[44px] text-lg" placeholder="Name" />
+      <Input className="min-h-[44px]" placeholder="Revenue" type="number" />
+      <Button className="min-h-[44px] min-w-[88px]">Save</Button>
+    </form>
+  );
 }
+```
 
-text
-
-### 5. Implement Search Functionality
-// hooks/useOrganizationSearch.ts
-import { useState, useEffect } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
-
-export function useOrganizationSearch() {
-const [query, setQuery] = useState('');
-const [results, setResults] = useState([]);
-const [loading, setLoading] = useState(false);
-
-const debouncedSearch = useDebouncedCallback(async (searchQuery) => {
-if (!searchQuery) return;
-
-text
-setLoading(true);
-const response = await fetch(`/api/organizations/search?q=${searchQuery}`);
-const data = await response.json();
-setResults(data);
-setLoading(false);
-}, 300); // 300ms debounce for performance
-
-useEffect(() => {
-debouncedSearch(query);
-}, [query, debouncedSearch]);
-
-return { query, setQuery, results, loading };
+### 5. Enhanced Global Search
+```typescript
+// hooks/useGlobalSearch.ts - NEW
+export function useGlobalSearch() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  
+  const search = useDebouncedCallback(async (q) => {
+    const res = await fetch(`/api/search/global?q=${q}`);
+    setResults(await res.json());
+  }, 300);
+  
+  return { query, setQuery, results, search };
 }
+```
 
-text
-
-### 6. Add Settings Integration
-// hooks/useSettings.ts
+### 6. Settings Integration (9 Categories)
+```typescript
 export function useSettings() {
-const { data: priorities } = useSWR('/api/settings/priorities');
-const { data: segments } = useSWR('/api/settings/segments');
-const { data: distributors } = useSWR('/api/settings/distributors');
-
-return {
-priorities: priorities || [],
-segments: segments || [],
-distributors: distributors || [],
-};
+  return {
+    priorities: useSWR('/api/settings/priorities').data,
+    segments: useSWR('/api/settings/segments').data,
+    distributors: useSWR('/api/settings/distributors').data
+  };
 }
+```
 
-text
+### 7. Multi-Device Testing
+- **Touch Laptop**: Primary testing device
+- **44px Touch Targets**: All interactive elements
+- **Performance**: <1s search, <2s global search, <10s reports
+- **Input Switching**: Touch/mouse transitions
 
-### 7. Test iPad Compatibility
-- Test on actual iPad devices (iPad Air, iPad Pro)
-- Validate landscape orientation layouts
-- Verify touch target sizes (44px minimum)
-- Test auto-complete performance (<500ms)
-- Validate form submission flows
-
-### 8. Performance Optimization
-// Implement caching and optimization
-const organizationCache = new Map();
-
-export async function getOrganizations() {
-const cacheKey = 'organizations';
-
-if (organizationCache.has(cacheKey)) {
-return organizationCache.get(cacheKey);
+### 8. Azure Optimization
+```typescript
+const cache = new Map();
+export async function getCachedOrgs() {
+  if (cache.has('orgs')) return cache.get('orgs');
+  const orgs = await prisma.organization.findMany();
+  cache.set('orgs', orgs, 300000);
+  return orgs;
 }
+```
 
-const organizations = await prisma.organization.findMany({
-include: {
-priority: true,
-segment: true,
-distributor: true,
-},
-});
+### 9. Quality Gate Validation
+- ✅ Multi-device functionality verified
+- ✅ Performance targets met
+- ✅ NextCRM patterns preserved
+- ✅ Azure cost under $18/month
+- ✅ Food service requirements satisfied
 
-organizationCache.set(cacheKey, organizations);
-return organizations;
-}
-
-text
-
-### 9. Integration Testing
-- Test feature with existing components
-- Validate data relationships
-- Confirm error handling
-- Test edge cases and validation
-
-### 10. Documentation Update
-Document completed feature:
-- API endpoint specifications
-- Component usage examples
-- Database schema changes
-- Performance benchmarks
-- iPad optimization notes
+### 10. Integration Testing
+- Feature integration with NextCRM
+- Data relationship validation
+- Error handling and edge cases
+- Performance regression testing
+- Multi-device workflow verification
 
 ## Success Criteria
-- Feature implemented as complete vertical slice
-- iPad optimization verified on actual devices
-- Performance targets met (<1s search, <10s reports)
-- Integration testing passed
-- Documentation complete and current
-4. Production Deployment Workflow
+- ✅ Complete vertical slice implementation
+- ✅ Multi-device optimization verified
+- ✅ Performance targets achieved
+- ✅ NextCRM foundation compliance
+- ✅ Azure budget maintained
+- ✅ Quality gate requirements passed
 
+## Food Service Requirements
+- **11 Principals**: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
+- **6 Interaction Types**: Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+- **5-Stage Pipeline**: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
+- **9 Settings**: Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction
+
+## Enhanced Features
+- ✨ Global Search across all entities
+- ✨ Revenue tracking and organization values
+- ✨ Drag-and-drop pipeline management
+- ✨ Enhanced dashboard with exports
+- ✨ Cross-browser compatibility testing
+
+## NextCRM Compliance
+- Preserve shadcn/ui + Tremor charts integration
+- Maintain SWR data fetching patterns
+- Use established component structure
+- Follow Azure SQL optimization strategies

@@ -1,0 +1,70 @@
+/* /styles/ipad-optimization.css */
+
+/* Ensure all interactive elements meet 44px minimum */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Form inputs optimized for touch */
+.form-input-touch {
+  height: 48px; /* Slightly larger than minimum for comfort */
+  font-size: 16px; /* Prevents zoom on iOS */
+  padding: 12px 16px;
+}
+
+/* Button touch optimization */
+.button-touch {
+  min-height: 48px;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+/* Select dropdown touch optimization */
+.select-touch {
+  min-height: 48px;
+  font-size: 16px;
+}
+
+/* Card touch targets for list items */
+.card-touch {
+  min-height: 80px;
+  padding: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.card-touch:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.card-touch:active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Spacing for touch-friendly layout */
+.form-spacing {
+  gap: 20px; /* Minimum 8px between touch targets */
+}
+
+/* iPad landscape optimization */
+@media (min-width: 768px) and (orientation: landscape) {
+  .ipad-landscape {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .form-grid-ipad {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+}
+
+/* Focus states for accessibility */
+.focus-visible:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}

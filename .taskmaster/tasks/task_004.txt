@@ -1,84 +1,48 @@
 # Task ID: 4
-# Title: Implement Multi-Device UI Framework
+# Title: Contact Management with Role Hierarchy
 # Status: pending
-# Dependencies: 1
-# Priority: high
-# Description: Set up a responsive UI framework optimized for both touch and mouse input, with special focus on iPad compatibility.
+# Dependencies: 3
+# Priority: critical
+# Description: Implement comprehensive contact management with food service roles and duplicate prevention
 # Details:
-1. Research Multi-Device UI Best Practices
-   - Document iPad-specific design requirements
-   - Research touch target size requirements (minimum 44px)
-   - Investigate Safari-specific considerations for iPad
+1. Contact Database Schema with Food Service Roles
+   - Support: Exec Chef, Buyer, Manager, Owner, Kitchen Manager
+   - Primary contact designation (one per organization)
+   - Performance optimization for multiple contacts
 
-2. Configure Responsive Design System
-   - Set up breakpoints for iPad Pro (12.9"), iPad Air (10.9"), iPad Mini (8.3")
-   - Optimize for landscape primary usage while supporting portrait
-   - Implement fluid layouts with CSS Grid and Flexbox
+2. Contact API Endpoints with Business Logic
+   - CRUD operations with relationship integrity
+   - Duplicate prevention within organizations
+   - Auto-complete for quick selection
 
-3. Customize shadcn/ui Components
-   - Modify NextCRM components to ensure 44px minimum touch targets
-   - Apply food service branding color scheme (A=Green, B=Yellow, C=Orange, D=Red)
-   - Enhance form components for touch input optimization
+3. Contact Management Interface
+   - Role-based filtering and sorting
+   - Primary contact visual indicators
+   - Quick contact creation for field visits
 
-4. Setup Testing Environment
-   - Configure development server for iPad testing
-   - Set up browser DevTools for device simulation
-   - Implement responsive testing utilities
-
-5. Create Component Documentation
-   - Document iPad-optimized component usage
-   - Create guidelines for developers on touch-friendly UI patterns
-   - Document responsive design principles and breakpoints
-
-Technical considerations:
-- Use TailwindCSS for responsive design with custom breakpoints
-- Implement React context for device type detection
-- Use CSS variables for theming and color scheme
-- Consider using Framer Motion for touch-friendly animations
-- Implement focus states that work well for both touch and keyboard navigation
+4. Contact Forms with Validation
+   - Role assignment with decision-making hierarchy
+   - Contact information with business rule enforcement
+   - Fuzzy matching for duplicate detection
 
 # Test Strategy:
-1. Test all interactive elements to verify 44px minimum touch targets
-2. Verify responsive design on iPad Pro, Air, and Mini in both orientations
-3. Test with both touch and mouse input to ensure consistent functionality
-4. Verify color contrast meets WCAG standards for accessibility
-5. Test loading times and performance on 3G connections
-6. Verify browser compatibility across Chrome, Safari, Edge, and Firefox
+1. Contact CRUD with organization relationships
+2. Food service roles properly implemented
+3. Primary contact designation working
+4. Duplicate prevention and fuzzy matching
+5. Multi-device usability for contact workflows
+6. Performance with large contact databases
 
 # Subtasks:
-## 1. Define UI Framework Architecture [pending]
+## 1. Food Service Role Implementation [pending]
 ### Dependencies: None
-### Description: Establish the core architecture for the responsive UI framework, considering NextCRM foundation and TypeScript strict mode requirements.
+### Description: 
 ### Details:
-Create a modular structure, define coding standards, and set up the development environment with TypeScript strict mode. Ensure compatibility with NextCRM's existing codebase.
+Exec Chef, Buyer, Manager, Owner, Kitchen Manager with hierarchy
 
-## 2. Develop Core Components [pending]
-### Dependencies: 4.1
-### Description: Design and implement core UI components with customization options, focusing on food service industry specifics.
+## 2. Duplicate Prevention System [pending]
+### Dependencies: None
+### Description: 
 ### Details:
-Create reusable components for priority system (A-D levels), market segments, distributor management, contact roles, and the 5-stage sales pipeline. Ensure components are customizable and follow TypeScript strict mode guidelines.
-
-## 3. Implement Responsive Layout System [pending]
-### Dependencies: 4.1, 4.2
-### Description: Create a flexible layout system that adapts to different screen sizes and orientations.
-### Details:
-Develop a grid system and responsive utilities. Implement media queries and flexible units (e.g., rem, vh, vw) to ensure proper scaling across devices.
-
-## 4. Optimize for iPad and Touch Devices [pending]
-### Dependencies: 4.2, 4.3
-### Description: Enhance the UI framework for optimal performance on iPads and other touch devices.
-### Details:
-Implement 44px touch targets for improved usability. Create touch-friendly interactions and gestures. Optimize layout and components for tablet viewports.
-
-## 5. Integrate with Azure SQL Database [pending]
-### Dependencies: 4.1
-### Description: Migrate data models and queries from MongoDB to Azure SQL Database.
-### Details:
-Analyze existing MongoDB schema and create corresponding SQL schema. Develop data access layer compatible with Azure SQL. Update API endpoints to use the new database.
-
-## 6. Perform Testing and Optimization [pending]
-### Dependencies: 4.3, 4.4, 4.5
-### Description: Conduct thorough testing of the UI framework across various devices and optimize performance.
-### Details:
-Perform unit testing, integration testing, and end-to-end testing. Optimize rendering performance, reduce bundle size, and implement lazy loading where appropriate. Conduct user acceptance testing with food service industry professionals.
+Fuzzy matching and merge suggestions for data quality
 

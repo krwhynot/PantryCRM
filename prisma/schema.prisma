@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 // Settings Management System
@@ -15,16 +16,20 @@ model Setting {
   id        String   @id @default(cuid())
   category  String   // Priority, Segment, Distributor, etc.
   key       String   // Actual value (e.g., "A", "Fine Dining", "Sysco")
-  label     String   // Display name
+  label     String?  // Display name
   color     String?  // For priority colors and UI highlighting
   sortOrder Int      // For maintaining specific order in dropdowns
   active    Boolean  @default(true)
-  metadata  Json?    // For category-specific additional data
+  metadata  String?  @db.Text    // For category-specific additional data
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([category, key])
   @@index([category, active])
+
+  organizationsWithPriority  Organization[] @relation(name: "OrganizationPriority")
+  organizationsWithSegment   Organization[] @relation(name: "OrganizationSegment")
+  organizationsWithDistributor Organization[] @relation(name: "OrganizationDistributor")
 }
 
 // User model for authentication
@@ -45,6 +50,7 @@ model User {
   organizations OrganizationUser[]
   interactions  Interaction[]
   opportunities Opportunity[]
+  managedOrganizations Organization[] @relation(name: "UserManagedOrganizations") // Added for reciprocal relation
 
   @@index([email])
   @@index([isActive])
@@ -67,7 +73,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@index([userId])
+
 }
 
 model Session {
@@ -77,7 +83,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
+
 }
 
 model VerificationToken {
@@ -88,114 +94,123 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// Kitchen Pantry CRM Models
-
 model Organization {
-  id            String   @id @default(cuid())
-  name          String
-  priority      String   // References Setting (category: "Priority")
-  segment       String   // References Setting (category: "Segment")
-  distributor   String   // References Setting (category: "Distributor")
-  address       String?
-  phone         String?
-  email         String?
-  website       String?
-  notes         String?  @db.Text
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id               String    @id @default(cuid())
+  name             String
+  description      String?   @db.Text
+  website          String?
+  phone            String?
+  email            String?
+  addressLine1     String?
+  addressLine2     String?
+  city             String?
+  state            String?
+  postalCode       String?
+  country          String?
+  isActive         Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  accountManagerId String?
 
-  contacts      Contact[]
-  interactions  Interaction[]
-  opportunities Opportunity[]
-  users         OrganizationUser[]
-  tags          OrganizationTag[]
+  // Food Service Specific Fields
+  priorityId       String?
+  priority         Setting?        @relation(name: "OrganizationPriority", fields: [priorityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  segmentId        String?
+  segment          Setting?        @relation(name: "OrganizationSegment", fields: [segmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  distributorId    String?
+  distributor      Setting?        @relation(name: "OrganizationDistributor", fields: [distributorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@unique([name])
-  @@index([priority])
-  @@index([segment])
-  @@index([distributor])
-  @@index([isActive])
-}
+  // Revenue Tracking Fields
+  annualRevenue    Decimal?        @db.Decimal(18, 2)
+  totalValue       Decimal?        @db.Decimal(18, 2)
 
-// Many-to-many relationship between Organizations and Users
-model OrganizationUser {
-  id             String       @id @default(cuid())
-  organizationId String
-  userId         String
-  role           String       // References Setting (category: "Position")
-  isActive       Boolean      @default(true)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  // Relations
+  accountManager   User?     @relation(name: "UserManagedOrganizations", fields: [accountManagerId], references: [id])
+  contacts         Contact[]
+  interactions     Interaction[]
+  opportunities    Opportunity[]
+  users            OrganizationUser[]
 
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, userId])
-  @@index([userId])
-  @@index([isActive])
-}
-
-// Tags for flexible organization categorization
-model OrganizationTag {
-  id             String       @id @default(cuid())
-  organizationId String
-  name           String
-  createdAt      DateTime     @default(now())
-
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, name])
   @@index([name])
+  @@index([city])
+  @@index([state])
+  @@index([postalCode])
+  @@index([country])
+  @@index([accountManagerId])
+  @@index([priorityId])
+  @@index([segmentId])
+  @@index([distributorId])
+  @@index([isActive])
 }
 
-model Contact {
+model OrganizationUser {
   id             String   @id @default(cuid())
   organizationId String
-  firstName      String
-  lastName       String
-  role           String   // References Setting (category: "Position")
-  isPrimary      Boolean  @default(false)
-  phone          String?
-  email          String?
-  notes          String?  @db.Text
-  isActive       Boolean  @default(true)
+  userId         String
+  role           String   // e.g., "admin", "member"
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  organization  Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  interactions  Interaction[]
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user         User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([organizationId, userId])
+
+  @@index([organizationId])
+}
+
+model Contact {
+  id             String    @id @default(cuid())
+  organizationId String
+  firstName      String
+  lastName       String
+  email          String?
+  phone          String?
+  title          String?
+  roleId         String? // References Setting (category: "ContactRole")
+  notes          String?   @db.Text
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  interactions Interaction[]
   opportunities Opportunity[]
 
   @@index([organizationId])
-  @@index([role])
+  @@index([firstName])
+  @@index([lastName])
+  @@index([email])
+  @@index([phone])
   @@index([isActive])
-  @@index([firstName, lastName])
 }
 
 model Interaction {
-  id               String    @id @default(cuid())
+  id               String       @id @default(cuid())
   organizationId   String
   contactId        String?
-  userId           String    // Account manager who logged the interaction
-  interactionType  String    // References Setting (category: "InteractionType")
+  userId           String       // Account manager who logged the interaction
   interactionDate  DateTime
-  notes            String?   @db.Text
+  typeId           String       // References Setting (category: "InteractionType")
+  notes            String?      @db.Text
   followUpDate     DateTime?
-  isCompleted      Boolean   @default(false)
-  createdAt        DateTime  @default(now())
+  isCompleted      Boolean      @default(false)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  // Food Service Specific Fields
+
+
+  // Relations
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   contact          Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction) // Break cascade cycle
 
+  // Indexes for performance optimization
   @@index([organizationId])
   @@index([contactId])
   @@index([userId])
-  @@index([interactionType])
   @@index([interactionDate])
-  @@index([followUpDate])
-  @@index([isCompleted])
 }
 
 model Opportunity {
@@ -207,7 +222,7 @@ model Opportunity {
   stage            String     // References Setting (category: "Stage")
   status           String     // References Setting (category: "Status")
   source           String?    // References Setting (category: "Source")
-  reason           String?    // References Setting (category: "Reason")
+  reason           String?    @db.Text
   probability      Int        // 0-100
   expectedRevenue  Decimal?   @db.Decimal(10, 2)
   expectedCloseDate DateTime?
@@ -216,9 +231,9 @@ model Opportunity {
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   contact          Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([organizationId])
   @@index([contactId])

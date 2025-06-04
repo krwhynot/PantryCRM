@@ -1,102 +1,50 @@
 # Task ID: 10
-# Title: Implement Sales Pipeline
+# Title: Excel Data Migration Pipeline
 # Status: pending
-# Dependencies: 5, 6, 7, 8
-# Priority: high
-# Description: Develop the sales pipeline functionality with 5 stages and support for 11 principals, including visualization, filtering, and opportunity management.
+# Dependencies: 7, 8, 9
+# Priority: critical
+# Description: Comprehensive data migration with validation, relationship preservation, and audit capabilities
 # Details:
-1. Implement Pipeline Database Schema with 5 Stages
-   - Execute migrations for opportunity tracking with 5-stage progression
-   - Support Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close stages
-   - Design for future addition of pipeline stages
+1. Excel Parser Service (.xlsx and .csv)
+   - Robust parsing with comprehensive error handling
+   - Large file processing with progress indicators
+   - Column mapping and data transformation
 
-2. Develop Pipeline API Endpoints with 11 Principal Support
-   - Create CRUD operations for opportunity management
-   - Add support for 11 principals: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
-   - Optimize for pipeline visualizations and reporting
+2. Data Validation and Quality Checks
+   - Business rule validation for all entities
+   - Food service industry-specific validation
+   - Data quality scoring and recommendations
 
-3. Create Visual Pipeline Dashboard for Multi-Device
-   - Build responsive pipeline visualization interface
-   - Optimize for both touch and mouse interfaces
-   - Add intuitive stage progression and opportunity management
+3. Relationship Preservation
+   - Organization-Contact-Interaction-Opportunity relationships
+   - Account manager assignment preservation
+   - **NEW**: Opportunity value preservation
+   - Data integrity verification
 
-4. Implement 5-Stage Pipeline with Business Rules
-   - Support proper stage progression with validation rules
-   - Add appropriate stage progression requirements
-   - Allow for stage skipping where business rules permit
-
-5. Add 11 Principal Associations and Filtering
-   - Integrate all 11 principals with opportunity tracking
-   - Add principal assignment and filtering capabilities
-   - Enable principal-specific pipeline analysis and forecasting
-
-6. Implement Probability Tracking and Status Management
-   - Add 0-100% probability assignment and status tracking
-   - Support Open, Closed-Won, Closed-Lost, On Hold statuses
-   - Enable probability-based forecasting and reporting
-
-7. Create Opportunity Detail Views and Forms
-   - Build comprehensive opportunity management interface
-   - Connect with organization and contact data seamlessly
-   - Enable quick opportunity creation and updates
-
-8. Build Pipeline Filtering and Search
-   - Create filtering by principal, stage, status, and account manager
-   - Optimize filter combinations and performance
-   - Provide intuitive filter interface for both input methods
-
-Technical considerations:
-- Use React DnD or similar library for drag-and-drop pipeline management
-- Implement React Context for pipeline state management
-- Use React Query/SWR for efficient data fetching
-- Consider using react-beautiful-dnd for smooth drag interactions
-- Implement optimistic UI updates for better user experience
-- Use Recharts or Tremor for pipeline visualization charts
+4. Migration Verification and Audit
+   - 100% data accuracy validation
+   - Import history tracking
+   - Rollback capabilities
+   - Comprehensive audit logging
 
 # Test Strategy:
-1. Test pipeline CRUD operations with 5-stage progression
-2. Verify support for all 11 principals
-3. Test pipeline visualization on both touch and mouse interfaces
-4. Verify business rules for stage progression
-5. Test probability tracking and status management
-6. Verify opportunity detail views and forms
-7. Test pipeline filtering and search functionality
-8. Verify performance with large opportunity volumes
+1. **CRITICAL**: 100% data migration accuracy
+2. Relationship preservation verification
+3. Account manager assignments maintained
+4. **NEW**: Opportunity values preserved
+5. Error handling and recovery
+6. Migration audit trail complete
 
 # Subtasks:
-## 1. Design Sales Pipeline Data Model [pending]
+## 1. Excel Parser with Error Handling [pending]
 ### Dependencies: None
-### Description: Create a comprehensive data model for the sales pipeline, including stages, priority levels, market segments, distributors, and contact roles.
+### Description: 
 ### Details:
-Define entities and relationships for the 5-stage pipeline, A-D priority levels, market segments, distributors, and contact roles. Ensure compatibility with Azure SQL Database and migration from MongoDB.
+Robust .xlsx/.csv parsing with comprehensive validation
 
-## 2. Implement Backend API for Sales Pipeline [pending]
-### Dependencies: 10.1
-### Description: Develop RESTful API endpoints for managing the sales pipeline, including CRUD operations and stage progression logic.
+## 2. Relationship Preservation System [pending]
+### Dependencies: None
+### Description: 
 ### Details:
-Use TypeScript with strict mode. Implement endpoints for creating, reading, updating, and deleting pipeline entries. Include logic for stage progression and principal-based filtering.
-
-## 3. Create Frontend Components for Pipeline Visualization [pending]
-### Dependencies: 10.2
-### Description: Develop React components for visualizing the sales pipeline, optimized for iPad with 44px touch targets.
-### Details:
-Design and implement responsive components for displaying the 5-stage pipeline, priority levels, and related information. Ensure all interactive elements have a minimum size of 44px for touch optimization.
-
-## 4. Implement Principal-Based Filtering [pending]
-### Dependencies: 10.2, 10.3
-### Description: Add functionality to filter pipeline entries based on user principals and permissions.
-### Details:
-Integrate principal-based filtering on both frontend and backend. Ensure that users can only view and interact with pipeline entries they have permission to access.
-
-## 5. Develop Food Service Industry Specific Features [pending]
-### Dependencies: 10.1, 10.2, 10.3
-### Description: Implement features specific to the food service industry, including market segments, distributors, and contact roles.
-### Details:
-Add functionality to associate pipeline entries with market segments, distributors, and contact roles. Implement UI components for managing these relationships.
-
-## 6. Perform Data Migration and Testing [pending]
-### Dependencies: 10.1, 10.2, 10.3, 10.4, 10.5
-### Description: Migrate existing data from MongoDB to Azure SQL Database and conduct thorough testing of the implemented features.
-### Details:
-Create and execute a data migration plan from MongoDB to Azure SQL Database. Perform unit tests, integration tests, and end-to-end tests to ensure all features work as expected.
+Maintain all data relationships and historical context
 
