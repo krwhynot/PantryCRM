@@ -17,7 +17,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const user = await prismadb.users.findUnique({
+  const user = await prismadb.user.findUnique({
     where: {
       email: session?.user?.email,
     },
@@ -38,12 +38,17 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   }
 
   try {
+    // TODO: Kitchen Pantry CRM - CRM Contracts functionality not implemented yet
+    console.log('CRM Contracts functionality disabled for Kitchen Pantry CRM');
+    
+    /* Original implementation commented out due to missing Prisma model
     const result = await prismadb.crm_Contracts.delete({
       where: {
         id: id,
       },
     });
     console.log(result, "result");
+    */
   } catch (error) {
     console.log(error);
     return {

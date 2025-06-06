@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { s3Client } from "@/lib/digital-ocean-s3";
-import { ListBucketsCommand } from "@aws-sdk/client-s3";
+import { listContainers } from "@/lib/azure-storage";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 
@@ -11,8 +10,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json("Unauthorized", { status: 401 });
   }
 
-  const buckets = await s3Client.send(new ListBucketsCommand({}));
-  console.log(buckets, "s3 buckets");
+  try {
+    const containers = await listContainers();
+    console.log(containers, "Azure storage containers");
 
-  return NextResponse.json({ buckets, success: true }, { status: 200 });
+    return NextResponse.json({ 
+      buckets: { 
+        Buckets: containers.map(name => ({ Name: name })),
+        Owner: { DisplayName: process.env.AZURE_STORAGE_ACCOUNT }
+      }, 
+      success: true 
+    }, { status: 200 });
+  } catch (error) {
+    console.error("Error listing Azure containers:", error);
+    return NextResponse.json({ error: "Failed to list containers", success: false }, { status: 500 });
+  }
 }

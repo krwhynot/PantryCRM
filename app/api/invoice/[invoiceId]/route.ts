@@ -1,7 +1,6 @@
 import { authOptions } from "@/lib/auth";
-import { s3Client } from "@/lib/digital-ocean-s3";
+import { deleteBlob } from "@/lib/azure-storage";
 import { prismadb } from "@/lib/prisma";
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -70,55 +69,37 @@ export async function DELETE(request: Request, props: { params: Promise<{ invoic
   }
 
   try {
-    //Delete files from S3
+    // Delete files from Azure Storage
+    const invoiceContainer = process.env.AZURE_STORAGE_CONTAINER_NAME || "invoices";
+    const rossumContainer = process.env.AZURE_STORAGE_ROSSUM_CONTAINER || "rossum";
+    const xmlContainer = process.env.AZURE_STORAGE_XML_CONTAINER || "xml";
 
-    //Delete invoice file from S3
+    // Delete invoice file from Azure
     if (invoiceData?.invoice_file_url) {
-      const bucketParams = {
-        Bucket: process.env.DO_BUCKET,
-        Key: `invoices/${
-          invoiceData?.invoice_file_url?.split("/").slice(-1)[0]
-        }`,
-      };
-      await s3Client.send(new DeleteObjectCommand(bucketParams));
-      console.log("Success - invoice deleted from S3 bucket");
+      const blobName = invoiceData?.invoice_file_url?.split("/").slice(-1)[0];
+      await deleteBlob(invoiceContainer, `invoices/${blobName}`);
+      console.log("Success - invoice deleted from Azure Storage");
     }
 
-    //Delete rossum annotation files from S3 - JSON
+    // Delete rossum annotation files from Azure - JSON
     if (invoiceData?.rossum_annotation_json_url) {
-      //Delete file from S3
-      const bucketParams = {
-        Bucket: process.env.DO_BUCKET,
-        Key: `rossum/${
-          invoiceData?.rossum_annotation_json_url?.split("/").slice(-1)[0]
-        }`,
-      };
-      await s3Client.send(new DeleteObjectCommand(bucketParams));
-      console.log("Success - rossum annotation json deleted from S3 bucket");
+      const blobName = invoiceData?.rossum_annotation_json_url?.split("/").slice(-1)[0];
+      await deleteBlob(rossumContainer, `rossum/${blobName}`);
+      console.log("Success - rossum annotation json deleted from Azure Storage");
     }
 
-    //Delete rossum annotation files from S3 - XML
+    // Delete rossum annotation files from Azure - XML
     if (invoiceData?.rossum_annotation_xml_url) {
-      //Delete file from S3
-      const bucketParams = {
-        Bucket: process.env.DO_BUCKET,
-        Key: `rossum/${
-          invoiceData?.rossum_annotation_xml_url?.split("/").slice(-1)[0]
-        }`,
-      };
-      await s3Client.send(new DeleteObjectCommand(bucketParams));
-      console.log("Success - rossum annotation xml deleted from S3 bucket");
+      const blobName = invoiceData?.rossum_annotation_xml_url?.split("/").slice(-1)[0];
+      await deleteBlob(rossumContainer, `rossum/${blobName}`);
+      console.log("Success - rossum annotation xml deleted from Azure Storage");
     }
 
-    //Delete money S3 xml document file from S3
+    // Delete money S3 xml document file from Azure
     if (invoiceData?.money_s3_url) {
-      //Delete file from S3
-      const bucketParams = {
-        Bucket: process.env.DO_BUCKET,
-        Key: `xml/${invoiceData?.money_s3_url?.split("/").slice(-1)[0]}`,
-      };
-      await s3Client.send(new DeleteObjectCommand(bucketParams));
-      console.log("Success - money S3 xml deleted from S3 bucket");
+      const blobName = invoiceData?.money_s3_url?.split("/").slice(-1)[0];
+      await deleteBlob(xmlContainer, `xml/${blobName}`);
+      console.log("Success - money xml deleted from Azure Storage");
     }
 
     //Delete invoice from database

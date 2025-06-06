@@ -1,73 +1,89 @@
 import { prismadb } from "@/lib/prisma";
 
+/**
+ * Performs a full-text search across multiple entities in the CRM
+ * Updated as part of Task 3 (Critical Dependency Fixes) to use correct Prisma models
+ * 
+ * @param search The search term to look for
+ * @returns Search results across multiple entities
+ */
 export const getSearch = async (search: string) => {
   //TODO: This action is now offtopic, because it is not used in the frontend.
 
-  //Search in modul CRM (Oppotunities)
-  const resultsCrmOpportunities = await prismadb.crm_Opportunities.findMany({
+  // Search in Opportunities
+  const resultsCrmOpportunities = await prismadb.opportunity.findMany({
     where: {
       OR: [
-        { description: { contains: search, mode: "insensitive" } },
-        { name: { contains: search, mode: "insensitive" } },
-        // add more fields as needed
+        { notes: { contains: search } },
+        { reason: { contains: search } },
       ],
+      isActive: true
     },
   });
 
-  //Search in modul CRM (Accounts)
-  const resultsCrmAccounts = await prismadb.crm_Accounts.findMany({
+  // Search in Organizations (formerly Accounts)
+  const resultsCrmAccounts = await prismadb.organization.findMany({
     where: {
       OR: [
-        { description: { contains: search, mode: "insensitive" } },
-        { name: { contains: search, mode: "insensitive" } },
-        { email: { contains: search, mode: "insensitive" } },
-        // add more fields as needed
+        { description: { contains: search } },
+        { name: { contains: search } },
+        { email: { contains: search } },
       ],
+      isActive: true
     },
   });
 
-  //Search in modul CRM (Contacts)
-  const resultsCrmContacts = await prismadb.crm_Contacts.findMany({
+  // Search in Contacts
+  const resultsCrmContacts = await prismadb.contact.findMany({
     where: {
       OR: [
-        { last_name: { contains: search, mode: "insensitive" } },
-        { first_name: { contains: search, mode: "insensitive" } },
-        { email: { contains: search, mode: "insensitive" } },
-        // add more fields as needed
+        { lastName: { contains: search } },
+        { firstName: { contains: search } },
+        { email: { contains: search } },
       ],
+      isActive: true
     },
   });
 
-  //Search in local user database
-  const resultsUser = await prismadb.users.findMany({
+  // Search in Users
+  const resultsUser = await prismadb.user.findMany({
     where: {
       OR: [
-        { email: { contains: search, mode: "insensitive" } },
-        { account_name: { contains: search, mode: "insensitive" } },
-        { name: { contains: search, mode: "insensitive" } },
-        { username: { contains: search, mode: "insensitive" } },
-        // add more fields as needed
+        { email: { contains: search } },
+        { name: { contains: search } },
       ],
+      isActive: true
     },
   });
 
-  const resultsTasks = await prismadb.tasks.findMany({
+  // Search in Tasks (using Interactions with followUpDate as proxy)
+  const resultsTasks = await prismadb.interaction.findMany({
     where: {
       OR: [
-        { title: { contains: search, mode: "insensitive" } },
-        { content: { contains: search, mode: "insensitive" } },
-        // add more fields as needed
+        { notes: { contains: search } },
       ],
+      followUpDate: {
+        not: null
+      },
+      isCompleted: false
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
 
-  const reslutsProjects = await prismadb.boards.findMany({
+  // Search in Projects (using Opportunities as proxy)
+  const reslutsProjects = await prismadb.opportunity.findMany({
     where: {
       OR: [
-        { title: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
-        // add more fields as needed
+        { notes: { contains: search } },
+        { reason: { contains: search } },
       ],
+      isActive: true
     },
   });
 

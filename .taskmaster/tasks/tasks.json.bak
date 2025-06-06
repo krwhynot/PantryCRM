@@ -36,6 +36,15 @@
           "title": "✅ Comprehensive Testing Setup",
           "status": "completed",
           "details": "Jest + React Testing Library configured with 44px touch target validation"
+        },
+        {
+          "id": 4,
+          "title": "Component Testing Verification",
+          "description": "Verify all food service components pass: PriorityBadge (color coding: A=Green, B=Yellow, C=Orange, D=Red), SegmentSelector and DistributorField, iPad touch target compliance (44px minimum), LoginComponent functionality.",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 1
         }
       ]
     },
@@ -75,451 +84,459 @@
     },
     {
       "id": 3,
-      "title": "Enhanced Organization Management with Revenue Tracking",
-      "description": "Implement organization management with food service fields, global search foundation, and revenue tracking capabilities",
-      "details": "1. Enhanced Database Schema Implementation\n   - Execute Prisma migrations with revenue tracking fields\n   - Add food service fields: priority (A-D), segments, distributors\n   - **NEW**: Revenue tracking and organization value fields\n\n2. Organization API Endpoints with Advanced Features\n   - Standard CRUD operations with audit trail\n   - **NEW**: Global search endpoint foundation\n   - Performance optimization for Azure SQL Basic\n\n3. Organization Management Interface (iPad Optimized)\n   - Responsive data table with server-side pagination\n   - Sub-second search with fuzzy matching\n   - **NEW**: URL-based state management for filters\n   - Priority color coding (A=Green, B=Yellow, C=Orange, D=Red)\n\n4. Settings Management System (9 Categories)\n   - Dynamic configuration for all dropdown values\n   - **NEW**: Drag-and-drop sort ordering\n   - Real-time updates across application",
-      "testStrategy": "1. Organization CRUD operations complete in <2 seconds\n2. Food service fields working with dynamic settings\n3. Priority color coding meets WCAG standards\n4. Search performance <1 second with 100+ records\n5. **NEW**: Global search foundation operational\n6. **NEW**: Settings system supports all 9 categories with real-time updates",
-      "priority": "critical",
-      "phase": "Phase 2 - Core CRM + Advanced Features",
+      "title": "🚨 Critical Dependency Fixes [BLOCKING - HIGH PRIORITY]",
+      "description": "Resolve critical blocking issues identified in audit: React Beautiful DnD incompatibility, bundle size optimization (40% reduction needed), AWS SDK architectural mismatch, and React 19 stability assessment for production readiness.",
+      "details": "**CRITICAL AUDIT FINDINGS REQUIRING IMMEDIATE ATTENTION:**\n- React Beautiful DnD incompatible with React 19 RC (blocking production)\n- Bundle size 40% too large affecting performance (<800KB target)\n- AWS SDK architectural mismatch in Azure-focused system\n- Missing React 19 compatibility validation\n\n**COMPLEXITY:** 8/10 | **TIMELINE:** Week 1 | **DEPENDENCIES:** Task 1\n\n**PERFORMANCE IMPACT:**\n- 40% bundle size reduction (moment.js → date-fns)\n- React 19 compatibility enabling production deployment\n- Architectural alignment with Azure services\n- Touch device drag-and-drop functionality restoration\n\n**SUCCESS CRITERIA:**\n✅ @hello-pangea/dnd replaces react-beautiful-dnd completely\n✅ Bundle size verified under 800KB target\n✅ All AWS SDK references replaced with Azure equivalents\n✅ React 19 compatibility confirmed across all components",
+      "testStrategy": "",
+      "status": "in-progress",
       "dependencies": [
-        1,
-        2
+        1
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: All tests must pass 100% before Phase 3",
+      "priority": "critical",
       "subtasks": [
         {
           "id": 1,
-          "title": "Enhanced Database Schema with Revenue Fields",
-          "status": "pending",
-          "details": "Add revenue tracking, value fields, and optimize for Advanced features"
+          "title": "React Beautiful DnD Replacement with @hello-pangea/dnd",
+          "description": "Replace react-beautiful-dnd with @hello-pangea/dnd to ensure React 19 compatibility. Update all drag-and-drop components, test functionality, and ensure smooth user interactions across the application.",
+          "dependencies": [],
+          "details": "Install @hello-pangea/dnd, update import statements, modify component implementations, test drag-and-drop features in kanban boards, lists, and other interactive elements. Verify performance and accessibility compliance.",
+          "status": "pending"
         },
         {
           "id": 2,
-          "title": "Global Search Foundation Implementation [NEW]",
-          "status": "pending",
-          "details": "Search endpoint architecture for cross-entity search capabilities"
+          "title": "Bundle Size Optimization - Replace moment.js with date-fns",
+          "description": "Replace moment.js with date-fns and remove unused dependencies to achieve 40% bundle size reduction. Audit current dependencies and optimize imports for better performance.",
+          "dependencies": [
+            1
+          ],
+          "details": "Analyze current bundle size, replace moment.js usage with date-fns equivalents, remove unused packages, implement tree-shaking optimizations, and validate date/time functionality across all components.",
+          "status": "pending"
         },
         {
           "id": 3,
-          "title": "Settings Management System (9 Categories)",
-          "status": "pending",
-          "details": "Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction"
+          "title": "AWS SDK Replacement with Azure Equivalents",
+          "description": "Replace AWS SDK implementations with Azure equivalents for architectural alignment. Update cloud service integrations, storage solutions, and authentication mechanisms.",
+          "dependencies": [
+            2
+          ],
+          "details": "Map AWS services to Azure equivalents, update SDK imports and configurations, modify authentication flows, test cloud storage operations, and ensure seamless migration of existing cloud functionalities.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "React 19 Stability Assessment and Compatibility Validation",
+          "description": "Conduct comprehensive React 19 compatibility assessment, validate all components and dependencies, and ensure application stability with the new React version.",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "Test all React components with React 19, validate hooks usage, check for deprecated patterns, run comprehensive test suite, perform performance benchmarking, and document any breaking changes or required updates.",
+          "status": "pending"
         }
       ]
     },
     {
       "id": 4,
-      "title": "Contact Management with Role Hierarchy",
-      "description": "Implement comprehensive contact management with food service roles and duplicate prevention",
-      "details": "1. Contact Database Schema with Food Service Roles\n   - Support: Exec Chef, Buyer, Manager, Owner, Kitchen Manager\n   - Primary contact designation (one per organization)\n   - Performance optimization for multiple contacts\n\n2. Contact API Endpoints with Business Logic\n   - CRUD operations with relationship integrity\n   - Duplicate prevention within organizations\n   - Auto-complete for quick selection\n\n3. Contact Management Interface\n   - Role-based filtering and sorting\n   - Primary contact visual indicators\n   - Quick contact creation for field visits\n\n4. Contact Forms with Validation\n   - Role assignment with decision-making hierarchy\n   - Contact information with business rule enforcement\n   - Fuzzy matching for duplicate detection",
-      "testStrategy": "1. Contact CRUD with organization relationships\n2. Food service roles properly implemented\n3. Primary contact designation working\n4. Duplicate prevention and fuzzy matching\n5. Multi-device usability for contact workflows\n6. Performance with large contact databases",
-      "priority": "critical",
-      "phase": "Phase 2 - Core CRM + Advanced Features",
+      "title": "🛡️ Performance Foundation & Error Handling [NEW CRITICAL]",
+      "description": "Implement comprehensive error boundaries, validation schemas with Zod, and performance monitoring infrastructure to ensure production stability and user experience protection.",
+      "details": "**NEW CRITICAL INFRASTRUCTURE FOR PRODUCTION READINESS:**\n- Missing error boundaries threatening production stability\n- No validation schemas for data integrity\n- Performance monitoring gaps\n- Memory leak prevention\n\n**COMPLEXITY:** 7/10 | **TIMELINE:** Week 2 | **DEPENDENCIES:** Tasks 2, 3\n\n**PRODUCTION IMPACT:**\n- Error boundary protection for all major components\n- Zod validation for all food service entities\n- Performance tracking and monitoring\n- Memory usage optimization\n\n**SUCCESS CRITERIA:**\n✅ Error boundaries implemented across all route components\n✅ Zod validation schemas for all forms and API endpoints\n✅ Performance monitoring dashboard operational\n✅ Memory leak detection and prevention verified",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
+        2,
         3
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: Contact relationships and roles must be 100% functional",
+      "priority": "critical",
       "subtasks": [
         {
           "id": 1,
-          "title": "Food Service Role Implementation",
-          "status": "pending",
-          "details": "Exec Chef, Buyer, Manager, Owner, Kitchen Manager with hierarchy"
+          "title": "Responsive Design System Setup with Touch Interface Optimization",
+          "description": "Implement comprehensive responsive design system with breakpoints, fluid typography, and touch-optimized components including 44px minimum touch targets for iPad compatibility",
+          "dependencies": [],
+          "details": "Set up CSS Grid/Flexbox layouts, establish breakpoint system (mobile, tablet, desktop), implement touch-friendly spacing, create responsive typography scale, and ensure 44px minimum touch target compliance for all interactive elements",
+          "status": "pending"
         },
         {
           "id": 2,
-          "title": "Duplicate Prevention System",
-          "status": "pending",
-          "details": "Fuzzy matching and merge suggestions for data quality"
+          "title": "Error Boundary Implementation for Production Stability",
+          "description": "Develop comprehensive error boundary system with fallback UI components, error logging, and graceful degradation for production environment stability",
+          "dependencies": [
+            1
+          ],
+          "details": "Create React Error Boundary components, implement error logging service integration, design fallback UI states, add error recovery mechanisms, and establish error reporting pipeline for production monitoring",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Validation Schema and Performance Monitoring Integration",
+          "description": "Implement Zod validation schemas for data integrity and set up performance monitoring system with real-time metrics tracking and optimization alerts",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Create comprehensive Zod schemas for all data models, implement form validation with error handling, set up performance monitoring dashboard, configure Core Web Vitals tracking, and establish performance budgets with automated alerts",
+          "status": "pending"
         }
       ]
     },
     {
       "id": 5,
-      "title": "Interaction Tracking with 30-Second Entry Goal",
-      "description": "Implement rapid interaction logging with 6 food service interaction types and auto-save functionality",
-      "details": "1. Interaction Database Schema (6 Types)\n   - Email, Call, In Person, Demo/sampled, Quoted price, Follow-up\n   - Relationships to organizations, contacts, account managers\n   - Performance optimization for frequent logging\n\n2. Quick Entry Forms (30-Second Target)\n   - Single-screen forms optimized for touch\n   - Auto-complete for organizations/contacts (<500ms)\n   - Large form controls for iPad input\n   - Type-specific fields and quick-select options\n\n3. Auto-Save and Form Recovery\n   - Auto-save every 30 seconds with visual feedback\n   - Form recovery after browser interruption\n   - Network interruption handling\n\n4. Interaction History and Timeline\n   - Comprehensive history displays\n   - Filtering and search capabilities\n   - Integration with reporting system",
-      "testStrategy": "1. All 6 interaction types functional\n2. **CRITICAL**: 30-second entry target achieved\n3. Auto-complete meets 500ms performance\n4. Auto-save and recovery working\n5. Multi-device workflow validation\n6. Performance with large interaction volumes",
-      "priority": "critical",
-      "phase": "Phase 2 - Core CRM + Advanced Features",
+      "title": "🏢 Enhanced Organization Management [HIGH PRIORITY]",
+      "description": "Implement high-performance Organization management with optimized database schema, API endpoints with N+1 query prevention, and iPad-optimized UI components with sub-second search performance.",
+      "details": "**PHASE 2: CORE CRM FUNCTIONALITY + OPTIMIZATION**\n\n**PERFORMANCE REQUIREMENTS:**\n- Database queries optimized for Azure SQL Basic tier\n- Organization search under 1 second response time\n- N+1 query prevention with strategic includes\n- Virtual scrolling for large datasets\n- 44px minimum touch targets for iPad\n\n**COMPLEXITY:** 8/10 | **DEPENDENCIES:** Phase 1 Complete\n\n**SUCCESS CRITERIA:**\n✅ All queries optimized for Azure SQL Basic DTU limits\n✅ Organization search consistently under 1 second\n✅ React.memo implementation for performance\n✅ Error boundaries and Zod validation integrated\n✅ Touch targets meet accessibility requirements",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
-        3,
         4
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: 30-second interaction entry must be achieved",
+      "priority": "high",
       "subtasks": [
         {
           "id": 1,
-          "title": "6 Food Service Interaction Types",
-          "status": "pending",
-          "details": "Email, Call, In Person, Demo/sampled, Quoted price, Follow-up"
+          "title": "Optimized Database Schema Implementation",
+          "description": "Design and implement high-performance database schema for organization management with strategic indexes, foreign key relationships, and N+1 query prevention mechanisms",
+          "dependencies": [],
+          "details": "Create organization tables with proper indexing on frequently queried fields (name, industry, priority_level, market_segment), implement composite indexes for complex queries, add database constraints for data integrity, and establish efficient relationship mappings to prevent N+1 query issues",
+          "status": "pending"
         },
         {
           "id": 2,
-          "title": "30-Second Entry Optimization",
-          "status": "pending",
-          "details": "Touch-optimized forms with auto-complete and quick-select"
+          "title": "High-Performance Organization API Endpoints",
+          "description": "Develop comprehensive REST API endpoints for organization CRUD operations with strategic data includes, Zod validation schemas, and industry-specific filtering capabilities",
+          "dependencies": [
+            1
+          ],
+          "details": "Build API routes for organization listing, creation, updating, and deletion with strategic eager loading, implement Zod schemas for request/response validation, add filtering by priority levels and market segments, include pagination and sorting capabilities, and optimize query performance with selective field inclusion",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Organization List View with Performance Optimization",
+          "description": "Create responsive organization list component with React.memo optimization, virtual scrolling for large datasets, and industry-specific filtering UI",
+          "dependencies": [
+            2
+          ],
+          "details": "Implement virtualized list component for handling thousands of organizations, add React.memo for preventing unnecessary re-renders, create filter controls for priority levels and market segments, implement search functionality, add sorting capabilities, and ensure multi-device responsive design",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Organization Detail View with Error Handling",
+          "description": "Build comprehensive organization detail view with error boundaries, loading states, and industry-specific data visualization for priority levels and market segments",
+          "dependencies": [
+            2
+          ],
+          "details": "Create detailed organization view with complete organization information display, implement error boundaries for graceful error handling, add loading skeletons and states, include industry-specific visualizations for priority levels and market segments, and ensure responsive design across all device types",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Organization Forms with Advanced Validation",
+          "description": "Develop organization creation and editing forms with advanced validation, auto-save functionality, and industry-specific field configurations for priority levels and market segments",
+          "dependencies": [
+            2
+          ],
+          "details": "Build dynamic forms for organization creation and editing with real-time validation using Zod schemas, implement auto-save functionality to prevent data loss, add industry-specific dropdown selections for priority levels and market segments, include form field dependencies and conditional rendering, and ensure mobile-optimized form layouts",
+          "status": "pending"
         }
       ]
     },
     {
       "id": 6,
-      "title": "Global Search & Advanced Filtering [NEW FEATURE]",
-      "description": "Implement comprehensive search across all entities with advanced filtering capabilities",
-      "details": "1. Global Search Implementation\n   - Full-text search across organizations, contacts, interactions\n   - Search result highlighting and relevance scoring\n   - Multi-entity search with unified results\n\n2. Advanced Filtering System\n   - Multi-select filters for priority, segment, distributor\n   - Date range filtering for interactions and opportunities\n   - Complex filter combinations with AND/OR logic\n   - Filter preset management and sharing\n\n3. Search Performance Optimization\n   - Proper indexing for Azure SQL Basic tier\n   - Search result caching strategies\n   - Query optimization for large datasets\n\n4. Search UI Components\n   - Unified search interface design\n   - Filter management components\n   - Search history and saved searches",
-      "testStrategy": "1. **NEW**: Global search across all entities in <2 seconds\n2. Advanced filtering with multiple criteria\n3. Search performance with production data\n4. Filter combination accuracy\n5. Multi-device search interface usability",
-      "priority": "high",
-      "phase": "Phase 2 - Core CRM + Advanced Features",
+      "title": "👥 Optimized Contact Management [HIGH PRIORITY]",
+      "description": "Implement high-performance contact management with role-based food service hierarchy, primary contact designation, and optimized search with fuzzy matching and duplicate prevention.",
+      "details": "**CONTACT MANAGEMENT WITH FOOD SERVICE SPECIALIZATION:**\n\n**FOOD SERVICE ROLES:** Exec Chef, Buyer, Manager, Owner, Kitchen Manager\n**PERFORMANCE:** Contact search under 500ms response time\n**FEATURES:** Primary contact designation, duplicate prevention, role-based filtering\n\n**COMPLEXITY:** 7/10 | **DEPENDENCIES:** Task 5\n\n**SUCCESS CRITERIA:**\n✅ Contact search consistently under 500ms\n✅ Role hierarchy properly implemented\n✅ Primary contact business logic functional\n✅ Duplicate prevention with fuzzy matching\n✅ N+1 query prevention implemented",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
-        3,
-        4,
         5
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: Global search must meet performance requirements",
+      "priority": "high",
       "subtasks": [
         {
           "id": 1,
-          "title": "Cross-Entity Search Implementation",
-          "status": "pending",
-          "details": "Unified search across organizations, contacts, and interactions"
+          "title": "Contact Database Schema with Performance Optimization",
+          "description": "Design and implement optimized database schema for contact management with role hierarchy, primary contact designation, and food service role integration. Include performance indexes, relationship mappings, and data validation constraints.",
+          "dependencies": [],
+          "details": "Create tables for contacts, roles, role_hierarchies, and contact_roles with proper foreign key relationships. Implement indexes for frequently queried fields (name, email, phone, role_type). Design primary contact designation logic with unique constraints. Add food service specific role types (chef, server, manager, supplier) with hierarchy levels. Include audit fields and soft delete functionality.",
+          "status": "pending"
         },
         {
           "id": 2,
-          "title": "Advanced Filter System",
-          "status": "pending",
-          "details": "Multi-select filters with AND/OR logic and preset management"
+          "title": "Contact API Endpoints with N+1 Prevention",
+          "description": "Develop RESTful API endpoints for contact operations with strategic eager loading, relationship includes, and query optimization to prevent N+1 problems. Implement role-based access control and bulk operations.",
+          "dependencies": [
+            1
+          ],
+          "details": "Create CRUD endpoints with strategic includes for roles and hierarchies. Implement bulk contact import/export with validation. Add role assignment endpoints with hierarchy validation. Include pagination, filtering, and sorting capabilities. Implement caching strategies for frequently accessed contact data and role hierarchies.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Contact Management Interface with Memoization",
+          "description": "Build responsive contact management interface with role-based filtering, memoized components, and optimized rendering for large contact lists. Include primary contact designation UI and role hierarchy visualization.",
+          "dependencies": [
+            2
+          ],
+          "details": "Develop contact list with virtual scrolling and memoized row components. Create role hierarchy tree view with drag-drop functionality. Implement primary contact toggle with visual indicators. Add advanced filtering by role, department, and hierarchy level. Include contact merge interface and bulk action capabilities.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Contact Search and Duplicate Prevention",
+          "description": "Implement intelligent contact search with fuzzy matching algorithms and automated duplicate detection system. Include merge suggestions, similarity scoring, and food service role-specific matching criteria.",
+          "dependencies": [
+            3
+          ],
+          "details": "Develop fuzzy search using Levenshtein distance and phonetic matching for names, emails, and phone numbers. Implement duplicate detection algorithms with configurable similarity thresholds. Create merge suggestion interface with field-by-field comparison. Add food service role-specific matching (e.g., supplier company names, chef certifications). Include automated duplicate prevention on contact creation.",
+          "status": "pending"
         }
       ]
     },
     {
       "id": 7,
-      "title": "Sales Pipeline with Drag-and-Drop Kanban [ENHANCED]",
-      "description": "Implement 5-stage pipeline with 11 principals, drag-and-drop interface, and opportunity value tracking",
-      "details": "1. 5-Stage Pipeline with Enhanced Features\n   - Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close\n   - **NEW**: Drag-and-drop Kanban board for iPad\n   - Stage transition tracking and business rules\n\n2. 11 Principal Integration\n   - Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers\n   - Principal-specific opportunity tracking\n   - **NEW**: Principal performance metrics\n\n3. Visual Pipeline Dashboard [NEW FEATURE]\n   - Touch-friendly drag-and-drop interface\n   - iPad landscape orientation optimization\n   - Real-time updates across users\n   - Stage validation with business rules\n\n4. Enhanced Opportunity Management\n   - **NEW**: Opportunity value and revenue tracking\n   - **NEW**: Expected close date with calculations\n   - Probability tracking (0-100%)\n   - Status management: Open, Closed-Won, Closed-Lost, On Hold",
-      "testStrategy": "1. 5-stage pipeline with correct transitions\n2. All 11 principals integrated and filterable\n3. **NEW**: Drag-and-drop functionality on iPad\n4. **NEW**: Opportunity value tracking accuracy\n5. Pipeline visualization on touch and mouse\n6. Business rules enforcement",
-      "priority": "critical",
-      "phase": "Phase 3 - Pipeline + Enhanced Features",
+      "title": "📞 Enhanced Interaction Tracking [CRITICAL]",
+      "description": "Implement 6-type interaction tracking system (Email, Call, In Person, Demo/sampled, Quoted price, Follow-up) with optimized quick entry forms targeting 30-second data entry and auto-complete functionality.",
+      "details": "**6 INTERACTION TYPES FOR FOOD SERVICE:**\nEmail | Call | In Person | Demo/sampled | Quoted price | Follow-up\n\n**PERFORMANCE TARGETS:**\n- Quick entry forms: 30-second target per interaction\n- Auto-complete response: Under 500ms\n- Database queries optimized for frequent logging\n- Batch operations with error handling\n\n**COMPLEXITY:** 7/10 | **DEPENDENCIES:** Tasks 5, 6\n\n**SUCCESS CRITERIA:**\n✅ All 6 interaction types fully functional\n✅ 30-second entry time achieved consistently\n✅ Auto-complete responds under 500ms\n✅ Error boundaries protect interaction logging\n✅ Touch-optimized forms for iPad entry",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
-        3,
-        4,
         5,
         6
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: Pipeline with drag-and-drop must be fully functional",
+      "priority": "critical",
       "subtasks": [
         {
           "id": 1,
-          "title": "Drag-and-Drop Kanban Implementation [NEW]",
-          "status": "pending",
-          "details": "Touch-optimized pipeline board with stage movement validation"
+          "title": "Interaction Database Schema with 6 Types and Performance Optimization",
+          "description": "Design and implement a comprehensive database schema supporting 6 distinct interaction types with optimized indexing, partitioning strategies, and query performance tuning for high-volume logging operations.",
+          "dependencies": [],
+          "details": "Create normalized tables for interaction types, implement proper indexing for frequent queries, set up database partitioning for timeline data, and establish performance benchmarks for concurrent write operations.",
+          "status": "pending"
         },
         {
           "id": 2,
-          "title": "Opportunity Value Tracking [NEW]",
-          "status": "pending",
-          "details": "Revenue tracking, expected close dates, pipeline forecasting"
+          "title": "High-Performance Interaction API Endpoints with Type-Specific Validation",
+          "description": "Develop RESTful API endpoints with type-specific validation rules, bulk operations support, and optimized response times for each of the 6 interaction types with comprehensive error handling.",
+          "dependencies": [
+            1
+          ],
+          "details": "Implement CRUD operations for each interaction type, create validation schemas, add bulk insert/update capabilities, implement rate limiting, and ensure sub-100ms response times for standard operations.",
+          "status": "pending"
         },
         {
           "id": 3,
-          "title": "11 Principals Integration",
-          "status": "pending",
-          "details": "Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers"
+          "title": "Optimized Quick Entry Forms Targeting 30-Second Entry Time",
+          "description": "Build responsive form interfaces optimized for rapid data entry with smart defaults, keyboard shortcuts, and streamlined workflows to achieve 30-second average completion time across all interaction types.",
+          "dependencies": [
+            2
+          ],
+          "details": "Design mobile-first forms with progressive enhancement, implement keyboard navigation, add smart field pre-population, create form templates, and conduct user testing to validate 30-second target.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Auto-Complete and Auto-Save with Performance and Conflict Resolution",
+          "description": "Implement intelligent auto-complete functionality and robust auto-save mechanisms with conflict resolution, offline support, and optimized performance to prevent data loss and enhance user experience.",
+          "dependencies": [
+            3
+          ],
+          "details": "Build predictive text for common fields, implement debounced auto-save with local storage backup, create conflict resolution UI for concurrent edits, add offline queue management, and ensure seamless sync when connectivity resumes.",
+          "status": "pending"
         }
       ]
     },
     {
       "id": 8,
-      "title": "Comprehensive Opportunity Tracking [NEW ENHANCED]",
-      "description": "Extended opportunity model with value calculations and forecasting capabilities",
-      "details": "1. Extended Opportunity Model\n   - Value, expectedCloseDate, products, notes fields\n   - Organization and contact linking\n   - Product association and tracking\n   - Historical value tracking and changes\n\n2. Value Calculations and Reporting\n   - Pipeline value by stage and principal\n   - Expected revenue calculations\n   - Win/loss ratio tracking\n   - Monthly and quarterly forecasting\n\n3. Opportunity CRUD Operations\n   - Create with comprehensive validation\n   - Update with audit trail\n   - Bulk operations for management\n   - Advanced filtering and sorting\n\n4. Opportunity Analytics\n   - Conversion rate tracking\n   - Stage duration analysis\n   - Principal performance comparison\n   - Revenue trend analysis",
-      "testStrategy": "1. **NEW**: Extended opportunity model functional\n2. **NEW**: Value calculations accurate\n3. **NEW**: Revenue forecasting working\n4. Opportunity CRUD with validation\n5. Analytics and reporting integration",
-      "priority": "high",
-      "phase": "Phase 3 - Pipeline + Enhanced Features",
+      "title": "🔍 Global Search & Advanced Filtering [ENHANCED]",
+      "description": "Implement high-performance global search with full-text search, advanced filtering system, and search result optimization targeting under 2-second response times across all entities.",
+      "details": "**GLOBAL SEARCH CAPABILITIES:**\n- Full-text search across Organizations, Contacts, Interactions\n- Advanced filtering with memoized components\n- Search result highlighting with performance optimization\n- Search history with local storage persistence\n\n**PERFORMANCE TARGETS:**\n- Global search: Under 2 seconds response time\n- Search result highlighting: Instant\n- Filter operations: Under 1 second\n- Search history: Instant retrieval\n\n**COMPLEXITY:** 6/10 | **DEPENDENCIES:** Tasks 5, 6, 7\n\n**SUCCESS CRITERIA:**\n✅ Full-text search under 2 seconds consistently\n✅ Advanced filters with virtualization working\n✅ Search highlighting performant\n✅ Filter presets and history functional",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
+        5,
+        6,
         7
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: Opportunity value tracking must be accurate",
+      "priority": "medium",
       "subtasks": [
         {
           "id": 1,
-          "title": "Value Calculation Engine",
-          "status": "pending",
-          "details": "Pipeline value aggregation and forecasting algorithms"
+          "title": "Optimized Global Search Implementation",
+          "description": "Implement full-text search functionality with result highlighting and sub-2-second response time across all data entities",
+          "dependencies": [],
+          "details": "Develop elasticsearch/algolia integration, implement search indexing, create result highlighting components, optimize query performance with caching, add search analytics and autocomplete functionality",
+          "status": "pending"
         },
         {
           "id": 2,
-          "title": "Revenue Analytics Dashboard",
-          "status": "pending",
-          "details": "Win/loss tracking and performance metrics visualization"
+          "title": "Advanced Filtering System with Virtualization",
+          "description": "Build advanced filtering system with memoized components, virtualization for large datasets, and persistent filter presets",
+          "dependencies": [
+            1
+          ],
+          "details": "Create memoized filter components, implement virtual scrolling for performance, develop filter preset save/load functionality, add multi-criteria filtering with AND/OR logic, integrate with global search results",
+          "status": "pending"
         }
       ]
     },
     {
       "id": 9,
-      "title": "Enhanced Reporting Engine (4+ Core Types) [ENHANCED]",
-      "description": "Comprehensive reporting with Tremor charts, enhanced dashboard, and export capabilities",
-      "details": "1. Four Core Report Types (Performance: <10 seconds)\n   - Weekly Activity Reports by Account Manager\n   - Pipeline Status by Principal Reports (enhanced with value)\n   - Interaction Volume Analysis Reports\n   - Organization Performance Tracking Reports\n\n2. **NEW**: Enhanced Dashboard with Key Metrics\n   - Real-time KPIs and performance indicators\n   - **NEW**: Pipeline value and revenue metrics\n   - Sales performance over time charts\n   - Activity reports by sales rep\n\n3. Tremor Charts Integration (NextCRM Foundation)\n   - Multi-device responsive design\n   - Touch-friendly chart interactions\n   - **NEW**: Pipeline value visualizations\n   - Interactive drill-down capabilities\n\n4. **NEW**: Export and Advanced Features\n   - **NEW**: Excel/CSV export for reports\n   - Print-optimized layouts\n   - Date range filtering (Last 7/30 days, Custom)\n   - Report scheduling and automation",
-      "testStrategy": "1. All 4+ report types generate in <10 seconds\n2. **NEW**: Enhanced dashboard with real-time metrics\n3. **NEW**: Export functionality working\n4. Tremor charts responsive and interactive\n5. Data accuracy verification\n6. Multi-device chart usability",
-      "priority": "critical",
-      "phase": "Phase 3 - Pipeline + Enhanced Features",
+      "title": "🎯 High-Performance Sales Pipeline [CRITICAL]",
+      "description": "Implement 5-stage sales pipeline with 11 principal integration, @hello-pangea/dnd drag-and-drop, and visual dashboard optimized for touch interactions and large datasets.",
+      "details": "**PHASE 3: PIPELINE, OPPORTUNITIES & REPORTING**\n\n**5-STAGE PIPELINE:** Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close\n**11 PRINCIPALS:** Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers\n\n**PERFORMANCE REQUIREMENTS:**\n- Pipeline operations under 3 seconds\n- @hello-pangea/dnd for React 19 compatibility\n- Touch-friendly drag-and-drop for iPad\n- Real-time updates consideration\n\n**COMPLEXITY:** 9/10 | **DEPENDENCIES:** Phase 2 Complete\n\n**SUCCESS CRITERIA:**\n✅ All 5 pipeline stages functional with drag-and-drop\n✅ 11 principals integrated with filtering\n✅ Touch interface optimized for iPad\n✅ Performance under 3 seconds for all operations",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
-        7,
         8
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: All reports must generate in <10 seconds with accurate data",
+      "priority": "critical",
       "subtasks": [
         {
           "id": 1,
-          "title": "Enhanced Dashboard Implementation [NEW]",
-          "status": "pending",
-          "details": "Real-time KPIs, pipeline value metrics, performance charts"
+          "title": "Optimized 5-Stage Pipeline Database Schema with Azure SQL Performance",
+          "description": "Design and implement a high-performance database schema for the 5-stage sales pipeline with stage tracking, audit trail, and Azure SQL optimization including indexing strategies, partitioning, and query performance tuning.",
+          "dependencies": [],
+          "details": "Create tables for pipeline stages, opportunities, stage transitions, audit logs with proper indexing, implement Azure SQL performance features like columnstore indexes, query store optimization, and automated tuning recommendations.",
+          "status": "pending"
         },
         {
           "id": 2,
-          "title": "Export Capabilities [NEW]",
-          "status": "pending",
-          "details": "Excel/CSV export functionality for all report types"
+          "title": "Auth.js Configuration with Session Security and User Management",
+          "description": "Configure Auth.js for secure authentication, implement comprehensive user management system with role-based access control, and establish robust session security measures integrated with Azure SQL user data.",
+          "dependencies": [
+            1
+          ],
+          "details": "Set up Auth.js providers, configure session management, implement user roles and permissions, secure session storage, integrate with Azure SQL for user data persistence, and establish security policies for pipeline access.",
+          "status": "pending"
         },
         {
           "id": 3,
-          "title": "Pipeline Value Reporting [NEW]",
-          "status": "pending",
-          "details": "Revenue-focused reports with forecasting visualizations"
+          "title": "Global Search Optimization with Performance Indexing",
+          "description": "Implement high-performance global search functionality across the sales pipeline with optimized indexing, full-text search capabilities, and Azure SQL search performance optimization.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Create full-text search indexes, implement search APIs with caching, optimize search queries for Azure SQL, add search filters for pipeline stages, opportunities, and contacts with real-time search suggestions.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Visual Pipeline Dashboard with React 19 and Opportunity Management",
+          "description": "Build an interactive visual pipeline dashboard using @hello-pangea/dnd for React 19 compatibility, implement opportunity management with Zod validation, business rules engine, and real-time updates.",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "Create drag-and-drop pipeline interface, implement opportunity cards with detailed views, add Zod schema validation for all forms, create business rules engine for stage transitions, integrate real-time updates, and ensure React 19 compatibility.",
+          "status": "pending"
         }
       ]
     },
     {
       "id": 10,
-      "title": "Excel Data Migration Pipeline",
-      "description": "Comprehensive data migration with validation, relationship preservation, and audit capabilities",
-      "details": "1. Excel Parser Service (.xlsx and .csv)\n   - Robust parsing with comprehensive error handling\n   - Large file processing with progress indicators\n   - Column mapping and data transformation\n\n2. Data Validation and Quality Checks\n   - Business rule validation for all entities\n   - Food service industry-specific validation\n   - Data quality scoring and recommendations\n\n3. Relationship Preservation\n   - Organization-Contact-Interaction-Opportunity relationships\n   - Account manager assignment preservation\n   - **NEW**: Opportunity value preservation\n   - Data integrity verification\n\n4. Migration Verification and Audit\n   - 100% data accuracy validation\n   - Import history tracking\n   - Rollback capabilities\n   - Comprehensive audit logging",
-      "testStrategy": "1. **CRITICAL**: 100% data migration accuracy\n2. Relationship preservation verification\n3. Account manager assignments maintained\n4. **NEW**: Opportunity values preserved\n5. Error handling and recovery\n6. Migration audit trail complete",
-      "priority": "critical",
-      "phase": "Phase 4 - Migration + Launch",
+      "title": "📊 Optimized Reporting Engine [CRITICAL]",
+      "description": "Implement high-performance reporting system with materialized views, Tremor charts integration, and 4 core reports (Weekly Activity, Pipeline Status, Interaction Volume, Organization Performance) targeting under 10-second generation times.",
+      "details": "**4 CORE REPORTS WITH PERFORMANCE OPTIMIZATION:**\n1. Weekly Activity Reports (Account manager focused)\n2. Pipeline Status by Principal Reports\n3. Interaction Volume Analysis \n4. Organization Performance Tracking\n\n**PERFORMANCE REQUIREMENTS:**\n- Report generation: Under 10 seconds\n- Materialized views for dashboard performance\n- Optimized queries for Azure SQL Basic DTU limits\n- Memoized Tremor chart components\n\n**COMPLEXITY:** 8/10 | **DEPENDENCIES:** Task 9\n\n**SUCCESS CRITERIA:**\n✅ All 4 reports generate under 10 seconds\n✅ Tremor charts load and interact smoothly\n✅ Dashboard performance optimized with caching\n✅ Touch-friendly chart interactions for iPad",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
-        7,
-        8,
         9
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: 100% data migration accuracy required",
+      "priority": "critical",
       "subtasks": [
         {
           "id": 1,
-          "title": "Excel Parser with Error Handling",
-          "status": "pending",
-          "details": "Robust .xlsx/.csv parsing with comprehensive validation"
+          "title": "High-Performance Report Data Layer Implementation",
+          "description": "Build optimized data layer with materialized views, caching mechanisms, and query optimization to ensure report generation under 10 seconds",
+          "dependencies": [],
+          "details": "Implement materialized views for aggregated data, Redis caching layer, database indexing strategies, and background data refresh processes. Include performance monitoring and query optimization for complex reporting queries.",
+          "status": "pending"
         },
         {
           "id": 2,
-          "title": "Relationship Preservation System",
-          "status": "pending",
-          "details": "Maintain all data relationships and historical context"
+          "title": "Core Reports Implementation Suite",
+          "description": "Develop 4 essential reports: Weekly Activity, Pipeline Status, Interaction Volume, and Organization Performance with real-time data integration",
+          "dependencies": [
+            1
+          ],
+          "details": "Create report templates, implement data aggregation logic, build filtering and sorting capabilities, and ensure seamless integration with the high-performance data layer. Include export functionality and scheduled report generation.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Tremor Charts Integration with Interactive Components",
+          "description": "Integrate Tremor Charts library with memoized components, touch-friendly interactions, and responsive design for optimal user experience",
+          "dependencies": [
+            2
+          ],
+          "details": "Implement chart components with React.memo optimization, touch gesture support for mobile devices, responsive breakpoints, interactive tooltips, and drill-down capabilities. Ensure charts load efficiently with large datasets.",
+          "status": "pending"
         }
       ]
     },
     {
       "id": 11,
-      "title": "Comprehensive User Acceptance Testing [ENHANCED]",
-      "description": "Extensive UAT with multi-device testing, performance validation, and user approval",
-      "details": "1. UAT Environment Preparation\n   - Production-like environment with migrated data\n   - Comprehensive test scenarios\n   - UAT documentation and feedback systems\n\n2. UAT Execution with Sales Team\n   - Complete workflow testing with actual users\n   - Task completion time measurement\n   - User satisfaction and feedback collection\n   - Issue prioritization and resolution\n\n3. Multi-Device UAT Testing\n   - Touch laptop and traditional laptop testing\n   - iPad Safari compatibility validation\n   - 44px touch target compliance\n   - Responsive design verification\n\n4. Performance and Load Validation\n   - Sub-second search with production data\n   - 10-second report generation verification\n   - 4 concurrent user simulation\n   - Azure Basic tier performance validation",
-      "testStrategy": "1. **CRITICAL**: Sales team approval required\n2. Multi-device functionality verification\n3. Performance targets met consistently\n4. User workflow completion validation\n5. Data accuracy user confirmation",
-      "priority": "critical",
-      "phase": "Phase 4 - Migration + Launch",
+      "title": "📁 Enhanced Excel Data Migration [CRITICAL]",
+      "description": "Implement robust Excel parser service with Zod validation, relationship preservation, and advanced duplicate detection with fuzzy matching for seamless transition from existing Excel-based system.",
+      "details": "**PHASE 4: DATA MIGRATION, TESTING & LAUNCH**\n\n**EXCEL MIGRATION FEATURES:**\n- Support for .xlsx and .csv with large file processing\n- Zod schema validation for all entity types\n- Advanced duplicate detection with fuzzy matching\n- Relationship preservation with integrity checks\n\n**DATA INTEGRITY:**\n- Foreign key relationship validation\n- Account manager assignment preservation  \n- Conflict resolution with user guidance\n- Complete audit trail for all operations\n\n**COMPLEXITY:** 9/10 | **DEPENDENCIES:** Phase 3 Complete\n\n**SUCCESS CRITERIA:**\n✅ 100% data migration accuracy with zero data loss\n✅ Advanced duplicate detection functional\n✅ Relationship integrity maintained\n✅ User-guided conflict resolution working",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
         10
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: User acceptance required before production",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Real-World User Testing",
-          "status": "pending",
-          "details": "Complete workflows with actual sales team members"
-        },
-        {
-          "id": 2,
-          "title": "Performance Validation",
-          "status": "pending",
-          "details": "Search <1s, reports <10s, concurrent user testing"
-        }
-      ]
+      "priority": "critical",
+      "subtasks": []
     },
     {
       "id": 12,
-      "title": "Cross-Browser & Device Testing [NEW COMPREHENSIVE]",
-      "description": "Comprehensive compatibility testing across browsers and device types",
-      "details": "1. Browser Compatibility Testing\n   - Chrome, Firefox, Safari, Edge testing\n   - Consistent functionality verification\n   - Browser-specific issue resolution\n   - Performance validation across platforms\n\n2. Device-Specific Testing\n   - iPad Safari optimization focus\n   - Touch interaction quality validation\n   - Gesture handling verification\n   - Screen size and orientation testing\n\n3. Network Condition Testing\n   - Various network speed testing\n   - Offline behavior validation\n   - Auto-save under poor connectivity\n   - Graceful degradation verification\n\n4. Accessibility and Usability Testing\n   - Keyboard navigation verification\n   - Screen reader compatibility\n   - Color contrast validation\n   - ARIA labels and semantic markup",
-      "testStrategy": "1. **NEW**: Cross-browser functionality 100% consistent\n2. **NEW**: Device-specific performance validated\n3. **NEW**: Network resilience tested\n4. **NEW**: Accessibility compliance verified",
-      "priority": "high",
-      "phase": "Phase 4 - Migration + Launch",
+      "title": "🚀 Comprehensive Production Readiness [CRITICAL]",
+      "description": "Implement production environment optimization with Azure App Service configuration, security hardening, performance monitoring with Azure Application Insights, and comprehensive load testing for 4 concurrent users.",
+      "details": "**PRODUCTION ENVIRONMENT OPTIMIZATION:**\n- Azure App Service configuration optimization\n- Database connection pooling for performance\n- Security headers and input validation hardening\n- Azure Application Insights integration\n\n**PERFORMANCE & LOAD TESTING:**\n- 4 concurrent user simulation\n- Database performance under load validation\n- Memory usage optimization verification\n- Network latency optimization testing\n\n**COMPLEXITY:** 7/10 | **DEPENDENCIES:** Task 11\n\n**SUCCESS CRITERIA:**\n✅ Production environment fully optimized\n✅ Security vulnerabilities addressed and verified\n✅ 4 concurrent users without performance degradation\n✅ Azure costs maintained under $18/month",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
         11
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: Cross-browser compatibility required",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Browser Compatibility Matrix",
-          "status": "pending",
-          "details": "Chrome, Firefox, Safari, Edge functional testing"
-        },
-        {
-          "id": 2,
-          "title": "Device Optimization Validation",
-          "status": "pending",
-          "details": "iPad Safari, touch laptops, various screen sizes"
-        }
-      ]
+      "priority": "critical",
+      "subtasks": []
     },
     {
       "id": 13,
-      "title": "Production Deployment & Enhanced Infrastructure",
-      "description": "Production environment with enhanced CI/CD, monitoring, and security",
-      "details": "1. Azure Production Environment\n   - App Service Basic B1 configuration\n   - Production security hardening\n   - Performance optimization within budget\n\n2. **Enhanced CI/CD Pipeline**\n   - GitHub Actions with automated testing\n   - Database migration automation\n   - Environment-specific configuration\n   - Rollback procedures and hotfix deployment\n\n3. Security and SSL Configuration\n   - HTTPS enforcement and certificates\n   - Production security headers\n   - Database security and firewall rules\n   - Vulnerability assessment\n\n4. Monitoring and Alerting\n   - Azure Application Insights\n   - Performance and resource monitoring\n   - Error tracking and alerting\n   - Cost monitoring ($18/month compliance)",
-      "testStrategy": "1. Production deployment successful\n2. **NEW**: Enhanced CI/CD pipeline operational\n3. Security configuration verified\n4. Monitoring and alerting functional\n5. Cost compliance maintained",
-      "priority": "critical",
-      "phase": "Phase 4 - Migration + Launch",
+      "title": "✅ Enhanced User Acceptance Testing [CRITICAL]",
+      "description": "Conduct comprehensive multi-device UAT testing with real-world workflow validation, performance target verification, and user satisfaction measurement to ensure production readiness.",
+      "details": "**MULTI-DEVICE UAT TESTING:**\n- Touch laptop testing with both input methods\n- iPad Safari compatibility validation\n- Performance testing on actual hardware\n- Accessibility compliance verification\n\n**REAL-WORLD WORKFLOW TESTING:**\n- Complete sales workflow validation\n- Data migration accuracy verification\n- Performance targets validation across all scenarios\n- User satisfaction measurement with feedback integration\n\n**COMPLEXITY:** 7/10 | **DEPENDENCIES:** Task 12\n\n**SUCCESS CRITERIA:**\n✅ All devices tested and validated\n✅ Complete workflows functional end-to-end\n✅ Performance targets consistently met\n✅ Sales team approval and satisfaction confirmed",
+      "testStrategy": "",
+      "status": "pending",
       "dependencies": [
-        11,
         12
       ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: Production environment must be fully operational",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Enhanced CI/CD Implementation [NEW]",
-          "status": "pending",
-          "details": "GitHub Actions with automated testing and deployment"
-        },
-        {
-          "id": 2,
-          "title": "Production Security Hardening",
-          "status": "pending",
-          "details": "HTTPS, security headers, vulnerability assessment"
-        }
-      ]
+      "priority": "critical",
+      "subtasks": []
     },
     {
       "id": 14,
-      "title": "Team Training and Production Launch",
-      "description": "Comprehensive training and coordinated production launch with post-launch support",
-      "details": "1. Enhanced Training Materials\n   - User guides with multi-device workflows\n   - Quick reference cards for iPad\n   - Video tutorials for common tasks\n   - **NEW**: Change management support\n\n2. Team Training Program\n   - Hands-on training with sales team\n   - Competency verification\n   - Individual assistance and support\n   - **NEW**: Feature comparison with Excel\n\n3. Production Launch Coordination\n   - Coordinated cutover from Excel\n   - Real-time monitoring during launch\n   - Immediate support availability\n   - Success metrics tracking\n\n4. Post-Launch Support Strategy\n   - Daily check-ins during first week\n   - Issue resolution and feedback collection\n   - Performance monitoring and optimization\n   - Budget compliance verification",
-      "testStrategy": "1. Training effectiveness verified\n2. User competency confirmed\n3. Production launch successful\n4. Post-launch support operational\n5. Success metrics achieved",
-      "priority": "critical",
-      "phase": "Phase 4 - Migration + Launch",
-      "dependencies": [
-        13
-      ],
-      "status": "pending",
-      "qualityGate": "🚨 BLOCKING: User training and launch readiness required",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Enhanced Training Program [NEW]",
-          "status": "pending",
-          "details": "Multi-device workflows, change management, Excel comparison"
-        },
-        {
-          "id": 2,
-          "title": "Production Launch Support",
-          "status": "pending",
-          "details": "Coordinated cutover, monitoring, immediate assistance"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "title": "Multi-Device Testing Protocol [CONTINUOUS]",
-      "description": "Comprehensive multi-device testing throughout all development phases",
-      "details": "1. Multi-Device Testing Environment\n   - Touch laptop primary testing setup\n   - Traditional laptop and tablet simulation\n   - Real device testing capabilities\n\n2. Touch Input Testing Suite\n   - 44px minimum touch target validation\n   - Gesture support verification\n   - Touch interaction quality assessment\n\n3. Mouse/Keyboard Testing Suite\n   - Precision interaction testing\n   - Keyboard navigation validation\n   - Accessibility compliance verification\n\n4. Input Method Switching Tests\n   - Seamless transition testing\n   - Functionality consistency validation\n   - Data preservation during switches\n\n5. Browser and Performance Testing\n   - Cross-browser compatibility\n   - Responsive design validation\n   - Performance consistency verification",
-      "testStrategy": "1. **CONTINUOUS**: All features work on touch and mouse\n2. 44px touch target compliance maintained\n3. Input method switching seamless\n4. Browser compatibility consistent\n5. Performance requirements met across devices",
-      "priority": "high",
-      "phase": "Continuous (Weeks 1-8)",
-      "dependencies": [
-        1,
-        2
-      ],
-      "status": "active",
-      "qualityGate": "🔄 WEEKLY: Multi-device compatibility verified",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Weekly Touch Target Validation",
-          "status": "active",
-          "details": "Verify 44px minimum on all new features"
-        },
-        {
-          "id": 2,
-          "title": "Input Method Testing",
-          "status": "active",
-          "details": "Touch laptop testing for both input methods"
-        }
-      ]
-    },
-    {
-      "id": 16,
-      "title": "Azure Cost Monitoring [CONTINUOUS]",
-      "description": "Continuous cost monitoring and optimization to maintain $18/month budget",
-      "details": "1. Resource Usage Tracking\n   - SQL Database and App Service monitoring\n   - DTU usage and storage tracking\n   - Performance vs cost optimization\n\n2. Budget Alert System\n   - 70% threshold alert ($12.60)\n   - 90% threshold alert ($16.20)\n   - Daily cost tracking dashboard\n\n3. Weekly Cost Reviews\n   - Cost trend analysis\n   - Optimization opportunity identification\n   - Budget compliance verification\n\n4. Cost Optimization Strategies\n   - Resource right-sizing\n   - Performance optimization\n   - Usage pattern analysis",
-      "testStrategy": "1. **WEEKLY**: Costs remain under $18/month\n2. Alert system functional\n3. Optimization strategies effective\n4. Budget compliance maintained",
-      "priority": "medium",
-      "phase": "Continuous (Weeks 1-8)",
-      "dependencies": [
-        2
-      ],
-      "status": "active",
-      "qualityGate": "🔄 WEEKLY: Budget compliance verified",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Weekly Budget Review",
-          "status": "active",
-          "details": "Monitor Azure costs against $18/month target"
-        }
-      ]
-    },
-    {
-      "id": 17,
-      "title": "NextCRM Integration Quality Assurance [CONTINUOUS]",
-      "description": "Ongoing quality assurance for NextCRM foundation compliance and customization testing",
-      "details": "1. NextCRM Component Testing\n   - Verify core functionality after customizations\n   - Test shadcn/ui, Tremor charts, Auth.js integration\n   - Ensure NextCRM patterns preserved\n\n2. Food Service Customization Testing\n   - Validate industry-specific modifications\n   - Test seamless integration with foundation\n   - Quality assurance for custom components\n\n3. Performance Testing Under Azure Constraints\n   - Test within Basic tier limitations\n   - Performance regression monitoring\n   - Optimization for DTU constraints\n\n4. Regression Testing for Updates\n   - Comprehensive testing procedures\n   - Automated testing where possible\n   - Update impact assessment",
-      "testStrategy": "1. **CONTINUOUS**: NextCRM foundation preserved\n2. Custom components integrate seamlessly\n3. Performance within Azure constraints\n4. No regression from updates",
-      "priority": "medium",
-      "phase": "Continuous (Weeks 1-8)",
-      "dependencies": [
-        1
-      ],
-      "status": "active",
-      "qualityGate": "🔄 WEEKLY: NextCRM compliance verified",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Foundation Compliance Testing",
-          "status": "active",
-          "details": "Verify NextCRM patterns and functionality preserved"
-        }
-      ]
-    },
-    {
-      "id": 18,
-      "title": "Implement Organizations Feature",
-      "description": "Implement the core Organizations feature, including database schema, API endpoints, and UI components, optimized for iPad.",
-      "details": "",
+      "title": "📱 Enhanced Multi-Device Testing Protocol [CONTINUOUS]",
+      "description": "Weekly multi-device testing protocol throughout all phases ensuring touch laptop compatibility, iPad Safari optimization, performance validation on actual hardware, and accessibility compliance.",
+      "details": "**CONTINUOUS TASKS (WEEKS 1-8) - WEEKLY EXECUTION:**\n\n**MULTI-DEVICE TESTING PROTOCOL:**\n- Touch laptop testing environment with both input methods\n- iPad Safari compatibility validation  \n- Performance testing on actual hardware\n- Error boundary testing across device types\n- Memory usage monitoring on touch devices\n- Bundle size impact testing\n\n**TESTING SCHEDULE:** Weekly throughout all phases\n**DEVICES:** Touch laptops, iPad (multiple models), Desktop browsers\n\n**SUCCESS CRITERIA:**\n✅ All interactive elements 44px minimum touch targets\n✅ iPad Safari compatibility maintained\n✅ Performance consistent across all devices\n✅ Memory usage optimized for touch devices",
       "testStrategy": "",
       "status": "pending",
       "dependencies": [],
       "priority": "high",
+      "subtasks": []
+    },
+    {
+      "id": 15,
+      "title": "💰 Enhanced Azure Cost Monitoring [CONTINUOUS]",
+      "description": "Weekly Azure cost review and optimization ensuring $18/month budget compliance with DTU usage tracking, query performance impact monitoring, and performance optimization ROI tracking.",
+      "details": "**CONTINUOUS COST MONITORING (WEEKS 1-8):**\n\n**AZURE COST TARGETS:**\n- SQL Database Basic: $5/month\n- App Service B1: $13/month  \n- Total Budget: ≤ $18/month\n\n**MONITORING AREAS:**\n- DTU usage tracking and optimization\n- Query performance impact on costs\n- Bundle size impact on bandwidth costs\n- Performance optimization ROI tracking\n\n**WEEKLY REVIEW SCHEDULE:** Cost analysis and optimization recommendations\n\n**SUCCESS CRITERIA:**\n✅ Azure costs consistently under $18/month\n✅ DTU usage optimized below 80% capacity\n✅ Query performance maintained within cost constraints\n✅ Bundle optimization reducing bandwidth costs",
+      "testStrategy": "",
+      "status": "pending",
+      "dependencies": [],
+      "priority": "medium",
       "subtasks": []
     }
   ],

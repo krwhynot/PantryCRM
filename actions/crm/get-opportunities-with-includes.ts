@@ -3,6 +3,15 @@
 import { prismadb } from "@/lib/prisma";
 
 export const getOpportunitiesFull = async () => {
+  // TODO: Kitchen Pantry CRM - CRM Opportunities functionality not implemented yet
+  console.log('CRM Opportunities functionality disabled for Kitchen Pantry CRM');
+  
+  return {
+    error: 'CRM Opportunities functionality not available in current version.',
+    opportunities: []
+  };
+  
+  /* Original implementation commented out due to missing Prisma model
   const data = await prismadb.crm_Opportunities.findMany({
     include: {
       assigned_account: {
@@ -27,4 +36,5 @@ export const getOpportunitiesFull = async () => {
   });
 
   return data;
+  */
 };

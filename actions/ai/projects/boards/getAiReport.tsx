@@ -1,19 +1,24 @@
 "use server";
 
-import axios from "axios";
-
 import { prismadb } from "@/lib/prisma";
-import resendHelper from "@/lib/resend";
-
-import AiProjectReportEmail from "@/emails/AiProjectReport";
 
 export async function getAiReport(session: any, boardId: string) {
-  /*
-  Resend.com function init - this is a helper function that will be used to send emails
-  */
+  // TODO: Kitchen Pantry CRM - AI Project Report functionality not implemented yet
+  console.log('AI Project Report functionality disabled for Kitchen Pantry CRM');
+  
+  return {
+    error: 'AI Project Report functionality not available in current version.',
+    user: session?.user?.email || 'unknown'
+  };
+  
+  /* Original implementation commented out due to missing Prisma models
+  import axios from "axios";
+  import resendHelper from "@/lib/resend";
+  import AiProjectReportEmail from "@/emails/AiProjectReport";
+
   const resend = await resendHelper();
 
-  const user = await prismadb.users.findUnique({
+  const user = await prismadb.user.findUnique({
     where: {
       id: session.user.id,
     },
@@ -99,4 +104,5 @@ export async function getAiReport(session: any, boardId: string) {
   }
 
   return { user: user.email };
+  */
 }

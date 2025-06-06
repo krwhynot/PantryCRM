@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { s3Client } from "@/lib/digital-ocean-s3";
-import {
-  BucketAlreadyExists,
-  ListBucketsCommand,
-  ListObjectsCommand,
-} from "@aws-sdk/client-s3";
+import { listBlobs } from "@/lib/azure-storage";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -19,13 +14,27 @@ export async function GET(request: NextRequest, props: { params: Promise<{ bucke
   const { bucketId } = params;
 
   if (!bucketId) {
-    return NextResponse.json("No bucketId ", { status: 400 });
+    return NextResponse.json("No containerId provided", { status: 400 });
   }
 
-  const bucketParams = { Bucket: bucketId };
+  try {
+    const blobs = await listBlobs(bucketId);
+    console.log("Success - Azure container listing", blobs);
 
-  const data = await s3Client.send(new ListObjectsCommand(bucketParams));
-  console.log("Success", data);
+    // Format response to match existing application expectations
+    const formattedResponse = {
+      Contents: blobs.map(blob => ({
+        Key: blob.name,
+        Size: blob.contentLength,
+        LastModified: blob.lastModified,
+        ContentType: blob.contentType
+      })),
+      Name: bucketId
+    };
 
-  return NextResponse.json({ files: data, success: true }, { status: 200 });
+    return NextResponse.json({ files: formattedResponse, success: true }, { status: 200 });
+  } catch (error) {
+    console.error("Error listing Azure blobs:", error);
+    return NextResponse.json({ error: "Failed to list blobs", success: false }, { status: 500 });
+  }
 }

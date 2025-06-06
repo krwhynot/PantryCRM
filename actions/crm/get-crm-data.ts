@@ -1,6 +1,33 @@
 import { prismadb } from "@/lib/prisma";
 
 export const getAllCrmData = async () => {
+  // TODO: Kitchen Pantry CRM - CRM Data retrieval functionality not fully implemented yet
+  console.log('CRM Data retrieval functionality disabled for Kitchen Pantry CRM');
+
+  const users = await prismadb.user.findMany({
+    where: {
+      // Assuming 'isActive' is the correct field based on schema
+      isActive: true, 
+    },
+  });
+  
+  // Returning only users for now, other models are missing or causing errors
+  const data = {
+    users,
+    accounts: [],
+    opportunities: [],
+    leads: [],
+    contacts: [],
+    contracts: [],
+    saleTypes: [],
+    saleStages: [],
+    campaigns: [],
+    industries: [],
+  };
+
+  return data;
+  
+  /* Original implementation commented out due to missing Prisma models
   const users = await prismadb.users.findMany({
     where: {
       userStatus: "ACTIVE",
@@ -30,4 +57,5 @@ export const getAllCrmData = async () => {
   };
 
   return data;
+  */
 };

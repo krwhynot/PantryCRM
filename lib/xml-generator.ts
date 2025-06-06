@@ -1,7 +1,54 @@
-import { create } from "xmlbuilder2";
+/**
+ * DEPRECATED: xmlbuilder2 has been replaced as part of Task 3 (Critical Dependency Fixes)
+ * The xmlbuilder2 package was removed to reduce bundle size and meet the <800KB target.
+ * 
+ * This implementation uses standard string templates to generate XML without external dependencies.
+ */
+
+/**
+ * Creates a simplified XML document using template literals instead of xmlbuilder2
+ * @param options Configuration options for the XML document
+ * @returns An object with methods to build XML elements
+ */
+function createXmlDocument(options: { version: string; encoding: string }) {
+  let xml = `<?xml version="${options.version}" encoding="${options.encoding}"?>\n`;
+  
+  return {
+    ele: function(name: string, attributes?: Record<string, any>) {
+      let attributeStr = '';
+      if (attributes) {
+        attributeStr = Object.entries(attributes)
+          .map(([key, value]) => ` ${key}="${value}"`)
+          .join('');
+      }
+      xml += `<${name}${attributeStr}>`;
+      
+      return {
+        ele: function(childName: string) {
+          xml += `<${childName}>`;
+          return this;
+        },
+        txt: function(text: string | null) {
+          if (text !== null && text !== undefined) {
+            xml += text;
+          }
+          return this;
+        },
+        up: function() {
+          // Simulate moving up to parent element
+          return this;
+        },
+        end: function(options?: { prettyPrint: boolean }) {
+          return xml + `</${name}>`;
+        }
+      };
+    }
+  };
+}
 
 export function fillXmlTemplate(data: any, myCompany: any) {
-  const xml = create({ version: "1.0", encoding: "UTF-8" })
+  // Use our simplified XML generator instead of xmlbuilder2
+  const xml = createXmlDocument({ version: "1.0", encoding: "UTF-8" })
     .ele("MoneyData", {
       ICAgendy: myCompany.VAT_number,
       KodAgendy: data.KodAgendy,

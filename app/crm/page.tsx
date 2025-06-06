@@ -1,4 +1,4 @@
-import { Dashboard } from '@/components/dashboard/Dashboard'
+import { Dashboard } from '@/src/components/dashboard/Dashboard'
 
 export default function CRMPage() {
   return (

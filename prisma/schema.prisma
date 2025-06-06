@@ -43,6 +43,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   isActive      Boolean   @default(true)
   role          String    @default("user") // admin, user
+  password      String? // Hashed password for local authentication
   lastLoginAt   DateTime?
 
   accounts      Account[]

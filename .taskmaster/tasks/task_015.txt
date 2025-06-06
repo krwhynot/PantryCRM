@@ -1,52 +1,30 @@
 # Task ID: 15
-# Title: Multi-Device Testing Protocol [CONTINUOUS]
-# Status: active
-# Dependencies: 1, 2
-# Priority: high
-# Description: Comprehensive multi-device testing throughout all development phases
+# Title: 💰 Enhanced Azure Cost Monitoring [CONTINUOUS]
+# Status: pending
+# Dependencies: None
+# Priority: medium
+# Description: Weekly Azure cost review and optimization ensuring $18/month budget compliance with DTU usage tracking, query performance impact monitoring, and performance optimization ROI tracking.
 # Details:
-1. Multi-Device Testing Environment
-   - Touch laptop primary testing setup
-   - Traditional laptop and tablet simulation
-   - Real device testing capabilities
+**CONTINUOUS COST MONITORING (WEEKS 1-8):**
 
-2. Touch Input Testing Suite
-   - 44px minimum touch target validation
-   - Gesture support verification
-   - Touch interaction quality assessment
+**AZURE COST TARGETS:**
+- SQL Database Basic: $5/month
+- App Service B1: $13/month  
+- Total Budget: ≤ $18/month
 
-3. Mouse/Keyboard Testing Suite
-   - Precision interaction testing
-   - Keyboard navigation validation
-   - Accessibility compliance verification
+**MONITORING AREAS:**
+- DTU usage tracking and optimization
+- Query performance impact on costs
+- Bundle size impact on bandwidth costs
+- Performance optimization ROI tracking
 
-4. Input Method Switching Tests
-   - Seamless transition testing
-   - Functionality consistency validation
-   - Data preservation during switches
+**WEEKLY REVIEW SCHEDULE:** Cost analysis and optimization recommendations
 
-5. Browser and Performance Testing
-   - Cross-browser compatibility
-   - Responsive design validation
-   - Performance consistency verification
+**SUCCESS CRITERIA:**
+✅ Azure costs consistently under $18/month
+✅ DTU usage optimized below 80% capacity
+✅ Query performance maintained within cost constraints
+✅ Bundle optimization reducing bandwidth costs
 
 # Test Strategy:
-1. **CONTINUOUS**: All features work on touch and mouse
-2. 44px touch target compliance maintained
-3. Input method switching seamless
-4. Browser compatibility consistent
-5. Performance requirements met across devices
-
-# Subtasks:
-## 1. Weekly Touch Target Validation [active]
-### Dependencies: None
-### Description: 
-### Details:
-Verify 44px minimum on all new features
-
-## 2. Input Method Testing [active]
-### Dependencies: None
-### Description: 
-### Details:
-Touch laptop testing for both input methods
 

@@ -29,8 +29,7 @@ export const OrganizationValidation = z.object({
     errorMap: () => ({ message: 'Invalid distributor' })
   }),
   
-  accountManager: z.string()
-    .min(2, 'Account manager name required'),
+  accountManagerId: z.string().optional(), // Make it optional for now, as a user selection component is not yet built
     
   phone: z.string()
     .regex(/^\+?[\d\s\-\(\)]+$/, 'Invalid phone number format')

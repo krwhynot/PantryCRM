@@ -19,10 +19,19 @@ export default async function DashboardPage() {
     <div className="flex flex-col space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4">
           <p className="text-sm text-muted-foreground">
             Welcome, {session.user.name}
           </p>
+          <a href="/organizations" className="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-sm font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-600/20">
+            Organizations
+          </a>
+          <a href="/organizations/new" className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-500/20">
+            New Organization
+          </a>
+          <a href="/settings" className="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800/40 px-2 py-1 text-sm font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-700/30">
+            Settings
+          </a>
         </div>
       </div>
       

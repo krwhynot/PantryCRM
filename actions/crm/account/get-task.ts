@@ -1,6 +1,15 @@
 import { prismadb } from "@/lib/prisma";
 
 export const getCrMTask = async (taskId: string) => {
+  // TODO: Kitchen Pantry CRM - CRM Tasks functionality not implemented yet
+  console.log('CRM Tasks functionality disabled for Kitchen Pantry CRM');
+  
+  return {
+    error: 'CRM Tasks functionality not available in current version.',
+    id: taskId
+  };
+  
+  /* Original implementation commented out due to missing Prisma model
   const data = await prismadb.crm_Accounts_Tasks.findFirst({
     where: {
       id: taskId,
@@ -36,4 +45,5 @@ export const getCrMTask = async (taskId: string) => {
     },
   });
   return data;
+  */
 };

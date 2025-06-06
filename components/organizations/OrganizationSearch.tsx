@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Search, Filter } from 'lucide-react';
 import { PriorityBadge } from '@/components/food-service/PriorityBadge';
-import { useDebounce } from '@/hooks/useDebounce';
+import { useDebounce } from 'use-debounce';
 
 interface Organization {
   id: string;
@@ -33,7 +33,7 @@ export function OrganizationSearch() {
   const [isLoading, setIsLoading] = useState(false);
   
   // Debounce search query to avoid too many API calls
-  const debouncedQuery = useDebounce(searchQuery, 300);
+  const [debouncedQuery] = useDebounce(searchQuery, 300);
 
   // Perform search when query or filters change
   useEffect(() => {
@@ -160,12 +160,12 @@ export function OrganizationSearch() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-3">
                         <h3 className="text-lg font-semibold">{org.name}</h3>
-                        <PriorityBadge priority={org.priority} />
+                        <PriorityBadge priority={org.priority.key} />
                       </div>
                       <div className="text-sm text-gray-600">
-                        <p><strong>Segment:</strong> {org.segment}</p>
-                        <p><strong>Distributor:</strong> {org.distributor}</p>
-                        <p><strong>Account Manager:</strong> {org.accountManager}</p>
+                        <p><strong>Segment:</strong> {org.segment.key}</p>
+                        <p><strong>Distributor:</strong> {org.distributor.key}</p>
+                        <p><strong>Account Manager:</strong> {org.accountManager.name}</p>
                         {org.phone && <p><strong>Phone:</strong> {org.phone}</p>}
                         {org.email && <p><strong>Email:</strong> {org.email}</p>}
                       </div>

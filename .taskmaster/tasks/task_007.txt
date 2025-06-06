@@ -1,56 +1,53 @@
 # Task ID: 7
-# Title: Sales Pipeline with Drag-and-Drop Kanban [ENHANCED]
+# Title: 📞 Enhanced Interaction Tracking [CRITICAL]
 # Status: pending
-# Dependencies: 3, 4, 5, 6
+# Dependencies: 5, 6
 # Priority: critical
-# Description: Implement 5-stage pipeline with 11 principals, drag-and-drop interface, and opportunity value tracking
+# Description: Implement 6-type interaction tracking system (Email, Call, In Person, Demo/sampled, Quoted price, Follow-up) with optimized quick entry forms targeting 30-second data entry and auto-complete functionality.
 # Details:
-1. 5-Stage Pipeline with Enhanced Features
-   - Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
-   - **NEW**: Drag-and-drop Kanban board for iPad
-   - Stage transition tracking and business rules
+**6 INTERACTION TYPES FOR FOOD SERVICE:**
+Email | Call | In Person | Demo/sampled | Quoted price | Follow-up
 
-2. 11 Principal Integration
-   - Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
-   - Principal-specific opportunity tracking
-   - **NEW**: Principal performance metrics
+**PERFORMANCE TARGETS:**
+- Quick entry forms: 30-second target per interaction
+- Auto-complete response: Under 500ms
+- Database queries optimized for frequent logging
+- Batch operations with error handling
 
-3. Visual Pipeline Dashboard [NEW FEATURE]
-   - Touch-friendly drag-and-drop interface
-   - iPad landscape orientation optimization
-   - Real-time updates across users
-   - Stage validation with business rules
+**COMPLEXITY:** 7/10 | **DEPENDENCIES:** Tasks 5, 6
 
-4. Enhanced Opportunity Management
-   - **NEW**: Opportunity value and revenue tracking
-   - **NEW**: Expected close date with calculations
-   - Probability tracking (0-100%)
-   - Status management: Open, Closed-Won, Closed-Lost, On Hold
+**SUCCESS CRITERIA:**
+✅ All 6 interaction types fully functional
+✅ 30-second entry time achieved consistently
+✅ Auto-complete responds under 500ms
+✅ Error boundaries protect interaction logging
+✅ Touch-optimized forms for iPad entry
 
 # Test Strategy:
-1. 5-stage pipeline with correct transitions
-2. All 11 principals integrated and filterable
-3. **NEW**: Drag-and-drop functionality on iPad
-4. **NEW**: Opportunity value tracking accuracy
-5. Pipeline visualization on touch and mouse
-6. Business rules enforcement
+
 
 # Subtasks:
-## 1. Drag-and-Drop Kanban Implementation [NEW] [pending]
+## 1. Interaction Database Schema with 6 Types and Performance Optimization [pending]
 ### Dependencies: None
-### Description: 
+### Description: Design and implement a comprehensive database schema supporting 6 distinct interaction types with optimized indexing, partitioning strategies, and query performance tuning for high-volume logging operations.
 ### Details:
-Touch-optimized pipeline board with stage movement validation
+Create normalized tables for interaction types, implement proper indexing for frequent queries, set up database partitioning for timeline data, and establish performance benchmarks for concurrent write operations.
 
-## 2. Opportunity Value Tracking [NEW] [pending]
-### Dependencies: None
-### Description: 
+## 2. High-Performance Interaction API Endpoints with Type-Specific Validation [pending]
+### Dependencies: 7.1
+### Description: Develop RESTful API endpoints with type-specific validation rules, bulk operations support, and optimized response times for each of the 6 interaction types with comprehensive error handling.
 ### Details:
-Revenue tracking, expected close dates, pipeline forecasting
+Implement CRUD operations for each interaction type, create validation schemas, add bulk insert/update capabilities, implement rate limiting, and ensure sub-100ms response times for standard operations.
 
-## 3. 11 Principals Integration [pending]
-### Dependencies: None
-### Description: 
+## 3. Optimized Quick Entry Forms Targeting 30-Second Entry Time [pending]
+### Dependencies: 7.2
+### Description: Build responsive form interfaces optimized for rapid data entry with smart defaults, keyboard shortcuts, and streamlined workflows to achieve 30-second average completion time across all interaction types.
 ### Details:
-Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
+Design mobile-first forms with progressive enhancement, implement keyboard navigation, add smart field pre-population, create form templates, and conduct user testing to validate 30-second target.
+
+## 4. Auto-Complete and Auto-Save with Performance and Conflict Resolution [pending]
+### Dependencies: 7.3
+### Description: Implement intelligent auto-complete functionality and robust auto-save mechanisms with conflict resolution, offline support, and optimized performance to prevent data loss and enhance user experience.
+### Details:
+Build predictive text for common fields, implement debounced auto-save with local storage backup, create conflict resolution UI for concurrent edits, add offline queue management, and ensure seamless sync when connectivity resumes.
 

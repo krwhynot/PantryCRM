@@ -3,6 +3,11 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+/**
+ * API route to deactivate a module
+ * Updated as part of Task 3 (Critical Dependency Fixes) to use setting model as proxy for system modules
+ * This is a temporary implementation until proper module management functionality is implemented
+ */
 export async function POST(req: Request, props: { params: Promise<{ moduleId: string }> }) {
   const params = await props.params;
   const session = await getServerSession(authOptions);
@@ -12,18 +17,21 @@ export async function POST(req: Request, props: { params: Promise<{ moduleId: st
   }
 
   try {
-    const user = await prismadb.system_Modules_Enabled.update({
+    // Use setting model as a proxy for system modules
+    // Update a setting with category "SystemModule" to mark it as inactive
+    const moduleSettings = await prismadb.setting.update({
       where: {
-        id: params.moduleId,
+        id: params.moduleId
       },
       data: {
-        enabled: false,
-      },
+        active: false,
+        metadata: JSON.stringify({ enabled: false, lastUpdated: new Date().toISOString() })
+      }
     });
 
-    return NextResponse.json(user);
+    return NextResponse.json(moduleSettings);
   } catch (error) {
-    console.log("[USERACTIVATE_POST]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    console.log("[MODULE_DEACTIVATE_POST]", error);
+    return new NextResponse("Error deactivating module", { status: 500 });
   }
 }

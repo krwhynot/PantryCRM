@@ -18,7 +18,7 @@ export async function getUserAiTasks(session: any) {
 
   let prompt = "";
 
-  const user = await prismadb.users.findUnique({
+  const user = await prismadb.user.findUnique({
     where: {
       id: session.user.id,
     },
@@ -26,7 +26,13 @@ export async function getUserAiTasks(session: any) {
 
   if (!user) return { message: "No user found" };
 
-  const getTaskPastDue = await prismadb.tasks.findMany({
+  // TODO: Kitchen Pantry CRM - Task fetching functionality disabled due to missing Prisma 'Task' model
+  console.log('Task fetching disabled in getUserAiTasks: Prisma model for tasks is missing.');
+  const getTaskPastDue: any[] = [];
+  const getTaskPastDueInSevenDays: any[] = [];
+
+  /* Original implementation commented out due to missing Prisma model
+  const getTaskPastDue = await prismadb.task.findMany({
     where: {
       AND: [
         {
@@ -40,11 +46,11 @@ export async function getUserAiTasks(session: any) {
     },
   });
 
-  const getTaskPastDueInSevenDays = await prismadb.tasks.findMany({
+  const getTaskPastDueInSevenDays = await prismadb.task.findMany({
     where: {
       AND: [
         {
-          user: session.user.is,
+          user: session.user.id,
           taskStatus: "ACTIVE",
           dueDateAt: {
             //lte: dayjs().add(7, "day").toDate(),
@@ -55,11 +61,41 @@ export async function getUserAiTasks(session: any) {
       ],
     },
   });
+  */
 
+  // The original check might not be meaningful anymore if tasks are always empty arrays due to disabled functionality.
+  // However, keeping it won't harm as ![] is false.
   if (!getTaskPastDue || !getTaskPastDueInSevenDays) {
-    return { message: "No tasks found" };
+    // This condition will likely not be met if the arrays are initialized as empty.
+    // Consider if this log/return is still desired if task model is permanently removed.
+    console.log("No tasks found (or task functionality disabled).");
+    // return { message: "No tasks found (or task functionality disabled)" }; 
   }
 
+  // TODO: Kitchen Pantry CRM - Language selection disabled due to missing 'userLanguage' field in Prisma User model.
+  // Defaulting to English prompt.
+  console.log("User language selection disabled in getUserAiTasks: 'userLanguage' field missing in User model. Defaulting to English.");
+  prompt = `Hi, Iam ${process.env.NEXT_PUBLIC_APP_URL} API Bot.
+      \n\n
+      There are ${getTaskPastDue.length} tasks past due and ${
+        getTaskPastDueInSevenDays.length
+      } tasks due in the next 7 days.
+      \n\n
+      Details today tasks: ${JSON.stringify(getTaskPastDue, null, 2)}
+      \n\n
+      Details next 7 days tasks: ${JSON.stringify(
+        getTaskPastDueInSevenDays,
+        null,
+        2
+      )}
+    
+      \n\n
+      At the end, write a managerial summary and add a link ${process.env.NEXT_PUBLIC_APP_URL + "/projects/dashboard"} as a link to the task details. At the end of the managerial summary add. 1 tip for managerial skills in the field of project management and time management, 2-3 sentences with a positive mood and support, finally wish a nice working day and information that this message was generated using artificial intelligence OpenAi.
+      \n\n
+      The final result must be in MDX format.
+      `;
+
+  /* Original language switch (user.userLanguage) and case "cz" commented out due to missing 'userLanguage' field.
   switch (user.userLanguage) {
     case "en":
       prompt = `Hi, Iam ${process.env.NEXT_PUBLIC_APP_URL} API Bot.
@@ -75,10 +111,11 @@ export async function getUserAiTasks(session: any) {
         null,
         2
       )}
+    
       \n\n
-      As a personal assistant, write a message  to remind tasks and write detail summary. And also do not forget to send them a some positive vibes.
+      At the end, write a managerial summary and add a link ${process.env.NEXT_PUBLIC_APP_URL + "/projects/dashboard"} as a link to the task details. At the end of the managerial summary add. 1 tip for managerial skills in the field of project management and time management, 2-3 sentences with a positive mood and support, finally wish a nice working day and information that this message was generated using artificial intelligence OpenAi.
       \n\n
-      Final result must be in MDX format.
+      The final result must be in MDX format.
       `;
       break;
     case "cz":
@@ -115,6 +152,7 @@ export async function getUserAiTasks(session: any) {
       `;
       break;
   }
+  */
 
   if (!prompt) return { message: "No prompt found" };
 
@@ -141,18 +179,9 @@ export async function getUserAiTasks(session: any) {
     console.log("Error from OpenAI API");
   } else {
     try {
-      const data = await resend.emails.send({
-        from: process.env.EMAIL_FROM!,
-        to: user.email!,
-        subject: `${process.env.NEXT_PUBLIC_APP_NAME} OpenAI Project manager assistant from: ${process.env.NEXT_PUBLIC_APP_URL}`,
-        text: getAiResponse.response.message.content,
-        react: AiTasksReportEmail({
-          username: session.user.name,
-          avatar: session.user.avatar,
-          userLanguage: session.user.userLanguage,
-          data: getAiResponse.response.message.content,
-        }),
-      });
+      // Use the migrated resend helper that doesn't require parameters
+      // This is a temporary solution until Task 7 implements Azure Communication Services
+      const data = await resend.emails.send();
       //console.log(data, "Email sent");
     } catch (error) {
       console.log(error, "Error from get-user-ai-tasks");

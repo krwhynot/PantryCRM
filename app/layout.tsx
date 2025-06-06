@@ -39,7 +39,7 @@ export default function RootLayout({
     return <BypassLayout>{children}</BypassLayout>;
   } else {
     return (
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <ThemeProvider
             attribute="class"

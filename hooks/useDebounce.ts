@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
-export function useDebounce<T>(value: T, delay: number): T {
+// Make sure to export as a named export to match the import in OrganizationSearch
+export const useDebounce = <T>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {

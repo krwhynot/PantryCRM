@@ -1,9 +1,16 @@
+/**
+ * DEPRECATED: This file is maintained for reference only.
+ * The uploadthing functionality has been replaced with Azure Storage-based upload APIs:
+ * - /api/upload/image - For image uploads
+ * - /api/upload/document - For document uploads
+ * - /api/upload/profile - For profile photo uploads
+ * 
+ * This change was made as part of Task 3 (Critical Dependency Fixes) to reduce bundle size.
+ */
+
 import { authOptions } from "@/lib/auth";
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { createUploadthing, type FileRouter } from "uploadthing/next";
-
-const f = createUploadthing();
 
 const auth = async (req: Request) => {
   const session = await getServerSession(authOptions);

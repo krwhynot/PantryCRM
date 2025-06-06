@@ -70,7 +70,7 @@ export default async function AppLayout({
           name={session.user.name as string}
           email={session.user.email as string}
           avatar={session.user.image as string}
-          lang={"en"} {/* Fixed to English */}
+          lang={"en"} /* Fixed to English */
         />
         <div className="flex-grow overflow-y-auto h-full p-5">{children}</div>
         <Footer />

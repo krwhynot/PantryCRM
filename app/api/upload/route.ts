@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { s3Client } from "@/lib/digital-ocean-s3";
-import { PutObjectAclCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { uploadBlob } from "@/lib/azure-storage";
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -78,27 +77,27 @@ export async function POST(request: NextRequest) {
   const invoiceFileName = "invoices/" + new Date().getTime() + "-" + file.name;
   console.log("Invoice File Name:", invoiceFileName);
 
-  console.log("UPloading to S3(Digital Ocean)...", invoiceFileName);
+  console.log("Uploading to Azure Storage...", invoiceFileName);
   try {
-    const bucketParams = {
-      Bucket: process.env.DO_BUCKET,
-      Key: invoiceFileName,
-      Body: buffer,
-      ContentType: file.type,
-      ContentDisposition: "inline",
-      ACL: "public-read" as const,
-    };
-
-    await s3Client.send(new PutObjectCommand(bucketParams));
+    // Upload to Azure Blob Storage
+    const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME || "invoices";
+    
+    await uploadBlob(
+      containerName,
+      invoiceFileName,
+      buffer,
+      file.type
+    );
   } catch (err) {
-    console.log("Error - uploading to S3(Digital Ocean)", err);
+    console.log("Error - uploading to Azure Storage", err);
   }
 
   console.log("Creating Item in DB...");
   try {
-    //S3 bucket url for the invoice
-    const url = `https://${process.env.DO_BUCKET}.${process.env.DO_REGION}.digitaloceanspaces.com/${invoiceFileName}`;
-    console.log("URL in Digital Ocean:", url);
+    //Azure Storage URL for the invoice
+    const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME || "invoices";
+    const url = `https://${process.env.AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${containerName}/${invoiceFileName}`;
+    console.log("URL in Azure Storage:", url);
 
     const rossumAnnotationId = rossumDocument.data.annotations[0]
       .split("/")

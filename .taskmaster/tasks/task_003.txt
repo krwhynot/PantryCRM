@@ -1,55 +1,55 @@
 # Task ID: 3
-# Title: Enhanced Organization Management with Revenue Tracking
-# Status: pending
-# Dependencies: 1, 2
+# Title: 🚨 Critical Dependency Fixes [BLOCKING - HIGH PRIORITY]
+# Status: in-progress
+# Dependencies: 1
 # Priority: critical
-# Description: Implement organization management with food service fields, global search foundation, and revenue tracking capabilities
+# Description: Resolve critical blocking issues identified in audit: React Beautiful DnD incompatibility, bundle size optimization (40% reduction needed), AWS SDK architectural mismatch, and React 19 stability assessment for production readiness.
 # Details:
-1. Enhanced Database Schema Implementation
-   - Execute Prisma migrations with revenue tracking fields
-   - Add food service fields: priority (A-D), segments, distributors
-   - **NEW**: Revenue tracking and organization value fields
+**CRITICAL AUDIT FINDINGS REQUIRING IMMEDIATE ATTENTION:**
+- React Beautiful DnD incompatible with React 19 RC (blocking production)
+- Bundle size 40% too large affecting performance (<800KB target)
+- AWS SDK architectural mismatch in Azure-focused system
+- Missing React 19 compatibility validation
 
-2. Organization API Endpoints with Advanced Features
-   - Standard CRUD operations with audit trail
-   - **NEW**: Global search endpoint foundation
-   - Performance optimization for Azure SQL Basic
+**COMPLEXITY:** 8/10 | **TIMELINE:** Week 1 | **DEPENDENCIES:** Task 1
 
-3. Organization Management Interface (iPad Optimized)
-   - Responsive data table with server-side pagination
-   - Sub-second search with fuzzy matching
-   - **NEW**: URL-based state management for filters
-   - Priority color coding (A=Green, B=Yellow, C=Orange, D=Red)
+**PERFORMANCE IMPACT:**
+- 40% bundle size reduction (moment.js → date-fns)
+- React 19 compatibility enabling production deployment
+- Architectural alignment with Azure services
+- Touch device drag-and-drop functionality restoration
 
-4. Settings Management System (9 Categories)
-   - Dynamic configuration for all dropdown values
-   - **NEW**: Drag-and-drop sort ordering
-   - Real-time updates across application
+**SUCCESS CRITERIA:**
+✅ @hello-pangea/dnd replaces react-beautiful-dnd completely
+✅ Bundle size verified under 800KB target
+✅ All AWS SDK references replaced with Azure equivalents
+✅ React 19 compatibility confirmed across all components
 
 # Test Strategy:
-1. Organization CRUD operations complete in <2 seconds
-2. Food service fields working with dynamic settings
-3. Priority color coding meets WCAG standards
-4. Search performance <1 second with 100+ records
-5. **NEW**: Global search foundation operational
-6. **NEW**: Settings system supports all 9 categories with real-time updates
+
 
 # Subtasks:
-## 1. Enhanced Database Schema with Revenue Fields [pending]
+## 1. React Beautiful DnD Replacement with @hello-pangea/dnd [pending]
 ### Dependencies: None
-### Description: 
+### Description: Replace react-beautiful-dnd with @hello-pangea/dnd to ensure React 19 compatibility. Update all drag-and-drop components, test functionality, and ensure smooth user interactions across the application.
 ### Details:
-Add revenue tracking, value fields, and optimize for Advanced features
+Install @hello-pangea/dnd, update import statements, modify component implementations, test drag-and-drop features in kanban boards, lists, and other interactive elements. Verify performance and accessibility compliance.
 
-## 2. Global Search Foundation Implementation [NEW] [pending]
-### Dependencies: None
-### Description: 
+## 2. Bundle Size Optimization - Replace moment.js with date-fns [pending]
+### Dependencies: 3.1
+### Description: Replace moment.js with date-fns and remove unused dependencies to achieve 40% bundle size reduction. Audit current dependencies and optimize imports for better performance.
 ### Details:
-Search endpoint architecture for cross-entity search capabilities
+Analyze current bundle size, replace moment.js usage with date-fns equivalents, remove unused packages, implement tree-shaking optimizations, and validate date/time functionality across all components.
 
-## 3. Settings Management System (9 Categories) [pending]
-### Dependencies: None
-### Description: 
+## 3. AWS SDK Replacement with Azure Equivalents [pending]
+### Dependencies: 3.2
+### Description: Replace AWS SDK implementations with Azure equivalents for architectural alignment. Update cloud service integrations, storage solutions, and authentication mechanisms.
 ### Details:
-Priority, Segment, Distributor, Account Manager, Stage, Position, Reason, Source, Interaction
+Map AWS services to Azure equivalents, update SDK imports and configurations, modify authentication flows, test cloud storage operations, and ensure seamless migration of existing cloud functionalities.
+
+## 4. React 19 Stability Assessment and Compatibility Validation [pending]
+### Dependencies: 3.1, 3.2, 3.3
+### Description: Conduct comprehensive React 19 compatibility assessment, validate all components and dependencies, and ensure application stability with the new React version.
+### Details:
+Test all React components with React 19, validate hooks usage, check for deprecated patterns, run comprehensive test suite, perform performance benchmarking, and document any breaking changes or required updates.
 

@@ -3,96 +3,122 @@ import { prismadb } from "@/lib/prisma";
 import dayjs from "dayjs";
 import { getServerSession } from "next-auth";
 
+/**
+ * Gets tasks that are past due or due within the next 7 days
+ * Updated as part of Task 3 (Critical Dependency Fixes) to use interactions as proxy for tasks
+ * This is a temporary implementation until proper project management functionality is implemented
+ */
 export const getTasksPastDue = async () => {
-  const session = await getServerSession(authOptions);
-  const today = dayjs().startOf("day");
-  const nextWeek = dayjs().add(7, "day").startOf("day");
-  if (session) {
-    const getTaskPastDue = await prismadb.tasks.findMany({
-      where: {
-        AND: [
-          {
-            user: session.user.id,
-          },
-          {
-            dueDateAt: {
-              lte: new Date(),
-            },
-          },
-          {
-            taskStatus: {
-              not: "COMPLETE",
-            },
-          },
-        ],
-      },
-      include: {
-        comments: {
-          select: {
-            id: true,
-            comment: true,
-            createdAt: true,
-            assigned_user: {
-              select: {
-                id: true,
-                name: true,
-                avatar: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
+  try {
+    const session = await getServerSession(authOptions);
+    const today = dayjs().startOf("day");
+    const nextWeek = dayjs().add(7, "day").startOf("day");
+    
+    if (session) {
+      // Use interactions as a proxy for tasks
+      // Get past due interactions (follow-up date in the past and not completed)
+      const pastDueInteractions = await prismadb.interaction.findMany({
+        where: {
+          AND: [
+            { userId: session.user.id },
+            { followUpDate: { lte: new Date() } },
+            { isCompleted: false }
+          ]
         },
-      },
-    });
-
-    const getTaskPastDueInSevenDays = await prismadb.tasks.findMany({
-      where: {
-        AND: [
-          {
-            user: session.user.id,
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true
+            }
           },
-          {
-            dueDateAt: {
-              //lte: dayjs().add(7, "day").toDate(),
-              gt: today.toDate(), // Due date is greater than or equal to today
-              lt: nextWeek.toDate(), // Due date is less than next week (not including today)
-            },
-          },
-          {
-            taskStatus: {
-              not: "COMPLETE",
-            },
-          },
-        ],
-      },
-      include: {
-        comments: {
-          select: {
-            id: true,
-            comment: true,
-            createdAt: true,
-            assigned_user: {
-              select: {
-                id: true,
-                name: true,
-                avatar: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
+          organization: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
         },
-      },
-    });
+        orderBy: {
+          followUpDate: 'asc'
+        }
+      });
 
-    const data = {
-      getTaskPastDue,
-      getTaskPastDueInSevenDays,
+      // Get interactions due in the next 7 days
+      const upcomingInteractions = await prismadb.interaction.findMany({
+        where: {
+          AND: [
+            { userId: session.user.id },
+            { 
+              followUpDate: {
+                gt: today.toDate(),
+                lt: nextWeek.toDate()
+              } 
+            },
+            { isCompleted: false }
+          ]
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true
+            }
+          },
+          organization: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
+        },
+        orderBy: {
+          followUpDate: 'asc'
+        }
+      });
+
+      // Transform interactions to task format
+      const transformInteractionToTask = (interaction: {
+        id: string;
+        notes?: string | null;
+        followUpDate: Date | null;
+        isCompleted: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string;
+        organization?: { name: string; id: string; } | null;
+      }) => ({
+        id: interaction.id,
+        title: `Interaction with ${interaction.organization?.name || 'Organization'}`,
+        description: interaction.notes || "",
+        dueDateAt: interaction.followUpDate,
+        taskStatus: interaction.isCompleted ? "COMPLETE" : "PENDING",
+        createdAt: interaction.createdAt,
+        updatedAt: interaction.updatedAt,
+        user: interaction.userId,
+        comments: [] // Empty comments array as we'll fetch them separately if needed
+      });
+
+      const getTaskPastDue = pastDueInteractions.map(transformInteractionToTask);
+      const getTaskPastDueInSevenDays = upcomingInteractions.map(transformInteractionToTask);
+
+      return {
+        getTaskPastDue,
+        getTaskPastDueInSevenDays
+      };
+    }
+    
+    return {
+      getTaskPastDue: [],
+      getTaskPastDueInSevenDays: []
     };
-
-    return data;
+  } catch (error) {
+    console.error("Error fetching past due tasks:", error);
+    return {
+      getTaskPastDue: [],
+      getTaskPastDueInSevenDays: []
+    };
   }
 };

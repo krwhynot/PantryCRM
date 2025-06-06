@@ -1,50 +1,49 @@
 # Task ID: 10
-# Title: Excel Data Migration Pipeline
+# Title: 📊 Optimized Reporting Engine [CRITICAL]
 # Status: pending
-# Dependencies: 7, 8, 9
+# Dependencies: 9
 # Priority: critical
-# Description: Comprehensive data migration with validation, relationship preservation, and audit capabilities
+# Description: Implement high-performance reporting system with materialized views, Tremor charts integration, and 4 core reports (Weekly Activity, Pipeline Status, Interaction Volume, Organization Performance) targeting under 10-second generation times.
 # Details:
-1. Excel Parser Service (.xlsx and .csv)
-   - Robust parsing with comprehensive error handling
-   - Large file processing with progress indicators
-   - Column mapping and data transformation
+**4 CORE REPORTS WITH PERFORMANCE OPTIMIZATION:**
+1. Weekly Activity Reports (Account manager focused)
+2. Pipeline Status by Principal Reports
+3. Interaction Volume Analysis 
+4. Organization Performance Tracking
 
-2. Data Validation and Quality Checks
-   - Business rule validation for all entities
-   - Food service industry-specific validation
-   - Data quality scoring and recommendations
+**PERFORMANCE REQUIREMENTS:**
+- Report generation: Under 10 seconds
+- Materialized views for dashboard performance
+- Optimized queries for Azure SQL Basic DTU limits
+- Memoized Tremor chart components
 
-3. Relationship Preservation
-   - Organization-Contact-Interaction-Opportunity relationships
-   - Account manager assignment preservation
-   - **NEW**: Opportunity value preservation
-   - Data integrity verification
+**COMPLEXITY:** 8/10 | **DEPENDENCIES:** Task 9
 
-4. Migration Verification and Audit
-   - 100% data accuracy validation
-   - Import history tracking
-   - Rollback capabilities
-   - Comprehensive audit logging
+**SUCCESS CRITERIA:**
+✅ All 4 reports generate under 10 seconds
+✅ Tremor charts load and interact smoothly
+✅ Dashboard performance optimized with caching
+✅ Touch-friendly chart interactions for iPad
 
 # Test Strategy:
-1. **CRITICAL**: 100% data migration accuracy
-2. Relationship preservation verification
-3. Account manager assignments maintained
-4. **NEW**: Opportunity values preserved
-5. Error handling and recovery
-6. Migration audit trail complete
+
 
 # Subtasks:
-## 1. Excel Parser with Error Handling [pending]
+## 1. High-Performance Report Data Layer Implementation [pending]
 ### Dependencies: None
-### Description: 
+### Description: Build optimized data layer with materialized views, caching mechanisms, and query optimization to ensure report generation under 10 seconds
 ### Details:
-Robust .xlsx/.csv parsing with comprehensive validation
+Implement materialized views for aggregated data, Redis caching layer, database indexing strategies, and background data refresh processes. Include performance monitoring and query optimization for complex reporting queries.
 
-## 2. Relationship Preservation System [pending]
-### Dependencies: None
-### Description: 
+## 2. Core Reports Implementation Suite [pending]
+### Dependencies: 10.1
+### Description: Develop 4 essential reports: Weekly Activity, Pipeline Status, Interaction Volume, and Organization Performance with real-time data integration
 ### Details:
-Maintain all data relationships and historical context
+Create report templates, implement data aggregation logic, build filtering and sorting capabilities, and ensure seamless integration with the high-performance data layer. Include export functionality and scheduled report generation.
+
+## 3. Tremor Charts Integration with Interactive Components [pending]
+### Dependencies: 10.2
+### Description: Integrate Tremor Charts library with memoized components, touch-friendly interactions, and responsive design for optimal user experience
+### Details:
+Implement chart components with React.memo optimization, touch gesture support for mobile devices, responsive breakpoints, interactive tooltips, and drill-down capabilities. Ensure charts load efficiently with large datasets.
 

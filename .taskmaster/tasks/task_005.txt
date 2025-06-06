@@ -1,49 +1,59 @@
 # Task ID: 5
-# Title: Interaction Tracking with 30-Second Entry Goal
+# Title: 🏢 Enhanced Organization Management [HIGH PRIORITY]
 # Status: pending
-# Dependencies: 3, 4
-# Priority: critical
-# Description: Implement rapid interaction logging with 6 food service interaction types and auto-save functionality
+# Dependencies: 4
+# Priority: high
+# Description: Implement high-performance Organization management with optimized database schema, API endpoints with N+1 query prevention, and iPad-optimized UI components with sub-second search performance.
 # Details:
-1. Interaction Database Schema (6 Types)
-   - Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
-   - Relationships to organizations, contacts, account managers
-   - Performance optimization for frequent logging
+**PHASE 2: CORE CRM FUNCTIONALITY + OPTIMIZATION**
 
-2. Quick Entry Forms (30-Second Target)
-   - Single-screen forms optimized for touch
-   - Auto-complete for organizations/contacts (<500ms)
-   - Large form controls for iPad input
-   - Type-specific fields and quick-select options
+**PERFORMANCE REQUIREMENTS:**
+- Database queries optimized for Azure SQL Basic tier
+- Organization search under 1 second response time
+- N+1 query prevention with strategic includes
+- Virtual scrolling for large datasets
+- 44px minimum touch targets for iPad
 
-3. Auto-Save and Form Recovery
-   - Auto-save every 30 seconds with visual feedback
-   - Form recovery after browser interruption
-   - Network interruption handling
+**COMPLEXITY:** 8/10 | **DEPENDENCIES:** Phase 1 Complete
 
-4. Interaction History and Timeline
-   - Comprehensive history displays
-   - Filtering and search capabilities
-   - Integration with reporting system
+**SUCCESS CRITERIA:**
+✅ All queries optimized for Azure SQL Basic DTU limits
+✅ Organization search consistently under 1 second
+✅ React.memo implementation for performance
+✅ Error boundaries and Zod validation integrated
+✅ Touch targets meet accessibility requirements
 
 # Test Strategy:
-1. All 6 interaction types functional
-2. **CRITICAL**: 30-second entry target achieved
-3. Auto-complete meets 500ms performance
-4. Auto-save and recovery working
-5. Multi-device workflow validation
-6. Performance with large interaction volumes
+
 
 # Subtasks:
-## 1. 6 Food Service Interaction Types [pending]
+## 1. Optimized Database Schema Implementation [pending]
 ### Dependencies: None
-### Description: 
+### Description: Design and implement high-performance database schema for organization management with strategic indexes, foreign key relationships, and N+1 query prevention mechanisms
 ### Details:
-Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+Create organization tables with proper indexing on frequently queried fields (name, industry, priority_level, market_segment), implement composite indexes for complex queries, add database constraints for data integrity, and establish efficient relationship mappings to prevent N+1 query issues
 
-## 2. 30-Second Entry Optimization [pending]
-### Dependencies: None
-### Description: 
+## 2. High-Performance Organization API Endpoints [pending]
+### Dependencies: 5.1
+### Description: Develop comprehensive REST API endpoints for organization CRUD operations with strategic data includes, Zod validation schemas, and industry-specific filtering capabilities
 ### Details:
-Touch-optimized forms with auto-complete and quick-select
+Build API routes for organization listing, creation, updating, and deletion with strategic eager loading, implement Zod schemas for request/response validation, add filtering by priority levels and market segments, include pagination and sorting capabilities, and optimize query performance with selective field inclusion
+
+## 3. Organization List View with Performance Optimization [pending]
+### Dependencies: 5.2
+### Description: Create responsive organization list component with React.memo optimization, virtual scrolling for large datasets, and industry-specific filtering UI
+### Details:
+Implement virtualized list component for handling thousands of organizations, add React.memo for preventing unnecessary re-renders, create filter controls for priority levels and market segments, implement search functionality, add sorting capabilities, and ensure multi-device responsive design
+
+## 4. Organization Detail View with Error Handling [pending]
+### Dependencies: 5.2
+### Description: Build comprehensive organization detail view with error boundaries, loading states, and industry-specific data visualization for priority levels and market segments
+### Details:
+Create detailed organization view with complete organization information display, implement error boundaries for graceful error handling, add loading skeletons and states, include industry-specific visualizations for priority levels and market segments, and ensure responsive design across all device types
+
+## 5. Organization Forms with Advanced Validation [pending]
+### Dependencies: 5.2
+### Description: Develop organization creation and editing forms with advanced validation, auto-save functionality, and industry-specific field configurations for priority levels and market segments
+### Details:
+Build dynamic forms for organization creation and editing with real-time validation using Zod schemas, implement auto-save functionality to prevent data loss, add industry-specific dropdown selections for priority levels and market segments, include form field dependencies and conditional rendering, and ensure mobile-optimized form layouts
 

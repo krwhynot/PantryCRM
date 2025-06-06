@@ -2,6 +2,20 @@
 import { prismadb } from "@/lib/prisma";
 
 export async function setInactiveOpportunity(id: string) {
+  // TODO: Kitchen Pantry CRM - CRM Opportunity inactivation functionality not implemented yet
+  console.log('CRM Opportunity inactivation functionality disabled for Kitchen Pantry CRM');
+  
+  if (!id) {
+    console.log("Opportunity id is required");
+    return { error: "Opportunity id is required" };
+  }
+  
+  return {
+    error: 'CRM Opportunity inactivation functionality not available in current version.',
+    id: id
+  };
+  
+  /* Original implementation commented out due to missing Prisma model
   console.log(id, "id");
 
   if (!id) {
@@ -23,4 +37,5 @@ export async function setInactiveOpportunity(id: string) {
   } catch (error) {
     console.error(error);
   }
+  */
 }

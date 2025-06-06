@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import Imap from "imap";
-import { simpleParser, ParsedMail } from "mailparser";
-import { Readable } from "stream";
+// Email processing functionality has been temporarily disabled until Azure Email implementation
+// Original implementation used: import Imap from "imap"; 
 import axios from "axios";
 
 const imapConfig: Imap.Config = {
@@ -13,25 +12,18 @@ const imapConfig: Imap.Config = {
 };
 
 export async function GET() {
-  try {
-    console.log("Starting email check...");
-    const imap = new Imap(imapConfig);
-    const emailsProcessed = await checkEmail(imap);
-    console.log(`Email check completed. Processed ${emailsProcessed} emails.`);
-
-    return NextResponse.json(
-      {
-        message: `Email check completed. Processed ${emailsProcessed} emails.`,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error in GET function:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
-  }
+  // Email processing functionality has been temporarily disabled
+  // This endpoint will be updated in Task 5 to use Azure Email Services
+  
+  console.log("Email invoice processing has been migrated to Azure services");
+  
+  return NextResponse.json(
+    {
+      message: "Email processing has been migrated to Azure Email Services. See documentation for details.",
+      status: "migration_pending"
+    },
+    { status: 200 }
+  );
 }
 
 async function checkEmail(imap: Imap): Promise<number> {

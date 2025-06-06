@@ -1,48 +1,49 @@
 # Task ID: 4
-# Title: Contact Management with Role Hierarchy
+# Title: 🛡️ Performance Foundation & Error Handling [NEW CRITICAL]
 # Status: pending
-# Dependencies: 3
+# Dependencies: 2, 3
 # Priority: critical
-# Description: Implement comprehensive contact management with food service roles and duplicate prevention
+# Description: Implement comprehensive error boundaries, validation schemas with Zod, and performance monitoring infrastructure to ensure production stability and user experience protection.
 # Details:
-1. Contact Database Schema with Food Service Roles
-   - Support: Exec Chef, Buyer, Manager, Owner, Kitchen Manager
-   - Primary contact designation (one per organization)
-   - Performance optimization for multiple contacts
+**NEW CRITICAL INFRASTRUCTURE FOR PRODUCTION READINESS:**
+- Missing error boundaries threatening production stability
+- No validation schemas for data integrity
+- Performance monitoring gaps
+- Memory leak prevention
 
-2. Contact API Endpoints with Business Logic
-   - CRUD operations with relationship integrity
-   - Duplicate prevention within organizations
-   - Auto-complete for quick selection
+**COMPLEXITY:** 7/10 | **TIMELINE:** Week 2 | **DEPENDENCIES:** Tasks 2, 3
 
-3. Contact Management Interface
-   - Role-based filtering and sorting
-   - Primary contact visual indicators
-   - Quick contact creation for field visits
+**PRODUCTION IMPACT:**
+- Error boundary protection for all major components
+- Zod validation for all food service entities
+- Performance tracking and monitoring
+- Memory usage optimization
 
-4. Contact Forms with Validation
-   - Role assignment with decision-making hierarchy
-   - Contact information with business rule enforcement
-   - Fuzzy matching for duplicate detection
+**SUCCESS CRITERIA:**
+✅ Error boundaries implemented across all route components
+✅ Zod validation schemas for all forms and API endpoints
+✅ Performance monitoring dashboard operational
+✅ Memory leak detection and prevention verified
 
 # Test Strategy:
-1. Contact CRUD with organization relationships
-2. Food service roles properly implemented
-3. Primary contact designation working
-4. Duplicate prevention and fuzzy matching
-5. Multi-device usability for contact workflows
-6. Performance with large contact databases
+
 
 # Subtasks:
-## 1. Food Service Role Implementation [pending]
+## 1. Responsive Design System Setup with Touch Interface Optimization [pending]
 ### Dependencies: None
-### Description: 
+### Description: Implement comprehensive responsive design system with breakpoints, fluid typography, and touch-optimized components including 44px minimum touch targets for iPad compatibility
 ### Details:
-Exec Chef, Buyer, Manager, Owner, Kitchen Manager with hierarchy
+Set up CSS Grid/Flexbox layouts, establish breakpoint system (mobile, tablet, desktop), implement touch-friendly spacing, create responsive typography scale, and ensure 44px minimum touch target compliance for all interactive elements
 
-## 2. Duplicate Prevention System [pending]
-### Dependencies: None
-### Description: 
+## 2. Error Boundary Implementation for Production Stability [pending]
+### Dependencies: 4.1
+### Description: Develop comprehensive error boundary system with fallback UI components, error logging, and graceful degradation for production environment stability
 ### Details:
-Fuzzy matching and merge suggestions for data quality
+Create React Error Boundary components, implement error logging service integration, design fallback UI states, add error recovery mechanisms, and establish error reporting pipeline for production monitoring
+
+## 3. Validation Schema and Performance Monitoring Integration [pending]
+### Dependencies: 4.1, 4.2
+### Description: Implement Zod validation schemas for data integrity and set up performance monitoring system with real-time metrics tracking and optimization alerts
+### Details:
+Create comprehensive Zod schemas for all data models, implement form validation with error handling, set up performance monitoring dashboard, configure Core Web Vitals tracking, and establish performance budgets with automated alerts
 

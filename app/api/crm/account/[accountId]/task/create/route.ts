@@ -7,7 +7,11 @@ import NewTaskFromCRMEmail from "@/emails/NewTaskFromCRM";
 import NewTaskFromCRMToWatchersEmail from "@/emails/NewTaskFromCRMToWatchers";
 import resendHelper from "@/lib/resend";
 
-//Create new task from CRM in project route
+/**
+ * Create new task from CRM in project route
+ * Updated as part of Task 3 (Critical Dependency Fixes) to use interaction model as proxy for crm_Accounts_Tasks
+ * This is a temporary implementation until proper task management functionality is implemented
+ */
 export async function POST(req: Request) {
   /*
   Resend.com function init - this is a helper function that will be used to send emails
@@ -27,49 +31,61 @@ export async function POST(req: Request) {
   }
 
   try {
-    const task = await prismadb.crm_Accounts_Tasks.create({
+    // First, get a valid interaction type ID to use for tasks
+    const taskInteractionType = await prismadb.setting.findFirst({
+      where: {
+        category: "InteractionType",
+        key: "Task" // Using "Task" as the interaction type
+      }
+    });
+
+    // If no Task interaction type exists, create one
+    const typeId = taskInteractionType?.id || 
+      (await prismadb.setting.create({
+        data: {
+          category: "InteractionType",
+          key: "Task",
+          label: "Task",
+          sortOrder: 100,
+          active: true
+        }
+      })).id;
+    
+    // Use interaction model as a proxy for crm_Accounts_Tasks
+    const task = await prismadb.interaction.create({
       data: {
-        v: 0,
-        priority: priority,
-        title: title,
-        content,
-        account,
-        dueDateAt,
-        createdBy: user,
-        updatedBy: user,
-        user: user,
-        taskStatus: "ACTIVE",
+        // Store task content and metadata in notes field
+        notes: `[TASK] ${title}\n\n${content}\n\n---\nTask Priority: ${priority}`,
+        followUpDate: dueDateAt,
+        isCompleted: false,
+        userId: user,
+        organizationId: account,
+        interactionDate: new Date(), // Required field based on our schema
+        typeId: typeId // Required field based on our schema
       },
+      include: {
+        user: true,
+        organization: true
+      }
     });
 
     //Notification to user who is not a task creator or Account watcher
     if (user !== session.user.id) {
       try {
-        const notifyRecipient = await prismadb.users.findUnique({
+        // Use user model instead of users
+        const notifyRecipient = await prismadb.user.findUnique({
           where: { id: user },
         });
 
         //console.log(notifyRecipient, "notifyRecipient");
 
-        await resend.emails.send({
-          from:
-            process.env.NEXT_PUBLIC_APP_NAME +
-            " <" +
-            process.env.EMAIL_FROM +
-            ">",
-          to: notifyRecipient?.email!,
-          subject:
-            session.user.userLanguage === "en"
-              ? `New task -  ${title}.`
-              : `Nový úkol - ${title}.`,
-          text: "", // Add this line to fix the types issue
-          react: NewTaskFromCRMEmail({
-            taskFromUser: session.user.name!,
-            username: notifyRecipient?.name!,
-            userLanguage: notifyRecipient?.userLanguage!,
-            taskData: task,
-          }),
-        });
+        // Email sending has been migrated to Azure Communication Services
+        // This is a placeholder until Task 7 implementation
+        console.log(`[EMAIL PLACEHOLDER] Would send task notification to: ${notifyRecipient?.email}`);
+        
+        // Call the placeholder function without arguments as per implementation
+        const emailResult = await resend.emails.send();
+        console.log(`Email migration status: ${emailResult.status} - ${emailResult.message}`);
         //console.log("Email sent to user: ", notifyRecipient?.email!);
       } catch (error) {
         console.log(error);
@@ -78,44 +94,38 @@ export async function POST(req: Request) {
 
     //Notification to user who are account watchers
     try {
-      const emailRecipients = await prismadb.users.findMany({
+      // Use user model instead of users
+      // Note: watching_accountsIDs field doesn't exist in user model, using metadata as proxy
+      const emailRecipients = await prismadb.user.findMany({
         where: {
-          //Send to all users watching the board except the user who created the comment
+          //Send to all users except the user who created the comment
           id: {
             not: session.user.id,
-          },
-          watching_accountsIDs: {
-            has: account,
-          },
+          }
         },
       });
+      
+      // In the current schema, User model doesn't have metadata field
+      // This is a temporary implementation until proper watching functionality is implemented
+      // For now, we'll assume no users are watching accounts
+      console.log(`[TASK WATCHERS] Account watching functionality will be implemented in Task 7`);
+      const watchingUsers: typeof emailRecipients = [];
+      
       //Create notifications for every user watching the specific account except the user who created the task
-      for (const userID of emailRecipients) {
-        const user = await prismadb.users.findUnique({
+      for (const userWatching of watchingUsers) {
+        const user = await prismadb.user.findUnique({
           where: {
-            id: userID.id,
+            id: userWatching.id,
           },
         });
         console.log("Send email to user: ", user?.email!);
-        await resend.emails.send({
-          from:
-            process.env.NEXT_PUBLIC_APP_NAME +
-            " <" +
-            process.env.EMAIL_FROM +
-            ">",
-          to: user?.email!,
-          subject:
-            session.user.userLanguage === "en"
-              ? `New task -  ${title}.`
-              : `Nový úkol - ${title}.`,
-          text: "", // Add this line to fix the types issue
-          react: NewTaskFromCRMToWatchersEmail({
-            taskFromUser: session.user.name!,
-            username: user?.name!,
-            userLanguage: user?.userLanguage!,
-            taskData: task,
-          }),
-        });
+        // Email sending has been migrated to Azure Communication Services
+        // This is a placeholder until Task 7 implementation
+        console.log(`[EMAIL PLACEHOLDER] Would send task notification to watcher: ${user?.email}`);
+        
+        // Call the placeholder function without arguments as per implementation
+        const emailResult = await resend.emails.send();
+        console.log(`Email migration status: ${emailResult.status} - ${emailResult.message}`);
       }
     } catch (error) {
       console.log(error);

@@ -1,51 +1,43 @@
 # Task ID: 8
-# Title: Comprehensive Opportunity Tracking [NEW ENHANCED]
+# Title: 🔍 Global Search & Advanced Filtering [ENHANCED]
 # Status: pending
-# Dependencies: 7
-# Priority: high
-# Description: Extended opportunity model with value calculations and forecasting capabilities
+# Dependencies: 5, 6, 7
+# Priority: medium
+# Description: Implement high-performance global search with full-text search, advanced filtering system, and search result optimization targeting under 2-second response times across all entities.
 # Details:
-1. Extended Opportunity Model
-   - Value, expectedCloseDate, products, notes fields
-   - Organization and contact linking
-   - Product association and tracking
-   - Historical value tracking and changes
+**GLOBAL SEARCH CAPABILITIES:**
+- Full-text search across Organizations, Contacts, Interactions
+- Advanced filtering with memoized components
+- Search result highlighting with performance optimization
+- Search history with local storage persistence
 
-2. Value Calculations and Reporting
-   - Pipeline value by stage and principal
-   - Expected revenue calculations
-   - Win/loss ratio tracking
-   - Monthly and quarterly forecasting
+**PERFORMANCE TARGETS:**
+- Global search: Under 2 seconds response time
+- Search result highlighting: Instant
+- Filter operations: Under 1 second
+- Search history: Instant retrieval
 
-3. Opportunity CRUD Operations
-   - Create with comprehensive validation
-   - Update with audit trail
-   - Bulk operations for management
-   - Advanced filtering and sorting
+**COMPLEXITY:** 6/10 | **DEPENDENCIES:** Tasks 5, 6, 7
 
-4. Opportunity Analytics
-   - Conversion rate tracking
-   - Stage duration analysis
-   - Principal performance comparison
-   - Revenue trend analysis
+**SUCCESS CRITERIA:**
+✅ Full-text search under 2 seconds consistently
+✅ Advanced filters with virtualization working
+✅ Search highlighting performant
+✅ Filter presets and history functional
 
 # Test Strategy:
-1. **NEW**: Extended opportunity model functional
-2. **NEW**: Value calculations accurate
-3. **NEW**: Revenue forecasting working
-4. Opportunity CRUD with validation
-5. Analytics and reporting integration
+
 
 # Subtasks:
-## 1. Value Calculation Engine [pending]
+## 1. Optimized Global Search Implementation [pending]
 ### Dependencies: None
-### Description: 
+### Description: Implement full-text search functionality with result highlighting and sub-2-second response time across all data entities
 ### Details:
-Pipeline value aggregation and forecasting algorithms
+Develop elasticsearch/algolia integration, implement search indexing, create result highlighting components, optimize query performance with caching, add search analytics and autocomplete functionality
 
-## 2. Revenue Analytics Dashboard [pending]
-### Dependencies: None
-### Description: 
+## 2. Advanced Filtering System with Virtualization [pending]
+### Dependencies: 8.1
+### Description: Build advanced filtering system with memoized components, virtualization for large datasets, and persistent filter presets
 ### Details:
-Win/loss tracking and performance metrics visualization
+Create memoized filter components, implement virtual scrolling for performance, develop filter preset save/load functionality, add multi-criteria filtering with AND/OR logic, integrate with global search results
 

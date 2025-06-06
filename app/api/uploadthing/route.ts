@@ -1,8 +1,37 @@
-import { createRouteHandler } from "uploadthing/next";
+/**
+ * DEPRECATED: This file is maintained for reference only.
+ * The uploadthing functionality has been replaced with Azure Storage-based upload APIs.
+ * 
+ * This change was made as part of Task 3 (Critical Dependency Fixes) to reduce bundle size.
+ */
 
-import { ourFileRouter } from "./core";
+import { NextRequest, NextResponse } from "next/server";
 
-// Export routes for Next App Router
-export const { GET, POST } = createRouteHandler({
-  router: ourFileRouter,
-});
+// Redirect to appropriate Azure Storage-based upload endpoints
+export async function GET() {
+  return NextResponse.json({
+    message: "Upload endpoints have been migrated to Azure Storage",
+    endpoints: {
+      image: "/api/upload/image",
+      document: "/api/upload/document",
+      profile: "/api/upload/profile"
+    }
+  });
+}
+
+export async function POST(request: NextRequest) {
+  // Extract the intended upload type from the request
+  const searchParams = new URL(request.url).searchParams;
+  const uploadType = searchParams.get("uploadType") || "document";
+  
+  // Redirect to the appropriate endpoint
+  const redirectMap: Record<string, string> = {
+    "image": "/api/upload/image",
+    "profile": "/api/upload/profile",
+    "document": "/api/upload/document"
+  };
+  
+  const redirectUrl = redirectMap[uploadType] || "/api/upload/document";
+  
+  return NextResponse.redirect(new URL(redirectUrl, request.url));
+}

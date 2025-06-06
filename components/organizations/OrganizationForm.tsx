@@ -106,16 +106,16 @@ export function OrganizationForm({ onSubmit, initialData, isLoading }: Organizat
 
           {/* Account Manager */}
           <div className="space-y-2">
-            <Label htmlFor="accountManager">Account Manager *</Label>
+            <Label htmlFor="accountManagerId">Account Manager ID</Label>
             <Input
-              id="accountManager"
-              {...register('accountManager')}
-              placeholder="Enter account manager name"
+              id="accountManagerId"
+              {...register('accountManagerId')}
+              placeholder="Enter account manager ID (optional)"
               className="h-12"
               disabled={isLoading}
             />
-            {errors.accountManager && (
-              <p className="text-sm text-red-600">{errors.accountManager.message}</p>
+            {errors.accountManagerId && (
+              <p className="text-sm text-red-600">{errors.accountManagerId.message}</p>
             )}
           </div>
 

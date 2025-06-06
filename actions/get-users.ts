@@ -1,10 +1,15 @@
 import { prismadb } from "@/lib/prisma";
 
-//Get all users  for admin module
+/**
+ * User data access functions
+ * Updated as part of Task 3 (Critical Dependency Fixes) to use correct Prisma model references
+ */
+
+//Get all users for admin module
 export const getUsers = async () => {
-  const data = await prismadb.users.findMany({
+  const data = await prismadb.user.findMany({
     orderBy: {
-      created_on: "desc",
+      createdAt: "desc",
     },
   });
   return data;
@@ -12,12 +17,12 @@ export const getUsers = async () => {
 
 //Get active users for Selects in app etc
 export const getActiveUsers = async () => {
-  const data = await prismadb.users.findMany({
+  const data = await prismadb.user.findMany({
     orderBy: {
-      created_on: "desc",
+      createdAt: "desc",
     },
     where: {
-      userStatus: "ACTIVE",
+      isActive: true,
     },
   });
   return data;
@@ -25,9 +30,9 @@ export const getActiveUsers = async () => {
 
 //Get new users by month for chart
 export const getUsersByMonthAndYear = async (year: number) => {
-  const users = await prismadb.users.findMany({
+  const users = await prismadb.user.findMany({
     select: {
-      created_on: true,
+      createdAt: true,
     },
   });
 
@@ -36,8 +41,8 @@ export const getUsersByMonthAndYear = async (year: number) => {
   }
 
   const usersByMonth = users.reduce((acc: any, user: any) => {
-    const yearCreated = new Date(user.created_on).getFullYear();
-    const month = new Date(user.created_on).toLocaleString("default", {
+    const yearCreated = new Date(user.createdAt).getFullYear();
+    const month = new Date(user.createdAt).toLocaleString("default", {
       month: "long",
     });
 
@@ -60,9 +65,9 @@ export const getUsersByMonthAndYear = async (year: number) => {
 
 //Get new users by month for chart
 export const getUsersByMonth = async () => {
-  const users = await prismadb.users.findMany({
+  const users = await prismadb.user.findMany({
     select: {
-      created_on: true,
+      createdAt: true,
     },
   });
 
@@ -71,7 +76,7 @@ export const getUsersByMonth = async () => {
   }
 
   const usersByMonth = users.reduce((acc: any, user: any) => {
-    const month = new Date(user.created_on).toLocaleString("default", {
+    const month = new Date(user.createdAt).toLocaleString("default", {
       month: "long",
     });
 
@@ -91,9 +96,9 @@ export const getUsersByMonth = async () => {
 };
 
 export const getUsersCountOverall = async () => {
-  const users = await prismadb.users.findMany({
+  const users = await prismadb.user.findMany({
     select: {
-      created_on: true,
+      createdAt: true,
     },
   });
 
@@ -102,7 +107,7 @@ export const getUsersCountOverall = async () => {
   }
 
   const usersByMonth = users.reduce((acc: any, user: any) => {
-    const date = new Date(user.created_on);
+    const date = new Date(user.createdAt);
     const yearMonth = `${date.getFullYear()}-${date.getMonth() + 1}`;
 
     acc[yearMonth] = (acc[yearMonth] || 0) + 1;

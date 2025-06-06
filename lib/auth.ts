@@ -3,7 +3,7 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { newUserNotify } from "./new-user-notify";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
@@ -48,21 +48,26 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        // console.log(credentials, "credentials");
+        console.log('🔐 Auth attempt:', credentials?.email);
         if (!credentials?.email || !credentials?.password) {
+          console.log('❌ Missing credentials');
           throw new Error("Email or password is missing");
         }
 
-        const user = await prismadb.users.findFirst({
+        const user = await prismadb.user.findFirst({
           where: {
             email: credentials.email,
           },
-        });
+        }) as any;
+
+        console.log('👤 Found user:', user ? 'Yes' : 'No');
+        console.log('🔑 User has password:', user?.password ? 'Yes' : 'No');
 
         //clear white space from password
         const trimmedPassword = credentials.password.trim();
 
         if (!user || !user?.password) {
+          console.log('❌ User not found or no password');
           throw new Error("User not found, please register first");
         }
 
@@ -71,11 +76,14 @@ export const authOptions: NextAuthOptions = {
           user.password
         );
 
+        console.log('🔓 Password match:', isCorrectPassword ? 'Yes' : 'No');
+
         if (!isCorrectPassword) {
+          console.log('❌ Incorrect password');
           throw new Error("Password is incorrect");
         }
 
-        //console.log(user, "user");
+        console.log('✅ Authentication successful');
         return user;
       },
     }),
@@ -83,7 +91,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     //TODO: fix this any
     async session({ token, session }: any) {
-      const user = await prismadb.users.findFirst({
+      const user = await prismadb.user.findFirst({
         where: {
           email: token.email,
         },
@@ -91,18 +99,14 @@ export const authOptions: NextAuthOptions = {
 
       if (!user) {
         try {
-          const newUser = await prismadb.users.create({
+          const newUser = await prismadb.user.create({
             data: {
               email: token.email,
               name: token.name,
-              avatar: token.picture,
-              is_admin: false,
-              is_account_admin: false,
+              image: token.picture,
+              isActive: true,
+              role: "user",
               lastLoginAt: new Date(),
-              userStatus:
-                process.env.NEXT_PUBLIC_APP_URL === "https://demo.nextcrm.io"
-                  ? "ACTIVE"
-                  : "PENDING",
             },
           });
 
@@ -112,18 +116,16 @@ export const authOptions: NextAuthOptions = {
           session.user.id = newUser.id;
           session.user.name = newUser.name;
           session.user.email = newUser.email;
-          session.user.avatar = newUser.avatar;
-          session.user.image = newUser.avatar;
-          session.user.isAdmin = false;
-          session.user.userLanguage = newUser.userLanguage;
-          session.user.userStatus = newUser.userStatus;
+          session.user.image = newUser.image;
+          session.user.role = newUser.role;
+          session.user.isActive = newUser.isActive;
           session.user.lastLoginAt = newUser.lastLoginAt;
           return session;
         } catch (error) {
           return console.log(error);
         }
       } else {
-        await prismadb.users.update({
+        await prismadb.user.update({
           where: {
             id: user.id,
           },
@@ -131,15 +133,13 @@ export const authOptions: NextAuthOptions = {
             lastLoginAt: new Date(),
           },
         });
-        //User allready exist in localDB, put user data in session
+        //User already exist in localDB, put user data in session
         session.user.id = user.id;
         session.user.name = user.name;
         session.user.email = user.email;
-        session.user.avatar = user.avatar;
-        session.user.image = user.avatar;
-        session.user.isAdmin = user.is_admin;
-        session.user.userLanguage = user.userLanguage;
-        session.user.userStatus = user.userStatus;
+        session.user.image = user.image;
+        session.user.role = user.role;
+        session.user.isActive = user.isActive;
         session.user.lastLoginAt = user.lastLoginAt;
       }
 

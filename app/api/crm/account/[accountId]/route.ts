@@ -4,6 +4,10 @@ import { getServerSession } from "next-auth";
 import { prismadb } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
 
+/**
+ * API route to delete an organization (account)
+ * Updated as part of Task 3 (Critical Dependency Fixes) to use organization model instead of crm_Accounts
+ */
 export async function DELETE(req: Request, props: { params: Promise<{ accountId: string }> }) {
   const params = await props.params;
   const session = await getServerSession(authOptions);
@@ -13,7 +17,8 @@ export async function DELETE(req: Request, props: { params: Promise<{ accountId:
   }
 
   try {
-    await prismadb.crm_Accounts.delete({
+    // Use organization model instead of crm_Accounts
+    await prismadb.organization.delete({
       where: {
         id: params.accountId,
       },
@@ -22,6 +27,6 @@ export async function DELETE(req: Request, props: { params: Promise<{ accountId:
     return NextResponse.json({ message: "Account deleted" }, { status: 200 });
   } catch (error) {
     console.log("[ACCOUNT_DELETE]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    return new NextResponse("Error deleting organization", { status: 500 });
   }
 }

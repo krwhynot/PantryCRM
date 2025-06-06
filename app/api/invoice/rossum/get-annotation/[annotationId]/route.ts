@@ -4,10 +4,9 @@ Next step is to update invoice metadata from annotation in database (invoice tab
 TODO: think about how to handle annotation files security - now they are public
 */
 import { authOptions } from "@/lib/auth";
-import { s3Client } from "@/lib/digital-ocean-s3";
+import { uploadBlob } from "@/lib/azure-storage";
 import { getRossumToken } from "@/lib/get-rossum-token";
 import { prismadb } from "@/lib/prisma";
-import { PutObjectAclCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -308,26 +307,24 @@ export async function GET(req: Request, props: { params: Promise<{ annotationId:
     console.log("No results found in the JSON data.");
   }
 
-  //Write data as a buffer for import to S3 bucket
+  //Write data as a buffer for import to Azure Storage
   const buffer = Buffer.from(JSON.stringify(data));
   //const bufferXML = Buffer.from(JSON.stringify(dataXML));
 
-  const fileNameJSON = `rossum/invoice_annotation-${annotationId}.json`;
-  const fileNameXML = `rossum/invoice_annotation-${annotationId}.xml`;
+  // Azure Storage container and blob names
+  const containerName = process.env.AZURE_STORAGE_ROSSUM_CONTAINER || "rossum";
+  const blobName = `invoice_annotation-${annotationId}.json`;
 
-  const bucketParamsJSON = {
-    Bucket: process.env.DO_BUCKET,
-    Key: fileNameJSON,
-    Body: buffer,
-    ContentType: "application/json",
-    ContentDisposition: "inline",
-    ACL: "public-read" as const,
-  };
+  // Upload JSON to Azure Storage
+  await uploadBlob(
+    containerName,
+    blobName,
+    buffer,
+    "application/json"
+  );
 
-  await s3Client.send(new PutObjectCommand(bucketParamsJSON));
-
-  //S3 bucket url for the invoice
-  const urlJSON = `https://${process.env.DO_BUCKET}.${process.env.DO_REGION}.digitaloceanspaces.com/${fileNameJSON}`;
+  // Azure Storage URL for the invoice
+  const urlJSON = `https://${process.env.AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${containerName}/${blobName}`;
 
   console.log(urlJSON, "url JSON");
 
