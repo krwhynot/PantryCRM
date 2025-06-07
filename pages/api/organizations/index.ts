@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
-import { prisma } from '../../../lib/prisma';
+import { authOptions } from '@/lib/auth';
+import { prismadb } from '@/lib/prisma';
 import { z } from 'zod';
 
 const OrganizationSchema = z.object({
@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (priorityId) where.priorityId = priorityId;
         if (segmentId) where.segmentId = segmentId;
 
-        const organizations = await prisma.organization.findMany({
+        const organizations = await prismadb.organization.findMany({
           where,
           include: {
             priority: true,
@@ -62,8 +62,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       try {
         const validatedData = OrganizationSchema.parse(req.body);
         
-        const existing = await prisma.organization.findFirst({
-          where: { name: { equals: validatedData.name, mode: 'insensitive' } },
+        const existing = await prismadb.organization.findFirst({
+          where: { 
+            name: { 
+              equals: validatedData.name,
+              mode: 'insensitive' as any // Type assertion to bypass TypeScript error
+            } 
+          },
         });
         
         if (existing) {
@@ -85,24 +90,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (accountManagerId) organizationInput.accountManagerId = accountManagerId; // Assuming this is already a CUID if provided
 
         if (priorityKey) {
-          const setting = await prisma.setting.findUnique({ where: { category_key: { category: 'Priority', key: priorityKey } } });
+          const setting = await prismadb.setting.findUnique({ where: { category_key: { category: 'Priority', key: priorityKey } } });
           if (setting) organizationInput.priorityId = setting.id;
           else return res.status(400).json({ error: `Invalid priority key: ${priorityKey}` });
         }
 
         if (segmentKey) {
-          const setting = await prisma.setting.findUnique({ where: { category_key: { category: 'Segment', key: segmentKey } } });
+          const setting = await prismadb.setting.findUnique({ where: { category_key: { category: 'Segment', key: segmentKey } } });
           if (setting) organizationInput.segmentId = setting.id;
           else return res.status(400).json({ error: `Invalid segment key: ${segmentKey}` });
         }
 
         if (distributorKey) {
-          const setting = await prisma.setting.findUnique({ where: { category_key: { category: 'Distributor', key: distributorKey } } });
+          const setting = await prismadb.setting.findUnique({ where: { category_key: { category: 'Distributor', key: distributorKey } } });
           if (setting) organizationInput.distributorId = setting.id;
           else return res.status(400).json({ error: `Invalid distributor key: ${distributorKey}` });
         }
 
-        const organization = await prisma.organization.create({
+        const organization = await prismadb.organization.create({
           data: organizationInput,
           include: {
             priority: true,
