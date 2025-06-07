@@ -30,6 +30,7 @@ model Setting {
   organizationsWithPriority  Organization[] @relation(name: "OrganizationPriority")
   organizationsWithSegment   Organization[] @relation(name: "OrganizationSegment")
   organizationsWithDistributor Organization[] @relation(name: "OrganizationDistributor")
+  contactsWithPosition Contact[] @relation(name: "ContactPosition")
 }
 
 // User model for authentication
@@ -168,7 +169,8 @@ model Contact {
   email          String?
   phone          String?
   title          String?
-  roleId         String? // References Setting (category: "ContactRole")
+  positionId     String? // References Setting (category: "Position")
+  position       Setting?  @relation(name: "ContactPosition", fields: [positionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   notes          String?   @db.Text
   isActive       Boolean   @default(true)
   createdAt      DateTime  @default(now())
@@ -184,6 +186,7 @@ model Contact {
   @@index([email])
   @@index([phone])
   @@index([isActive])
+  @@index([positionId])
 }
 
 model Interaction {

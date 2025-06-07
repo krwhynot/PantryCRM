@@ -70,15 +70,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(409).json({ error: 'Organization name already exists' });
         }
 
-        const { address, zipCode, ...restOfValidatedData } = validatedData;
-        const organizationData: any = {
-          ...restOfValidatedData,
+        const { name, priorityId: priorityKey, segmentId: segmentKey, distributorId: distributorKey, accountManagerId, address, zipCode, notes, phone, website, ...otherFields } = validatedData;
+
+        const organizationInput: any = {
+          name,
+          notes,
+          phone,
+          website,
+          ...otherFields, // any other direct fields from schema
         };
-        if (address) organizationData.addressLine1 = address;
-        if (zipCode) organizationData.postalCode = zipCode;
+
+        if (address) organizationInput.addressLine1 = address;
+        if (zipCode) organizationInput.postalCode = zipCode;
+        if (accountManagerId) organizationInput.accountManagerId = accountManagerId; // Assuming this is already a CUID if provided
+
+        if (priorityKey) {
+          const setting = await prisma.setting.findUnique({ where: { category_key: { category: 'Priority', key: priorityKey } } });
+          if (setting) organizationInput.priorityId = setting.id;
+          else return res.status(400).json({ error: `Invalid priority key: ${priorityKey}` });
+        }
+
+        if (segmentKey) {
+          const setting = await prisma.setting.findUnique({ where: { category_key: { category: 'Segment', key: segmentKey } } });
+          if (setting) organizationInput.segmentId = setting.id;
+          else return res.status(400).json({ error: `Invalid segment key: ${segmentKey}` });
+        }
+
+        if (distributorKey) {
+          const setting = await prisma.setting.findUnique({ where: { category_key: { category: 'Distributor', key: distributorKey } } });
+          if (setting) organizationInput.distributorId = setting.id;
+          else return res.status(400).json({ error: `Invalid distributor key: ${distributorKey}` });
+        }
 
         const organization = await prisma.organization.create({
-          data: organizationData,
+          data: organizationInput,
           include: {
             priority: true,
             segment: true,
