@@ -9,7 +9,21 @@
 
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
+let chalk;
+
+try {
+  chalk = require('chalk');
+} catch (e) {
+  // Fallback if chalk is not available
+  chalk = {
+    red: (text) => `\x1b[31m${text}\x1b[0m`,
+    blue: { bold: (text) => `\x1b[1m\x1b[34m${text}\x1b[0m` },
+    yellow: (text) => `\x1b[33m${text}\x1b[0m`,
+    green: (text) => `\x1b[32m${text}\x1b[0m`,
+    gray: (text) => `\x1b[90m${text}\x1b[0m`,
+    white: (text) => `\x1b[37m${text}\x1b[0m`
+  };
+}
 
 // Check if stats file exists
 const statsFilePath = path.join(process.cwd(), '.next/analyze/stats.json');
