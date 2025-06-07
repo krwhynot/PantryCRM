@@ -1,5 +1,5 @@
 <a href="https://nextcrm.app/">
-  <h1 align="center">NextCRM</h1>
+  <h1 align="center">Kitchen Pantry CRM</h1>
 </a>
 
 <p align="center">
@@ -7,7 +7,7 @@
 </p>
 
 <!-- <p align="center">
-NextCRM is a CRM build on top of the Next.JS 14 using TypeScript, great UI library shadcn, Prisma and MongoDB as a database. Upload things as a S3 blob for document storage.
+Kitchen Pantry CRM is built on top of the NextCRM foundation using Next.js 15, React 18.2.0, TypeScript, shadcn/ui, and Prisma ORM with Azure SQL Database. Specialized for the food service industry.
 </p> -->
 
 <p align="center">

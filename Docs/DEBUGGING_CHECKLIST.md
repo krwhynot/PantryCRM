@@ -49,8 +49,11 @@
 - [ ] Verify connection pooling is working
 
 ### Performance Testing
-- [ ] Test page load times (target: <1s desktop, <2s iPad)
-- [ ] Verify search performance (target: <300ms response)
+- [ ] Test page load times (target: <3s on 3G connections)
+- [ ] Verify search performance (target: sub-second response)
+- [ ] Check report generation (target: <10s for simple, <30s for complex)
+- [ ] Verify interaction entry time (target: under 30 seconds)
+- [ ] Test touch targets (minimum 44px for iPad Safari compatibility)
 - [ ] Check memory usage in browser
 - [ ] Test with throttled network conditions
 

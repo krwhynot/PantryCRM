@@ -3,10 +3,12 @@
 ## Performance Requirements
 
 - **Bundle Size Target**: < 800KB initial load
-- **Page Load Time**: < 1 second on desktop, < 2 seconds on iPad
-- **Touch Targets**: Minimum 44px for iPad compatibility
-- **Database Query Time**: < 100ms for common operations
-- **Budget Constraint**: $18/month total Azure costs
+- **Page Load Time**: < 3 seconds on 3G connections
+- **Touch Targets**: Minimum 44px for iPad Safari compatibility
+- **Search Response**: Sub-second for organization and contact searches
+- **Report Generation**: < 10 seconds for simple reports, < 30 seconds for complex analytical reports
+- **Interaction Entry**: Under 30-second target time
+- **Budget Constraint**: $18/month total Azure costs ($5 SQL + $13 App Service)
 
 ## Current Bundle Analysis
 

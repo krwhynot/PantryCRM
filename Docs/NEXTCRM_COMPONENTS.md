@@ -4,10 +4,11 @@
 
 This guide explains how to integrate the NextCRM core components into the Kitchen Pantry CRM application. All components are built with:
 
-- React 18.2.0 functional components with hooks
-- TypeScript strict mode with comprehensive type definitions
-- 44px minimum touch targets for iPad compatibility
-- shadcn/ui design system integration
+- React 18.2.0 functional components with hooks (not React 19 RC)
+- TypeScript strict mode with comprehensive type definitions and Zod validation
+- 44px minimum touch targets for iPad Safari compatibility
+- shadcn/ui components built on Radix UI primitives
+- Error boundaries for component-level error isolation
 - Light and dark mode support
 
 ## Available Components

@@ -4,7 +4,8 @@
 - **Tech Stack**: Next.js 15, React 18.2.0, TypeScript, shadcn/ui, Prisma ORM
 - **Database**: Azure SQL Server Basic tier ($5/month)
 - **Budget**: $18/month Azure hosting limit ($5 for SQL Basic + $13 for App Service B1)
-- **Users**: 4 sales representatives replacing Excel system
+- **Users**: 4 sales representatives managing restaurants, healthcare facilities, and institutional food service operations
+- **Business Value**: 50% faster data entry, 80% faster report generation, sub-second search
 
 ## Issues Fixed
 

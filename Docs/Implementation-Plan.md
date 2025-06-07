@@ -1,12 +1,12 @@
- # Food Service CRM - Implementation Plan [SF][CA]
+# Kitchen Pantry CRM - Implementation Plan
 
-> This document outlines the 8-week implementation plan for the Food Service CRM project, following the NextCRM foundation architecture with optimization for iPad usage and Azure SQL integration within an $18/month budget constraint.
+> This document outlines the 8-week implementation plan for the Kitchen Pantry CRM project, following the NextCRM foundation architecture with optimization for iPad Safari testing and Azure SQL integration within an $18/month budget constraint.
 
-**Version:** 2.0  
-**Date:** June 2025  
+**Version:** 3.0  
+**Date:** June 7, 2025  
 **Author:** Kyle Ramsy  
 **Project Duration:** 8 weeks  
-**Budget:** $18/month Azure hosting  
+**Budget:** $18/month Azure hosting (Azure SQL Basic $5 + App Service B1 $13)  
 
 ---
 

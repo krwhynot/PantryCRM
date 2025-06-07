@@ -2,8 +2,9 @@
 
 ## Budget Constraints
 - **Total Budget**: $18/month for Azure services
-- **Database Allocation**: $5/month (Azure SQL Basic tier)
-- **App Service**: $13/month (B1 tier)
+- **Database Allocation**: $5/month (Azure SQL Basic tier, 2GB storage, 5 DTUs)
+- **App Service**: $13/month (B1 tier, 1.75GB RAM)
+- **Performance Requirements**: Sub-second searches, < 10 second simple reports, < 30 second complex reports
 
 ## Azure SQL Basic Tier Specifications
 - **DTUs**: 5
