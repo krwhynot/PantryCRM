@@ -17,7 +17,7 @@ export async function DELETE(req: Request, props: { params: Promise<{ leadId: st
   }
 
   try {
-    await prismadb.crm_Leads.delete({
+    await prismadb.opportunity.delete({
       where: {
         id: params.leadId,
       },

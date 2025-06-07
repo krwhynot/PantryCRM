@@ -29,15 +29,38 @@ export async function POST(req: Request) {
   }
 
   try {
-    await prismadb.crm_Contacts.create({
+    // Use Contact model as proxy for crm_Contacts
+    // Need to find or create an organization first for the contact
+    let organization = await prismadb.organization.findFirst({
+      where: {
+        name: company
+      }
+    });
+    
+    if (!organization) {
+      // Create a new organization if it doesn't exist
+      organization = await prismadb.organization.create({
+        data: {
+          name: company,
+          isActive: true
+        }
+      });
+    }
+    
+    // Now create the contact with the organization
+    await prismadb.contact.create({
       data: {
-        first_name: name,
-        last_name: surname,
+        firstName: name,
+        lastName: surname,
         email,
-        mobile_phone: phone,
-        type: "Prospect",
-        tags: [tag],
-        notes: ["Account: " + company, "Message: " + message],
+        phone,
+        organization: {
+          connect: {
+            id: organization.id
+          }
+        },
+        // Store additional information in notes field
+        notes: `Type: Prospect\nTags: ${tag}\nMessage: ${message}`
       },
     });
     return NextResponse.json({ message: "Contact created" });

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/app/providers/ThemeProvider";
+import { DeviceProvider } from "@/app/providers/DeviceProvider";
 
 // Import the bypass layout
 import BypassLayout from './layout-bypass';
@@ -47,8 +48,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
-            <Toaster />
+            <DeviceProvider>
+              {children}
+              <Toaster />
+            </DeviceProvider>
           </ThemeProvider>
         </body>
       </html>

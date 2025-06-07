@@ -27,13 +27,13 @@ export async function PUT(req: Request, props: { params: Promise<{ contactId: st
   }
 
   try {
-    await prismadb.crm_Contacts.update({
+    await prismadb.contact.update({
       where: {
         id: params.contactId,
       },
-      //Disconnect opportunity ID from contacts opportunityIds array
+      //Disconnect opportunity ID from contacts opportunities array
       data: {
-        assigned_opportunities: {
+        opportunities: {
           disconnect: {
             id: opportunityId,
           },

@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDevice } from "@/app/providers/DeviceProvider";
 
 import {
   ColumnDef,
@@ -42,6 +43,7 @@ export function DataTable<TData, TValue>({
   data,
   search,
 }: DataTableProps<TData, TValue>) {
+  const { isTouchDevice } = useDevice();
   //This is for filtering the columns
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -135,9 +137,14 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={isTouchDevice ? "h-16 touch-target" : ""}
+                  data-touch-device={isTouchDevice}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell 
+                      key={cell.id}
+                      className={isTouchDevice ? "py-4 px-4" : ""}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -159,20 +166,22 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-4 py-4">
         <Button
           variant="outline"
-          size="sm"
+          size={isTouchDevice ? "default" : "sm"}
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
+          className={isTouchDevice ? "button-touch" : ""}
         >
           Previous
         </Button>
         <Button
           variant="outline"
-          size="sm"
+          size={isTouchDevice ? "default" : "sm"}
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
+          className={isTouchDevice ? "button-touch" : ""}
         >
           Next
         </Button>

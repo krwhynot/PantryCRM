@@ -1,0 +1,102 @@
+/* styles/responsive.css */
+/* Comprehensive multi-device UI framework with touch-friendly interfaces */
+
+/* Base touch target sizes - following WCAG 2.5.5 (Level AAA) */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Enhanced interactive elements for touch */
+.button-touch {
+  min-height: 48px;
+  min-width: 48px;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  touch-action: manipulation;
+}
+
+.form-input-touch {
+  height: 48px;
+  font-size: 16px; /* Prevents zoom on iOS */
+  padding: 12px 16px;
+  touch-action: manipulation;
+}
+
+/* Touch-friendly checkbox and radio */
+.checkbox-touch {
+  min-width: 24px;
+  min-height: 24px;
+  margin: 10px; /* Creates effective 44px touch target */
+}
+
+/* Touch-friendly select */
+.select-touch {
+  min-height: 48px;
+  font-size: 16px;
+  padding: 12px 16px;
+}
+
+/* Device-specific optimizations */
+.touch-device .interactive-element {
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Improved focus states for touch */
+.touch-device :focus {
+  outline: none;
+}
+
+.touch-device :focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 3px;
+}
+
+/* Responsive grid layouts */
+.responsive-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Touch-friendly spacing */
+.touch-layout {
+  --spacing-unit: 16px;
+}
+
+.mouse-layout {
+  --spacing-unit: 12px;
+}
+
+.adaptive-spacing > * + * {
+  margin-top: var(--spacing-unit);
+}
+
+.adaptive-spacing-x > * + * {
+  margin-left: var(--spacing-unit);
+}
+
+/* iPad-specific optimizations */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .ipad-optimize {
+    font-size: 16px;
+  }
+  
+  .ipad-optimize .button-touch {
+    padding: 14px 28px;
+  }
+}

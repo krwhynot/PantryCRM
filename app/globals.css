@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import touch-friendly responsive styles */
+@import "../styles/responsive.css";
+@import "../styles/ipad-optimization.css";
+
 @keyframes dialog-overlay-show {
   from {
     opacity: 0;

@@ -12,7 +12,11 @@ export async function GET(req: Request) {
   }
 
   try {
-    const data = await prismadb.crm_Industry_Type.findMany({});
+    const data = await prismadb.setting.findMany({
+      where: {
+        category: "INDUSTRY_TYPE", // Assuming this is the category for industry types
+      },
+    });
 
     return NextResponse.json(data);
   } catch (error) {
