@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate &&  prisma db push && prisma db seed && next build",
+    "build": "prisma generate && prisma db push && prisma db seed && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watchAll",
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:client": "source-map-explorer .next/static/chunks/*.js",
-    "analyze:report": "npm run build && npm run analyze:client"
+    "analyze:report": "npm run build && npm run analyze:client",
+    "analyze:bundle": "node ./scripts/analyze-bundle.js",
+    "optimize": "npm dedupe && npm prune"
   },
   "prisma": {
     "seed": "node ./prisma/seed.js"

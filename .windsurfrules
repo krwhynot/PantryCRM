@@ -1,5 +1,0 @@
-1. My framework is [YOUR_FRAMEWORK]
-2. Don't modify package.json without permission
-3. Use TypeScript strict mode
-4. Write JSDoc comments for functions
-5. Maximum line length is 120 characters
