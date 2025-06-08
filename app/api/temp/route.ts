@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -19,3 +19,5 @@ export async function GET() {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+

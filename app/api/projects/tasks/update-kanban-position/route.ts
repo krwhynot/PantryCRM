@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   const body = await req.json();
 
@@ -85,3 +85,5 @@ export async function PUT(req: Request) {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -9,7 +9,7 @@ import { hash } from "bcryptjs";
 import InviteUserEmail from "@/emails/InviteUser";
 import resendHelper from "@/lib/resend";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   /*
   Resend.com function init - this is a helper function that will be used to send emails
   */
@@ -115,3 +115,5 @@ export async function POST(req: Request) {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+

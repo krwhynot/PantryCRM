@@ -149,7 +149,7 @@ export default function ComponentsTestPage() {
                       minChars={2}
                     />
                     <p className="text-sm text-muted-foreground mt-2">
-                      Try searching for "Kaufholds", "Frites", or "Chef"
+                      Try searching for &quot;Kaufholds&quot;, &quot;Frites&quot;, or &quot;Chef&quot;
                     </p>
                   </div>
                 </CardContent>

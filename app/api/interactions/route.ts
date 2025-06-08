@@ -10,7 +10,7 @@ const interactionSchema = z.object({
   notes: z.string().max(500, 'Notes cannot exceed 500 characters').optional(),
 });
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   try {
     const body = await req.json();
 
@@ -42,3 +42,5 @@ export async function POST(req: NextRequest) {
     }
   }
 }
+
+

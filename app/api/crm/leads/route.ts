@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import sendEmail from "@/lib/sendmail";
 
 //Create a new Opportunity (formerly Lead)
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -296,7 +296,7 @@ export async function POST(req: Request) {
 }
 
 //Get all Opportunities (formerly Leads)
-export async function GET(req: Request) {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -352,7 +352,7 @@ export async function GET(req: Request) {
 }
 
 //Update an Opportunity (formerly Lead)
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -498,3 +498,5 @@ export async function PUT(req: Request) {
     return new NextResponse("Internal error updating opportunity from lead", { status: 500 });
   }
 }
+
+

@@ -1,9 +1,9 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from "@/lib/auth";
 import { getRossumToken } from "@/lib/get-rossum-token";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -31,3 +31,5 @@ export async function POST(req: Request) {
     return NextResponse.json(error, { status: 500 });
   }
 }
+
+

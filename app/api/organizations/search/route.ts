@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   try {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get('query');
@@ -39,3 +39,5 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to search organizations' }, { status: 500 });
   }
 }
+
+

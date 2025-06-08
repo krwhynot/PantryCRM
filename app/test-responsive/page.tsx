@@ -4,12 +4,12 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ResponsiveLayout } from "@/components/layout/ResponsiveLayout";
+import ResponsiveLayout from "@/components/layout/ResponsiveLayout";
 import { ResponsiveCard } from "@/components/ui/responsive-card";
 import { ResponsiveForm } from "@/components/form/ResponsiveForm";
 import { useDevice } from "@/app/providers/DeviceProvider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { IconButton } from "@/components/ui/IconButton";
+import IconButton from "@/components/ui/IconButton";
 import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { Plus, Search, Settings } from "lucide-react";/**
  * Test page for responsive UI components

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 // Email processing functionality has been temporarily disabled until Azure Email implementation
 // Original implementation used: import Imap from "imap"; 
 import axios from "axios";
@@ -11,7 +11,7 @@ const imapConfig: Imap.Config = {
   tls: true,
 };
 
-export async function GET() {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   // Email processing functionality has been temporarily disabled
   // This endpoint will be updated in Task 5 to use Azure Email Services
   
@@ -155,3 +155,5 @@ async function sendAttachmentToAPI(attachment: any) {
     throw error;
   }
 }
+
+

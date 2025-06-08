@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
 //Create new account route
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
 }
 
 //Update account route
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -191,7 +191,7 @@ export async function PUT(req: Request) {
 }
 
 //GET all accounts route
-export async function GET(req: Request) {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -249,3 +249,5 @@ export async function GET(req: Request) {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+

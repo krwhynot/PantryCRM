@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from "@/lib/auth";
 import { openAiHelper } from "@/lib/openai";
 import { OpenAIStream, StreamingTextResponse } from "ai";
@@ -7,7 +8,7 @@ import OpenAI from "openai";
 // IMPORTANT! Set the runtime to edge
 //export const runtime = "edge";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   // Extract the `prompt` from the body of the request
   const session = await getServerSession(authOptions);
 
@@ -41,3 +42,5 @@ export async function POST(req: Request) {
   // Respond with the stream
   return new StreamingTextResponse(stream);
 }
+
+

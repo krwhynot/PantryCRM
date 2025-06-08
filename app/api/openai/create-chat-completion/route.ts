@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 
 import { openAiHelper } from "@/lib/openai";
 
 export const maxDuration = 300;
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const body = await req.json();
   const { prompt, userId } = body;
 
@@ -48,3 +48,5 @@ export async function POST(req: Request) {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+

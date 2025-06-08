@@ -8,7 +8,7 @@ import { getRossumToken } from "@/lib/get-rossum-token";
 
 const FormData = require("form-data");
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -132,3 +132,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false });
   }
 }
+
+

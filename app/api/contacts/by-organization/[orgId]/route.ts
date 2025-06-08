@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
 
-export async function GET(req: NextRequest, { params }: { params: { orgId: string } }) {
+// Properly typed API route for Next.js 15.3.3
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { orgId: string } }
+): Promise<Response> {
   try {
     const { orgId } = params;
 

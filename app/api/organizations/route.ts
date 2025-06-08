@@ -3,7 +3,7 @@ import { prismadb } from '@/lib/prisma';
 import { OrganizationValidation } from '@/lib/validations/organization';
 import { ZodError } from 'zod';
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   try {
     const { searchParams } = new URL(req.url);
     const q = searchParams.get('q');
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   try {
     const body = await req.json();
     const validatedData = OrganizationValidation.parse(body);
@@ -116,3 +116,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

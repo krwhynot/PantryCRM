@@ -8,7 +8,7 @@ import { uploadBlob } from "@/lib/azure-storage";
  * Handles document upload requests, storing files in Azure Storage
  * Replacement for uploadthing/docUploader functionality
  */
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   try {
     // Check authentication
     const session = await getServerSession(authOptions);
@@ -76,3 +76,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to upload document" }, { status: 500 });
   }
 }
+

@@ -3,7 +3,7 @@ import { listContainers } from "@/lib/azure-storage";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 
-export async function GET(request: NextRequest) {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -26,3 +26,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Failed to list containers", success: false }, { status: 500 });
   }
 }
+
+

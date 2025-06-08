@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -11,7 +11,7 @@ import resendHelper from "@/lib/resend";
 /*
 TODO: there is second route for creating task in board, but it is the same as this one. Consider merging them (/api/projects/tasks/create-task/[boardId]). 
 */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   /*
   Resend.com function init - this is a helper function that will be used to send emails
   */
@@ -135,3 +135,5 @@ export async function POST(req: Request) {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+

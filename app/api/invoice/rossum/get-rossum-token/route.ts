@@ -1,8 +1,8 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -29,3 +29,5 @@ export async function GET() {
     return NextResponse.json(error, { status: 500 });
   }
 }
+
+

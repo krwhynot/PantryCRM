@@ -71,7 +71,7 @@ export function LoginComponent() {
     setIsLoading(true);
     try {
       await signIn("google", {
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
+        callbackUrl: "/crm",
       });
     } catch (error) {
       console.log(error, "error");
@@ -106,7 +106,7 @@ export function LoginComponent() {
           title: "Success",
           description: "Successfully logged in",
         });
-        router.push("/dashboard");
+        router.push("/crm");
       }
     } catch (error) {
       console.log(error, "error");

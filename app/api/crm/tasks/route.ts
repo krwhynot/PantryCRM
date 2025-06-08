@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
 //Delete task API endpoint - for CRM tasks
-export async function DELETE(req: Request) {
+export async function DELETE(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   const body = await req.json();
   console.log(body, "body");
@@ -47,3 +47,5 @@ export async function DELETE(req: Request) {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+

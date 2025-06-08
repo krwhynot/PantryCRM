@@ -1,58 +1,51 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlserver"
-  url      = env("DATABASE_URL")
+  provider          = "sqlserver"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-// Settings Management System
 model Setting {
-  id        String   @id @default(cuid())
-  category  String   // Priority, Segment, Distributor, etc.
-  key       String   // Actual value (e.g., "A", "Fine Dining", "Sysco")
-  label     String?  // Display name
-  color     String?  // For priority colors and UI highlighting
-  sortOrder Int      // For maintaining specific order in dropdowns
-  active    Boolean  @default(true)
-  metadata  String?  @db.Text    // For category-specific additional data
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                           String         @id @default(cuid())
+  category                     String
+  key                          String
+  label                        String?
+  color                        String?
+  sortOrder                    Int
+  active                       Boolean        @default(true)
+  metadata                     String?        @db.Text
+  createdAt                    DateTime       @default(now())
+  updatedAt                    DateTime       @updatedAt
+  contactsWithPosition         Contact[]      @relation("ContactPosition")
+  organizationsWithDistributor Organization[] @relation("OrganizationDistributor")
+  organizationsWithPriority    Organization[] @relation("OrganizationPriority")
+  organizationsWithSegment     Organization[] @relation("OrganizationSegment")
 
   @@unique([category, key])
   @@index([category, active])
-
-  organizationsWithPriority  Organization[] @relation(name: "OrganizationPriority")
-  organizationsWithSegment   Organization[] @relation(name: "OrganizationSegment")
-  organizationsWithDistributor Organization[] @relation(name: "OrganizationDistributor")
-  contactsWithPosition Contact[] @relation(name: "ContactPosition")
 }
 
-// User model for authentication
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  name          String?
-  image         String?
-  emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  isActive      Boolean   @default(true)
-  role          String    @default("user") // admin, user
-  password      String? // Hashed password for local authentication
-  lastLoginAt   DateTime?
-
-  accounts      Account[]
-  sessions      Session[]
-  organizations OrganizationUser[]
-  interactions  Interaction[]
-  opportunities Opportunity[]
-  managedOrganizations Organization[] @relation(name: "UserManagedOrganizations") // Added for reciprocal relation
+  id                   String             @id @default(cuid())
+  email                String             @unique
+  name                 String?
+  image                String?
+  emailVerified        DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  isActive             Boolean            @default(true)
+  role                 String             @default("user")
+  lastLoginAt          DateTime?
+  password             String?
+  accounts             Account[]
+  interactions         Interaction[]
+  opportunities        Opportunity[]
+  managedOrganizations Organization[]     @relation("UserManagedOrganizations")
+  organizations        OrganizationUser[]
+  sessions             Session[]
 
   @@index([email])
   @@index([isActive])
@@ -71,11 +64,9 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-
 }
 
 model Session {
@@ -84,8 +75,6 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-
 }
 
 model VerificationToken {
@@ -97,9 +86,9 @@ model VerificationToken {
 }
 
 model Organization {
-  id               String    @id @default(cuid())
+  id               String             @id @default(cuid())
   name             String
-  description      String?   @db.Text
+  description      String?            @db.Text
   website          String?
   phone            String?
   email            String?
@@ -109,28 +98,22 @@ model Organization {
   state            String?
   postalCode       String?
   country          String?
-  isActive         Boolean   @default(true)
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
   accountManagerId String?
-
-  // Food Service Specific Fields
   priorityId       String?
-  priority         Setting?        @relation(name: "OrganizationPriority", fields: [priorityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   segmentId        String?
-  segment          Setting?        @relation(name: "OrganizationSegment", fields: [segmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   distributorId    String?
-  distributor      Setting?        @relation(name: "OrganizationDistributor", fields: [distributorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  // Revenue Tracking Fields
-  annualRevenue    Decimal?        @db.Decimal(18, 2)
-  totalValue       Decimal?        @db.Decimal(18, 2)
-
-  // Relations
-  accountManager   User?     @relation(name: "UserManagedOrganizations", fields: [accountManagerId], references: [id])
+  annualRevenue    Decimal?           @db.Decimal(18, 2)
+  totalValue       Decimal?           @db.Decimal(18, 2)
   contacts         Contact[]
   interactions     Interaction[]
   opportunities    Opportunity[]
+  accountManager   User?              @relation("UserManagedOrganizations", fields: [accountManagerId], references: [id])
+  distributor      Setting?           @relation("OrganizationDistributor", fields: [distributorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  priority         Setting?           @relation("OrganizationPriority", fields: [priorityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  segment          Setting?           @relation("OrganizationSegment", fields: [segmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users            OrganizationUser[]
 
   @@index([name])
@@ -146,39 +129,36 @@ model Organization {
 }
 
 model OrganizationUser {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   organizationId String
   userId         String
-  role           String   // e.g., "admin", "member"
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user         User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  role           String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onUpdate: NoAction)
+  user           User         @relation(fields: [userId], references: [id], onUpdate: NoAction)
 
   @@unique([organizationId, userId])
-
   @@index([organizationId])
 }
 
 model Contact {
-  id             String    @id @default(cuid())
+  id             String        @id @default(cuid())
   organizationId String
   firstName      String
   lastName       String
   email          String?
   phone          String?
   title          String?
-  positionId     String? // References Setting (category: "Position")
-  position       Setting?  @relation(name: "ContactPosition", fields: [positionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  notes          String?   @db.Text
-  isActive       Boolean   @default(true)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  interactions Interaction[]
-  opportunities Opportunity[]
+  notes          String?       @db.Text
+  isActive       Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  positionId     String?
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  position       Setting?      @relation("ContactPosition", fields: [positionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  interactions   Interaction[]
+  opportunities  Opportunity[]
 
   @@index([organizationId])
   @@index([firstName])
@@ -190,27 +170,21 @@ model Contact {
 }
 
 model Interaction {
-  id               String       @id @default(cuid())
-  organizationId   String
-  contactId        String?
-  userId           String       // Account manager who logged the interaction
-  interactionDate  DateTime
-  typeId           String       // References Setting (category: "InteractionType")
-  notes            String?      @db.Text
-  followUpDate     DateTime?
-  isCompleted      Boolean      @default(false)
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  id              String       @id @default(cuid())
+  organizationId  String
+  contactId       String?
+  userId          String
+  interactionDate DateTime
+  typeId          String
+  notes           String?      @db.Text
+  followUpDate    DateTime?
+  isCompleted     Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  contact         Contact?     @relation(fields: [contactId], references: [id])
+  organization    Organization @relation(fields: [organizationId], references: [id], onUpdate: NoAction)
+  user            User         @relation(fields: [userId], references: [id], onUpdate: NoAction)
 
-  // Food Service Specific Fields
-
-
-  // Relations
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  contact          Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  user             User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction) // Break cascade cycle
-
-  // Indexes for performance optimization
   @@index([organizationId])
   @@index([contactId])
   @@index([userId])
@@ -218,26 +192,25 @@ model Interaction {
 }
 
 model Opportunity {
-  id                String    @id @default(cuid())
+  id                String       @id @default(cuid())
   organizationId    String
   contactId         String?
-  userId            String    // Account manager responsible
-  principal         String    // References Setting (category: "Principal")
-  stage            String     // References Setting (category: "Stage")
-  status           String     // References Setting (category: "Status")
-  source           String?    // References Setting (category: "Source")
-  reason           String?    @db.Text
-  probability      Int        // 0-100
-  expectedRevenue  Decimal?   @db.Decimal(10, 2)
+  userId            String
+  principal         String
+  stage             String
+  status            String
+  source            String?
+  reason            String?      @db.Text
+  probability       Int
+  expectedRevenue   Decimal?     @db.Decimal(10, 2)
   expectedCloseDate DateTime?
-  notes            String?    @db.Text
-  isActive         Boolean    @default(true)
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
-
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  contact          Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  user             User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  notes             String?      @db.Text
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  contact           Contact?     @relation(fields: [contactId], references: [id])
+  organization      Organization @relation(fields: [organizationId], references: [id], onUpdate: NoAction)
+  user              User         @relation(fields: [userId], references: [id], onUpdate: NoAction)
 
   @@index([organizationId])
   @@index([contactId])

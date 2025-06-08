@@ -1,0 +1,36 @@
+﻿# Dependencies
+node_modules/
+.pnpm/
+.yarn/
+
+# Build outputs
+.next/
+dist/
+build/
+out/
+
+# Development
+.vercel/
+.env.local
+*.log
+
+# Version control
+.git/
+.gitignore
+
+# Testing
+coverage/
+.nyc_output/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# Temporary
+tmp/
+temp/

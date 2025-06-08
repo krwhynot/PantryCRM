@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { hash } from "bcryptjs";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -24,3 +24,5 @@ export async function GET(req: Request) {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+

@@ -1,7 +1,7 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
-import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
   if (req.headers.get("content-type") !== "application/json") {
     return NextResponse.json(
       { message: "Invalid content-type" },
@@ -102,3 +102,5 @@ export async function POST(req: Request) {
     }
   }
 }
+
+
