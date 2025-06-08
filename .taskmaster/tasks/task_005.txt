@@ -1,11 +1,55 @@
 # Task ID: 5
-# Title: Implement Contact Management with Role Hierarchy
-# Status: pending
+# Title: Contact Management with Role Hierarchy
+# Status: in-progress
 # Dependencies: 4
 # Priority: high
-# Description: Create contact management system with multiple contacts per organization, food service-specific roles, and primary contact designation.
+# Description: Implement contact management with role hierarchy for food service industry.
 # Details:
-Create Contact model: organization_id FK, first_name, last_name, email, phone, role (FK to Settings), is_primary boolean, notes. Implement API endpoints: GET /api/contacts (by organization), POST/PUT/DELETE /api/contacts/[id]. Build ContactForm with role selection from Settings (Executive Chef, Buyer, Manager, Owner, Kitchen Manager). Implement primary contact logic - only one primary per organization, auto-update when new primary selected. Create ContactList component with role-based filtering and quick contact switching. Use React Hook Form with Zod validation: z.object({ first_name: z.string().min(1), last_name: z.string().min(1), email: z.string().email().optional(), role: z.string(), is_primary: z.boolean() }). Add contact hierarchy display in organization view.
+Create data models, UI components, and API endpoints for managing contacts within organizations. Implement role hierarchy for Executive Chef, Buyer, Manager, Owner, and Kitchen Manager. Ensure proper relationships between contacts and organizations.
 
 # Test Strategy:
-Test contact CRUD operations, verify primary contact constraints, validate role-based filtering, confirm contact hierarchy display, and test quick contact switching functionality.
+Write unit tests for Contact components. Perform integration tests for CRUD operations. Verify role hierarchy functionality through UI testing.
+
+# Subtasks:
+## 1. Contact Data Model Design [done]
+### Dependencies: None
+### Description: Define the data structures for contacts with role hierarchy
+### Details:
+Design database schema for contacts with proper foreign keys to organizations and role settings. Implement role hierarchy relationships.
+
+## 2. Contact List Component [pending]
+### Dependencies: 5.1
+### Description: Develop a component to display a list of contacts for an organization.
+### Details:
+Create `ContactList.tsx` to fetch and display contacts, including primary contact badge, email, phone, and title. Ensure 44px touch targets and responsive design.
+
+## 3. Contact API Route [pending]
+### Dependencies: 5.1
+### Description: Create API endpoints for contact management.
+### Details:
+Implement `/api/contacts` GET and POST endpoints for fetching and creating contacts. Include Zod validation and logic for setting primary contacts.
+
+## 4. Contact Form Implementation [pending]
+### Dependencies: 5.1, 5.2, 5.3
+### Description: Create forms for contact data entry and editing
+### Details:
+Implement contact forms with role selection, validation, and organization relationship. Optimize for rapid data entry.
+
+## 5. Primary Contact Logic [pending]
+### Dependencies: 5.1, 5.3, 5.4
+### Description: Implement primary contact designation functionality
+### Details:
+Develop logic to designate and manage primary contacts for organizations with proper database transactions.
+
+## 6. Contact Search and Filtering [pending]
+### Dependencies: 5.5
+### Description: Implement search functionality for contacts
+### Details:
+Develop contact search with role filtering and organization context, optimized for sub-second performance.
+
+## 7. Contact Management Testing [pending]
+### Dependencies: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6
+### Description: Comprehensive testing of contact functionality
+### Details:
+Perform unit, integration, and end-to-end testing for contact management features.
+

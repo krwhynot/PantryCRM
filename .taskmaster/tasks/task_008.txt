@@ -1,11 +1,49 @@
 # Task ID: 8
-# Title: Build Performance-Optimized Search and Auto-Complete
-# Status: pending
-# Dependencies: 5
-# Priority: medium
-# Description: Implement advanced search functionality with auto-complete for organizations and contacts, optimized for sub-second response times.
+# Title: Sales Pipeline Management
+# Status: in-progress
+# Dependencies: 4, 5, 7
+# Priority: high
+# Description: Implement 5-stage sales pipeline management system.
 # Details:
-Create search API endpoints: GET /api/search/organizations, GET /api/search/contacts with query parameters. Implement SQL Server full-text search with CONTAINS() and FREETEXT() functions. Add database indexes on searchable fields: organizations.name, contacts.first_name, contacts.last_name. Create SearchCombobox component with debounced input (300ms), virtual scrolling for large results. Implement client-side caching with React Query 5.0+ for search results (5-minute TTL). Add search highlighting with match emphasis. Create global search component for header navigation. Optimize queries to return only essential fields for auto-complete. Add search analytics tracking for query optimization.
+Create a visual pipeline management system with the 5 stages: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close. Implement drag-and-drop functionality for moving opportunities between stages.
 
 # Test Strategy:
-Benchmark search performance with 1000+ records to ensure <1 second response, test auto-complete with various input patterns, verify caching behavior, and validate search result accuracy.
+Test pipeline visualization with various screen sizes. Verify proper state transitions and data persistence. Conduct performance testing with large numbers of opportunities.
+
+# Subtasks:
+## 1. Pipeline Board Component [pending]
+### Dependencies: None
+### Description: Develop the main visual component for the sales pipeline.
+### Details:
+Create `PipelineBoard.tsx` using `react-beautiful-dnd` (or `@hello-pangea/dnd`) for drag-and-drop. Display opportunities grouped by stage with summary metrics. Ensure responsive design.
+
+## 2. Opportunity API Endpoints [pending]
+### Dependencies: 8.1
+### Description: Create API endpoints for opportunity management.
+### Details:
+Implement `/api/opportunities` for CRUD operations and stage updates. Ensure transaction management and error handling.
+
+## 3. Opportunity Data Model Design [done]
+### Dependencies: None
+### Description: Design the database schema for opportunities.
+### Details:
+Define schema for opportunities including organization, contacts, stages, expected revenue, probability, and close date. Integrate with Settings for stages.
+
+## 4. Pipeline Logic and Validation [pending]
+### Dependencies: 8.2, 8.3
+### Description: Implement business logic and validation for pipeline stages.
+### Details:
+Ensure proper stage transitions, data integrity during drag-and-drop, and validation for opportunity fields.
+
+## 5. Pipeline Reporting and Analytics [pending]
+### Dependencies: 8.1, 8.2
+### Description: Integrate basic reporting for pipeline performance.
+### Details:
+Display key metrics like total pipeline value, conversion rates, and stage-wise distribution using Tremor charts.
+
+## 6. Sales Pipeline Testing [pending]
+### Dependencies: 8.1, 8.2, 8.3, 8.4, 8.5
+### Description: Comprehensive testing of sales pipeline functionality.
+### Details:
+Perform unit, integration, and end-to-end testing for the sales pipeline, including drag-and-drop and data persistence.
+

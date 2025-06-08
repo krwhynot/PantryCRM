@@ -1,11 +1,61 @@
 # Task ID: 4
-# Title: Build Organization Management with Search
-# Status: pending
-# Dependencies: 3
+# Title: Organization Management
+# Status: in-progress
+# Dependencies: 2, 3
 # Priority: high
-# Description: Implement comprehensive organization management with CRUD operations, industry-specific fields, and optimized search functionality with auto-complete.
+# Description: Implement comprehensive organization management for food service businesses.
 # Details:
-Create Organization model with fields: name, address, phone, email, priority_id, segment_id, distributor_id (all FKs to Settings). Implement API endpoints: GET /api/organizations (with search, pagination), POST/PUT/DELETE /api/organizations/[id]. Build search with SQL Server CONTAINS() for full-text search, targeting <1 second response. Create OrganizationForm with shadcn/ui components: Input, Select (populated from Settings), Textarea. Implement auto-complete using Combobox component with debounced search (300ms). Add validation with Zod: z.object({ name: z.string().min(1), priority_id: z.number(), segment_id: z.number(), distributor_id: z.number() }). Create OrganizationList with pagination, sorting, and filtering.
+Create data models, UI components, and API endpoints for managing restaurant and food service business records. Implement server-side and client-side validation using Zod. Ensure sub-second response times for organization search and retrieval. Integrate with Settings Management for dynamic dropdowns.
 
 # Test Strategy:
-Test CRUD operations, verify search performance <1 second with 1000+ records, validate auto-complete functionality, confirm dropdown population from Settings, and test form validation edge cases.
+Write unit tests for Organization components. Perform integration tests for CRUD operations. Conduct performance tests to verify sub-second search response times.
+
+# Subtasks:
+## 1. Data Model Design [done]
+### Dependencies: None
+### Description: Define the data structures and relationships needed for the organization management system
+### Details:
+Create entity relationship diagrams, define data types, establish relationships between entities, and document the data model architecture to address hidden complexity
+
+## 2. UI Component Creation [done]
+### Dependencies: 4.1
+### Description: Develop reusable UI components for the organization management interface
+### Details:
+Design and implement modular UI components following design patterns to reduce complexity and improve maintainability while ensuring consistent user experience
+
+## 3. Form Implementation [done]
+### Dependencies: 4.1, 4.2
+### Description: Create forms for data entry and editing within the organization management system
+### Details:
+Implement form layouts, input fields, and submission handling with consideration for user experience and data integrity requirements
+
+## 4. Validation Logic [done]
+### Dependencies: 4.3
+### Description: Implement validation rules for organization data
+### Details:
+Develop server-side and client-side validation using Zod schemas to ensure data integrity and provide meaningful error messages
+
+## 5. API Development [done]
+### Dependencies: 4.1, 4.4
+### Description: Create API endpoints for organization management
+### Details:
+Develop RESTful API endpoints for creating, reading, updating, and deleting organization records with proper error handling and transaction management
+
+## 6. Search Functionality [done]
+### Dependencies: 4.1, 4.5
+### Description: Implement efficient search capabilities for organizations
+### Details:
+Develop search functionality with filters and sorting options, optimized for sub-second performance on Azure SQL Basic tier
+
+## 7. Performance Optimization [in-progress]
+### Dependencies: 4.5, 4.6
+### Description: Optimize organization management for performance
+### Details:
+Implement caching strategies, optimize database queries, and improve frontend rendering performance to meet sub-second response time requirements
+
+## 8. Testing [pending]
+### Dependencies: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7
+### Description: Comprehensive testing of organization management functionality
+### Details:
+Perform unit testing, integration testing, and end-to-end testing to ensure reliability and performance of the organization management system
+

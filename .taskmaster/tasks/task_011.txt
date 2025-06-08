@@ -1,11 +1,11 @@
 # Task ID: 11
-# Title: Implement Basic Reporting System
+# Title: Performance-Optimized Reporting
 # Status: pending
-# Dependencies: 10
+# Dependencies: 7, 8
 # Priority: medium
-# Description: Create foundational reporting system with performance dashboards and simple reports targeting <10 second load times.
+# Description: Implement performance-optimized reporting with Tremor charts.
 # Details:
-Create reporting API endpoints: GET /api/reports/interactions, GET /api/reports/pipeline, GET /api/reports/performance. Implement SQL query optimization for Azure SQL Basic tier: use appropriate indexes, limit result sets, implement pagination. Create ReportDashboard with Tremor charts: AreaChart for interaction trends, BarChart for pipeline by stage, DonutChart for opportunities by principal. Add date range filtering with react-day-picker. Implement report caching with Redis-compatible Azure Cache (if budget allows) or in-memory caching. Create simple report exports to CSV using papaparse library. Add loading states and error boundaries for report components. Optimize queries to use covering indexes and avoid table scans.
+Create reporting system with Tremor charts for sales performance visualization. Optimize queries for Azure SQL Basic tier limitations. Implement caching for report data.
 
 # Test Strategy:
-Benchmark report load times to ensure <10 seconds for simple reports, test with realistic data volumes, verify chart rendering performance, and validate export functionality.
+Measure report generation time to verify <10 second target for simple reports and <30 second target for complex reports. Test with realistic data volumes.

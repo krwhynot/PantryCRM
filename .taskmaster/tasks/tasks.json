@@ -2,328 +2,643 @@
   "tasks": [
     {
       "id": 1,
-      "title": "Setup NextCRM Foundation and Project Structure",
-      "description": "Initialize the project with NextCRM foundation, configure Next.js 15 with React 18.2.0, and establish the core project structure with TypeScript configuration.",
-      "details": "Install Next.js 15.0.3 with React 18.2.0 stable. Configure NextCRM foundation components and resolve any compatibility issues. Setup TypeScript 5.3+ with strict mode, ESLint with Next.js config, and Prettier. Configure package.json with exact versions: next@15.0.3, react@18.2.0, typescript@5.3.0. Setup folder structure: /components, /pages/api, /lib, /types, /styles. Configure next.config.js for bundle optimization targeting <800KB. Install shadcn/ui components and Tremor charts for UI foundation.",
-      "testStrategy": "Verify NextCRM components load correctly, TypeScript compilation passes without errors, and development server starts successfully. Test bundle analyzer shows initial bundle <200KB baseline.",
+      "title": "Setup Next.js Project with TypeScript",
+      "description": "Initialize a new Next.js 15 project with TypeScript, React 18.2.0, and configure the development environment.",
+      "details": "Use create-next-app to set up the project. Install necessary dependencies including React 18.2.0 and TypeScript. Configure tsconfig.json for strict type checking. Set up ESLint and Prettier for code quality. Initialize Git repository and create initial project structure.",
+      "testStrategy": "Verify successful project creation by running the development server and checking for TypeScript compilation errors. Ensure all configurations are correct by reviewing config files.",
       "priority": "high",
       "dependencies": [],
-      "status": "pending",
+      "status": "done",
       "subtasks": []
     },
     {
       "id": 2,
-      "title": "Configure Azure SQL Database and Prisma ORM",
-      "description": "Setup Azure SQL Database Basic tier and configure Prisma ORM with the complete database schema for organizations, contacts, interactions, opportunities, and settings.",
-      "details": "Provision Azure SQL Database Basic ($5/month, 2GB, 5 DTU). Install Prisma 5.7+ with @prisma/client and prisma CLI. Create schema.prisma with all required models: Organizations (priority_id, segment_id, distributor_id), Contacts (organization_id FK, role, is_primary), Interactions (6 types, organization_id FK, contact_id FK), Opportunities (11 principals, 5 stages), Settings (category, key, label, color, sort_order, active). Configure connection string with SSL. Run prisma migrate dev to create initial migration. Setup Prisma generate in build process.",
-      "testStrategy": "Verify database connection, run test queries for each model, confirm foreign key constraints work correctly, and validate Prisma Client generation. Test connection pooling under load.",
+      "title": "Integrate NextCRM Foundation",
+      "description": "Integrate the NextCRM foundation to accelerate development by 60-70%.",
+      "details": "Clone or install the NextCRM foundation. Resolve any component conflicts with the current Next.js setup. Integrate NextCRM's authentication system and role-based access control. Ensure compatibility with React 18.2.0 and Next.js 15. Document any necessary modifications or workarounds.",
+      "testStrategy": "Create unit tests for key NextCRM components. Verify successful integration by testing authentication flow and role-based access. Ensure no conflicts with existing Next.js configuration.",
       "priority": "high",
       "dependencies": [
         1
       ],
-      "status": "pending",
+      "status": "done",
       "subtasks": []
     },
     {
       "id": 3,
-      "title": "Implement Settings Management System",
-      "description": "Create the foundational Settings Management system that provides dynamic dropdown values for all other components, replacing hard-coded enums.",
-      "details": "Create Settings model with categories: priority_levels, market_segments, distributors, contact_roles, interaction_types, opportunity_stages, principals. Implement CRUD API endpoints: GET /api/settings/[category], POST/PUT/DELETE /api/settings with validation. Create SettingsProvider React context for client-side caching. Build admin interface with shadcn/ui Table, Dialog, and Form components. Implement validation to prevent deletion of settings in use. Add color coding and sort_order functionality. Use Zod schemas for validation: z.object({ category: z.string(), key: z.string(), label: z.string(), color: z.string().optional(), sort_order: z.number(), active: z.boolean() }).",
-      "testStrategy": "Test CRUD operations for all setting categories, verify referential integrity prevents deletion of used settings, validate admin interface functionality, and confirm dropdown population across the application.",
-      "priority": "high",
-      "dependencies": [
-        2
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 4,
-      "title": "Build Organization Management with Search",
-      "description": "Implement comprehensive organization management with CRUD operations, industry-specific fields, and optimized search functionality with auto-complete.",
-      "details": "Create Organization model with fields: name, address, phone, email, priority_id, segment_id, distributor_id (all FKs to Settings). Implement API endpoints: GET /api/organizations (with search, pagination), POST/PUT/DELETE /api/organizations/[id]. Build search with SQL Server CONTAINS() for full-text search, targeting <1 second response. Create OrganizationForm with shadcn/ui components: Input, Select (populated from Settings), Textarea. Implement auto-complete using Combobox component with debounced search (300ms). Add validation with Zod: z.object({ name: z.string().min(1), priority_id: z.number(), segment_id: z.number(), distributor_id: z.number() }). Create OrganizationList with pagination, sorting, and filtering.",
-      "testStrategy": "Test CRUD operations, verify search performance <1 second with 1000+ records, validate auto-complete functionality, confirm dropdown population from Settings, and test form validation edge cases.",
-      "priority": "high",
-      "dependencies": [
-        3
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 5,
-      "title": "Implement Contact Management with Role Hierarchy",
-      "description": "Create contact management system with multiple contacts per organization, food service-specific roles, and primary contact designation.",
-      "details": "Create Contact model: organization_id FK, first_name, last_name, email, phone, role (FK to Settings), is_primary boolean, notes. Implement API endpoints: GET /api/contacts (by organization), POST/PUT/DELETE /api/contacts/[id]. Build ContactForm with role selection from Settings (Executive Chef, Buyer, Manager, Owner, Kitchen Manager). Implement primary contact logic - only one primary per organization, auto-update when new primary selected. Create ContactList component with role-based filtering and quick contact switching. Use React Hook Form with Zod validation: z.object({ first_name: z.string().min(1), last_name: z.string().min(1), email: z.string().email().optional(), role: z.string(), is_primary: z.boolean() }). Add contact hierarchy display in organization view.",
-      "testStrategy": "Test contact CRUD operations, verify primary contact constraints, validate role-based filtering, confirm contact hierarchy display, and test quick contact switching functionality.",
-      "priority": "high",
-      "dependencies": [
-        4
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 6,
-      "title": "Create Rapid Interaction Logging System",
-      "description": "Build the core interaction logging system optimized for 30-second entry with six interaction types and mobile-friendly interface.",
-      "details": "Create Interaction model: type (Email, Call, In Person, Demo/sampled, Quoted price, Follow-up), organization_id FK, contact_id FK, date, notes, created_by. Implement API endpoints with optimized queries: POST /api/interactions, GET /api/interactions (by organization/contact). Build InteractionForm with large touch targets (44px minimum), auto-complete organization/contact selection, pre-populated fields. Use React Hook Form with optimized re-renders, implement auto-save every 10 seconds. Create mobile-optimized layout with Tremor components, minimize form fields for speed. Add keyboard shortcuts for power users. Implement client-side caching for recent organizations/contacts. Use Zod validation: z.object({ type: z.enum(['Email', 'Call', 'In Person', 'Demo/sampled', 'Quoted price', 'Follow-up']), organization_id: z.number(), contact_id: z.number().optional(), notes: z.string() }).",
-      "testStrategy": "Time interaction entry to ensure <30 seconds, test on touch devices with 44px targets, verify auto-save functionality, validate form performance on mobile networks, and test auto-complete speed.",
-      "priority": "high",
-      "dependencies": [
-        5
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 7,
-      "title": "Implement Authentication and Role-Based Access Control",
-      "description": "Setup NextCRM integrated authentication system with role-based access control for sales representatives, managers, and administrators.",
-      "details": "Configure NextCRM auth system with NextAuth.js 4.24+. Setup User model with roles: sales_rep, manager, admin. Implement role-based middleware for API routes using NextAuth getServerSession(). Create login/logout pages with shadcn/ui components. Setup session management with JWT tokens, 24-hour expiration. Implement role-based UI rendering with useSession hook. Create ProtectedRoute component for client-side protection. Add password requirements: min 8 chars, uppercase, lowercase, number. Configure RBAC: sales_rep (CRUD own data), manager (read all, CRUD own team), admin (full access). Use bcrypt for password hashing with 12 rounds.",
-      "testStrategy": "Test login/logout flow, verify role-based API access restrictions, validate session persistence, test password requirements, and confirm UI elements show/hide based on roles.",
+      "title": "Set Up Azure SQL Database",
+      "description": "Provision and configure Azure SQL Database Basic tier for the project.",
+      "details": "Use Azure Portal or Azure CLI to create a new Azure SQL Database (Basic tier, 2GB storage, 5 DTU). Configure firewall rules and connection strings. Set up database schema based on the provided data model. Implement connection pooling for optimal performance.",
+      "testStrategy": "Verify successful connection to the database from the application. Test basic CRUD operations. Measure query performance to ensure it meets requirements.",
       "priority": "high",
       "dependencies": [
         1
       ],
-      "status": "pending",
+      "status": "done",
       "subtasks": []
+    },
+    {
+      "id": 4,
+      "title": "Organization Management",
+      "description": "Implement comprehensive organization management for food service businesses.",
+      "details": "Create data models, UI components, and API endpoints for managing restaurant and food service business records. Implement server-side and client-side validation using Zod. Ensure sub-second response times for organization search and retrieval. Integrate with Settings Management for dynamic dropdowns.",
+      "testStrategy": "Write unit tests for Organization components. Perform integration tests for CRUD operations. Conduct performance tests to verify sub-second search response times.",
+      "priority": "high",
+      "dependencies": [
+        2,
+        3
+      ],
+      "status": "in-progress",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Data Model Design",
+          "description": "Define the data structures and relationships needed for the organization management system",
+          "dependencies": [],
+          "details": "Create entity relationship diagrams, define data types, establish relationships between entities, and document the data model architecture to address hidden complexity",
+          "status": "done"
+        },
+        {
+          "id": 2,
+          "title": "UI Component Creation",
+          "description": "Develop reusable UI components for the organization management interface",
+          "dependencies": [
+            1
+          ],
+          "details": "Design and implement modular UI components following design patterns to reduce complexity and improve maintainability while ensuring consistent user experience",
+          "status": "done"
+        },
+        {
+          "id": 3,
+          "title": "Form Implementation",
+          "description": "Create forms for data entry and editing within the organization management system",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implement form layouts, input fields, and submission handling with consideration for user experience and data integrity requirements",
+          "status": "done"
+        },
+        {
+          "id": 4,
+          "title": "Validation Logic",
+          "description": "Implement validation rules for organization data",
+          "dependencies": [
+            3
+          ],
+          "details": "Develop server-side and client-side validation using Zod schemas to ensure data integrity and provide meaningful error messages",
+          "status": "done"
+        },
+        {
+          "id": 5,
+          "title": "API Development",
+          "description": "Create API endpoints for organization management",
+          "dependencies": [
+            1,
+            4
+          ],
+          "details": "Develop RESTful API endpoints for creating, reading, updating, and deleting organization records with proper error handling and transaction management",
+          "status": "done"
+        },
+        {
+          "id": 6,
+          "title": "Search Functionality",
+          "description": "Implement efficient search capabilities for organizations",
+          "dependencies": [
+            1,
+            5
+          ],
+          "details": "Develop search functionality with filters and sorting options, optimized for sub-second performance on Azure SQL Basic tier",
+          "status": "done"
+        },
+        {
+          "id": 7,
+          "title": "Performance Optimization",
+          "description": "Optimize organization management for performance",
+          "dependencies": [
+            5,
+            6
+          ],
+          "details": "Implement caching strategies, optimize database queries, and improve frontend rendering performance to meet sub-second response time requirements",
+          "status": "in-progress"
+        },
+        {
+          "id": 8,
+          "title": "Testing",
+          "description": "Comprehensive testing of organization management functionality",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "details": "Perform unit testing, integration testing, and end-to-end testing to ensure reliability and performance of the organization management system",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Contact Management with Role Hierarchy",
+      "description": "Implement contact management with role hierarchy for food service industry.",
+      "details": "Create data models, UI components, and API endpoints for managing contacts within organizations. Implement role hierarchy for Executive Chef, Buyer, Manager, Owner, and Kitchen Manager. Ensure proper relationships between contacts and organizations.",
+      "testStrategy": "Write unit tests for Contact components. Perform integration tests for CRUD operations. Verify role hierarchy functionality through UI testing.",
+      "priority": "high",
+      "dependencies": [
+        4
+      ],
+      "status": "in-progress",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Contact Data Model Design",
+          "description": "Define the data structures for contacts with role hierarchy",
+          "dependencies": [],
+          "details": "Design database schema for contacts with proper foreign keys to organizations and role settings. Implement role hierarchy relationships.",
+          "status": "done"
+        },
+        {
+          "id": 2,
+          "title": "Contact List Component",
+          "description": "Develop a component to display a list of contacts for an organization.",
+          "dependencies": [
+            1
+          ],
+          "details": "Create `ContactList.tsx` to fetch and display contacts, including primary contact badge, email, phone, and title. Ensure 44px touch targets and responsive design.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Contact API Route",
+          "description": "Create API endpoints for contact management.",
+          "dependencies": [
+            1
+          ],
+          "details": "Implement `/api/contacts` GET and POST endpoints for fetching and creating contacts. Include Zod validation and logic for setting primary contacts.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Contact Form Implementation",
+          "description": "Create forms for contact data entry and editing",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "Implement contact forms with role selection, validation, and organization relationship. Optimize for rapid data entry.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Primary Contact Logic",
+          "description": "Implement primary contact designation functionality",
+          "dependencies": [
+            1,
+            3,
+            4
+          ],
+          "details": "Develop logic to designate and manage primary contacts for organizations with proper database transactions.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Contact Search and Filtering",
+          "description": "Implement search functionality for contacts",
+          "dependencies": [
+            5
+          ],
+          "details": "Develop contact search with role filtering and organization context, optimized for sub-second performance.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Contact Management Testing",
+          "description": "Comprehensive testing of contact functionality",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "details": "Perform unit, integration, and end-to-end testing for contact management features.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Dynamic Settings Management",
+      "description": "Implement a dynamic settings management system to replace hard-coded enums.",
+      "details": "Create a flexible settings management system that allows for dynamic configuration of dropdown options, system parameters, and user preferences. Implement proper validation and error handling for settings management.",
+      "testStrategy": "Write unit tests for settings components. Verify proper loading and application of settings throughout the application. Test settings persistence and retrieval.",
+      "priority": "critical",
+      "dependencies": [
+        3
+      ],
+      "status": "in-progress",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Database Schema Design",
+          "description": "Design database schema for settings management",
+          "dependencies": [],
+          "details": "Create Settings table with category, key, label, color, sortOrder, and active fields. Implement proper indexing for performance.",
+          "status": "done"
+        },
+        {
+          "id": 2,
+          "title": "Admin Interface Creation",
+          "description": "Develop admin interface for settings management",
+          "dependencies": [
+            1
+          ],
+          "details": "Create UI for viewing, adding, editing, and deactivating settings. Implement category-based organization and drag-and-drop sorting.",
+          "status": "done"
+        },
+        {
+          "id": 3,
+          "title": "CRUD Operations Implementation",
+          "description": "Implement CRUD operations for settings",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Develop API endpoints and service methods for creating, reading, updating, and deleting settings with proper validation.",
+          "status": "done"
+        },
+        {
+          "id": 4,
+          "title": "Validation Logic",
+          "description": "Implement validation for settings management",
+          "dependencies": [
+            3
+          ],
+          "details": "Create validation rules to prevent deletion of system-required settings and ensure data integrity.",
+          "status": "done"
+        },
+        {
+          "id": 5,
+          "title": "Application-wide Integration",
+          "description": "Integrate settings throughout the application",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "Create hooks and context providers for accessing settings. Implement dropdown components that use settings data.",
+          "status": "in-progress"
+        },
+        {
+          "id": 6,
+          "title": "Testing",
+          "description": "Test settings management functionality",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "Perform comprehensive testing of settings management, including performance testing for settings retrieval.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "30-Second Interaction Entry System",
+      "description": "Develop a rapid interaction logging system optimized for 30-second entry time.",
+      "details": "Create an optimized interaction entry system that allows sales representatives to log customer interactions in under 30 seconds. Implement auto-complete, smart defaults, and keyboard shortcuts to maximize efficiency.",
+      "testStrategy": "Conduct usability testing with simulated sales scenarios. Measure interaction entry time to verify 30-second target. Test with various input methods including touch and keyboard.",
+      "priority": "critical",
+      "dependencies": [
+        4,
+        5,
+        6
+      ],
+      "status": "in-progress",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Interaction Schema Design",
+          "description": "Design optimized database schema for interactions",
+          "dependencies": [],
+          "details": "Create Interactions table with organization, contact, type, notes, and date fields. Implement proper indexing for performance.",
+          "status": "done"
+        },
+        {
+          "id": 2,
+          "title": "Quick Interaction Entry Component",
+          "description": "Develop a speed-optimized component for interaction entry.",
+          "dependencies": [
+            1
+          ],
+          "details": "Create `QuickInteractionEntry.tsx` with organization search, contact selection, interaction type buttons, and notes field. Implement 200ms debounce, 50px touch targets, and Ctrl+Enter submission.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Auto-complete Implementation",
+          "description": "Implement organization and contact auto-complete",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Develop debounced search with 300ms threshold for organization and contact lookup. Optimize for sub-second response.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Interaction Type Selection",
+          "description": "Implement quick interaction type selection",
+          "dependencies": [
+            2
+          ],
+          "details": "Create large touch-friendly buttons for interaction types with visual indicators. Support keyboard shortcuts.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Notes Field Optimization",
+          "description": "Optimize notes field for rapid entry",
+          "dependencies": [
+            2
+          ],
+          "details": "Implement auto-expanding text area with character limit indicator. Add quick template selection for common notes.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "API and Performance Optimization",
+          "description": "Optimize backend for rapid interaction saving",
+          "dependencies": [
+            1,
+            3,
+            4,
+            5
+          ],
+          "details": "Develop optimized API endpoint for interaction creation with minimal validation overhead. Implement optimistic UI updates.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Usability Testing",
+          "description": "Conduct usability testing for 30-second target",
+          "dependencies": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "details": "Perform timed tests with realistic sales scenarios to verify 30-second entry target. Iterate on UI based on feedback.",
+          "status": "pending"
+        }
+      ]
     },
     {
       "id": 8,
-      "title": "Build Performance-Optimized Search and Auto-Complete",
-      "description": "Implement advanced search functionality with auto-complete for organizations and contacts, optimized for sub-second response times.",
-      "details": "Create search API endpoints: GET /api/search/organizations, GET /api/search/contacts with query parameters. Implement SQL Server full-text search with CONTAINS() and FREETEXT() functions. Add database indexes on searchable fields: organizations.name, contacts.first_name, contacts.last_name. Create SearchCombobox component with debounced input (300ms), virtual scrolling for large results. Implement client-side caching with React Query 5.0+ for search results (5-minute TTL). Add search highlighting with match emphasis. Create global search component for header navigation. Optimize queries to return only essential fields for auto-complete. Add search analytics tracking for query optimization.",
-      "testStrategy": "Benchmark search performance with 1000+ records to ensure <1 second response, test auto-complete with various input patterns, verify caching behavior, and validate search result accuracy.",
-      "priority": "medium",
+      "title": "Sales Pipeline Management",
+      "description": "Implement 5-stage sales pipeline management system.",
+      "details": "Create a visual pipeline management system with the 5 stages: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close. Implement drag-and-drop functionality for moving opportunities between stages.",
+      "testStrategy": "Test pipeline visualization with various screen sizes. Verify proper state transitions and data persistence. Conduct performance testing with large numbers of opportunities.",
+      "priority": "high",
       "dependencies": [
-        5
+        4,
+        5,
+        7
       ],
-      "status": "pending",
-      "subtasks": []
+      "status": "in-progress",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Pipeline Board Component",
+          "description": "Develop the main visual component for the sales pipeline.",
+          "dependencies": [],
+          "details": "Create `PipelineBoard.tsx` using `react-beautiful-dnd` (or `@hello-pangea/dnd`) for drag-and-drop. Display opportunities grouped by stage with summary metrics. Ensure responsive design.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Opportunity API Endpoints",
+          "description": "Create API endpoints for opportunity management.",
+          "dependencies": [
+            1
+          ],
+          "details": "Implement `/api/opportunities` for CRUD operations and stage updates. Ensure transaction management and error handling.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Opportunity Data Model Design",
+          "description": "Design the database schema for opportunities.",
+          "dependencies": [],
+          "details": "Define schema for opportunities including organization, contacts, stages, expected revenue, probability, and close date. Integrate with Settings for stages.",
+          "status": "done"
+        },
+        {
+          "id": 4,
+          "title": "Pipeline Logic and Validation",
+          "description": "Implement business logic and validation for pipeline stages.",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Ensure proper stage transitions, data integrity during drag-and-drop, and validation for opportunity fields.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Pipeline Reporting and Analytics",
+          "description": "Integrate basic reporting for pipeline performance.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Display key metrics like total pipeline value, conversion rates, and stage-wise distribution using Tremor charts.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Sales Pipeline Testing",
+          "description": "Comprehensive testing of sales pipeline functionality.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "Perform unit, integration, and end-to-end testing for the sales pipeline, including drag-and-drop and data persistence.",
+          "status": "pending"
+        }
+      ]
     },
     {
       "id": 9,
-      "title": "Create Sales Pipeline Foundation",
-      "description": "Implement the five-stage sales pipeline structure and opportunity tracking system for the 11 food service principals.",
-      "details": "Create Opportunity model: organization_id FK, contact_id FK, principal (11 brands from Settings), stage (Lead-discovery, Contacted, Sampled/Visited, Follow-up, Close), probability percentage, estimated_value, expected_close_date, notes. Implement API endpoints: GET /api/opportunities (with filtering), POST/PUT/DELETE /api/opportunities/[id]. Create OpportunityForm with principal selection from Settings, stage progression logic, probability auto-calculation based on stage. Build pipeline stage validation - opportunities can only move forward or stay in same stage. Add opportunity history tracking for stage changes. Use Zod validation: z.object({ principal: z.string(), stage: z.enum(['Lead-discovery', 'Contacted', 'Sampled/Visited', 'Follow-up', 'Close']), probability: z.number().min(0).max(100), estimated_value: z.number().optional() }).",
-      "testStrategy": "Test opportunity CRUD operations, verify stage progression logic, validate probability calculations, confirm principal selection from Settings, and test opportunity history tracking.",
-      "priority": "medium",
+      "title": "Multi-Device Testing & Performance Validation",
+      "description": "Ensure application works properly across required devices and optimize performance.",
+      "details": "Test application on Windows touch laptops and iPad Safari. Verify all touch targets meet 44px minimum size. Optimize layout for different screen sizes and input methods. Conduct performance testing on Azure Basic tier.",
+      "testStrategy": "Create test matrix for required devices. Verify all functionality works correctly on each device. Measure and optimize performance metrics.",
+      "priority": "high",
       "dependencies": [
-        6
+        4,
+        5,
+        6,
+        7,
+        8
       ],
-      "status": "pending",
-      "subtasks": []
+      "status": "in-progress",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Touch Target Compliance Test",
+          "description": "Develop a component to automatically validate touch target sizes.",
+          "dependencies": [],
+          "details": "Create `TouchTargetValidator.tsx` to scan the page for interactive elements and report if their dimensions are less than 44px. Provide a summary of compliant vs. non-compliant elements.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Performance Testing Script",
+          "description": "Develop a PowerShell script for automated performance testing.",
+          "dependencies": [],
+          "details": "Create `test-performance.ps1` to simulate organization searches, interaction creation, and concurrent users. Measure response times against targets (<1s search, <30s interaction) and provide a summary report.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "iPad Safari Compatibility Testing",
+          "description": "Manually test and optimize for iPad Safari compatibility.",
+          "dependencies": [
+            1
+          ],
+          "details": "Verify all UI components, forms, and interactions function correctly on iPad Safari, including touch gestures and responsiveness.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Concurrent User Load Testing",
+          "description": "Conduct load testing to ensure 4 concurrent users are supported.",
+          "dependencies": [
+            2
+          ],
+          "details": "Use the performance testing script to simulate 4 concurrent users and monitor Azure SQL DTU usage and application response times.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Performance Optimization Iteration",
+          "description": "Iterate on performance optimizations based on testing results.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "details": "Address bottlenecks identified during testing, focusing on database queries, API responses, and frontend rendering to meet all performance targets.",
+          "status": "pending"
+        }
+      ]
     },
     {
       "id": 10,
-      "title": "Build Visual Pipeline Dashboard",
-      "description": "Create interactive pipeline dashboard with drag-and-drop functionality and visual opportunity management across all stages.",
-      "details": "Install @dnd-kit/core 6.1+ and @dnd-kit/sortable for drag-and-drop functionality. Create PipelineDashboard component with 5 columns for each stage. Implement OpportunityCard component with key details: organization name, principal, estimated value, probability. Add drag-and-drop between stages with optimistic updates and API sync. Create pipeline filters: by principal, by sales rep, by date range. Implement real-time updates using SWR or React Query for data synchronization. Add pipeline metrics: total value per stage, conversion rates, average time in stage. Use Tremor charts for pipeline analytics visualization. Implement responsive design for tablet/mobile viewing.",
-      "testStrategy": "Test drag-and-drop functionality across all stages, verify optimistic updates and API synchronization, validate pipeline metrics calculations, and test responsive behavior on different screen sizes.",
+      "title": "Bundle Size Optimization",
+      "description": "Optimize application bundle size to meet 800KB target.",
+      "details": "Analyze current bundle size and implement optimizations to reduce it below 800KB. Use code splitting, tree shaking, and other techniques to minimize bundle size.",
+      "testStrategy": "Measure bundle size after each optimization. Verify application functionality is not affected by optimizations. Test loading performance on slow connections.",
       "priority": "medium",
       "dependencies": [
-        9
+        4,
+        5,
+        6,
+        7,
+        8
       ],
-      "status": "pending",
+      "status": "in-progress",
       "subtasks": []
     },
     {
       "id": 11,
-      "title": "Implement Basic Reporting System",
-      "description": "Create foundational reporting system with performance dashboards and simple reports targeting <10 second load times.",
-      "details": "Create reporting API endpoints: GET /api/reports/interactions, GET /api/reports/pipeline, GET /api/reports/performance. Implement SQL query optimization for Azure SQL Basic tier: use appropriate indexes, limit result sets, implement pagination. Create ReportDashboard with Tremor charts: AreaChart for interaction trends, BarChart for pipeline by stage, DonutChart for opportunities by principal. Add date range filtering with react-day-picker. Implement report caching with Redis-compatible Azure Cache (if budget allows) or in-memory caching. Create simple report exports to CSV using papaparse library. Add loading states and error boundaries for report components. Optimize queries to use covering indexes and avoid table scans.",
-      "testStrategy": "Benchmark report load times to ensure <10 seconds for simple reports, test with realistic data volumes, verify chart rendering performance, and validate export functionality.",
+      "title": "Performance-Optimized Reporting",
+      "description": "Implement performance-optimized reporting with Tremor charts.",
+      "details": "Create reporting system with Tremor charts for sales performance visualization. Optimize queries for Azure SQL Basic tier limitations. Implement caching for report data.",
+      "testStrategy": "Measure report generation time to verify <10 second target for simple reports and <30 second target for complex reports. Test with realistic data volumes.",
       "priority": "medium",
       "dependencies": [
-        10
+        7,
+        8
       ],
       "status": "pending",
       "subtasks": []
     },
     {
       "id": 12,
-      "title": "Optimize Mobile Interface and Touch Interactions",
-      "description": "Enhance mobile experience with touch-optimized interfaces, improved performance, and mobile-specific navigation patterns.",
-      "details": "Implement responsive design with Tailwind CSS breakpoints: sm (640px), md (768px), lg (1024px). Create mobile navigation with hamburger menu using shadcn/ui Sheet component. Optimize touch targets to minimum 44px with adequate spacing. Implement swipe gestures for common actions using react-use-gesture. Add mobile-specific form layouts with larger inputs and simplified workflows. Create bottom navigation for primary actions on mobile. Implement virtual scrolling for large lists using react-window. Add haptic feedback for touch interactions where supported. Optimize images with next/image for mobile bandwidth. Create mobile-first interaction logging with voice-to-text support using Web Speech API.",
-      "testStrategy": "Test on actual mobile devices (iOS Safari, Android Chrome), verify touch target sizes, validate swipe gestures, test form usability with on-screen keyboards, and measure performance on 3G networks.",
+      "title": "Production Deployment Preparation",
+      "description": "Prepare the application for production deployment on Azure.",
+      "details": "Verify environment configurations, ensure all necessary environment variables are set, and confirm database migrations are up-to-date. Set up continuous deployment pipelines.",
+      "testStrategy": "Validate environment variables. Perform a dry run deployment. Verify application functionality post-deployment.",
       "priority": "medium",
       "dependencies": [
-        8
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 13,
-      "title": "Create Advanced Analytics and Complex Reporting",
-      "description": "Build comprehensive analytics system with complex reports, trend analysis, and forecasting capabilities targeting <30 second load times.",
-      "details": "Create advanced reporting API endpoints with complex aggregations: GET /api/analytics/trends, GET /api/analytics/forecasting, GET /api/analytics/performance. Implement SQL Server window functions for trend analysis, CTEs for complex queries. Create AnalyticsDashboard with advanced Tremor charts: LineChart for trends, ScatterChart for correlation analysis, Metric cards for KPIs. Add forecasting using simple linear regression on historical data. Implement report builder interface allowing custom date ranges, filters, and groupings. Create executive summary reports with key metrics. Add comparative analysis (period-over-period, year-over-year). Implement intelligent query optimization with execution plan analysis. Add report scheduling and email delivery using nodemailer.",
-      "testStrategy": "Benchmark complex report performance to ensure <30 seconds, validate forecasting accuracy with historical data, test report builder functionality, and verify email delivery system.",
-      "priority": "medium",
-      "dependencies": [
+        9,
+        10,
         11
       ],
       "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 14,
-      "title": "Implement Data Export and Excel Integration",
-      "description": "Create comprehensive data export functionality with Excel format support for migration and backup purposes.",
-      "details": "Install xlsx library 0.20+ for Excel file generation. Create export API endpoints: GET /api/export/organizations, GET /api/export/contacts, GET /api/export/interactions, GET /api/export/opportunities. Implement streaming exports for large datasets to avoid memory issues. Create ExportDialog component with format selection (CSV, Excel), date range filtering, and field selection. Add Excel formatting: headers, data types, conditional formatting for priorities. Implement import functionality for Excel data migration with validation and error reporting. Create data mapping interface for Excel column matching. Add progress indicators for large exports/imports. Implement file compression for large exports using pako library.",
-      "testStrategy": "Test export functionality with large datasets, verify Excel file format and compatibility, validate import data mapping accuracy, and test progress indicators during long operations.",
-      "priority": "medium",
-      "dependencies": [
-        13
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 15,
-      "title": "Setup Error Handling and Monitoring",
-      "description": "Implement comprehensive error handling, logging, and monitoring system for production reliability.",
-      "details": "Install @sentry/nextjs 7.80+ for error tracking and performance monitoring. Create React Error Boundaries for component-level error handling. Implement API error handling middleware with standardized error responses. Setup Winston logger with Azure Application Insights integration. Create error reporting system with user-friendly error messages and technical details for debugging. Implement retry mechanisms for network requests using axios-retry. Add performance monitoring for Core Web Vitals. Create health check endpoint: GET /api/health with database connectivity test. Implement graceful degradation for offline scenarios. Add user feedback system for error reporting.",
-      "testStrategy": "Test error boundary functionality, verify error logging and reporting, validate retry mechanisms, test health check endpoint, and confirm performance monitoring data collection.",
-      "priority": "medium",
-      "dependencies": [
-        7
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 16,
-      "title": "Implement Caching Strategy and Performance Optimization",
-      "description": "Create comprehensive caching strategy to optimize performance within Azure Basic tier constraints.",
-      "details": "Implement multi-level caching: browser cache with Cache-Control headers, Next.js ISR for static content, API response caching with node-cache. Create cache invalidation strategies for data updates. Implement React Query 5.0+ for client-side caching with stale-while-revalidate pattern. Add database query optimization: covering indexes, query plan analysis, connection pooling. Implement bundle optimization: code splitting with dynamic imports, tree shaking, compression with gzip. Create performance monitoring dashboard tracking Core Web Vitals, API response times, database query performance. Add lazy loading for images and components. Implement service worker for offline caching of critical resources.",
-      "testStrategy": "Benchmark performance improvements, test cache invalidation scenarios, verify offline functionality, measure bundle size reduction, and validate Core Web Vitals improvements.",
-      "priority": "medium",
-      "dependencies": [
-        15
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 17,
-      "title": "Create User Management and Team Features",
-      "description": "Implement user management system with team assignment, activity tracking, and collaborative features.",
-      "details": "Extend User model with team assignments, manager relationships, activity tracking. Create user management API endpoints: GET /api/users, POST/PUT/DELETE /api/users/[id]. Build UserManagement component for admin role with user creation, role assignment, team management. Implement activity logging for audit trails: user actions, data changes, login history. Create team-based filtering for managers to view their team's data. Add user profile management with avatar upload using next-cloudinary. Implement user invitation system with email verification. Create team performance dashboards comparing individual and team metrics. Add user preferences storage for UI customization.",
-      "testStrategy": "Test user CRUD operations, verify team-based data filtering, validate activity logging accuracy, test invitation email system, and confirm role-based access controls.",
-      "priority": "low",
-      "dependencies": [
-        7
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 18,
-      "title": "Build Progressive Web App (PWA) Capabilities",
-      "description": "Implement PWA features for offline functionality and app-like experience on mobile devices.",
-      "details": "Install next-pwa 5.6+ and configure service worker for offline caching. Create app manifest with proper icons, theme colors, and display modes. Implement offline data synchronization using IndexedDB with Dexie.js. Create offline indicator component showing connection status. Add background sync for form submissions when offline. Implement push notifications using web-push for important updates. Create app installation prompts for mobile devices. Add offline-first interaction logging with sync when online. Implement conflict resolution for offline data changes. Create offline analytics tracking with sync when connected.",
-      "testStrategy": "Test offline functionality across different scenarios, verify data synchronization accuracy, test push notifications, validate app installation process, and confirm offline analytics tracking.",
-      "priority": "low",
-      "dependencies": [
-        16
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 19,
-      "title": "Implement Advanced Search and Filtering",
-      "description": "Create sophisticated search and filtering capabilities with saved searches and advanced query building.",
-      "details": "Create advanced search interface with multiple criteria: organization name, contact role, interaction type, date ranges, opportunity stage. Implement search query builder with AND/OR logic using react-querybuilder. Add saved search functionality with user-specific storage. Create search history and recent searches. Implement faceted search with result counts per category. Add search suggestions based on user behavior and popular searches. Create global search with unified results across all entities. Implement search result ranking based on relevance and user activity. Add search analytics to track popular queries and optimize performance.",
-      "testStrategy": "Test complex search queries with multiple criteria, verify saved search functionality, validate search result ranking accuracy, and test search performance with large datasets.",
-      "priority": "low",
-      "dependencies": [
-        8
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 20,
-      "title": "Create Notification and Alert System",
-      "description": "Implement comprehensive notification system for important events, reminders, and system alerts.",
-      "details": "Create Notification model: user_id FK, type, title, message, read status, created_at. Implement notification API endpoints: GET /api/notifications, PUT /api/notifications/[id]/read. Build NotificationCenter component with toast notifications using sonner library. Create notification types: follow-up reminders, opportunity stage changes, system alerts, team updates. Implement email notifications using nodemailer with Azure SendGrid. Add notification preferences per user with granular controls. Create in-app notification badges and counters. Implement real-time notifications using Server-Sent Events or WebSockets. Add notification scheduling for follow-up reminders. Create notification templates for consistent messaging.",
-      "testStrategy": "Test notification delivery across different channels, verify notification preferences functionality, validate real-time notification updates, and test email notification formatting.",
-      "priority": "low",
-      "dependencies": [
-        17
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 21,
-      "title": "Build Data Validation and Quality Assurance",
-      "description": "Implement comprehensive data validation, quality checks, and data integrity maintenance systems.",
-      "details": "Create data validation schemas using Zod for all entities with comprehensive rules. Implement data quality checks: duplicate detection, incomplete records, invalid formats. Create DataQuality dashboard showing data health metrics and issues. Add automated data cleanup routines for orphaned records and invalid data. Implement data validation API endpoints: GET /api/data-quality/report, POST /api/data-quality/cleanup. Create data integrity constraints and foreign key validations. Add data import validation with detailed error reporting. Implement data standardization for phone numbers, addresses, names. Create data quality scoring system with improvement recommendations.",
-      "testStrategy": "Test data validation rules with edge cases, verify duplicate detection accuracy, validate data cleanup routines, and test import validation with various data formats.",
-      "priority": "low",
-      "dependencies": [
-        14
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 22,
-      "title": "Implement Security Enhancements and Compliance",
-      "description": "Add advanced security features, data encryption, and compliance measures for production deployment.",
-      "details": "Implement data encryption at rest using Azure SQL TDE and in transit with SSL/TLS. Add input sanitization and SQL injection prevention with parameterized queries. Create audit logging for all data changes with user attribution. Implement rate limiting using express-rate-limit to prevent abuse. Add CSRF protection using next-csrf. Create data retention policies and automated cleanup. Implement backup and disaster recovery procedures with Azure SQL automated backups. Add security headers using next-secure-headers. Create data privacy controls for GDPR compliance. Implement session security with secure cookies and HTTPS enforcement.",
-      "testStrategy": "Test security measures with penetration testing tools, verify encryption implementation, validate audit logging accuracy, test rate limiting effectiveness, and confirm backup/recovery procedures.",
-      "priority": "low",
-      "dependencies": [
-        15
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 23,
-      "title": "Create Integration APIs and Webhooks",
-      "description": "Build external integration capabilities with REST APIs, webhooks, and third-party service connections.",
-      "details": "Create public API endpoints with OpenAPI 3.0 documentation using swagger-jsdoc. Implement API authentication using API keys and JWT tokens. Create webhook system for real-time data synchronization with external systems. Add integration with email services (Outlook, Gmail) for interaction import. Implement calendar integration for scheduling follow-ups. Create data export APIs for third-party reporting tools. Add integration with accounting systems for opportunity value tracking. Implement CRM data import from other systems with field mapping. Create API rate limiting and usage analytics. Add webhook delivery retry mechanisms and failure handling.",
-      "testStrategy": "Test API endpoints with various authentication methods, verify webhook delivery reliability, validate third-party integrations, and test API documentation accuracy.",
-      "priority": "low",
-      "dependencies": [
-        21
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 24,
-      "title": "Implement Advanced Analytics and Machine Learning",
-      "description": "Add predictive analytics, sales forecasting, and machine learning capabilities for intelligent insights.",
-      "details": "Implement sales forecasting using linear regression and moving averages. Create customer scoring model based on interaction frequency and opportunity value. Add churn prediction using interaction patterns and opportunity progression. Implement recommendation engine for next best actions. Create predictive analytics for opportunity close probability. Add trend analysis with seasonal adjustments. Implement anomaly detection for unusual sales patterns. Create intelligent lead scoring based on historical conversion data. Add automated insights generation with natural language summaries. Implement A/B testing framework for feature optimization.",
-      "testStrategy": "Validate forecasting accuracy against historical data, test recommendation engine effectiveness, verify anomaly detection sensitivity, and measure A/B testing statistical significance.",
-      "priority": "low",
-      "dependencies": [
-        13
-      ],
-      "status": "pending",
-      "subtasks": []
-    },
-    {
-      "id": 25,
-      "title": "Production Deployment and Performance Monitoring",
-      "description": "Deploy the application to Azure App Service, configure production monitoring, and establish maintenance procedures.",
-      "details": "Configure Azure App Service Basic B1 with Node.js runtime and deployment slots. Setup CI/CD pipeline using GitHub Actions with automated testing and deployment. Configure production environment variables and secrets management. Implement health checks and uptime monitoring using Azure Application Insights. Create performance monitoring dashboard tracking response times, error rates, user sessions. Setup automated backups and disaster recovery procedures. Configure log aggregation and alerting for critical errors. Implement blue-green deployment strategy for zero-downtime updates. Create production runbook with troubleshooting procedures. Setup cost monitoring to maintain $18/month budget constraint.",
-      "testStrategy": "Test production deployment process, verify monitoring and alerting functionality, validate backup and recovery procedures, test performance under load, and confirm cost tracking accuracy.",
-      "priority": "high",
-      "dependencies": [
-        22,
-        23,
-        24
-      ],
-      "status": "pending",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Environment Configuration Check",
+          "description": "Develop a utility to validate required environment variables.",
+          "dependencies": [],
+          "details": "Create `environment-validator.ts` to check for the presence of `DATABASE_URL`, `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `AZURE_SQL_SERVER`, and `AZURE_SQL_DATABASE`. Throw an error if any are missing.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Database Migration Verification",
+          "description": "Ensure all database migrations are applied and up-to-date.",
+          "dependencies": [
+            1
+          ],
+          "details": "Verify that `npx prisma migrate status` shows no pending migrations. Document steps for applying migrations in production.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "SSL Certificate Configuration",
+          "description": "Configure SSL certificates for secure communication.",
+          "dependencies": [],
+          "details": "Ensure SSL is enabled and properly configured on the Azure App Service. Redirect HTTP traffic to HTTPS.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Performance Monitoring Setup",
+          "description": "Set up performance monitoring and alerting for production.",
+          "dependencies": [],
+          "details": "Integrate Azure Application Insights or similar for monitoring application performance, errors, and resource utilization.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Continuous Deployment Pipeline",
+          "description": "Set up a CI/CD pipeline for automated deployments.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "details": "Configure GitHub Actions to build, test, and deploy the application to Azure App Service upon code pushes to main branch.",
+          "status": "pending"
+        }
+      ]
     }
   ]
 }

@@ -1,11 +1,43 @@
 # Task ID: 9
-# Title: Create Sales Pipeline Foundation
-# Status: pending
-# Dependencies: 6
-# Priority: medium
-# Description: Implement the five-stage sales pipeline structure and opportunity tracking system for the 11 food service principals.
+# Title: Multi-Device Testing & Performance Validation
+# Status: in-progress
+# Dependencies: 4, 5, 6, 7, 8
+# Priority: high
+# Description: Ensure application works properly across required devices and optimize performance.
 # Details:
-Create Opportunity model: organization_id FK, contact_id FK, principal (11 brands from Settings), stage (Lead-discovery, Contacted, Sampled/Visited, Follow-up, Close), probability percentage, estimated_value, expected_close_date, notes. Implement API endpoints: GET /api/opportunities (with filtering), POST/PUT/DELETE /api/opportunities/[id]. Create OpportunityForm with principal selection from Settings, stage progression logic, probability auto-calculation based on stage. Build pipeline stage validation - opportunities can only move forward or stay in same stage. Add opportunity history tracking for stage changes. Use Zod validation: z.object({ principal: z.string(), stage: z.enum(['Lead-discovery', 'Contacted', 'Sampled/Visited', 'Follow-up', 'Close']), probability: z.number().min(0).max(100), estimated_value: z.number().optional() }).
+Test application on Windows touch laptops and iPad Safari. Verify all touch targets meet 44px minimum size. Optimize layout for different screen sizes and input methods. Conduct performance testing on Azure Basic tier.
 
 # Test Strategy:
-Test opportunity CRUD operations, verify stage progression logic, validate probability calculations, confirm principal selection from Settings, and test opportunity history tracking.
+Create test matrix for required devices. Verify all functionality works correctly on each device. Measure and optimize performance metrics.
+
+# Subtasks:
+## 1. Touch Target Compliance Test [pending]
+### Dependencies: None
+### Description: Develop a component to automatically validate touch target sizes.
+### Details:
+Create `TouchTargetValidator.tsx` to scan the page for interactive elements and report if their dimensions are less than 44px. Provide a summary of compliant vs. non-compliant elements.
+
+## 2. Performance Testing Script [pending]
+### Dependencies: None
+### Description: Develop a PowerShell script for automated performance testing.
+### Details:
+Create `test-performance.ps1` to simulate organization searches, interaction creation, and concurrent users. Measure response times against targets (<1s search, <30s interaction) and provide a summary report.
+
+## 3. iPad Safari Compatibility Testing [pending]
+### Dependencies: 9.1
+### Description: Manually test and optimize for iPad Safari compatibility.
+### Details:
+Verify all UI components, forms, and interactions function correctly on iPad Safari, including touch gestures and responsiveness.
+
+## 4. Concurrent User Load Testing [pending]
+### Dependencies: 9.2
+### Description: Conduct load testing to ensure 4 concurrent users are supported.
+### Details:
+Use the performance testing script to simulate 4 concurrent users and monitor Azure SQL DTU usage and application response times.
+
+## 5. Performance Optimization Iteration [pending]
+### Dependencies: 9.1, 9.2, 9.3, 9.4
+### Description: Iterate on performance optimizations based on testing results.
+### Details:
+Address bottlenecks identified during testing, focusing on database queries, API responses, and frontend rendering to meet all performance targets.
+

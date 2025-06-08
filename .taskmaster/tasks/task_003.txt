@@ -1,11 +1,11 @@
 # Task ID: 3
-# Title: Implement Settings Management System
-# Status: pending
-# Dependencies: 2
+# Title: Set Up Azure SQL Database
+# Status: done
+# Dependencies: 1
 # Priority: high
-# Description: Create the foundational Settings Management system that provides dynamic dropdown values for all other components, replacing hard-coded enums.
+# Description: Provision and configure Azure SQL Database Basic tier for the project.
 # Details:
-Create Settings model with categories: priority_levels, market_segments, distributors, contact_roles, interaction_types, opportunity_stages, principals. Implement CRUD API endpoints: GET /api/settings/[category], POST/PUT/DELETE /api/settings with validation. Create SettingsProvider React context for client-side caching. Build admin interface with shadcn/ui Table, Dialog, and Form components. Implement validation to prevent deletion of settings in use. Add color coding and sort_order functionality. Use Zod schemas for validation: z.object({ category: z.string(), key: z.string(), label: z.string(), color: z.string().optional(), sort_order: z.number(), active: z.boolean() }).
+Use Azure Portal or Azure CLI to create a new Azure SQL Database (Basic tier, 2GB storage, 5 DTU). Configure firewall rules and connection strings. Set up database schema based on the provided data model. Implement connection pooling for optimal performance.
 
 # Test Strategy:
-Test CRUD operations for all setting categories, verify referential integrity prevents deletion of used settings, validate admin interface functionality, and confirm dropdown population across the application.
+Verify successful connection to the database from the application. Test basic CRUD operations. Measure query performance to ensure it meets requirements.

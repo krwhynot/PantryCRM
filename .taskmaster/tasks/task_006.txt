@@ -1,11 +1,49 @@
 # Task ID: 6
-# Title: Create Rapid Interaction Logging System
-# Status: pending
-# Dependencies: 5
-# Priority: high
-# Description: Build the core interaction logging system optimized for 30-second entry with six interaction types and mobile-friendly interface.
+# Title: Dynamic Settings Management
+# Status: in-progress
+# Dependencies: 3
+# Priority: critical
+# Description: Implement a dynamic settings management system to replace hard-coded enums.
 # Details:
-Create Interaction model: type (Email, Call, In Person, Demo/sampled, Quoted price, Follow-up), organization_id FK, contact_id FK, date, notes, created_by. Implement API endpoints with optimized queries: POST /api/interactions, GET /api/interactions (by organization/contact). Build InteractionForm with large touch targets (44px minimum), auto-complete organization/contact selection, pre-populated fields. Use React Hook Form with optimized re-renders, implement auto-save every 10 seconds. Create mobile-optimized layout with Tremor components, minimize form fields for speed. Add keyboard shortcuts for power users. Implement client-side caching for recent organizations/contacts. Use Zod validation: z.object({ type: z.enum(['Email', 'Call', 'In Person', 'Demo/sampled', 'Quoted price', 'Follow-up']), organization_id: z.number(), contact_id: z.number().optional(), notes: z.string() }).
+Create a flexible settings management system that allows for dynamic configuration of dropdown options, system parameters, and user preferences. Implement proper validation and error handling for settings management.
 
 # Test Strategy:
-Time interaction entry to ensure <30 seconds, test on touch devices with 44px targets, verify auto-save functionality, validate form performance on mobile networks, and test auto-complete speed.
+Write unit tests for settings components. Verify proper loading and application of settings throughout the application. Test settings persistence and retrieval.
+
+# Subtasks:
+## 1. Database Schema Design [done]
+### Dependencies: None
+### Description: Design database schema for settings management
+### Details:
+Create Settings table with category, key, label, color, sortOrder, and active fields. Implement proper indexing for performance.
+
+## 2. Admin Interface Creation [done]
+### Dependencies: 6.1
+### Description: Develop admin interface for settings management
+### Details:
+Create UI for viewing, adding, editing, and deactivating settings. Implement category-based organization and drag-and-drop sorting.
+
+## 3. CRUD Operations Implementation [done]
+### Dependencies: 6.1, 6.2
+### Description: Implement CRUD operations for settings
+### Details:
+Develop API endpoints and service methods for creating, reading, updating, and deleting settings with proper validation.
+
+## 4. Validation Logic [done]
+### Dependencies: 6.3
+### Description: Implement validation for settings management
+### Details:
+Create validation rules to prevent deletion of system-required settings and ensure data integrity.
+
+## 5. Application-wide Integration [in-progress]
+### Dependencies: 6.3, 6.4
+### Description: Integrate settings throughout the application
+### Details:
+Create hooks and context providers for accessing settings. Implement dropdown components that use settings data.
+
+## 6. Testing [pending]
+### Dependencies: 6.1, 6.2, 6.3, 6.4, 6.5
+### Description: Test settings management functionality
+### Details:
+Perform comprehensive testing of settings management, including performance testing for settings retrieval.
+
