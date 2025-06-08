@@ -1,53 +1,11 @@
 # Task ID: 7
-# Title: 📞 Enhanced Interaction Tracking [CRITICAL]
+# Title: Implement Authentication and Role-Based Access Control
 # Status: pending
-# Dependencies: 5, 6
-# Priority: critical
-# Description: Implement 6-type interaction tracking system (Email, Call, In Person, Demo/sampled, Quoted price, Follow-up) with optimized quick entry forms targeting 30-second data entry and auto-complete functionality.
+# Dependencies: 1
+# Priority: high
+# Description: Setup NextCRM integrated authentication system with role-based access control for sales representatives, managers, and administrators.
 # Details:
-**6 INTERACTION TYPES FOR FOOD SERVICE:**
-Email | Call | In Person | Demo/sampled | Quoted price | Follow-up
-
-**PERFORMANCE TARGETS:**
-- Quick entry forms: 30-second target per interaction
-- Auto-complete response: Under 500ms
-- Database queries optimized for frequent logging
-- Batch operations with error handling
-
-**COMPLEXITY:** 7/10 | **DEPENDENCIES:** Tasks 5, 6
-
-**SUCCESS CRITERIA:**
-✅ All 6 interaction types fully functional
-✅ 30-second entry time achieved consistently
-✅ Auto-complete responds under 500ms
-✅ Error boundaries protect interaction logging
-✅ Touch-optimized forms for iPad entry
+Configure NextCRM auth system with NextAuth.js 4.24+. Setup User model with roles: sales_rep, manager, admin. Implement role-based middleware for API routes using NextAuth getServerSession(). Create login/logout pages with shadcn/ui components. Setup session management with JWT tokens, 24-hour expiration. Implement role-based UI rendering with useSession hook. Create ProtectedRoute component for client-side protection. Add password requirements: min 8 chars, uppercase, lowercase, number. Configure RBAC: sales_rep (CRUD own data), manager (read all, CRUD own team), admin (full access). Use bcrypt for password hashing with 12 rounds.
 
 # Test Strategy:
-
-
-# Subtasks:
-## 1. Interaction Database Schema with 6 Types and Performance Optimization [pending]
-### Dependencies: None
-### Description: Design and implement a comprehensive database schema supporting 6 distinct interaction types with optimized indexing, partitioning strategies, and query performance tuning for high-volume logging operations.
-### Details:
-Create normalized tables for interaction types, implement proper indexing for frequent queries, set up database partitioning for timeline data, and establish performance benchmarks for concurrent write operations.
-
-## 2. High-Performance Interaction API Endpoints with Type-Specific Validation [pending]
-### Dependencies: 7.1
-### Description: Develop RESTful API endpoints with type-specific validation rules, bulk operations support, and optimized response times for each of the 6 interaction types with comprehensive error handling.
-### Details:
-Implement CRUD operations for each interaction type, create validation schemas, add bulk insert/update capabilities, implement rate limiting, and ensure sub-100ms response times for standard operations.
-
-## 3. Optimized Quick Entry Forms Targeting 30-Second Entry Time [pending]
-### Dependencies: 7.2
-### Description: Build responsive form interfaces optimized for rapid data entry with smart defaults, keyboard shortcuts, and streamlined workflows to achieve 30-second average completion time across all interaction types.
-### Details:
-Design mobile-first forms with progressive enhancement, implement keyboard navigation, add smart field pre-population, create form templates, and conduct user testing to validate 30-second target.
-
-## 4. Auto-Complete and Auto-Save with Performance and Conflict Resolution [pending]
-### Dependencies: 7.3
-### Description: Implement intelligent auto-complete functionality and robust auto-save mechanisms with conflict resolution, offline support, and optimized performance to prevent data loss and enhance user experience.
-### Details:
-Build predictive text for common fields, implement debounced auto-save with local storage backup, create conflict resolution UI for concurrent edits, add offline queue management, and ensure seamless sync when connectivity resumes.
-
+Test login/logout flow, verify role-based API access restrictions, validate session persistence, test password requirements, and confirm UI elements show/hide based on roles.

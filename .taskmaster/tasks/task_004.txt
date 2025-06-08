@@ -1,49 +1,11 @@
 # Task ID: 4
-# Title: 🛡️ Performance Foundation & Error Handling [NEW CRITICAL]
+# Title: Build Organization Management with Search
 # Status: pending
-# Dependencies: 2, 3
-# Priority: critical
-# Description: Implement comprehensive error boundaries, validation schemas with Zod, and performance monitoring infrastructure to ensure production stability and user experience protection.
+# Dependencies: 3
+# Priority: high
+# Description: Implement comprehensive organization management with CRUD operations, industry-specific fields, and optimized search functionality with auto-complete.
 # Details:
-**NEW CRITICAL INFRASTRUCTURE FOR PRODUCTION READINESS:**
-- Missing error boundaries threatening production stability
-- No validation schemas for data integrity
-- Performance monitoring gaps
-- Memory leak prevention
-
-**COMPLEXITY:** 7/10 | **TIMELINE:** Week 2 | **DEPENDENCIES:** Tasks 2, 3
-
-**PRODUCTION IMPACT:**
-- Error boundary protection for all major components
-- Zod validation for all food service entities
-- Performance tracking and monitoring
-- Memory usage optimization
-
-**SUCCESS CRITERIA:**
-✅ Error boundaries implemented across all route components
-✅ Zod validation schemas for all forms and API endpoints
-✅ Performance monitoring dashboard operational
-✅ Memory leak detection and prevention verified
+Create Organization model with fields: name, address, phone, email, priority_id, segment_id, distributor_id (all FKs to Settings). Implement API endpoints: GET /api/organizations (with search, pagination), POST/PUT/DELETE /api/organizations/[id]. Build search with SQL Server CONTAINS() for full-text search, targeting <1 second response. Create OrganizationForm with shadcn/ui components: Input, Select (populated from Settings), Textarea. Implement auto-complete using Combobox component with debounced search (300ms). Add validation with Zod: z.object({ name: z.string().min(1), priority_id: z.number(), segment_id: z.number(), distributor_id: z.number() }). Create OrganizationList with pagination, sorting, and filtering.
 
 # Test Strategy:
-
-
-# Subtasks:
-## 1. Responsive Design System Setup with Touch Interface Optimization [pending]
-### Dependencies: None
-### Description: Implement comprehensive responsive design system with breakpoints, fluid typography, and touch-optimized components including 44px minimum touch targets for iPad compatibility
-### Details:
-Set up CSS Grid/Flexbox layouts, establish breakpoint system (mobile, tablet, desktop), implement touch-friendly spacing, create responsive typography scale, and ensure 44px minimum touch target compliance for all interactive elements
-
-## 2. Error Boundary Implementation for Production Stability [pending]
-### Dependencies: 4.1
-### Description: Develop comprehensive error boundary system with fallback UI components, error logging, and graceful degradation for production environment stability
-### Details:
-Create React Error Boundary components, implement error logging service integration, design fallback UI states, add error recovery mechanisms, and establish error reporting pipeline for production monitoring
-
-## 3. Validation Schema and Performance Monitoring Integration [pending]
-### Dependencies: 4.1, 4.2
-### Description: Implement Zod validation schemas for data integrity and set up performance monitoring system with real-time metrics tracking and optimization alerts
-### Details:
-Create comprehensive Zod schemas for all data models, implement form validation with error handling, set up performance monitoring dashboard, configure Core Web Vitals tracking, and establish performance budgets with automated alerts
-
+Test CRUD operations, verify search performance <1 second with 1000+ records, validate auto-complete functionality, confirm dropdown population from Settings, and test form validation edge cases.

@@ -1,49 +1,11 @@
 # Task ID: 10
-# Title: 📊 Optimized Reporting Engine [CRITICAL]
+# Title: Build Visual Pipeline Dashboard
 # Status: pending
 # Dependencies: 9
-# Priority: critical
-# Description: Implement high-performance reporting system with materialized views, Tremor charts integration, and 4 core reports (Weekly Activity, Pipeline Status, Interaction Volume, Organization Performance) targeting under 10-second generation times.
+# Priority: medium
+# Description: Create interactive pipeline dashboard with drag-and-drop functionality and visual opportunity management across all stages.
 # Details:
-**4 CORE REPORTS WITH PERFORMANCE OPTIMIZATION:**
-1. Weekly Activity Reports (Account manager focused)
-2. Pipeline Status by Principal Reports
-3. Interaction Volume Analysis 
-4. Organization Performance Tracking
-
-**PERFORMANCE REQUIREMENTS:**
-- Report generation: Under 10 seconds
-- Materialized views for dashboard performance
-- Optimized queries for Azure SQL Basic DTU limits
-- Memoized Tremor chart components
-
-**COMPLEXITY:** 8/10 | **DEPENDENCIES:** Task 9
-
-**SUCCESS CRITERIA:**
-✅ All 4 reports generate under 10 seconds
-✅ Tremor charts load and interact smoothly
-✅ Dashboard performance optimized with caching
-✅ Touch-friendly chart interactions for iPad
+Install @dnd-kit/core 6.1+ and @dnd-kit/sortable for drag-and-drop functionality. Create PipelineDashboard component with 5 columns for each stage. Implement OpportunityCard component with key details: organization name, principal, estimated value, probability. Add drag-and-drop between stages with optimistic updates and API sync. Create pipeline filters: by principal, by sales rep, by date range. Implement real-time updates using SWR or React Query for data synchronization. Add pipeline metrics: total value per stage, conversion rates, average time in stage. Use Tremor charts for pipeline analytics visualization. Implement responsive design for tablet/mobile viewing.
 
 # Test Strategy:
-
-
-# Subtasks:
-## 1. High-Performance Report Data Layer Implementation [pending]
-### Dependencies: None
-### Description: Build optimized data layer with materialized views, caching mechanisms, and query optimization to ensure report generation under 10 seconds
-### Details:
-Implement materialized views for aggregated data, Redis caching layer, database indexing strategies, and background data refresh processes. Include performance monitoring and query optimization for complex reporting queries.
-
-## 2. Core Reports Implementation Suite [pending]
-### Dependencies: 10.1
-### Description: Develop 4 essential reports: Weekly Activity, Pipeline Status, Interaction Volume, and Organization Performance with real-time data integration
-### Details:
-Create report templates, implement data aggregation logic, build filtering and sorting capabilities, and ensure seamless integration with the high-performance data layer. Include export functionality and scheduled report generation.
-
-## 3. Tremor Charts Integration with Interactive Components [pending]
-### Dependencies: 10.2
-### Description: Integrate Tremor Charts library with memoized components, touch-friendly interactions, and responsive design for optimal user experience
-### Details:
-Implement chart components with React.memo optimization, touch gesture support for mobile devices, responsive breakpoints, interactive tooltips, and drill-down capabilities. Ensure charts load efficiently with large datasets.
-
+Test drag-and-drop functionality across all stages, verify optimistic updates and API synchronization, validate pipeline metrics calculations, and test responsive behavior on different screen sizes.

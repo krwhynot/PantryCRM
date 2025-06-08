@@ -1,54 +1,11 @@
 # Task ID: 9
-# Title: 🎯 High-Performance Sales Pipeline [CRITICAL]
+# Title: Create Sales Pipeline Foundation
 # Status: pending
-# Dependencies: 8
-# Priority: critical
-# Description: Implement 5-stage sales pipeline with 11 principal integration, @hello-pangea/dnd drag-and-drop, and visual dashboard optimized for touch interactions and large datasets.
+# Dependencies: 6
+# Priority: medium
+# Description: Implement the five-stage sales pipeline structure and opportunity tracking system for the 11 food service principals.
 # Details:
-**PHASE 3: PIPELINE, OPPORTUNITIES & REPORTING**
-
-**5-STAGE PIPELINE:** Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
-**11 PRINCIPALS:** Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
-
-**PERFORMANCE REQUIREMENTS:**
-- Pipeline operations under 3 seconds
-- @hello-pangea/dnd for React 19 compatibility
-- Touch-friendly drag-and-drop for iPad
-- Real-time updates consideration
-
-**COMPLEXITY:** 9/10 | **DEPENDENCIES:** Phase 2 Complete
-
-**SUCCESS CRITERIA:**
-✅ All 5 pipeline stages functional with drag-and-drop
-✅ 11 principals integrated with filtering
-✅ Touch interface optimized for iPad
-✅ Performance under 3 seconds for all operations
+Create Opportunity model: organization_id FK, contact_id FK, principal (11 brands from Settings), stage (Lead-discovery, Contacted, Sampled/Visited, Follow-up, Close), probability percentage, estimated_value, expected_close_date, notes. Implement API endpoints: GET /api/opportunities (with filtering), POST/PUT/DELETE /api/opportunities/[id]. Create OpportunityForm with principal selection from Settings, stage progression logic, probability auto-calculation based on stage. Build pipeline stage validation - opportunities can only move forward or stay in same stage. Add opportunity history tracking for stage changes. Use Zod validation: z.object({ principal: z.string(), stage: z.enum(['Lead-discovery', 'Contacted', 'Sampled/Visited', 'Follow-up', 'Close']), probability: z.number().min(0).max(100), estimated_value: z.number().optional() }).
 
 # Test Strategy:
-
-
-# Subtasks:
-## 1. Optimized 5-Stage Pipeline Database Schema with Azure SQL Performance [pending]
-### Dependencies: None
-### Description: Design and implement a high-performance database schema for the 5-stage sales pipeline with stage tracking, audit trail, and Azure SQL optimization including indexing strategies, partitioning, and query performance tuning.
-### Details:
-Create tables for pipeline stages, opportunities, stage transitions, audit logs with proper indexing, implement Azure SQL performance features like columnstore indexes, query store optimization, and automated tuning recommendations.
-
-## 2. Auth.js Configuration with Session Security and User Management [pending]
-### Dependencies: 9.1
-### Description: Configure Auth.js for secure authentication, implement comprehensive user management system with role-based access control, and establish robust session security measures integrated with Azure SQL user data.
-### Details:
-Set up Auth.js providers, configure session management, implement user roles and permissions, secure session storage, integrate with Azure SQL for user data persistence, and establish security policies for pipeline access.
-
-## 3. Global Search Optimization with Performance Indexing [pending]
-### Dependencies: 9.1, 9.2
-### Description: Implement high-performance global search functionality across the sales pipeline with optimized indexing, full-text search capabilities, and Azure SQL search performance optimization.
-### Details:
-Create full-text search indexes, implement search APIs with caching, optimize search queries for Azure SQL, add search filters for pipeline stages, opportunities, and contacts with real-time search suggestions.
-
-## 4. Visual Pipeline Dashboard with React 19 and Opportunity Management [pending]
-### Dependencies: 9.1, 9.2, 9.3
-### Description: Build an interactive visual pipeline dashboard using @hello-pangea/dnd for React 19 compatibility, implement opportunity management with Zod validation, business rules engine, and real-time updates.
-### Details:
-Create drag-and-drop pipeline interface, implement opportunity cards with detailed views, add Zod schema validation for all forms, create business rules engine for stage transitions, integrate real-time updates, and ensure React 19 compatibility.
-
+Test opportunity CRUD operations, verify stage progression logic, validate probability calculations, confirm principal selection from Settings, and test opportunity history tracking.

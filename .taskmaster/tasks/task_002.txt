@@ -1,31 +1,11 @@
 # Task ID: 2
-# Title: ✅ Azure Infrastructure & Enhanced CI/CD [COMPLETED]
-# Status: completed
+# Title: Configure Azure SQL Database and Prisma ORM
+# Status: pending
 # Dependencies: 1
-# Priority: critical
-# Description: Azure SQL Database and App Service configured with automated deployment pipeline
+# Priority: high
+# Description: Setup Azure SQL Database Basic tier and configure Prisma ORM with the complete database schema for organizations, contacts, interactions, opportunities, and settings.
 # Details:
-COMPLETED: Azure SQL Database Basic ($5) and server created in Central US. Database schema deployed successfully. Enhanced CI/CD pipeline setup needed.
+Provision Azure SQL Database Basic ($5/month, 2GB, 5 DTU). Install Prisma 5.7+ with @prisma/client and prisma CLI. Create schema.prisma with all required models: Organizations (priority_id, segment_id, distributor_id), Contacts (organization_id FK, role, is_primary), Interactions (6 types, organization_id FK, contact_id FK), Opportunities (11 principals, 5 stages), Settings (category, key, label, color, sort_order, active). Configure connection string with SSL. Run prisma migrate dev to create initial migration. Setup Prisma generate in build process.
 
 # Test Strategy:
-✅ Azure SQL operational, connection verified, Prisma schema deployed
-
-# Subtasks:
-## 1. ✅ Azure SQL Database Setup [completed]
-### Dependencies: None
-### Description: 
-### Details:
-Basic tier database created, firewall configured, connection verified
-
-## 2. 🔄 Enhanced CI/CD Pipeline Setup [NEW] [pending]
-### Dependencies: None
-### Description: 
-### Details:
-GitHub Actions workflow with automated testing, Azure deployment, rollback procedures
-
-## 3. 🔄 Cost Monitoring Enhancement [pending]
-### Dependencies: None
-### Description: 
-### Details:
-Azure Cost Management alerts at 70% and 90% thresholds
-
+Verify database connection, run test queries for each model, confirm foreign key constraints work correctly, and validate Prisma Client generation. Test connection pooling under load.

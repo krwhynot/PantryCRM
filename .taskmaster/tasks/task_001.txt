@@ -1,37 +1,11 @@
 # Task ID: 1
-# Title: ✅ NextCRM Foundation Setup [COMPLETED]
-# Status: completed
+# Title: Setup NextCRM Foundation and Project Structure
+# Status: pending
 # Dependencies: None
-# Priority: critical
-# Description: Clone and configure NextCRM repository with comprehensive testing setup and food service components
+# Priority: high
+# Description: Initialize the project with NextCRM foundation, configure Next.js 15 with React 18.2.0, and establish the core project structure with TypeScript configuration.
 # Details:
-COMPLETED: NextCRM foundation operational with Azure SQL Database, comprehensive testing infrastructure, and 8 food service components passing tests. English-only approach implemented. Development server running on localhost:3006.
+Install Next.js 15.0.3 with React 18.2.0 stable. Configure NextCRM foundation components and resolve any compatibility issues. Setup TypeScript 5.3+ with strict mode, ESLint with Next.js config, and Prettier. Configure package.json with exact versions: next@15.0.3, react@18.2.0, typescript@5.3.0. Setup folder structure: /components, /pages/api, /lib, /types, /styles. Configure next.config.js for bundle optimization targeting <800KB. Install shadcn/ui components and Tremor charts for UI foundation.
 
 # Test Strategy:
-✅ All tests passing: NextCRM components, Azure SQL connection, iPad touch targets (44px), food service components
-
-# Subtasks:
-## 1. ✅ Clone NextCRM Repository [completed]
-### Dependencies: None
-### Description: 
-### Details:
-Successfully cloned from pdovhomilja/nextcrm-app with all dependencies
-
-## 2. ✅ Environment Variables Configuration [completed]
-### Dependencies: None
-### Description: 
-### Details:
-Azure SQL connection string configured, English-only approach implemented
-
-## 3. ✅ Comprehensive Testing Setup [completed]
-### Dependencies: None
-### Description: 
-### Details:
-Jest + React Testing Library configured with 44px touch target validation
-
-## 4. Component Testing Verification [done]
-### Dependencies: None
-### Description: Verify all food service components pass: PriorityBadge (color coding: A=Green, B=Yellow, C=Orange, D=Red), SegmentSelector and DistributorField, iPad touch target compliance (44px minimum), LoginComponent functionality.
-### Details:
-
-
+Verify NextCRM components load correctly, TypeScript compilation passes without errors, and development server starts successfully. Test bundle analyzer shows initial bundle <200KB baseline.

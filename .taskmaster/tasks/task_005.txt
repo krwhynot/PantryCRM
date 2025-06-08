@@ -1,59 +1,11 @@
 # Task ID: 5
-# Title: 🏢 Enhanced Organization Management [HIGH PRIORITY]
+# Title: Implement Contact Management with Role Hierarchy
 # Status: pending
 # Dependencies: 4
 # Priority: high
-# Description: Implement high-performance Organization management with optimized database schema, API endpoints with N+1 query prevention, and iPad-optimized UI components with sub-second search performance.
+# Description: Create contact management system with multiple contacts per organization, food service-specific roles, and primary contact designation.
 # Details:
-**PHASE 2: CORE CRM FUNCTIONALITY + OPTIMIZATION**
-
-**PERFORMANCE REQUIREMENTS:**
-- Database queries optimized for Azure SQL Basic tier
-- Organization search under 1 second response time
-- N+1 query prevention with strategic includes
-- Virtual scrolling for large datasets
-- 44px minimum touch targets for iPad
-
-**COMPLEXITY:** 8/10 | **DEPENDENCIES:** Phase 1 Complete
-
-**SUCCESS CRITERIA:**
-✅ All queries optimized for Azure SQL Basic DTU limits
-✅ Organization search consistently under 1 second
-✅ React.memo implementation for performance
-✅ Error boundaries and Zod validation integrated
-✅ Touch targets meet accessibility requirements
+Create Contact model: organization_id FK, first_name, last_name, email, phone, role (FK to Settings), is_primary boolean, notes. Implement API endpoints: GET /api/contacts (by organization), POST/PUT/DELETE /api/contacts/[id]. Build ContactForm with role selection from Settings (Executive Chef, Buyer, Manager, Owner, Kitchen Manager). Implement primary contact logic - only one primary per organization, auto-update when new primary selected. Create ContactList component with role-based filtering and quick contact switching. Use React Hook Form with Zod validation: z.object({ first_name: z.string().min(1), last_name: z.string().min(1), email: z.string().email().optional(), role: z.string(), is_primary: z.boolean() }). Add contact hierarchy display in organization view.
 
 # Test Strategy:
-
-
-# Subtasks:
-## 1. Optimized Database Schema Implementation [pending]
-### Dependencies: None
-### Description: Design and implement high-performance database schema for organization management with strategic indexes, foreign key relationships, and N+1 query prevention mechanisms
-### Details:
-Create organization tables with proper indexing on frequently queried fields (name, industry, priority_level, market_segment), implement composite indexes for complex queries, add database constraints for data integrity, and establish efficient relationship mappings to prevent N+1 query issues
-
-## 2. High-Performance Organization API Endpoints [pending]
-### Dependencies: 5.1
-### Description: Develop comprehensive REST API endpoints for organization CRUD operations with strategic data includes, Zod validation schemas, and industry-specific filtering capabilities
-### Details:
-Build API routes for organization listing, creation, updating, and deletion with strategic eager loading, implement Zod schemas for request/response validation, add filtering by priority levels and market segments, include pagination and sorting capabilities, and optimize query performance with selective field inclusion
-
-## 3. Organization List View with Performance Optimization [pending]
-### Dependencies: 5.2
-### Description: Create responsive organization list component with React.memo optimization, virtual scrolling for large datasets, and industry-specific filtering UI
-### Details:
-Implement virtualized list component for handling thousands of organizations, add React.memo for preventing unnecessary re-renders, create filter controls for priority levels and market segments, implement search functionality, add sorting capabilities, and ensure multi-device responsive design
-
-## 4. Organization Detail View with Error Handling [pending]
-### Dependencies: 5.2
-### Description: Build comprehensive organization detail view with error boundaries, loading states, and industry-specific data visualization for priority levels and market segments
-### Details:
-Create detailed organization view with complete organization information display, implement error boundaries for graceful error handling, add loading skeletons and states, include industry-specific visualizations for priority levels and market segments, and ensure responsive design across all device types
-
-## 5. Organization Forms with Advanced Validation [pending]
-### Dependencies: 5.2
-### Description: Develop organization creation and editing forms with advanced validation, auto-save functionality, and industry-specific field configurations for priority levels and market segments
-### Details:
-Build dynamic forms for organization creation and editing with real-time validation using Zod schemas, implement auto-save functionality to prevent data loss, add industry-specific dropdown selections for priority levels and market segments, include form field dependencies and conditional rendering, and ensure mobile-optimized form layouts
-
+Test contact CRUD operations, verify primary contact constraints, validate role-based filtering, confirm contact hierarchy display, and test quick contact switching functionality.

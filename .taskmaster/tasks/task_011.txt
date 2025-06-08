@@ -1,57 +1,11 @@
 # Task ID: 11
-# Title: 📁 Enhanced Excel Data Migration [CRITICAL]
+# Title: Implement Basic Reporting System
 # Status: pending
 # Dependencies: 10
-# Priority: critical
-# Description: Implement robust Excel parser service with Zod validation, relationship preservation, and advanced duplicate detection with fuzzy matching for seamless transition from existing Excel-based system.
+# Priority: medium
+# Description: Create foundational reporting system with performance dashboards and simple reports targeting <10 second load times.
 # Details:
-**PHASE 4: DATA MIGRATION, TESTING & LAUNCH**
-
-**EXCEL MIGRATION FEATURES:**
-- Support for .xlsx and .csv with large file processing
-- Zod schema validation for all entity types
-- Advanced duplicate detection with fuzzy matching
-- Relationship preservation with integrity checks
-
-**DATA INTEGRITY:**
-- Foreign key relationship validation
-- Account manager assignment preservation  
-- Conflict resolution with user guidance
-- Complete audit trail for all operations
-
-**COMPLEXITY:** 9/10 | **DEPENDENCIES:** Phase 3 Complete
-
-**SUCCESS CRITERIA:**
-✅ 100% data migration accuracy with zero data loss
-✅ Advanced duplicate detection functional
-✅ Relationship integrity maintained
-✅ User-guided conflict resolution working
+Create reporting API endpoints: GET /api/reports/interactions, GET /api/reports/pipeline, GET /api/reports/performance. Implement SQL query optimization for Azure SQL Basic tier: use appropriate indexes, limit result sets, implement pagination. Create ReportDashboard with Tremor charts: AreaChart for interaction trends, BarChart for pipeline by stage, DonutChart for opportunities by principal. Add date range filtering with react-day-picker. Implement report caching with Redis-compatible Azure Cache (if budget allows) or in-memory caching. Create simple report exports to CSV using papaparse library. Add loading states and error boundaries for report components. Optimize queries to use covering indexes and avoid table scans.
 
 # Test Strategy:
-
-
-# Subtasks:
-## 1. Robust Excel Parser Service Implementation [pending]
-### Dependencies: None
-### Description: Develop a comprehensive Excel parsing service that supports both .xlsx and .csv file formats with real-time progress indicators and error handling for large datasets
-### Details:
-Create a service that can handle multiple Excel formats, implement streaming for large files, add progress tracking with WebSocket updates, handle malformed data gracefully, and provide detailed parsing logs and error reports
-
-## 2. Advanced Data Validation and Quality Framework [pending]
-### Dependencies: 11.1
-### Description: Build a robust data validation system using Zod schemas with custom business rules validation and comprehensive quality checks
-### Details:
-Implement Zod schema validation for all data types, create custom business rule validators, add data quality scoring, implement field-level validation with detailed error messages, and create validation rule configuration interface
-
-## 3. Relationship Preservation and Integrity System [pending]
-### Dependencies: 11.2
-### Description: Develop a system to maintain data relationships during migration with foreign key validation and referential integrity checks
-### Details:
-Create relationship mapping algorithms, implement foreign key constraint validation, build referential integrity checkers, add relationship visualization tools, and create automated relationship repair suggestions
-
-## 4. Enhanced Duplicate Detection and Merge Workflow [pending]
-### Dependencies: 11.3
-### Description: Implement sophisticated duplicate detection using fuzzy matching algorithms with user-guided merge workflows and conflict resolution
-### Details:
-Build fuzzy matching engine with configurable similarity thresholds, create interactive merge interface for user decisions, implement conflict resolution workflows, add duplicate prevention rules, and create merge audit trails
-
+Benchmark report load times to ensure <10 seconds for simple reports, test with realistic data volumes, verify chart rendering performance, and validate export functionality.

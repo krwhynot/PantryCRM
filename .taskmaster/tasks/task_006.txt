@@ -1,50 +1,11 @@
 # Task ID: 6
-# Title: 👥 Optimized Contact Management [HIGH PRIORITY]
+# Title: Create Rapid Interaction Logging System
 # Status: pending
 # Dependencies: 5
 # Priority: high
-# Description: Implement high-performance contact management with role-based food service hierarchy, primary contact designation, and optimized search with fuzzy matching and duplicate prevention.
+# Description: Build the core interaction logging system optimized for 30-second entry with six interaction types and mobile-friendly interface.
 # Details:
-**CONTACT MANAGEMENT WITH FOOD SERVICE SPECIALIZATION:**
-
-**FOOD SERVICE ROLES:** Exec Chef, Buyer, Manager, Owner, Kitchen Manager
-**PERFORMANCE:** Contact search under 500ms response time
-**FEATURES:** Primary contact designation, duplicate prevention, role-based filtering
-
-**COMPLEXITY:** 7/10 | **DEPENDENCIES:** Task 5
-
-**SUCCESS CRITERIA:**
-✅ Contact search consistently under 500ms
-✅ Role hierarchy properly implemented
-✅ Primary contact business logic functional
-✅ Duplicate prevention with fuzzy matching
-✅ N+1 query prevention implemented
+Create Interaction model: type (Email, Call, In Person, Demo/sampled, Quoted price, Follow-up), organization_id FK, contact_id FK, date, notes, created_by. Implement API endpoints with optimized queries: POST /api/interactions, GET /api/interactions (by organization/contact). Build InteractionForm with large touch targets (44px minimum), auto-complete organization/contact selection, pre-populated fields. Use React Hook Form with optimized re-renders, implement auto-save every 10 seconds. Create mobile-optimized layout with Tremor components, minimize form fields for speed. Add keyboard shortcuts for power users. Implement client-side caching for recent organizations/contacts. Use Zod validation: z.object({ type: z.enum(['Email', 'Call', 'In Person', 'Demo/sampled', 'Quoted price', 'Follow-up']), organization_id: z.number(), contact_id: z.number().optional(), notes: z.string() }).
 
 # Test Strategy:
-
-
-# Subtasks:
-## 1. Contact Database Schema with Performance Optimization [pending]
-### Dependencies: None
-### Description: Design and implement optimized database schema for contact management with role hierarchy, primary contact designation, and food service role integration. Include performance indexes, relationship mappings, and data validation constraints.
-### Details:
-Create tables for contacts, roles, role_hierarchies, and contact_roles with proper foreign key relationships. Implement indexes for frequently queried fields (name, email, phone, role_type). Design primary contact designation logic with unique constraints. Add food service specific role types (chef, server, manager, supplier) with hierarchy levels. Include audit fields and soft delete functionality.
-
-## 2. Contact API Endpoints with N+1 Prevention [pending]
-### Dependencies: 6.1
-### Description: Develop RESTful API endpoints for contact operations with strategic eager loading, relationship includes, and query optimization to prevent N+1 problems. Implement role-based access control and bulk operations.
-### Details:
-Create CRUD endpoints with strategic includes for roles and hierarchies. Implement bulk contact import/export with validation. Add role assignment endpoints with hierarchy validation. Include pagination, filtering, and sorting capabilities. Implement caching strategies for frequently accessed contact data and role hierarchies.
-
-## 3. Contact Management Interface with Memoization [pending]
-### Dependencies: 6.2
-### Description: Build responsive contact management interface with role-based filtering, memoized components, and optimized rendering for large contact lists. Include primary contact designation UI and role hierarchy visualization.
-### Details:
-Develop contact list with virtual scrolling and memoized row components. Create role hierarchy tree view with drag-drop functionality. Implement primary contact toggle with visual indicators. Add advanced filtering by role, department, and hierarchy level. Include contact merge interface and bulk action capabilities.
-
-## 4. Contact Search and Duplicate Prevention [pending]
-### Dependencies: 6.3
-### Description: Implement intelligent contact search with fuzzy matching algorithms and automated duplicate detection system. Include merge suggestions, similarity scoring, and food service role-specific matching criteria.
-### Details:
-Develop fuzzy search using Levenshtein distance and phonetic matching for names, emails, and phone numbers. Implement duplicate detection algorithms with configurable similarity thresholds. Create merge suggestion interface with field-by-field comparison. Add food service role-specific matching (e.g., supplier company names, chef certifications). Include automated duplicate prevention on contact creation.
-
+Time interaction entry to ensure <30 seconds, test on touch devices with 44px targets, verify auto-save functionality, validate form performance on mobile networks, and test auto-complete speed.
