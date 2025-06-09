@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const apiKey = req.headers.get("NEXTCRM_TOKEN");
 
   // Get API key from headers

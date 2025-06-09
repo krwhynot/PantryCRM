@@ -9,7 +9,7 @@ import { hash } from "bcryptjs";
 import PasswordResetEmail from "@/emails/PasswordReset";
 import resendHelper from "@/lib/resend";
 
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   /*
   Resend.com function init - this is a helper function that will be used to send emails
   */

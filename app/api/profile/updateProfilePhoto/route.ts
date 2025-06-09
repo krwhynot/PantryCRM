@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 
-export async function PUT(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function PUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -27,12 +27,12 @@ export async function PUT(req: NextRequest, context: { params: Record<string, st
   }
 
   try {
-    await prismadb.users.update({
+    await prismadb.user.update({
       where: {
         id: session.user.id,
       },
       data: {
-        avatar: body.avatar,
+        image: body.avatar, // Using 'image' field from User model
       },
     });
     console.log("Profile photo updated");

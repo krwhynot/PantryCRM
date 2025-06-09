@@ -15,21 +15,13 @@ export async function DELETE(req: Request, props: { params: Promise<{ sectionId:
   }
 
   try {
-    const tasks = await prismadb.tasks.deleteMany({
-      where: {
-        section: sectionId,
-      },
-    });
-    console.log("All section tasks deleted", tasks);
-    await prismadb.sections.delete({
-      where: {
-        id: sectionId,
-      },
-    });
-    console.log("Delete section:", sectionId);
-    return NextResponse.json({ status: 200 });
+    // Section deletion not implemented - missing Section and Task models
+    return NextResponse.json({ 
+      error: "Section deletion feature not implemented",
+      message: "Section and Task models not available in current schema" 
+    }, { status: 501 });
   } catch (error) {
     console.log("[DELETE_SECTION]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    return new NextResponse("Internal error", { status: 500 });
   }
 }

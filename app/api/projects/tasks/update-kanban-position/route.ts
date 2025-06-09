@@ -3,7 +3,7 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function PUT(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function PUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   const body = await req.json();
 
@@ -19,71 +19,13 @@ export async function PUT(req: NextRequest, context: { params: Record<string, st
   }
 
   try {
-    /*   const resourceList = body.resourceList;
-    const destinationList = body.destinationList;
-    const resourceSectionId = body.resourceSectionId;
-    const destinationSectionId = body.destinationSectionId; */
-    const resourceListReverse = resourceList.reverse();
-    const destinationListReverse = destinationList.reverse();
-
-    try {
-      if (resourceSectionId !== destinationSectionId) {
-        for (let key: any = 0; key < resourceListReverse.length; key++) {
-          const task = resourceListReverse[key];
-          const position = parseInt(key);
-
-          await prismadb.tasks.update({
-            where: {
-              id: task.id,
-            },
-            data: {
-              section: resourceSectionId,
-              position: position,
-              updatedBy: session.user.id,
-            },
-          });
-        }
-      }
-
-      for (let key: any = 0; key < destinationListReverse.length; key++) {
-        const task = destinationListReverse[key];
-        const position = parseInt(key);
-
-        await prismadb.tasks.update({
-          where: {
-            id: task.id,
-          },
-          data: {
-            section: destinationSectionId,
-            position: position,
-            updatedBy: session.user.id,
-          },
-        });
-      }
-      console.log("Task positions updated successfully");
-      return NextResponse.json(
-        {
-          message: "Task positions updated successfully",
-        },
-        {
-          status: 200,
-        }
-      );
-    } catch (err) {
-      console.log(err);
-      return NextResponse.json(
-        {
-          message: "Error updating task positions",
-        },
-        {
-          status: 500,
-        }
-      );
-    }
+    // Kanban position update not implemented - missing Task model
+    return NextResponse.json({ 
+      error: "Kanban position update feature not implemented",
+      message: "Task model not available in current schema" 
+    }, { status: 501 });
   } catch (error) {
-    console.log("[UPDATE_TASK_POSITION_POST]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    console.log("[UPDATE_TASK_POSITION]", error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 }
-
-

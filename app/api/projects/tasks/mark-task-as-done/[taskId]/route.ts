@@ -17,19 +17,13 @@ export async function POST(req: Request, props: { params: Promise<{ taskId: stri
   }
 
   try {
-    await prismadb.tasks.update({
-      where: {
-        id: taskId,
-      },
-      data: {
-        taskStatus: "COMPLETE",
-        updatedBy: session.user.id,
-      },
-    });
-
-    return NextResponse.json({ status: 200 });
+    // Task completion not implemented - missing Task model
+    return NextResponse.json({ 
+      error: "Task completion feature not implemented",
+      message: "Task model not available in current schema" 
+    }, { status: 501 });
   } catch (error) {
-    console.log("[NEW_TASK_IN_PROJECT_POST]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    console.log("[TASK_MARK_DONE]", error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 }

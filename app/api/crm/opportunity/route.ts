@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import sendEmail from "@/lib/sendmail";
 
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -35,30 +35,23 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
 
     //console.log(req.body, "req.body");
 
-    const newOpportunity = await prismadb.crm_Opportunities.create({
+    const newOpportunity = await prismadb.opportunity.create({
       data: {
-        account: account,
-        assigned_to: assigned_to,
-        budget: Number(budget),
-        campaign: campaign,
-        close_date: close_date,
-        contact: contact,
-        created_by: userId,
-        last_activity_by: userId,
-        updatedBy: userId,
-        currency: currency,
-        description: description,
-        expected_revenue: Number(expected_revenue),
-        name: name,
-        next_step: next_step,
-        sales_stage: sales_stage,
+        organizationId: account, // assuming account is organization ID
+        contactId: contact, // assuming contact is contact ID
+        userId: userId,
+        principal: type, // using type as principal
+        stage: sales_stage,
         status: "ACTIVE",
-        type: type,
+        expectedRevenue: expected_revenue ? Number(expected_revenue) : null,
+        expectedCloseDate: close_date ? new Date(close_date) : null,
+        notes: description,
+        probability: 10, // default probability for new opportunities
       },
     });
 
     if (assigned_to !== userId) {
-      const notifyRecipient = await prismadb.users.findFirst({
+      const notifyRecipient = await prismadb.user.findFirst({
         where: {
           id: assigned_to,
         },
@@ -71,14 +64,8 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
       await sendEmail({
         from: process.env.EMAIL_FROM as string,
         to: notifyRecipient.email || "info@softbase.cz",
-        subject:
-          notifyRecipient.userLanguage === "en"
-            ? `New opportunity ${name} has been added to the system and assigned to you.`
-            : `Nová příležitost ${name} byla přidána do systému a přidělena vám.`,
-        text:
-          notifyRecipient.userLanguage === "en"
-            ? `New opportunity ${name} has been added to the system and assigned to you. You can click here for detail: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${newOpportunity.id}`
-            : `Nová příležitost ${name} byla přidána do systému a přidělena vám. Detaily naleznete zde: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${newOpportunity.id}`,
+        subject: `New opportunity has been assigned to you`,
+        text: `A new opportunity has been added to the system and assigned to you. View details: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${newOpportunity.id}`,
       });
     }
 
@@ -88,7 +75,7 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
     return new NextResponse("Initial error", { status: 500 });
   }
 }
-export async function PUT(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function PUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -120,29 +107,23 @@ export async function PUT(req: NextRequest, context: { params: Record<string, st
 
     //console.log(req.body, "req.body");
 
-    const updatedOpportunity = await prismadb.crm_Opportunities.update({
+    const updatedOpportunity = await prismadb.opportunity.update({
       where: { id },
       data: {
-        account: account,
-        assigned_to: assigned_to,
-        budget: Number(budget),
-        campaign: campaign,
-        close_date: close_date,
-        contact: contact,
-        updatedBy: userId,
-        currency: currency,
-        description: description,
-        expected_revenue: Number(expected_revenue),
-        name: name,
-        next_step: next_step,
-        sales_stage: sales_stage,
+        organizationId: account,
+        contactId: contact,
+        userId: assigned_to,
+        principal: type,
+        stage: sales_stage,
         status: "ACTIVE",
-        type: type,
+        expectedRevenue: expected_revenue ? Number(expected_revenue) : null,
+        expectedCloseDate: close_date ? new Date(close_date) : null,
+        notes: description,
       },
     });
 
     /* if (assigned_to !== userId) {
-      const notifyRecipient = await prismadb.users.findFirst({
+      const notifyRecipient = await prismadb.user.findFirst({
         where: {
           id: assigned_to,
         },
@@ -155,14 +136,8 @@ export async function PUT(req: NextRequest, context: { params: Record<string, st
       await sendEmail({
         from: process.env.EMAIL_FROM as string,
         to: notifyRecipient.email || "info@softbase.cz",
-        subject:
-          notifyRecipient.userLanguage === "en"
-            ? `New opportunity ${name} has been added to the system and assigned to you.`
-            : `Nová příležitost ${name} byla přidána do systému a přidělena vám.`,
-        text:
-          notifyRecipient.userLanguage === "en"
-            ? `New opportunity ${name} has been added to the system and assigned to you. You can click here for detail: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${newOpportunity.id}`
-            : `Nová příležitost ${name} byla přidána do systému a přidělena vám. Detaily naleznete zde: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${newOpportunity.id}`,
+        subject: `New opportunity has been assigned to you`,
+        text: `A new opportunity has been added to the system and assigned to you. View details: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${newOpportunity.id}`,
       });
     } */
 
@@ -173,22 +148,21 @@ export async function PUT(req: NextRequest, context: { params: Record<string, st
   }
 }
 
-export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
   }
 
   try {
-    const users = await prismadb.users.findMany({});
-    const accounts = await prismadb.crm_Accounts.findMany({});
-    const contacts = await prismadb.crm_Contacts.findMany({});
-    const saleTypes = await prismadb.crm_Opportunities_Type.findMany({});
-    const saleStages = await prismadb.crm_Opportunities_Sales_Stages.findMany(
-      {}
-    );
-    const campaigns = await prismadb.crm_campaigns.findMany({});
-    const industries = await prismadb.crm_Industry_Type.findMany({});
+    const users = await prismadb.user.findMany({});
+    const accounts = await prismadb.organization.findMany({});
+    const contacts = await prismadb.contact.findMany({});
+    // Using settings for dropdown data
+    const saleTypes = await prismadb.setting.findMany({ where: { category: "PRINCIPAL" } });
+    const saleStages = await prismadb.setting.findMany({ where: { category: "STAGE" } });
+    const campaigns: any[] = [];
+    const industries = await prismadb.setting.findMany({ where: { category: "SEGMENT" } });
 
     const data = {
       users,

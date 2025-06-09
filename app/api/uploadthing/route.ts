@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Redirect to appropriate Azure Storage-based upload endpoints
-export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   return NextResponse.json({
     message: "Upload endpoints have been migrated to Azure Storage",
     endpoints: {
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, context: { params: Record<string, st
   });
 }
 
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   // Extract the intended upload type from the request
   const searchParams = new URL(request.url).searchParams;
   const uploadType = searchParams.get("uploadType") || "document";

@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { hash } from "bcryptjs";
 import { newUserNotify } from "@/lib/new-user-notify";
 
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   try {
     const body = await req.json();
     const { name, username, email, language, password, confirmPassword } = body;
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
   }
 }
 
-export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {

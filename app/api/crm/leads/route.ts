@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import sendEmail from "@/lib/sendmail";
 
 //Create a new Opportunity (formerly Lead)
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -43,10 +43,9 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
     }
 
     let organizationId: string;
-    // Attempt to find an existing organization by its unique name.
-    // Prisma's findUnique on a @unique field is case-sensitive by default on most databases.
-    // If case-insensitivity is needed, a raw query or a separate normalized field might be required.
-    const existingOrganization = await prismadb.organization.findUnique({
+    // Attempt to find an existing organization by name.
+    // Using findFirst since name is not a unique field in the schema.
+    const existingOrganization = await prismadb.organization.findFirst({
       where: { name: company }, // `company` is from the destructured request body
     });
 
@@ -57,7 +56,7 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
       const newOrganization = await prismadb.organization.create({
         data: {
           name: company,
-          managedById: sessionUserId, // Default: the user creating the lead/opportunity also manages the new org.
+          accountManagerId: sessionUserId, // Default: the user creating the lead/opportunity also manages the new org.
           // TODO: Consider setting default values for other fields like priorityId, segmentId, distributorId.
           // These would involve fetching valid 'key' values from the Setting model, e.g.:
           // priorityId: (await prismadb.setting.findFirst({ where: { category: "ORGANIZATION_PRIORITY", key: "DEFAULT_KEY_FROM_SETTINGS" } }))?.key,
@@ -120,7 +119,7 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
 
     if (email && email.trim() !== "") {
       // Try to find an existing contact by email.
-      const existingContact = await prismadb.contact.findUnique({
+      const existingContact = await prismadb.contact.findFirst({
         where: { email: email.trim() },
       });
 
@@ -140,7 +139,7 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
               firstName: first_name,
               lastName: last_name,
               phone: phone, // from lead data
-              jobTitle: jobTitle, // from lead data
+              title: jobTitle, // from lead data
               // TODO: Set default values for other Contact fields if necessary/possible.
               // e.g., source: lead_source (if applicable to contacts too)
               isActive: true,
@@ -296,7 +295,7 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
 }
 
 //Get all Opportunities (formerly Leads)
-export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -352,7 +351,7 @@ export async function GET(req: NextRequest, context: { params: Record<string, st
 }
 
 //Update an Opportunity (formerly Lead)
-export async function PUT(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function PUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });

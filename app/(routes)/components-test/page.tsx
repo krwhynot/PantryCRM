@@ -33,21 +33,21 @@ export default function ComponentsTestPage() {
         id: '1',
         title: 'Kaufholds Restaurant',
         description: 'Fine Dining - Chicago',
-        type: 'organization',
+        type: 'organization' as const,
         url: '/organizations/1'
       },
       {
         id: '2',
         title: 'Frites Street Bistro',
         description: 'Casual Dining - New York',
-        type: 'organization',
+        type: 'organization' as const,
         url: '/organizations/2'
       },
       {
         id: '3',
         title: 'Chef John Smith',
         description: 'Executive Chef at Better Balance',
-        type: 'contact',
+        type: 'contact' as const,
         url: '/contacts/3'
       }
     ];

@@ -8,7 +8,7 @@ import { getRossumToken } from "@/lib/get-rossum-token";
 
 const FormData = require("form-data");
 
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   // Parse the request body as JSON instead of FormData
   const { file } = await request.json();
 

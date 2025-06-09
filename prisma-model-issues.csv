@@ -1,0 +1,6 @@
+"Issue","Suggestion","File","Line"
+"Prisma model reference: prismadb.notionIntegration","Use valid model name from schema","\lib\notion.ts","11"
+"Prisma model reference: prismadb.systemService","Use valid model name from schema","\lib\openai.ts","11"
+"Prisma model reference: prismadb.openAiKey","Use valid model name from schema","\lib\openai.ts","17"
+"Import: PrismaClient from @prisma/client","Use valid model name from schema","\lib\prisma.ts","1"
+"Prisma model reference: prismadb.systemService","Use valid model name from schema","\lib\resend.ts","11"

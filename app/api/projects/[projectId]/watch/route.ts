@@ -20,20 +20,13 @@ export async function POST(req: Request, props: { params: Promise<{ projectId: s
   console.log(session.user.id, "session.user.id");
 
   try {
-    await prismadb.boards.update({
-      where: {
-        id: boardId,
-      },
-      data: {
-        watchers_users: {
-          connect: {
-            id: session.user.id,
-          },
-        },
-      },
-    });
-    return NextResponse.json({ message: "Board watched" }, { status: 200 });
+    // Board watching not implemented - missing Board model
+    return NextResponse.json({ 
+      error: "Board watching feature not implemented",
+      message: "Board model not available in current schema" 
+    }, { status: 501 });
   } catch (error) {
     console.log(error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 }

@@ -3,7 +3,7 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   const body = await req.json();
   const data = body;
@@ -18,72 +18,72 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
 
   try {
     //Search in modul CRM (Oppotunities)
-    const resultsCrmOpportunities = await prismadb.crm_Opportunities.findMany({
+    const resultsCrmOpportunities = await prismadb.opportunity.findMany({
       where: {
         OR: [
-          { description: { contains: search, mode: "insensitive" } },
-          { name: { contains: search, mode: "insensitive" } },
+          { notes: { contains: search } },
+          { principal: { contains: search } },
           // add more fields as needed
         ],
       },
     });
 
     //Search in modul CRM (Accounts)
-    const resultsCrmAccounts = await prismadb.crm_Accounts.findMany({
+    const resultsCrmAccounts = await prismadb.organization.findMany({
       where: {
         OR: [
-          { description: { contains: search, mode: "insensitive" } },
-          { name: { contains: search, mode: "insensitive" } },
-          { email: { contains: search, mode: "insensitive" } },
+          { description: { contains: search,  } },
+          { name: { contains: search,  } },
+          { email: { contains: search,  } },
           // add more fields as needed
         ],
       },
     });
 
     //Search in modul CRM (Contacts)
-    const resultsCrmContacts = await prismadb.crm_Contacts.findMany({
+    const resultsCrmContacts = await prismadb.contact.findMany({
       where: {
         OR: [
-          { last_name: { contains: search, mode: "insensitive" } },
-          { first_name: { contains: search, mode: "insensitive" } },
-          { email: { contains: search, mode: "insensitive" } },
+          { lastName: { contains: search,  } },
+          { firstName: { contains: search,  } },
+          { email: { contains: search,  } },
           // add more fields as needed
         ],
       },
     });
 
     //Search in local user database
-    const resultsUser = await prismadb.users.findMany({
+    const resultsUser = await prismadb.user.findMany({
       where: {
         OR: [
-          { email: { contains: search, mode: "insensitive" } },
-          { account_name: { contains: search, mode: "insensitive" } },
-          { name: { contains: search, mode: "insensitive" } },
-          { username: { contains: search, mode: "insensitive" } },
+          { email: { contains: search } },
+          { name: { contains: search } },
           // add more fields as needed
         ],
       },
     });
 
-    const resultsTasks = await prismadb.tasks.findMany({
+    // Tasks model not implemented - returning empty array
+    const resultsTasks: any[] = []; /*await prismadb.tasks.findMany({
       where: {
         OR: [
-          { title: { contains: search, mode: "insensitive" } },
-          { content: { contains: search, mode: "insensitive" } },
+          { title: { contains: search } },
+          { content: { contains: search } },
           // add more fields as needed
         ],
       },
-    });
+    }); */
 
-    const reslutsProjects = await prismadb.boards.findMany({
+    // Boards model not implemented - returning empty array  
+    const reslutsProjects: any[] = []; /*await prismadb.boards.findMany({
       where: {
         OR: [
-          { title: { contains: search, mode: "insensitive" } },
-          { description: { contains: search, mode: "insensitive" } },
+          { title: { contains: search } },
+          { description: { contains: search } },
           // add more fields as needed
         ],
       },
-    });
+    }); */
 
     const data = {
       opportunities: resultsCrmOpportunities,

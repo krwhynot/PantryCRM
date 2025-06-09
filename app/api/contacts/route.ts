@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
 
-export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   try {
     const { searchParams } = new URL(req.url);
     const organizationId = searchParams.get('organizationId');
@@ -19,8 +19,8 @@ export async function GET(req: NextRequest, context: { params: Record<string, st
         position: { select: { label: true } },
       },
       orderBy: [
-        { isPrimary: 'desc' },
         { firstName: 'asc' },
+        { lastName: 'asc' },
       ],
     });
 
@@ -30,4 +30,5 @@ export async function GET(req: NextRequest, context: { params: Record<string, st
     return NextResponse.json({ error: 'Failed to fetch contacts' }, { status: 500 });
   }
 }
+
 

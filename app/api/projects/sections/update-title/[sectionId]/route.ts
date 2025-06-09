@@ -14,21 +14,13 @@ export async function PUT(req: Request, props: { params: Promise<{ sectionId: st
   const { newTitle } = body;
 
   try {
-    await prismadb.sections.update({
-      where: {
-        id: sectionId,
-      },
-      data: {
-        title: newTitle,
-      },
-    });
-
-    return NextResponse.json(
-      { message: "Section Title change successfully" },
-      { status: 200 }
-    );
+    // Section title update not implemented - missing Section model
+    return NextResponse.json({ 
+      error: "Section title update feature not implemented",
+      message: "Section model not available in current schema" 
+    }, { status: 501 });
   } catch (error) {
     console.log("[NEW_SECTION_TITLE_POST]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    return new NextResponse("Internal error", { status: 500 });
   }
 }

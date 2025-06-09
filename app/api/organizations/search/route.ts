@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
 
-export async function GET(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   try {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get('query');
@@ -15,8 +15,8 @@ export async function GET(req: NextRequest, context: { params: Record<string, st
     const organizations = await prismadb.organization.findMany({
       where: {
         OR: [
-          { name: { contains: query, mode: 'insensitive' } },
-          { city: { contains: query, mode: 'insensitive' } },
+          { name: { contains: query } },
+          { city: { contains: query } },
         ],
         isActive: true, // Assuming an isActive flag for organizations
       },

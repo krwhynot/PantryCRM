@@ -3,7 +3,7 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   const body = await req.json();
   const { title, description, visibility } = body;
@@ -21,38 +21,18 @@ export async function POST(req: NextRequest, context: { params: Record<string, s
   }
 
   try {
-    const boardsCount = await prismadb.boards.count();
-
-    const newBoard = await prismadb.boards.create({
-      data: {
-        v: 0,
-        user: session.user.id,
-        title: title,
-        description: description,
-        position: boardsCount > 0 ? boardsCount : 0,
-        visibility: visibility,
-        sharedWith: [session.user.id],
-        createdBy: session.user.id,
-      },
-    });
-
-    await prismadb.sections.create({
-      data: {
-        v: 0,
-        board: newBoard.id,
-        title: "Backlog",
-        position: 0,
-      },
-    });
-
-    return NextResponse.json({ newBoard }, { status: 200 });
+    // Project creation not implemented - missing Board and Section models
+    return NextResponse.json({ 
+      error: "Project creation feature not implemented",
+      message: "Board and Section models not available in current schema" 
+    }, { status: 501 });
   } catch (error) {
     console.log("[NEW_BOARD_POST]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }
 
-export async function PUT(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function PUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
   const body = await req.json();
   const { id, title, description, visibility } = body;
@@ -70,26 +50,14 @@ export async function PUT(req: NextRequest, context: { params: Record<string, st
   }
 
   try {
-    await prismadb.boards.update({
-      where: {
-        id,
-      },
-      data: {
-        title: title,
-        description: description,
-        visibility: visibility,
-        updatedBy: session.user.id,
-        updatedAt: new Date(),
-      },
-    });
-
-    return NextResponse.json(
-      { message: "Board updated successfullsy" },
-      { status: 200 }
-    );
+    // Project update not implemented - missing Board model
+    return NextResponse.json({ 
+      error: "Project update feature not implemented",
+      message: "Board model not available in current schema" 
+    }, { status: 501 });
   } catch (error) {
     console.log("[UPDATE_BOARD_POST]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    return new NextResponse("Internal error", { status: 500 });
   }
 }
 

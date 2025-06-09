@@ -6,13 +6,24 @@
  */
 import { prismadb } from "./prisma";
 
+// Define interface to match your Prisma schema
+interface NotionIntegration {
+  id: string;
+  user: string;
+  apiKey: string;
+  databaseId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+
 const initNotionClient = async (userId: string) => {
   try {
-    const apiKey = await prismadb.secondBrain_notions.findFirst({
+    const apiKey = await prismadb.notionIntegration?.findFirst({
       where: {
         user: userId,
       },
-    });
+    }) as NotionIntegration | null;
 
     if (!apiKey) {
       return {
@@ -43,3 +54,5 @@ const initNotionClient = async (userId: string) => {
 };
 
 export default initNotionClient;
+
+

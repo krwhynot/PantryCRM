@@ -10,8 +10,8 @@ const customJestConfig = {
   // Test environment
   testEnvironment: 'jsdom',
   
-  // Setup files - using simplified JavaScript setup to avoid SWC transformer issues
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  // Setup files - updated for Next.js 15 compatibility with TSX support
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.tsx'],
   
   // Module name mapping for path aliases
   moduleNameMapper: {

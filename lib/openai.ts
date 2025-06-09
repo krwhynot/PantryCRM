@@ -6,19 +6,37 @@
  */
 import { prismadb } from "./prisma";
 
+// Define interfaces to match your Prisma schema
+interface SystemService {
+  id: string;
+  name: string;
+  value: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface OpenAiKey {
+  id: string;
+  user: string;
+  key: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+
 export async function openAiHelper(userId: string) {
   // Still check for API keys to maintain database structure
-  const openAiKey = await prismadb.systemServices.findFirst({
+  const openAiKey = await prismadb.systemService?.findFirst({
     where: {
       name: "openAiKey",
     },
-  });
+  }) as SystemService | null;
 
-  const userOpenAiKey = await prismadb.openAi_keys.findFirst({
+  const userOpenAiKey = await prismadb.openAiKey?.findFirst({
     where: {
       user: userId,
     },
-  });
+  }) as SystemService | null;
 
   // Return a placeholder client with methods that return migration notices
   return {
@@ -44,3 +62,5 @@ export async function openAiHelper(userId: string) {
     migrationNotice: "OpenAI integration has been migrated to Azure OpenAI Services."
   };
 }
+
+

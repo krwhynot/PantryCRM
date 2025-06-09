@@ -8,7 +8,7 @@ import { uploadBlob } from "@/lib/azure-storage";
  * Handles profile photo upload requests, storing files in Azure Storage
  * Replacement for uploadthing/profilePhotoUploader functionality
  */
-export async function POST(req: NextRequest, context: { params: Record<string, string> }): Promise<Response> {
+export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   try {
     // Check authentication
     const session = await getServerSession(authOptions);

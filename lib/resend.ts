@@ -6,13 +6,27 @@
  */
 import { prismadb } from "./prisma";
 
-export default async function resendHelper() {
+// Define interface to match your Prisma schema
+interface SystemService {
+  id: string;
+  name: string;
+  value: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/**
+ * Placeholder for resend email functionality
+ * Will be replaced with Azure Communication Services in Task 7
+ * to maintain the $18/month budget constraint
+ */
+export default async function resendHelper(): Promise<any> {
   // Still check for API keys to maintain database structure
-  const resendKey = await prismadb.systemServices.findFirst({
+  const resendKey = await prismadb.systemService?.findFirst({
     where: {
       name: "resend_smtp",
     },
-  });
+  }) as SystemService | null;
 
   // Return a placeholder client with methods that return migration notices
   return {
