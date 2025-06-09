@@ -1,3 +1,5 @@
+"use client";
+
 import { Dashboard } from '@/src/components/dashboard/Dashboard'
 import QuickInteractionEntry from '@/components/interactions/QuickInteractionEntry'
 
