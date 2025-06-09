@@ -2,9 +2,17 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Title } from "@tremor/react";
 
+interface Interaction {
+  id: string;
+  organizationName: string;
+  type: string;
+  date: string;
+  userName: string;
+}
+
 interface DashboardProps {
   organizationCount: number;
-  recentInteractions: number;
+  recentInteractions: Interaction[];
   className?: string;
 }
 
@@ -45,9 +53,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <CardTitle>Recent Interactions</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green-600" data-testid="recent-interactions">
-              {recentInteractions}
-            </p>
+            <div className="space-y-2" data-testid="recent-interactions">
+              {recentInteractions.map((interaction) => (
+                <div key={interaction.id} className="text-sm">
+                  <div className="font-medium">{interaction.organizationName}</div>
+                  <div className="text-muted-foreground">
+                    {interaction.type} • {interaction.date} • {interaction.userName}
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>

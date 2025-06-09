@@ -8,10 +8,14 @@ describe('Button Component', () => {
   });
 
   it('maintains minimum 44px touch target height', () => {
-    const { container } = render(<Button>iPad Touch Target</Button>);
-    const button = container.firstChild as HTMLElement;
+    render(<Button>Test</Button>);
+    const button = screen.getByRole('button');
+    
+    // Force compute styles and check height
     const styles = window.getComputedStyle(button);
-    const height = parseFloat(styles.height);
+    const height = button.getBoundingClientRect().height;
+    
+    // Use actual rendered height instead of CSS height property
     expect(height).toBeGreaterThanOrEqual(44);
   });
 });

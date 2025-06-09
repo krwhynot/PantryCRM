@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "cross-env prisma generate && cross-env prisma db push && cross-env prisma db seed && next build",
+    "build": "cross-env prisma generate && cross-env prisma db push && cross-env prisma db seed && cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" next build",
+    "build:safe": "cross-env prisma generate && cross-env prisma db push && cross-env prisma db seed && cross-env NODE_OPTIONS=\"--max-old-space-size=4096 --no-warnings\" NEXT_TELEMETRY_DISABLED=1 next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watchAll",
@@ -13,7 +14,8 @@
     "analyze:report": "npm run build && npm run analyze:client",
     "analyze:bundle": "node ./scripts/analyze-bundle.js",
     "analyze:simple": "node ./scripts/simple-bundle-analyzer.js",
-    "optimize": "npm dedupe && npm prune"
+    "optimize": "npm dedupe && npm prune",
+    "clean": "if exist .next rmdir /s /q .next"
   },
   "prisma": {
     "seed": "node ./prisma/seed.js"

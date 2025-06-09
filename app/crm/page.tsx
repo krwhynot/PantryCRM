@@ -14,7 +14,32 @@ export default function CRMPage() {
         }} />
       </div>
       
-      <Dashboard organizationCount={25} recentInteractions={12} />
+      <Dashboard 
+        organizationCount={3} 
+        recentInteractions={[
+          {
+            id: "1",
+            organizationName: "Bistro Nouveau",
+            type: "Call",
+            date: "2025-06-08",
+            userName: "Kyle Ramsy"
+          },
+          {
+            id: "2",
+            organizationName: "Healthy Eats Cafe",
+            type: "In Person",
+            date: "2025-06-07",
+            userName: "Kyle Ramsy"
+          },
+          {
+            id: "3",
+            organizationName: "City Hospital Cafeteria",
+            type: "Demo",
+            date: "2025-06-05",
+            userName: "Kyle Ramsy"
+          }
+        ]} 
+      />
       
       {/* Navigation Cards */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
