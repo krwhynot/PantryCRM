@@ -1,122 +1,65 @@
-import {
-  Body,
-  Button,
-  Container,
-  Column,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Img,
-  Link,
-  Preview,
-  Row,
-  Section,
-  Tailwind,
-  Text,
-} from "@react-email/components";
-import * as React from "react";
+// Simplified email template without @react-email/components dependency
+// Kitchen Pantry CRM - Performance Optimization
 
-interface VercelInviteUserEmailProps {
-  username: string;
-  invitedByUsername: string;
-  invitedUserPassword: string;
-  userLanguage: string;
+interface InviteUserEmailProps {
+  username?: string;
+  userEmail?: string;
+  invitedBy?: string;
+  inviteLink?: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
-
 export const InviteUserEmail = ({
-  username,
-  invitedByUsername,
-  invitedUserPassword,
-  userLanguage,
-}: VercelInviteUserEmailProps) => {
-  const previewText =
-    userLanguage === "en"
-      ? `You have been invited by ${invitedByUsername} to NextCRM app`
-      : `Byl jste pozván uživatelem ${invitedByUsername} do aplikace NextCRM`;
+  username = "User",
+  userEmail = "user@example.com",
+  invitedBy = "Kitchen Pantry CRM",
+  inviteLink = "https://kitchenpantry.com/invite",
+}: InviteUserEmailProps) => {
+  // Simple HTML email template
+  const emailHtml = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Kitchen Pantry CRM Invitation</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.5; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 style="color: #0f172a; font-size: 24px; margin-bottom: 10px;">Kitchen Pantry CRM</h1>
+          <p style="color: #64748b; font-size: 16px;">Food Service Sales Management</p>
+        </div>
+        
+        <div style="background-color: #f8fafc; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h2 style="color: #0f172a; font-size: 20px; margin-bottom: 10px;">You've been invited!</h2>
+          <p style="color: #334155; font-size: 16px;">
+            Hello ${username},
+          </p>
+          <p style="color: #334155; font-size: 16px;">
+            ${invitedBy} has invited you to join Kitchen Pantry CRM. Click the button below to accept the invitation and create your account.
+          </p>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${inviteLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; border-radius: 4px; text-decoration: none; font-weight: bold;">
+              Accept Invitation
+            </a>
+          </div>
+          
+          <p style="color: #64748b; font-size: 14px;">
+            If you're having trouble with the button above, copy and paste the URL below into your web browser:
+          </p>
+          <p style="color: #64748b; font-size: 14px; word-break: break-all;">
+            ${inviteLink}
+          </p>
+        </div>
+        
+        <div style="text-align: center; color: #94a3b8; font-size: 14px;">
+          <p>Kitchen Pantry CRM - Food Service Sales Management</p>
+          <p>© ${new Date().getFullYear()} Kitchen Pantry. All rights reserved.</p>
+        </div>
+      </body>
+    </html>
+  `;
 
-  return (
-    <Html>
-      <Head />
-      <Preview>{previewText}</Preview>
-      <Tailwind>
-        <Body className="bg-white my-auto mx-auto font-sans">
-          <Container className="border border-solid border-slate-300 rounded-md my-[40px] mx-auto p-[20px] w-[465px]">
-            <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-              {userLanguage === "en"
-                ? "  You have been invited to cooperate on something special"
-                : "Byl(a) jste pozván(a) ke spolupráci na něčem úžasném"}
-            </Heading>
-            <Text className="text-black text-[14px] leading-[24px]">
-              {userLanguage === "en"
-                ? `Hello ${username},`
-                : `Dobrý den ${username},`}
-            </Text>
-            <Text className="text-black text-[14px] leading-[24px]">
-              <strong>{invitedByUsername}</strong>
-              {/*   (
-            <Link
-                href={`mailto:${invitedByEmail}`}
-                className="text-blue-600 no-underline"
-              >
-                {invitedByEmail}
-              </Link>   )*/}
-              {userLanguage === "en"
-                ? ` has invited you to the`
-                : ` Vás pozval ke spolupráci na`}
-            </Text>
-            <Text>
-              <strong>{process.env.NEXT_PUBLIC_APP_NAME}</strong> app:
-              <strong>{process.env.NEXT_PUBLIC_APP_URL}</strong>.
-            </Text>
-            <Text className="text-black text-[14px] leading-[24px]">
-              {userLanguage === "en"
-                ? `
-              To accept this invitation, click the button below. And use this
-              password to login: `
-                : `
-              Pro přijetí této pozvánky klikněte na tlačítko níže. A použijte toto heslo pro přihlášení:
-              `}
-              <strong>{invitedUserPassword}</strong>
-            </Text>
-
-            <Section className="text-center mt-[32px] mb-[32px]">
-              <Button
-                className="bg-slate-800 rounded-md text-white  py-3 px-4 text-[12px] font-semibold no-underline text-center"
-                href={process.env.NEXT_PUBLIC_APP_URL}
-              >
-                {userLanguage === "en" ? "Join the team" : "Připojit se"}
-              </Button>
-            </Section>
-            <Text className="text-black text-[14px] leading-[24px]">
-              {userLanguage === "en"
-                ? `
-              or copy and paste this URL into your browser:`
-                : `     nebo zkopírujte a vložte tento odkaz do svého prohlížeče:`}{" "}
-              <Link
-                href={process.env.NEXT_PUBLIC_APP_URL}
-                className="text-blue-600 no-underline"
-              >
-                {process.env.NEXT_PUBLIC_APP_URL}
-              </Link>
-            </Text>
-            <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
-            <Text className="text-slate-500 text-muted-foreground text-[12px] leading-[24px]">
-              {userLanguage === "en"
-                ? `This invitation was intended for `
-                : `Toto pozvání bylo určeno pro `}
-              <span className="text-black">{username}. </span>
-              {userLanguage === "en"
-                ? "If you were not expecting this invitation, you can ignore this email. If you are concerned about your account's safety, please reply to this email to get in touch with us."
-                : "Pokud jste toto pozvání neočekávali, můžete tento e-mail ignorovat. Pokud se obáváte o bezpečnost svého účtu, odpovězte na tento e-mail, abyste se s námi spojili."}
-            </Text>
-          </Container>
-        </Body>
-      </Tailwind>
-    </Html>
-  );
+  return { html: emailHtml };
 };
 
 export default InviteUserEmail;

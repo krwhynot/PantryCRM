@@ -1,10 +1,8 @@
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { CommandComponent } from "@/components/CommandComponent";
-import SupportComponent from "@/components/support";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, Search } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 type Props = {
@@ -24,10 +22,11 @@ const Header = ({ id, name, email, avatar }: Props) => {
           <h1 className="text-xl font-bold">Kitchen Pantry CRM</h1>
         </div>
         <div className="flex items-center gap-3">
-          <CommandComponent />
-          {/* Food Service-specific components only */}
+          {/* Simplified header with only essential components */}
+          <button className="p-2 rounded-md hover:bg-muted">
+            <Search className="h-5 w-5" />
+          </button>
           <ThemeToggle />
-          <SupportComponent />
           
           {/* Simple avatar dropdown replacement */}
           <DropdownMenu>

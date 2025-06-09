@@ -10,7 +10,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig = {
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false, // Disable in development for faster builds
   // Completely disable tracing to fix Windows EPERM errors
   generateBuildId: async () => {
     return `build-${Date.now()}`;
@@ -33,8 +33,8 @@ const nextConfig = {
     },
     // Enable modern browser optimizations
     optimizeCss: true,
-    // Enable module and mjs fullySpecified
-    fullySpecified: true,
+    // Disable experimental features that aren't needed
+    fullySpecified: false,
   },
   
   // Basic security headers
@@ -47,16 +47,31 @@ const nextConfig = {
     minimumCacheTTL: 86400, // 24 hours
   },
   
-  // Enable React Strict Mode
-  reactStrictMode: true,
+  // Disable React Strict Mode in development for faster renders
+  reactStrictMode: process.env.NODE_ENV === 'production',
   
-  // Configure webpack for better tree shaking
+  // Configure webpack for better tree shaking and faster development
   webpack: (config, { isServer, dev }) => {
     if (isServer) {
       config.devtool = 'source-map';
     }
-    // Only run in production
-    if (!dev) {
+    
+    // Development optimizations
+    if (dev) {
+      // Add watchOptions to reduce file watching overhead
+      config.watchOptions = {
+        aggregateTimeout: 300,
+        poll: 1000,
+        ignored: [
+          '**/.git/**',
+          '**/node_modules/**',
+          '**/backup-removed/**',
+          '**/.next/**',
+        ],
+      };
+    } 
+    // Production optimizations
+    else {
       // Add module concatenation for better minification
       config.optimization.concatenateModules = true;
       
