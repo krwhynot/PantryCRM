@@ -22,7 +22,7 @@ export async function PUT(req: Request, props: { params: Promise<{ userId: strin
   }
 
   try {
-    const newUserLanguage = await prismadb.users.update({
+    const newUserLanguage = await prismadb.user.update({
       data: {
         userLanguage: language,
       },

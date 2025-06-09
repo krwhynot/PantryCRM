@@ -57,9 +57,12 @@ export default async function AppLayout({
   const SideBar = (await import("./components/SideBar")).default;
   const Header = (await import("./components/Header")).default;
   const Footer = (await import("./components/Footer")).default;
-  const getAllCommits = (await import("@/actions/github/get-repo-commits")).default;
-
-  const build = await getAllCommits();
+  // Simplified build info for Kitchen Pantry CRM
+  const build = {
+    version: "2.0.0",
+    buildDate: new Date().toISOString(),
+    name: "Kitchen Pantry CRM"
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">

@@ -29,7 +29,7 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 
     const password = generateRandomPassword();
 
-    const user = await prismadb.users.findFirst({
+    const user = await prismadb.user.findFirst({
       where: {
         email: email,
       },
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
       });
     }
 
-    const newpassword = await prismadb.users.update({
+    const newpassword = await prismadb.user.update({
       where: { id: user.id },
       data: {
         password: await hash(password, 12),

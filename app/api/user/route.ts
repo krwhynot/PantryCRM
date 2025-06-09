@@ -18,7 +18,7 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
       return new NextResponse("Password does not match", { status: 401 });
     }
 
-    const checkexisting = await prismadb.users.findFirst({
+    const checkexisting = await prismadb.user.findFirst({
       where: {
         email: email,
       },
@@ -32,10 +32,10 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
     Check if user is first user in the system. If yes, then create user with admin rights. If not, then create user with no admin rights.
     */
 
-    const isFirstUser = await prismadb.users.findMany({});
+    const isFirstUser = await prismadb.user.findMany({});
     if (isFirstUser.length === 0) {
       //There is no user in the system, so create user with admin rights and set userStatus to ACTIVE
-      const user = await prismadb.users.create({
+      const user = await prismadb.user.create({
         data: {
           name,
           username,
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
       return NextResponse.json(user);
     } else {
       //There is at least one user in the system, so create user with no admin rights and set userStatus to PENDING
-      const user = await prismadb.users.create({
+      const user = await prismadb.user.create({
         data: {
           name,
           username,
@@ -91,7 +91,7 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
   }
 
   try {
-    const users = await prismadb.users.findMany({});
+    const users = await prismadb.user.findMany({})
 
     return NextResponse.json(users);
   } catch (error) {

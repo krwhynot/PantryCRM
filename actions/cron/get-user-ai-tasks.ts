@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { prismadb } from "@/lib/prisma";
 import resendHelper from "@/lib/resend";
-import AiTasksReportEmail from "@/emails/AiTasksReport";
+// import AiTasksReportEmail from "@/emails/AiTasksReport";
 
 export async function getUserAiTasks(session: any) {
   /*
@@ -178,14 +178,15 @@ export async function getUserAiTasks(session: any) {
   if (getAiResponse.error) {
     console.log("Error from OpenAI API");
   } else {
-    try {
-      // Use the migrated resend helper that doesn't require parameters
-      // This is a temporary solution until Task 7 implements Azure Communication Services
-      const data = await resend.emails.send();
-      //console.log(data, "Email sent");
-    } catch (error) {
-      console.log(error, "Error from get-user-ai-tasks");
-    }
+    // Email sending temporarily disabled
+    // try {
+    //   // Use the migrated resend helper that doesn't require parameters
+    //   // This is a temporary solution until Task 7 implements Azure Communication Services
+    //   const data = await resend.emails.send();
+    //   //console.log(data, "Email sent");
+    // } catch (error) {
+    //   console.log(error, "Error from get-user-ai-tasks");
+    // }
   }
 
   return { user: user.email };

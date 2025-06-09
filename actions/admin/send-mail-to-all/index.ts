@@ -10,7 +10,7 @@ import { prismadb } from "@/lib/prisma";
 import resendHelper from "@/lib/resend";
 import { authOptions } from "@/lib/auth";
 import { createSafeAction } from "@/lib/create-safe-action";
-import MessageToAllUsers from "@/emails/admin/MessageToAllUser";
+// import MessageToAllUsers from "@/emails/admin/MessageToAllUser";
 import sendEmail from "@/lib/sendmail";
 
 const handler = async (data: InputType): Promise<ReturnType> => {

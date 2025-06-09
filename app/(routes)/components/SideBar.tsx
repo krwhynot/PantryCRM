@@ -9,7 +9,13 @@ import { signOut } from "next-auth/react";
  * Main sidebar navigation component for Kitchen Pantry CRM
  * Optimized for iPad use by sales representatives
  */
-const SideBar = async ({ build }: { build: number }) => {
+interface BuildInfo {
+  version: string;
+  buildDate: string;
+  name: string;
+}
+
+const SideBar = async ({ build }: { build: BuildInfo }) => {
   const session = await getServerSession(authOptions);
   if (!session) return null;
 
@@ -126,7 +132,7 @@ const SideBar = async ({ build }: { build: number }) => {
         </button>
       </div>
       <div className="border-t p-4 text-xs text-muted-foreground">
-        Build: {build}
+        Build: {build.name} v{build.version} ({new Date(build.buildDate).toLocaleDateString()})
       </div>
     </div>
   );

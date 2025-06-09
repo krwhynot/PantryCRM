@@ -13,7 +13,7 @@ export async function POST(req: Request, props: { params: Promise<{ userId: stri
   }
 
   try {
-    const user = await prismadb.users.update({
+    const user = await prismadb.user.update({
       where: {
         id: params.userId,
       },

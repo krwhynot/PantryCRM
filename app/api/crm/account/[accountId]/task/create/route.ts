@@ -3,8 +3,8 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-import NewTaskFromCRMEmail from "@/emails/NewTaskFromCRM";
-import NewTaskFromCRMToWatchersEmail from "@/emails/NewTaskFromCRMToWatchers";
+// import NewTaskFromCRMEmail from "@/emails/NewTaskFromCRM";
+// import NewTaskFromCRMToWatchersEmail from "@/emails/NewTaskFromCRMToWatchers";
 import resendHelper from "@/lib/resend";
 
 /**
@@ -83,9 +83,9 @@ export async function POST(req: Request) {
         // This is a placeholder until Task 7 implementation
         console.log(`[EMAIL PLACEHOLDER] Would send task notification to: ${notifyRecipient?.email}`);
         
-        // Call the placeholder function without arguments as per implementation
-        const emailResult = await resend.emails.send();
-        console.log(`Email migration status: ${emailResult.status} - ${emailResult.message}`);
+        // Email sending temporarily disabled
+        // const emailResult = await resend.emails.send();
+        // console.log(`Email migration status: ${emailResult.status} - ${emailResult.message}`);
         //console.log("Email sent to user: ", notifyRecipient?.email!);
       } catch (error) {
         console.log(error);

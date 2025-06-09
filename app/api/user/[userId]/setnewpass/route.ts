@@ -35,7 +35,7 @@ export async function PUT(req: Request, props: { params: Promise<{ userId: strin
   }
 
   try {
-    const newUserPass = await prismadb.users.update({
+    const newUserPass = await prismadb.user.update({
       data: {
         password: await hash(password, 10),
       },

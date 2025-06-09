@@ -13,7 +13,7 @@ export async function GET(req: Request, props: { params: Promise<{ userId: strin
   }
 
   try {
-    const user = await prismadb.users.findMany({
+    const user = await prismadb.user.findMany({
       where: {
         id: params.userId,
       },
@@ -35,7 +35,7 @@ export async function DELETE(req: Request, props: { params: Promise<{ userId: st
   }
 
   try {
-    const user = await prismadb.users.delete({
+    const user = await prismadb.user.delete({
       where: {
         id: params.userId,
       },
