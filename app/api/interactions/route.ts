@@ -139,6 +139,43 @@ export async function GET(req: NextRequest) {
     const organizationId = url.searchParams.get("organizationId");
     const contactId = url.searchParams.get("contactId");
     const typeId = url.searchParams.get("typeId");
+    const testMode = url.searchParams.get("test");
+    
+    // Special test mode to simulate data for frontend development
+    if (testMode === "true") {
+      const testInteractions = [
+        {
+          id: "test-interaction-1",
+          organizationId: organizationId || "test-org-id",
+          contactId: contactId || "test-contact-id",
+          userId: "test-user-id",
+          interactionDate: new Date(),
+          typeId: "email",
+          notes: "Initial contact with chef about Kaufholds products",
+          followUpDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week later
+          isCompleted: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          stageId: "contacted"
+        },
+        {
+          id: "test-interaction-2",
+          organizationId: organizationId || "test-org-id",
+          contactId: contactId || "test-contact-id",
+          userId: "test-user-id",
+          interactionDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+          typeId: "call",
+          notes: "Follow-up call about Frites Street products",
+          followUpDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 2 weeks later
+          isCompleted: false,
+          createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+          updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+          stageId: "follow-up"
+        }
+      ];
+      
+      return NextResponse.json(testInteractions);
+    }
     
     if (!organizationId) {
       return NextResponse.json(
@@ -147,29 +184,36 @@ export async function GET(req: NextRequest) {
       );
     }
     
-    // Build the query based on provided filters
-    const query: any = {
-      where: {
-        organizationId,
-        ...(contactId && { contactId }),
-        ...(typeId && { typeId }),
-      },
-      include: {
-        Contact: true,
-        Organization: true,
-      },
-      orderBy: {
-        interactionDate: "desc",
-      },
-    };
-    
-    const interactions = await prismadb.interaction.findMany(query);
-    
-    return NextResponse.json(interactions);
+    try {
+      // Build the query based on provided filters
+      const query: any = {
+        where: {
+          organizationId,
+          ...(contactId && { contactId }),
+          ...(typeId && { typeId }),
+        },
+        include: {
+          Contact: true,
+        },
+        orderBy: {
+          interactionDate: "desc",
+        },
+      };
+      
+      const interactions = await prismadb.interaction.findMany(query);
+      
+      return NextResponse.json(interactions);
+    } catch (dbError) {
+      console.error("Database error retrieving interactions:", dbError);
+      return NextResponse.json(
+        { error: "Database error: " + (dbError as Error).message },
+        { status: 500 }
+      );
+    }
   } catch (error) {
     console.error("Error retrieving interactions:", error);
     return NextResponse.json(
-      { error: "An error occurred while retrieving interactions" },
+      { error: "An error occurred while retrieving interactions: " + (error as Error).message },
       { status: 500 }
     );
   }
