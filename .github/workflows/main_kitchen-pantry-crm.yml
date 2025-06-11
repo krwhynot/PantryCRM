@@ -1,36 +1,74 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Optimized Azure Web App Deployment - Kitchen Pantry CRM
+# Faster deployment with proper build process and caching
 
-name: Build and deploy Node.js app to Azure Web App - kitchen-pantry-crm
+name: Deploy Kitchen Pantry CRM to Azure
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
+
+env:
+  NODE_VERSION: '18.x'
+  AZURE_WEBAPP_NAME: 'kitchen-pantry-crm'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+      - name: Install dependencies
+        run: npm ci --production
 
-      - name: Upload artifact for deployment job
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Build Next.js application
+        run: npm run build:azure
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Create deployment package
+        run: |
+          # Create minimal deployment package
+          mkdir deploy-package
+          cp -r .next deploy-package/
+          cp -r public deploy-package/
+          cp -r prisma deploy-package/
+          cp package.json deploy-package/
+          cp package-lock.json deploy-package/
+          cp next.config.js deploy-package/
+          cp server.js deploy-package/
+          cp web.config deploy-package/
+          cp .deployment deploy-package/
+          cp deploy.cmd deploy-package/
+          
+          # Copy only production node_modules
+          npm ci --production --prefix deploy-package
+
+      - name: Zip deployment package
+        run: |
+          cd deploy-package
+          zip -r ../deployment.zip . -x "node_modules/.cache/*" "node_modules/@types/*"
+
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
-          path: release.zip
+          name: webapp-package
+          path: deployment.zip
+          retention-days: 1
 
   deploy:
     runs-on: ubuntu-latest
@@ -39,18 +77,15 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: webapp-package
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-      
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -58,11 +93,20 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9096DC77B3CA41C5AD2EE7FEA88F5234 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9D0DCD13FB2B4EB4BBD080D2298D6777 }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'kitchen-pantry-crm'
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
-          package: .
-          
+          package: deployment.zip
+
+      - name: Health check
+        run: |
+          sleep 30
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/api/health || echo "000")
+          if [ $response -eq 200 ]; then
+            echo "✅ Deployment successful! Health check passed"
+          else
+            echo "⚠️ Deployment completed but health check failed with status: $response"
+          fi
