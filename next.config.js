@@ -22,8 +22,12 @@ const nextConfig = {
   // Disable static generation during build
   ...(process.env.CI && {
     experimental: {
-      ...nextConfig.experimental,
-      isrMemoryCacheSize: 0,
+      isrMemoryCacheSize: 0, // Directly define experimental settings
+      serverActions: {
+        allowedOrigins: ['localhost:3000', '192.168.192.11:3000'],
+        bodySizeLimit: '2mb',
+      },
+      optimizeCss: true,
     },
     generateBuildId: async () => 'build-' + Date.now(),
   }),
@@ -36,14 +40,16 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // Next.js 15 compatible server actions
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:3000', '192.168.192.11:3000'],
-      bodySizeLimit: '2mb'
+  // Next.js 15 compatible server actions (fallback for non-CI builds)
+  ...(!process.env.CI && {
+    experimental: {
+      serverActions: {
+        allowedOrigins: ['localhost:3000', '192.168.192.11:3000'],
+        bodySizeLimit: '2mb',
+      },
+      optimizeCss: true,
     },
-    optimizeCss: true,
-  },
+  }),
   
   // Images configuration
   images: {
