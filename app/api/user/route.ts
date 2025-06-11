@@ -48,6 +48,15 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
           userStatus: "ACTIVE",
           password: await hash(password, 12),
         },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          isActive: true,
+          createdAt: true,
+          // Exclude password from response
+        }
       });
       return NextResponse.json(user);
     } else {
@@ -68,6 +77,15 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
               : "PENDING",
           password: await hash(password, 12),
         },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          isActive: true,
+          createdAt: true,
+          // Exclude password from response
+        }
       });
 
       /*
@@ -91,7 +109,20 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
   }
 
   try {
-    const users = await prismadb.user.findMany({})
+    // Only return safe user data, exclude password and other sensitive fields
+    const users = await prismadb.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+        lastLoginAt: true,
+        // Exclude password, and other sensitive fields
+      }
+    });
 
     return NextResponse.json(users);
   } catch (error) {

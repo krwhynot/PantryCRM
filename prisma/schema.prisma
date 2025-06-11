@@ -35,20 +35,23 @@ model Session {
 }
 
 model User {
-  id            String    @id
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          String    @default("user")
-  isActive      Boolean   @default(true)
-  lastLoginAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id               String    @id
+  name             String?
+  email            String    @unique
+  emailVerified    DateTime?
+  image            String?
+  password         String?
+  role             String    @default("user")
+  isActive         Boolean   @default(true)
+  lastLoginAt      DateTime?
+  resetToken       String?   // For secure password reset
+  resetTokenExpiry DateTime? // Reset token expiration
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
-  accounts Account[]
-  sessions Session[]
+  accounts     Account[]
+  sessions     Session[]
+  assignedLeads Lead[]
 }
 
 model VerificationToken {
@@ -83,8 +86,20 @@ model Organization {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   
-  contacts     Contact[]
-  interactions Interaction[]
+  contacts      Contact[]
+  interactions  Interaction[]
+  opportunities Opportunity[]
+  leads         Lead[]
+  contracts     Contract[]
+
+  // Performance indexes for common queries
+  @@index([status, priority, name]) // For filtered searches
+  @@index([name]) // For text search
+  @@index([email]) // For email search
+  @@index([priority, updatedAt]) // For dashboard ordering
+  @@index([segment, status]) // For segment filtering
+  @@index([lastContactDate]) // For follow-up queries
+  @@index([nextFollowUpDate]) // For upcoming tasks
 }
 
 model Contact {
@@ -101,7 +116,15 @@ model Contact {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   
-  interactions Interaction[]
+  interactions  Interaction[]
+  opportunities Opportunity[]
+  contracts     Contract[]
+
+  // Performance indexes for common queries
+  @@index([organizationId, isPrimary]) // For finding primary contacts
+  @@index([firstName, lastName]) // For name searches
+  @@index([email]) // For email lookups
+  @@index([organizationId, createdAt]) // For recent contacts by org
 }
 
 model Interaction {
@@ -119,6 +142,84 @@ model Interaction {
   contact        Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+
+  // Performance indexes for common queries
+  @@index([organizationId, date]) // For interaction history by org
+  @@index([contactId, date]) // For interaction history by contact
+  @@index([type, date]) // For filtering by interaction type
+  @@index([date]) // For chronological queries
+  @@index([nextAction]) // For follow-up tasks
+  @@index([outcome, date]) // For outcome analysis
+}
+
+// CRM Extension Models
+model Opportunity {
+  id                String   @id @default(cuid())
+  name              String
+  organizationId    String
+  contactId         String?
+  value             Float?
+  stage             String   @default("PROSPECT") // PROSPECT, QUALIFIED, PROPOSAL, NEGOTIATION, CLOSED_WON, CLOSED_LOST
+  probability       Int      @default(50) // 0-100%
+  expectedCloseDate DateTime?
+  notes             String?
+  reason            String?
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  // Performance indexes
+  @@index([organizationId, stage])
+  @@index([stage, expectedCloseDate])
+  @@index([isActive, updatedAt])
+}
+
+// Update Organization model to include the opportunity relation
+model Lead {
+  id             String       @id @default(cuid())
+  firstName      String
+  lastName       String
+  email          String?
+  phone          String?
+  company        String?
+  source         String?      // Website, referral, cold call, etc.
+  status         String       @default("NEW") // NEW, CONTACTED, QUALIFIED, CONVERTED, LOST
+  notes          String?
+  organizationId String?
+  assignedToId   String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  assignedTo   User?         @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([organizationId])
+  @@index([assignedToId])
+}
+
+model Contract {
+  id             String       @id @default(cuid())
+  name           String
+  organizationId String
+  contactId      String?
+  value          Float?
+  startDate      DateTime?
+  endDate        DateTime?
+  status         String       @default("DRAFT") // DRAFT, ACTIVE, EXPIRED, CANCELLED
+  terms          String?
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, status])
+  @@index([status, endDate])
 }
 
 // Settings Models
@@ -130,4 +231,8 @@ model SystemSetting {
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Performance indexes for common queries
+  @@index([key]) // For settings lookups
+  @@index([type]) // For filtering by setting type
 }

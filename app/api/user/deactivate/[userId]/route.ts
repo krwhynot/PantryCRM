@@ -11,6 +11,15 @@ export async function POST(req: Request, props: { params: Promise<{ userId: stri
     return new NextResponse("Unauthenticated", { status: 401 });
   }
 
+  // Check if current user is admin
+  const currentUser = await prismadb.user.findFirst({
+    where: { email: session.user.email }
+  });
+
+  if (currentUser?.role !== "admin") {
+    return new NextResponse("Unauthorized - Admin access required", { status: 403 });
+  }
+
   try {
     const user = await prismadb.user.update({
       where: {

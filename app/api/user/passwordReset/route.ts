@@ -2,78 +2,186 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
-
-import { generateRandomPassword } from "@/lib/utils";
-
 import { hash } from "bcryptjs";
 import PasswordResetEmail from "@/emails/PasswordReset";
 import resendHelper from "@/lib/resend";
+import crypto from "crypto";
+import { z } from "zod";
 
-export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
-  /*
-  Resend.com function init - this is a helper function that will be used to send emails
-  */
-  const resend = await resendHelper();
+// Rate limiting store (in production, use Redis or database)
+const resetAttempts = new Map<string, { count: number; lastAttempt: number }>();
+
+// Validation schema
+const passwordResetSchema = z.object({
+  email: z.string().email("Invalid email address")
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Reset token is required"),
+  newPassword: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+// Generate secure reset token
+function generateResetToken(): string {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+// Check rate limiting
+function checkRateLimit(email: string): boolean {
+  const now = Date.now();
+  const attempt = resetAttempts.get(email);
+  
+  if (!attempt) {
+    resetAttempts.set(email, { count: 1, lastAttempt: now });
+    return true;
+  }
+  
+  // Reset counter if more than 1 hour has passed
+  if (now - attempt.lastAttempt > 3600000) {
+    resetAttempts.set(email, { count: 1, lastAttempt: now });
+    return true;
+  }
+  
+  // Allow max 3 attempts per hour
+  if (attempt.count >= 3) {
+    return false;
+  }
+  
+  attempt.count++;
+  attempt.lastAttempt = now;
+  return true;
+}
+
+// Request password reset (sends reset token via email)
+export async function POST(req: NextRequest): Promise<Response> {
   try {
     const body = await req.json();
-    const { email } = body;
+    
+    // Validate input
+    const validation = passwordResetSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: "Invalid email address" },
+        { status: 400 }
+      );
+    }
 
-    //console.log(body, "body");
-    //console.log(email, "email");
+    const { email } = validation.data;
 
-    if (!email) {
-      return new NextResponse("Email is required!", {
-        status: 401,
+    // Check rate limiting
+    if (!checkRateLimit(email)) {
+      return NextResponse.json(
+        { error: "Too many reset attempts. Please try again in an hour." },
+        { status: 429 }
+      );
+    }
+
+    // Check if user exists
+    const user = await prismadb.user.findFirst({
+      where: { email }
+    });
+
+    // Always return success to prevent email enumeration
+    if (!user) {
+      return NextResponse.json({ 
+        message: "If an account with that email exists, a reset link has been sent." 
       });
     }
 
-    const password = generateRandomPassword();
+    // Generate secure reset token
+    const resetToken = generateResetToken();
+    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
 
+    // Store reset token in database
+    await prismadb.user.update({
+      where: { id: user.id },
+      data: {
+        resetToken,
+        resetTokenExpiry,
+      },
+    });
+
+    // Send reset email with token
+    const resend = await resendHelper();
+    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
+    
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM!,
+      to: user.email,
+      subject: "Password Reset Request",
+      text: `Click this link to reset your password: ${resetUrl}`,
+      html: `
+        <h2>Password Reset Request</h2>
+        <p>You requested a password reset. Click the link below to reset your password:</p>
+        <a href="${resetUrl}">Reset Password</a>
+        <p>This link will expire in 1 hour.</p>
+        <p>If you didn't request this, please ignore this email.</p>
+      `,
+    });
+
+    return NextResponse.json({ 
+      message: "If an account with that email exists, a reset link has been sent." 
+    });
+  } catch (error) {
+    console.error("[PASSWORD_RESET_POST]", error);
+    return NextResponse.json(
+      { error: "Password reset request failed" },
+      { status: 500 }
+    );
+  }
+}
+
+// Reset password with token
+export async function PUT(req: NextRequest): Promise<Response> {
+  try {
+    const body = await req.json();
+    
+    // Validate input
+    const validation = resetPasswordSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: "Invalid input", details: validation.error.errors },
+        { status: 400 }
+      );
+    }
+
+    const { token, newPassword } = validation.data;
+
+    // Find user with valid reset token
     const user = await prismadb.user.findFirst({
       where: {
-        email: email,
+        resetToken: token,
+        resetTokenExpiry: {
+          gt: new Date(), // Token must not be expired
+        },
       },
     });
 
     if (!user) {
-      return new NextResponse("No user with that Email exist in Db!", {
-        status: 401,
-      });
+      return NextResponse.json(
+        { error: "Invalid or expired reset token" },
+        { status: 400 }
+      );
     }
 
-    const newpassword = await prismadb.user.update({
+    // Update password and clear reset token
+    await prismadb.user.update({
       where: { id: user.id },
       data: {
-        password: await hash(password, 12),
+        password: await hash(newPassword, 12),
+        resetToken: null,
+        resetTokenExpiry: null,
       },
     });
 
-    if (!newpassword) {
-      return new NextResponse("Password not updated!", {
-        status: 401,
-      });
-    } else {
-      const data = await resend.emails.send({
-        from: process.env.EMAIL_FROM!,
-        to: user.email,
-        subject: "NextCRM - Password reset",
-        text: "", // Add this line to fix the types issue
-        //react: DemoTemplate({ firstName: "John" }),
-        react: PasswordResetEmail({
-          username: user?.name!,
-          avatar: user.avatar,
-          email: user.email,
-          password: password,
-          userLanguage: user.userLanguage,
-        }),
-      });
-      console.log(data, "data");
-      console.log("Email sent to: " + user.email);
-    }
-
-    return NextResponse.json({ message: "Password changed!", status: true });
+    return NextResponse.json({ 
+      message: "Password reset successfully" 
+    });
   } catch (error) {
-    console.log("[USER_PASSWORD_CHANGE_POST]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    console.error("[PASSWORD_RESET_PUT]", error);
+    return NextResponse.json(
+      { error: "Password reset failed" },
+      { status: 500 }
+    );
   }
 }

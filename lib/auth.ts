@@ -1,5 +1,6 @@
 import { prismadb } from "@/lib/prisma";
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -48,9 +49,7 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        console.log('🔐 Auth attempt:', credentials?.email);
         if (!credentials?.email || !credentials?.password) {
-          console.log('❌ Missing credentials');
           throw new Error("Email or password is missing");
         }
 
@@ -58,16 +57,12 @@ export const authOptions: NextAuthOptions = {
           where: {
             email: credentials.email,
           },
-        }) as any;
-
-        console.log('👤 Found user:', user ? 'Yes' : 'No');
-        console.log('🔑 User has password:', user?.password ? 'Yes' : 'No');
+        });
 
         //clear white space from password
         const trimmedPassword = credentials.password.trim();
 
         if (!user || !user?.password) {
-          console.log('❌ User not found or no password');
           throw new Error("User not found, please register first");
         }
 
@@ -76,21 +71,16 @@ export const authOptions: NextAuthOptions = {
           user.password
         );
 
-        console.log('🔓 Password match:', isCorrectPassword ? 'Yes' : 'No');
-
         if (!isCorrectPassword) {
-          console.log('❌ Incorrect password');
           throw new Error("Password is incorrect");
         }
 
-        console.log('✅ Authentication successful');
         return user;
       },
     }),
   ],
   callbacks: {
-    //TODO: fix this any
-    async session({ token, session }: any) {
+    async session({ token, session }: { token: JWT; session: Session }) {
       const user = await prismadb.user.findFirst({
         where: {
           email: token.email,
@@ -122,7 +112,8 @@ export const authOptions: NextAuthOptions = {
           session.user.lastLoginAt = newUser.lastLoginAt;
           return session;
         } catch (error) {
-          return console.log(error);
+          console.error("Error creating new user during OAuth:", error);
+          return null;
         }
       } else {
         await prismadb.user.update({
@@ -143,7 +134,6 @@ export const authOptions: NextAuthOptions = {
         session.user.lastLoginAt = user.lastLoginAt;
       }
 
-      //console.log(session, "session");
       return session;
     },
   },

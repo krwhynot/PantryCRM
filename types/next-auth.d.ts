@@ -7,6 +7,11 @@ type UserId = string;
 declare module "next-auth/jwt" {
   interface JWT {
     id: UserId;
+    name?: string | null;
+    email?: string | null;
+    picture?: string | null;
+    role?: string;
+    isActive?: boolean;
   }
 }
 
@@ -14,11 +19,26 @@ declare module "next-auth" {
   interface Session {
     user: User & {
       id: UserId;
-      _id: UserId;
+      _id?: UserId;
       avatar?: string | null | undefined;
-      isAdmin: boolean;
-      userLanguage: string;
-      userStatus: string;
+      isAdmin?: boolean;
+      role?: string;
+      isActive?: boolean;
+      userLanguage?: string;
+      userStatus?: string;
+      lastLoginAt?: Date | null;
     };
+  }
+
+  interface User {
+    id: string;
+    email: string;
+    name?: string | null;
+    image?: string | null;
+    role?: string;
+    isActive?: boolean;
+    userStatus?: string;
+    userLanguage?: string;
+    lastLoginAt?: Date | null;
   }
 }

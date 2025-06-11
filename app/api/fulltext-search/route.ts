@@ -2,21 +2,45 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { z } from "zod";
+
+// Input validation schema
+const searchSchema = z.object({
+  data: z.string()
+    .min(1, "Search term cannot be empty")
+    .max(100, "Search term too long")
+    .regex(/^[a-zA-Z0-9\s@.-]+$/, "Search term contains invalid characters")
+});
+
+// Input sanitization function
+function sanitizeSearchInput(input: string): string {
+  return input
+    .replace(/[<>'"]/g, '') // Remove potential XSS characters
+    .trim()
+    .substring(0, 100); // Limit length
+}
 
 export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   const session = await getServerSession(authOptions);
-  const body = await req.json();
-  const data = body;
-
-  const search = data.data;
 
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
   }
 
-  //return new NextResponse("Done", { status: 200 });
-
   try {
+    const body = await req.json();
+    
+    // Validate input
+    const validation = searchSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: "Invalid search input", details: validation.error.errors },
+        { status: 400 }
+      );
+    }
+
+    // Sanitize search input
+    const search = sanitizeSearchInput(validation.data.data);
     //Search in modul CRM (Oppotunities)
     const resultsCrmOpportunities = await prismadb.opportunity.findMany({
       where: {
@@ -96,8 +120,11 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
-    console.log("[FULLTEXT_SEARCH_POST]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    console.error("[FULLTEXT_SEARCH_POST]", error);
+    return NextResponse.json(
+      { error: "Search operation failed" },
+      { status: 500 }
+    );
   }
 }
 

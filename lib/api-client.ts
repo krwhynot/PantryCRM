@@ -4,7 +4,7 @@ export class APIError extends Error {
   constructor(
     message: string,
     public status: number,
-    public data?: any
+    public data?: unknown
   ) {
     super(message);
     this.name = 'APIError';
@@ -18,7 +18,7 @@ export class APIClient {
     this.baseURL = baseURL;
   }
 
-  async request<T = any>(
+  async request<T = unknown>(
     url: string,
     options?: RequestInit
   ): Promise<T> {
@@ -69,25 +69,25 @@ export class APIClient {
   }
 
   // Convenience methods
-  get<T = any>(url: string) {
+  get<T = unknown>(url: string) {
     return this.request<T>(url, { method: 'GET' });
   }
 
-  post<T = any>(url: string, data?: any) {
+  post<T = unknown>(url: string, data?: unknown) {
     return this.request<T>(url, {
       method: 'POST',
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  put<T = any>(url: string, data?: any) {
+  put<T = unknown>(url: string, data?: unknown) {
     return this.request<T>(url, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  delete<T = any>(url: string) {
+  delete<T = unknown>(url: string) {
     return this.request<T>(url, { method: 'DELETE' });
   }
 }

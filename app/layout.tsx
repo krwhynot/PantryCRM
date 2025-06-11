@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/app/providers/ThemeProvider";
 import { DeviceProvider } from "@/app/providers/DeviceProvider";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Import the bypass layout
 import BypassLayout from './layout-bypass';
@@ -42,17 +43,21 @@ export default function RootLayout({
     return (
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <DeviceProvider>
-              {children}
-              <Toaster />
-            </DeviceProvider>
-          </ThemeProvider>
+          <ErrorBoundary showError={process.env.NODE_ENV === 'development'}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <DeviceProvider>
+                <ErrorBoundary>
+                  {children}
+                </ErrorBoundary>
+                <Toaster />
+              </DeviceProvider>
+            </ThemeProvider>
+          </ErrorBoundary>
         </body>
       </html>
     );

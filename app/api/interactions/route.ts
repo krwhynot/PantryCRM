@@ -38,15 +38,11 @@ const createInteractionSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
-    // For API routes in App Router, we need to handle sessions differently
-    // Getting session info would normally be done like this:
-    // const session = await getServerSession(authOptions);
-    // if (!session?.user) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
-    
-    // However, for testing purposes we'll allow this without authentication
-    // In production, uncomment the above code
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     
     const body = await req.json();
     console.log("Received interaction data:", body);
@@ -67,9 +63,8 @@ export async function POST(req: NextRequest) {
     // Create a unique ID for the interaction
     const id = crypto.randomUUID();
     
-    // In production, get the userId from the session
-    // const userId = session.user.id;
-    const userId = "system"; // For testing only
+    // Get the userId from the session
+    const userId = session.user.id || session.user.email;
     
     try {
       // Check if the organization exists first
@@ -120,14 +115,14 @@ export async function POST(req: NextRequest) {
     } catch (dbError) {
       console.error("Database error creating interaction:", dbError);
       return NextResponse.json(
-        { error: "Database error: " + (dbError as Error).message },
+        { error: "Failed to create interaction" },
         { status: 500 }
       );
     }
   } catch (error) {
     console.error("Error creating interaction:", error);
     return NextResponse.json(
-      { error: "An error occurred while creating the interaction: " + (error as Error).message },
+      { error: "An error occurred while creating the interaction" },
       { status: 500 }
     );
   }
@@ -135,6 +130,12 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const url = new URL(req.url);
     const organizationId = url.searchParams.get("organizationId");
     const contactId = url.searchParams.get("contactId");
@@ -206,14 +207,14 @@ export async function GET(req: NextRequest) {
     } catch (dbError) {
       console.error("Database error retrieving interactions:", dbError);
       return NextResponse.json(
-        { error: "Database error: " + (dbError as Error).message },
+        { error: "Failed to retrieve interactions" },
         { status: 500 }
       );
     }
   } catch (error) {
     console.error("Error retrieving interactions:", error);
     return NextResponse.json(
-      { error: "An error occurred while retrieving interactions: " + (error as Error).message },
+      { error: "An error occurred while retrieving interactions" },
       { status: 500 }
     );
   }

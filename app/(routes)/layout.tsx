@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import { SimpleErrorBoundary } from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -66,17 +67,27 @@ export default async function AppLayout({
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <SideBar build={build} />
+      <SimpleErrorBoundary message="Navigation sidebar failed to load">
+        <SideBar build={build} />
+      </SimpleErrorBoundary>
       <div className="flex flex-col h-full w-full overflow-hidden">
-        <Header
-          id={session.user.id as string}
-          name={session.user.name as string}
-          email={session.user.email as string}
-          avatar={session.user.image as string}
-          lang={"en"} /* Fixed to English */
-        />
-        <div className="flex-grow overflow-y-auto h-full p-5">{children}</div>
-        <Footer />
+        <SimpleErrorBoundary message="Header failed to load">
+          <Header
+            id={session.user.id as string}
+            name={session.user.name as string}
+            email={session.user.email as string}
+            avatar={session.user.image as string}
+            lang={"en"} /* Fixed to English */
+          />
+        </SimpleErrorBoundary>
+        <div className="flex-grow overflow-y-auto h-full p-5">
+          <SimpleErrorBoundary message="Page content failed to load">
+            {children}
+          </SimpleErrorBoundary>
+        </div>
+        <SimpleErrorBoundary message="Footer failed to load">
+          <Footer />
+        </SimpleErrorBoundary>
       </div>
     </div>
   );

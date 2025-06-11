@@ -1,7 +1,25 @@
 "use client";
 
-import { Dashboard } from '@/src/components/dashboard/Dashboard'
-import QuickInteractionEntry from '@/components/interactions/QuickInteractionEntry'
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import { LoadingComponent } from '@/components/LoadingComponent';
+
+// Dynamically import heavy components
+const Dashboard = dynamic(
+  () => import('@/src/components/dashboard/Dashboard').then(mod => ({ default: mod.Dashboard })),
+  {
+    loading: () => <LoadingComponent />,
+    ssr: false,
+  }
+);
+
+const QuickInteractionEntry = dynamic(
+  () => import('@/components/interactions/QuickInteractionEntry'),
+  {
+    loading: () => <div className="h-32 animate-pulse bg-gray-200 rounded"></div>,
+    ssr: false,
+  }
+);
 
 export default function CRMPage() {
   return (
@@ -10,15 +28,18 @@ export default function CRMPage() {
       
       {/* Primary Feature: Quick Interaction Entry */}
       <div className="mb-8">
-        <QuickInteractionEntry onSuccess={() => {
-          // Refresh dashboard metrics or show success notification
-          window.location.reload(); // Simple approach for now
-        }} />
+        <Suspense fallback={<div className="h-32 animate-pulse bg-gray-200 rounded"></div>}>
+          <QuickInteractionEntry onSuccess={() => {
+            // Refresh dashboard metrics or show success notification
+            window.location.reload(); // Simple approach for now
+          }} />
+        </Suspense>
       </div>
       
-      <Dashboard 
-        organizationCount={3} 
-        recentInteractions={[
+      <Suspense fallback={<LoadingComponent />}>
+        <Dashboard 
+          organizationCount={3} 
+          recentInteractions={[
           {
             id: "1",
             organizationName: "Bistro Nouveau",
@@ -41,7 +62,8 @@ export default function CRMPage() {
             userName: "Kyle Ramsy"
           }
         ]} 
-      />
+        />
+      </Suspense>
       
       {/* Navigation Cards */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
