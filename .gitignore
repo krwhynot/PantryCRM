@@ -69,3 +69,10 @@ node_modules/
 # Task files
 tasks.json
 tasks/ 
+
+# Chrome browser files (prevent future issues)
+chrome/
+chromedriver
+*.deb
+*.tar.gz
+deploy-temp/
