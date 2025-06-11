@@ -71,12 +71,8 @@ jobs:
           cd deploy-package
           npm ci --production --omit=dev
           
-          # Create package.json start script for Azure
-          node -e "
-            const pkg = require('./package.json');
-            pkg.scripts.start = 'next start -p \\$PORT';
-            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
-          "
+          # Update package.json start script for Azure
+          sed -i 's/"start": "next start"/"start": "next start -p $PORT"/' package.json
 
       - name: Zip deployment package
         run: |
