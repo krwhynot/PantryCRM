@@ -19,6 +19,15 @@ const nextConfig = {
   output: 'standalone',
   trailingSlash: false,
   
+  // Disable static generation during build
+  ...(process.env.CI && {
+    experimental: {
+      ...nextConfig.experimental,
+      isrMemoryCacheSize: 0,
+    },
+    generateBuildId: async () => 'build-' + Date.now(),
+  }),
+  
   // Ignore build errors for faster deployment
   typescript: {
     ignoreBuildErrors: true,

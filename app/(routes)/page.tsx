@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   description: "Food Service CRM Dashboard for Sales Representatives",
 };
 
+// Force dynamic rendering to prevent build-time issues
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
   
