@@ -1,5 +1,5 @@
 # Optimized Azure Web App Deployment - Kitchen Pantry CRM
-# Faster deployment with proper build process and caching
+# Faster deployment with proper build process and cachings
 
 name: Deploy Kitchen Pantry CRM to Azure
 
