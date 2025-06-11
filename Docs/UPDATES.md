@@ -2,7 +2,7 @@
 
 ## 2025-06-05 - Task 3.1: React Beautiful DnD Replacement
 
-### Changes Made
+### Changes Maded
 
 1. **Removed Dependencies**:
    - `react-beautiful-dnd` (v13.1.1) - Deprecated
