@@ -54,6 +54,21 @@ const nextConfig = {
   webpack: (config, { isServer, dev }) => {
     if (isServer) {
       config.devtool = 'source-map';
+      
+      // Provide polyfills for browser globals in server environment
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+      
+      // Provide browser globals for server environment
+      config.plugins.push(
+        new config.webpack.DefinePlugin({
+          "self": "global",
+        })
+      );
     }
     
     // Development optimizations
