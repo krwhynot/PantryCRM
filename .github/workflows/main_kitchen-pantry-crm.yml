@@ -1,90 +1,42 @@
-# Optimized Azure Web App Deployment - Kitchen Pantry CRM
-# Faster deployment with proper build process and cachings
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Deploy Kitchen Pantry CRM to Azure
+name: Build and deploy Node.js app to Azure Web App - kitchen-pantry-crm
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
-
-env:
-  NODE_VERSION: '18.x'
-  AZURE_WEBAPP_NAME: 'kitchen-pantry-crm'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read #This is required for actions/checkout
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          node-version: '18.x'
 
-      - name: Install all dependencies
-        run: npm ci
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
-
-      - name: Build Next.js application
-        run: npm run build:azure
-        env:
-          NODE_ENV: production
-          NEXT_TELEMETRY_DISABLED: 1
-          ANALYZE: false
-          CI: true
-          # Dummy environment variables for build time
-          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
-          GOOGLE_ID: "dummy"
-          GOOGLE_SECRET: "dummy"
-          GITHUB_ID: "dummy"
-          GITHUB_SECRET: "dummy"
-          JWT_SECRET: "dummy-secret-for-build"
-
-      - name: Create deployment package
+      - name: npm install, build, and test
         run: |
-          # Create minimal deployment package for Azure
-          mkdir deploy-package
-          
-          # Copy built application
-          cp -r .next deploy-package/
-          cp -r public deploy-package/
-          cp -r prisma deploy-package/
-          
-          # Copy essential files
-          cp package.json deploy-package/
-          cp package-lock.json deploy-package/
-          cp next.config.js deploy-package/
-          
-          # Create a simple startup file for Azure
-          echo 'npm start' > deploy-package/startup.txt
-          
-          # Install only production dependencies
-          cd deploy-package
-          npm ci --production --omit=dev
-          
-          # Update package.json start script for Azure
-          sed -i 's/"start": "next start"/"start": "next start -p $PORT"/' package.json
+          npm install
+          npm run build --if-present
+          npm run test --if-present
 
-      - name: Zip deployment package
-        run: |
-          cd deploy-package
-          zip -r ../deployment.zip . -x "node_modules/.cache/*" "node_modules/@types/*" "**/test/**" "**/tests/**"
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
 
-      - name: Upload artifact for deployment
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: webapp-package
-          path: deployment.zip
-          retention-days: 1
+          name: node-app
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -92,37 +44,21 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write
-      contents: read
-
+    
     steps:
-      - name: Download build artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: webapp-package
+          name: node-app
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_074D3AB92CDB4EA8BBD2D3C2B33C87ED }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9096DC77B3CA41C5AD2EE7FEA88F5234 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9D0DCD13FB2B4EB4BBD080D2298D6777 }}
-
-      - name: Deploy to Azure Web App
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+      
+      - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: 'kitchen-pantry-crm'
           slot-name: 'Production'
-          package: deployment.zip
-
-      - name: Health check
-        run: |
-          sleep 30
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/api/health || echo "000")
-          if [ $response -eq 200 ]; then
-            echo "✅ Deployment successful! Health check passed"
-          else
-            echo "⚠️ Deployment completed but health check failed with status: $response"
-          fi
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EFF36E07D25C41A3BB2EC4E80FDE0248 }}
