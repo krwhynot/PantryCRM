@@ -15,22 +15,9 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: process.env.NODE_ENV === 'production',
   
-  // Disable static optimization for build issues
+  // Azure deployment optimization
   output: 'standalone',
   trailingSlash: false,
-  
-  // Disable static generation during build
-  ...(process.env.CI && {
-    experimental: {
-      isrMemoryCacheSize: 0, // Directly define experimental settings
-      serverActions: {
-        allowedOrigins: ['localhost:3000', '192.168.192.11:3000'],
-        bodySizeLimit: '2mb',
-      },
-      optimizeCss: true,
-    },
-    generateBuildId: async () => 'build-' + Date.now(),
-  }),
   
   // Ignore build errors for faster deployment
   typescript: {
@@ -40,16 +27,14 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // Next.js 15 compatible server actions (fallback for non-CI builds)
-  ...(!process.env.CI && {
-    experimental: {
-      serverActions: {
-        allowedOrigins: ['localhost:3000', '192.168.192.11:3000'],
-        bodySizeLimit: '2mb',
-      },
-      optimizeCss: true,
+  // Next.js 15 compatible server actions
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['localhost:3000', '192.168.192.11:3000'],
+      bodySizeLimit: '2mb',
     },
-  }),
+    optimizeCss: true,
+  },
   
   // Images configuration
   images: {
