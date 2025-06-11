@@ -51,26 +51,37 @@ jobs:
 
       - name: Create deployment package
         run: |
-          # Create minimal deployment package
+          # Create minimal deployment package for Azure
           mkdir deploy-package
+          
+          # Copy built application
           cp -r .next deploy-package/
           cp -r public deploy-package/
           cp -r prisma deploy-package/
+          
+          # Copy essential files
           cp package.json deploy-package/
           cp package-lock.json deploy-package/
           cp next.config.js deploy-package/
-          cp server.js deploy-package/
-          cp web.config deploy-package/
-          cp .deployment deploy-package/
-          cp deploy.cmd deploy-package/
           
-          # Copy only production node_modules
-          npm ci --production --prefix deploy-package
+          # Create a simple startup file for Azure
+          echo 'npm start' > deploy-package/startup.txt
+          
+          # Install only production dependencies
+          cd deploy-package
+          npm ci --production --omit=dev
+          
+          # Create package.json start script for Azure
+          node -e "
+            const pkg = require('./package.json');
+            pkg.scripts.start = 'next start -p \\$PORT';
+            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+          "
 
       - name: Zip deployment package
         run: |
           cd deploy-package
-          zip -r ../deployment.zip . -x "node_modules/.cache/*" "node_modules/@types/*"
+          zip -r ../deployment.zip . -x "node_modules/.cache/*" "node_modules/@types/*" "**/test/**" "**/tests/**"
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
