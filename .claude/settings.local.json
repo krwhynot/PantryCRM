@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git check-ignore:*)"
+      "Bash(git check-ignore:*)",
+      "Bash(mv:*)",
+      "Bash(DATABASE_URL=\"file:./dev.db\" npx prisma db push --force-reset)",
+      "Bash(DATABASE_URL=\"file:./dev.db\" node -e \"\nconst { PrismaClient } = require('@prisma/client');\nconst prisma = new PrismaClient();\n\nasync function seedDemo() {\n  console.log('Creating demo organizations...');\n  \n  const org1 = await prisma.organization.create({\n    data: {\n      name: 'Bella Vista Restaurant',\n      priority: 'A',\n      segment: 'FINE_DINING',\n      address: '123 Main St',\n      city: 'Downtown',\n      state: 'CA',\n      zipCode: '90210',\n      phone: '(555) 123-4567',\n      email: 'manager@bellavista.com',\n      estimatedRevenue: 250000,\n      employeeCount: 25,\n      status: 'ACTIVE'\n    }\n  });\n  \n  const org2 = await prisma.organization.create({\n    data: {\n      name: 'Quick Burger Chain',\n      priority: 'B',\n      segment: 'FAST_FOOD',\n      address: '456 Speed Ave',\n      city: 'Fasttown',\n      state: 'TX',\n      zipCode: '75201',\n      phone: '(555) 987-6543',\n      email: 'orders@quickburger.com',\n      estimatedRevenue: 150000,\n      employeeCount: 15,\n      status: 'ACTIVE'\n    }\n  });\n  \n  console.log('Creating demo contacts...');\n  \n  await prisma.contact.create({\n    data: {\n      firstName: 'Maria',\n      lastName: 'Rodriguez',\n      email: 'maria@bellavista.com',\n      phone: '(555) 123-4567',\n      position: 'General Manager',\n      isPrimary: true,\n      organizationId: org1.id\n    }\n  });\n  \n  await prisma.contact.create({\n    data: {\n      firstName: 'John',\n      lastName: 'Smith',\n      email: 'john@quickburger.com',\n      phone: '(555) 987-6543',\n      position: 'Operations Director',\n      isPrimary: true,\n      organizationId: org2.id\n    }\n  });\n  \n  console.log('✅ Demo data created successfully!');\n  \n  await prisma.\\$disconnect();\n}\n\nseedDemo().catch(console.error);\n\")"
     ],
     "deny": []
   }
