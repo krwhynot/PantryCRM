@@ -36,7 +36,8 @@
       "Bash(npx tsc:*)",
       "Bash(npm audit:*)",
       "Bash(node:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(ls:*)"
     ],
     "deny": []
   }
