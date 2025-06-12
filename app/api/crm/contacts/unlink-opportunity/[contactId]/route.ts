@@ -3,8 +3,14 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 //Route to unlink contact from opportunity
-export async function PUT(req: Request, props: { params: Promise<{ contactId: string }> }) {
+async function handlePUT(req: Request, props: { params: Promise<{ contactId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: Request);
+  if (error) return error;
   const params = await props.params;
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -45,3 +51,7 @@ export async function PUT(req: Request, props: { params: Promise<{ contactId: st
   }
   return NextResponse.json("Hello World", { status: 200 });
 }
+
+
+// Export with authentication, rate limiting, and error handling
+export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });

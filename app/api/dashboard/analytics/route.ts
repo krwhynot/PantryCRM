@@ -1,32 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
 import { batchDashboardAnalytics } from '@/lib/azure-sql-optimization';
 
 /**
  * Optimized dashboard analytics endpoint
  * Uses query batching for Azure SQL Basic tier efficiency
  */
-export async function GET(req: NextRequest) {
-  try {
-    // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+async function handleGET(req: NextRequest): Promise<NextResponse> {
+  // Check authentication using the standardized method
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
 
     // Use batched queries for optimal DTU usage
     const analytics = await batchDashboardAnalytics();
 
-    return NextResponse.json({
-      ...analytics,
-      timestamp: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error('Dashboard analytics error:', error);
-    return NextResponse.json(
-      { error: 'Failed to load dashboard analytics' },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json({
+    ...analytics,
+    timestamp: new Date().toISOString(),
+  });
 }
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 50, windowMs: 60000 });

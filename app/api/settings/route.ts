@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
 
-export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
+async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   try {
     // Get all settings with optimized selection
     const settings = await prismadb.setting.findMany({
@@ -38,7 +44,10 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
   }
 }
 
-export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   try {
     const body = await req.json();
     
@@ -72,3 +81,8 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 }
 
 
+
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });

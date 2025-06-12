@@ -3,8 +3,14 @@ import { requireContactAccess } from "@/lib/authorization";
 import { logDataAccess, logSecurityEvent } from "@/lib/security-logger";
 import { prismadb } from "@/lib/prisma";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 // Contact delete route
-export async function DELETE(req: NextRequest, props: { params: Promise<{ contactId: string }> }) {
+async function handleDELETE(req: NextRequest, props: { params: Promise<{ contactId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error;
   const params = await props.params;
 
   if (!params.contactId) {
@@ -106,7 +112,10 @@ export async function DELETE(req: NextRequest, props: { params: Promise<{ contac
 }
 
 // GET route for retrieving a single contact
-export async function GET(req: NextRequest, props: { params: Promise<{ contactId: string }> }) {
+async function handleGET(req: NextRequest, props: { params: Promise<{ contactId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error;
   const params = await props.params;
 
   if (!params.contactId) {
@@ -160,3 +169,7 @@ export async function GET(req: NextRequest, props: { params: Promise<{ contactId
     return new NextResponse("Failed to retrieve contact", { status: 500 });
   }
 }
+
+// Export with authentication, rate limiting, and error handling
+export const DELETE = withRateLimit(withErrorHandler(handleDELETE), { maxAttempts: 100, windowMs: 60000 });
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });

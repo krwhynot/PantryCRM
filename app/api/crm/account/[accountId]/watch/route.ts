@@ -3,7 +3,13 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, props: { params: Promise<{ accountId: string }> }) {
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
+async function handlePOST(req: Request, props: { params: Promise<{ accountId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: Request);
+  if (error) return error;
   const params = await props.params;
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -46,3 +52,7 @@ export async function POST(req: Request, props: { params: Promise<{ accountId: s
     // Error handling will be implemented in Task 7
   }
 }
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });

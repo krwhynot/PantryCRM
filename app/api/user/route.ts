@@ -5,7 +5,13 @@ import { authOptions } from "@/lib/auth";
 import { hash } from "bcryptjs";
 import { newUserNotify } from "@/lib/new-user-notify";
 
-export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
+async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   try {
     const body = await req.json();
     const { name, username, email, language, password, confirmPassword } = body;
@@ -100,7 +106,10 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
   }
 }
 
-export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -130,3 +139,8 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 }
 
 
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });

@@ -4,11 +4,17 @@ import { authOptions } from '@/lib/auth';
 import { batchSearchQueries } from '@/lib/azure-sql-optimization';
 import { processSearchInput } from '@/lib/input-sanitization';
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Unified search endpoint with query batching
  * Optimized for Azure SQL Basic tier performance
  */
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error;
   try {
     // Check authentication
     const session = await getServerSession(authOptions);
@@ -48,3 +54,6 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });

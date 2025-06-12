@@ -4,8 +4,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import sendEmail from "@/lib/sendmail";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 //Create a new Opportunity (formerly Lead)
-export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -293,7 +299,10 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 }
 
 //Get all Opportunities (formerly Leads)
-export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -348,7 +357,10 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 }
 
 //Update an Opportunity (formerly Lead)
-export async function PUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handlePUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -494,3 +506,9 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
 }
 
 
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
+export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });

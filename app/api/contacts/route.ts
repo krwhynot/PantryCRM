@@ -1,16 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
 
-export async function GET(req: NextRequest): Promise<Response> {
-  try {
-    const { searchParams } = new URL(req.url);
-    const organizationId = searchParams.get('organizationId');
+async function handleGET(req: NextRequest): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
 
-    if (!organizationId) {
-      return NextResponse.json({ error: 'Organization ID required' }, { status: 400 });
-    }
+  const { searchParams } = new URL(req.url);
+  const organizationId = searchParams.get('organizationId');
 
-    const contacts = await prismadb.contact.findMany({
+  if (!organizationId) {
+    return NextResponse.json({ error: 'Organization ID required' }, { status: 400 });
+  }
+
+  const contacts = await prismadb.contact.findMany({
       where: {
         organizationId,
         isActive: true,
@@ -35,10 +40,9 @@ export async function GET(req: NextRequest): Promise<Response> {
     });
 
     return NextResponse.json(contacts);
-  } catch (error) {
-    console.error('Contact fetch error:', error);
-    return NextResponse.json({ error: 'Failed to fetch contacts' }, { status: 500 });
-  }
 }
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
 
 

@@ -59,7 +59,7 @@ const nextConfig: NextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   
-  // Optimized headers for caching and performance
+  // Enhanced security headers with HSTS and CSP
   async headers() {
     return [
       {
@@ -75,7 +75,35 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            value: '0', // Disabled per OWASP recommendation for modern browsers
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains; preload',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'wasm-unsafe-eval'", // Removed unsafe directives
+              "style-src 'self' 'unsafe-inline'", // CSS-in-JS frameworks need this
+              "img-src 'self' data: https:",
+              "font-src 'self' data:",
+              "connect-src 'self' https://*.azure.net https://*.azurewebsites.net",
+              "object-src 'none'", // Prevent Flash/plugin execution
+              "base-uri 'self'", // Prevent base tag injection
+              "form-action 'self'", // Restrict form submissions
+              "frame-ancestors 'none'", // Enhanced clickjacking protection
+              "upgrade-insecure-requests" // Force HTTPS
+            ].join('; ')
           },
         ],
       },

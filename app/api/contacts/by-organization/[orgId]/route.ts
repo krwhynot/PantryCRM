@@ -1,31 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+import { requireOrganizationAccess } from '@/lib/authorization';
 
 /**
  * GET handler for retrieving contacts by organization ID
  * Updated for Next.js 15 with async params pattern
  */
-export async function GET(
+async function handleGET(
   request: NextRequest,
   { params }: { params: Promise<{ orgId: string }> }
-) {
-  try {
-    // Critical: await the params Promise
-    const { orgId } = await params;
+): Promise<NextResponse> {
+  // Critical: await the params Promise
+  const { orgId } = await params;
+  
+  // Check authentication and organization access
+  const authResult = await requireOrganizationAccess(request, orgId);
+  if (!authResult.authorized) {
+    return authResult.error!;
+  }
     
-    // Handle query parameters
-    const searchParams = request.nextUrl.searchParams;
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const skip = (page - 1) * limit;
-    
-    // Validate orgId
-    if (!orgId) {
-      return NextResponse.json(
-        { error: 'Organization ID is required' },
-        { status: 400 }
-      );
-    }
+  // Handle query parameters
+  const searchParams = request.nextUrl.searchParams;
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '10');
+  const skip = (page - 1) * limit;
+  
+  // Validate orgId
+  if (!orgId) {
+    return NextResponse.json(
+      { error: 'Organization ID is required' },
+      { status: 400 }
+    );
+  }
     
     // Get total count for pagination
     const totalCount = await prismadb.contact.count({
@@ -68,29 +76,28 @@ export async function GET(
         limit,
         totalCount,
         totalPages: Math.ceil(totalCount / limit)
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching contacts:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch contacts' },
-      { status: 500 }
-    );
-  }
+    }
+  });
 }
 
 /**
  * POST handler for creating a new contact for an organization
  * Updated for Next.js 15 with async params pattern
  */
-export async function POST(
+async function handlePOST(
   request: NextRequest,
   { params }: { params: Promise<{ orgId: string }> }
-) {
-  try {
-    // Critical: await the params Promise
-    const { orgId } = await params;
-    const body = await request.json();
+): Promise<NextResponse> {
+  // Critical: await the params Promise
+  const { orgId } = await params;
+  
+  // Check authentication and organization access
+  const authResult = await requireOrganizationAccess(request, orgId);
+  if (!authResult.authorized) {
+    return authResult.error!;
+  }
+  
+  const body = await request.json();
     
     // Validate required fields
     if (!body.name || !body.email || !body.roleId) {
@@ -121,11 +128,8 @@ export async function POST(
     });
     
     return NextResponse.json(newContact, { status: 201 });
-  } catch (error) {
-    console.error('Error creating contact:', error);
-    return NextResponse.json(
-      { error: 'Failed to create contact' },
-      { status: 500 }
-    );
-  }
 }
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 50, windowMs: 60000 });

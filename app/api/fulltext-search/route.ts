@@ -7,6 +7,9 @@ import { withBatchTimeout, QUERY_TIMEOUTS } from "@/lib/query-timeout";
 import { cacheSearch } from "@/lib/result-cache";
 import { timeOperation } from "@/lib/performance-monitoring";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 // Input validation schema
 const searchSchema = z.object({
   data: z.string()
@@ -23,7 +26,10 @@ function sanitizeSearchInput(input: string): string {
     .substring(0, 100); // Limit length
 }
 
-export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   return timeOperation('fulltext-search', async () => {
     const session = await getServerSession(authOptions);
 
@@ -128,3 +134,7 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 }
 
 
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });

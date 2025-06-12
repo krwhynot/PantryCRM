@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prismadb } from "@/lib/prisma";
 import { z } from "zod";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
 import crypto from "crypto";
 
 // Define allowed interaction types based on requirements
@@ -36,13 +36,10 @@ const createInteractionSchema = z.object({
   isCompleted: z.boolean().default(false),
 });
 
-export async function POST(req: NextRequest) {
-  try {
-    // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+async function handlePOST(req: NextRequest): Promise<NextResponse> {
+  // Check authentication using the standardized method
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
     
     const body = await req.json();
     
@@ -62,8 +59,8 @@ export async function POST(req: NextRequest) {
     // Create a unique ID for the interaction
     const id = crypto.randomUUID();
     
-    // Get the userId from the session
-    const userId = session.user.id || session.user.email;
+    // Get the userId from authenticated user
+    const userId = user.id;
     
     try {
       // Check if the organization exists first
@@ -126,13 +123,10 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
-  try {
-    // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+async function handleGET(req: NextRequest): Promise<NextResponse> {
+  // Check authentication using the standardized method
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
 
     const url = new URL(req.url);
     const organizationId = url.searchParams.get("organizationId");
@@ -236,3 +230,7 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 50, windowMs: 60000 });

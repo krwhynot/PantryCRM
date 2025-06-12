@@ -101,6 +101,8 @@ export async function optimizedSearch<T extends Record<string, any>>(
           orderBy: options.orderBy || { updatedAt: 'desc' },
           select: options.select,
           include: options.include,
+          // Add relation optimization for better performance
+          ...(options.include && { relationLoadStrategy: 'join' as const }),
         }),
       ]);
 
@@ -143,6 +145,8 @@ export async function optimizedFindUnique<T>(
       where,
       select: options.select,
       include: options.include,
+      // Add relation optimization for better performance
+      ...(options.include && { relationLoadStrategy: 'join' as const }),
     }),
     options.ttl || CacheStrategies.FAST
   );
@@ -308,10 +312,63 @@ export function getIndexRecommendations() {
   return Array.from(new Set(recommendations));
 }
 
+/**
+ * Optimized opportunity queries with proper relation loading
+ */
+export async function getOptimizedOpportunities(options: {
+  include?: {
+    organization?: boolean;
+    contact?: boolean;
+  };
+  where?: Record<string, any>;
+  orderBy?: Record<string, 'asc' | 'desc'>;
+  pagination?: PaginationOptions;
+}) {
+  const pagination = createPagination(options.pagination);
+  
+  return prismadb.opportunity.findMany({
+    where: options.where,
+    include: options.include,
+    // Use join strategy for optimal performance with relations
+    relationLoadStrategy: 'join',
+    orderBy: options.orderBy || { updatedAt: 'desc' },
+    skip: pagination.skip,
+    take: pagination.take,
+  });
+}
+
+/**
+ * Optimized contact queries with proper relation loading
+ */
+export async function getOptimizedContacts(options: {
+  include?: {
+    organization?: boolean;
+    opportunities?: boolean;
+    interactions?: boolean;
+  };
+  where?: Record<string, any>;
+  orderBy?: Record<string, 'asc' | 'desc'>;
+  pagination?: PaginationOptions;
+}) {
+  const pagination = createPagination(options.pagination);
+  
+  return prismadb.contact.findMany({
+    where: options.where,
+    include: options.include,
+    // Use join strategy for optimal performance with relations
+    relationLoadStrategy: 'join',
+    orderBy: options.orderBy || { updatedAt: 'desc' },
+    skip: pagination.skip,
+    take: pagination.take,
+  });
+}
+
 // Export query optimization utilities
 export const QueryOptimization = {
   optimizedSearch,
   optimizedFindUnique,
+  getOptimizedOpportunities,
+  getOptimizedContacts,
   BatchOperations,
   QueryAnalyzer,
   checkDatabaseHealth,

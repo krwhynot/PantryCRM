@@ -8,6 +8,9 @@ import resendHelper from "@/lib/resend";
 import crypto from "crypto";
 import { z } from "zod";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 // Rate limiting store (in production, use Redis or database)
 const resetAttempts = new Map<string, { count: number; lastAttempt: number }>();
 
@@ -53,7 +56,10 @@ function checkRateLimit(email: string): boolean {
 }
 
 // Request password reset (sends reset token via email)
-export async function POST(req: NextRequest): Promise<Response> {
+async function handlePOST(req: NextRequest): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   try {
     const body = await req.json();
     
@@ -132,7 +138,10 @@ export async function POST(req: NextRequest): Promise<Response> {
 }
 
 // Reset password with token
-export async function PUT(req: NextRequest): Promise<Response> {
+async function handlePUT(req: NextRequest): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   try {
     const body = await req.json();
     
@@ -185,3 +194,8 @@ export async function PUT(req: NextRequest): Promise<Response> {
     );
   }
 }
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });

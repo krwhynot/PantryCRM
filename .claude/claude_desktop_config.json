@@ -1,0 +1,129 @@
+{
+    "mcpServers": {
+        "memory": {
+            "memory_manager_path": "C:\\Users\\kyle.ramsy\\AppData\\Roaming\\Claude\\memory_manager.py",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-memory@latest",
+                "--memory-check-interval=60",
+                "--max-heap-size=4096",
+                "--gc-interval=300",
+                "--max-backup-count=5",
+                "--compression-level=6"
+            ],
+            "env": {
+                "MEMORY_FILE_PATH": "/workspaces/PantryCRM/.claude/claude_desktop_config.json",
+                "MCP_MEMORY_RETRIEVAL_STRATEGY": "minimal",
+                "MCP_LEARNING_ADAPTATION": "step_by_step",
+                "MCP_COMMUNICATION_STYLE": "direct_concise",
+                "MCP_KNOWLEDGE_PROGRESSION": "foundational_to_complex",
+                "MCP_VISUAL_REPRESENTATION": "enabled",
+                "MCP_MEMORY_CHECK": "true",
+                "MCP_MEMORY_LIMIT": "4gb",
+                "MCP_LOG_FORMAT": "json",
+                "MCP_HEAP_SIZE": "4096m",
+                "MCP_GC_ENABLED": "true",
+                "MCP_LOG_LEVEL": "error",
+                "MCP_COMPRESSION_ENABLED": "true",
+                "MCP_MAX_TOKENS_PER_RESPONSE": "500",
+                "MCP_SUMMARY_MODE": "true",
+                "NODE_ENV": "production"
+            }
+        },
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem@latest",
+                "C:/Users/kyle.ramsy/Projects",
+                "C:/Users/kyle.ramsy/mcp-servers"
+            ],
+            "env": {
+                "MCP_TRANSPORT": "stdio",
+                "MCP_LOG_LEVEL": "info",
+                "NODE_ENV": "production",
+                "MCP_FILE_ENCODING": "utf8",
+                "MCP_MAX_FILE_SIZE": "10mb"
+            }
+        },
+        "tavily-mcp": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "tavily-mcp@0.1.2"
+            ],
+            "env": {
+                "TAVILY_API_KEY": "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"
+            }
+        },
+        "sequential-thinking": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking@latest",
+                "--max-thoughts=15",
+                "--branch-limit=2",
+                "--detail-level=low",
+                "--revision-depth=3"
+            ],
+            "env": {
+                "MCP_TRANSPORT": "stdio",
+                "MCP_LOG_LEVEL": "error",
+                "NODE_ENV": "production",
+                "MCP_THOUGHT_FORMAT": "structured",
+                "MCP_REVISION_TRACKING": "minimal"
+            }
+        },
+        "exa": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "exa-mcp-server",
+                "--tools=web_search_exa,research_paper_search,company_research,crawling,competitor_finder,linkedin_search,wikipedia_search_exa,github_search"
+            ],
+            "env": {
+                "EXA_API_KEY": "a9b28749-adac-4675-ac21-b6d6afbb65f1"
+            }
+        },
+        "perplexity-ask": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "server-perplexity-ask"
+            ],
+            "env": {
+                "PERPLEXITY_API_KEY": "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"
+            }
+        },
+        "fetch": {
+            "command": "python",
+            "args": [
+                "-m",
+                "mcp_server_fetch"
+            ]
+        },
+        "brave-search": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-brave-search",
+                "--max-requests-per-minute=30",
+                "--timeout=30000"
+            ],
+            "env": {
+                "BRAVE_API_KEY": "BSA8_xD0H0Y1SXakh5ZTfgIzwSAwPkU",
+                "MCP_TRANSPORT": "stdio",
+                "MCP_LOG_LEVEL": "info",
+                "NODE_ENV": "production"
+            }
+        },
+        "Context7": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp"
+            ]
+        }
+    }
+}

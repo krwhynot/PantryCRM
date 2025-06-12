@@ -26,30 +26,99 @@ export function isValidEmail(email: string): boolean {
 }
 
 /**
- * Rate limiting for API endpoints
+ * Enhanced rate limiting for API endpoints with security logging
  */
 class RateLimiter {
-  private attempts = new Map<string, { count: number; resetTime: number }>();
+  private attempts = new Map<string, { count: number; resetTime: number; firstAttempt: number }>();
+  private cleanupInterval: NodeJS.Timeout;
+  
+  constructor() {
+    // Clean up expired entries every 5 minutes
+    this.cleanupInterval = setInterval(() => this.cleanup(), 5 * 60 * 1000);
+  }
   
   check(identifier: string, maxAttempts: number = 10, windowMs: number = 60000): boolean {
     const now = Date.now();
     const attempt = this.attempts.get(identifier);
     
     if (!attempt || now >= attempt.resetTime) {
-      this.attempts.set(identifier, { count: 1, resetTime: now + windowMs });
+      this.attempts.set(identifier, { 
+        count: 1, 
+        resetTime: now + windowMs,
+        firstAttempt: now
+      });
       return true;
     }
     
     if (attempt.count >= maxAttempts) {
+      // Log rate limit exceeded for security monitoring
+      if (attempt.count === maxAttempts) {
+        console.warn(`[SECURITY] Rate limit exceeded for ${identifier}. ${maxAttempts} attempts in ${(now - attempt.firstAttempt)}ms`);
+      }
       return false;
     }
     
     attempt.count++;
     return true;
   }
+  
+  private cleanup(): void {
+    const now = Date.now();
+    for (const [key, value] of this.attempts.entries()) {
+      if (now >= value.resetTime) {
+        this.attempts.delete(key);
+      }
+    }
+  }
+  
+  destroy(): void {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+  }
 }
 
 export const rateLimiter = new RateLimiter();
+
+/**
+ * Rate limiting middleware for API routes
+ */
+export function withRateLimit(
+  handler: (req: NextRequest) => Promise<NextResponse>,
+  options: { maxAttempts?: number; windowMs?: number } = {}
+) {
+  return async (req: NextRequest): Promise<NextResponse> => {
+    const { maxAttempts = 100, windowMs = 60000 } = options;
+    
+    // Create identifier from IP and user agent
+    const ip = req.ip || 
+               req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+               req.headers.get('x-real-ip') || 
+               'unknown';
+    const userAgent = req.headers.get('user-agent') || 'unknown';
+    const identifier = `${ip}:${userAgent.substring(0, 50)}`;
+    
+    if (!rateLimiter.check(identifier, maxAttempts, windowMs)) {
+      return NextResponse.json(
+        { 
+          error: 'Too many requests', 
+          retryAfter: Math.ceil(windowMs / 1000) 
+        }, 
+        { 
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil(windowMs / 1000).toString(),
+            'X-RateLimit-Limit': maxAttempts.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': new Date(Date.now() + windowMs).toISOString()
+          }
+        }
+      );
+    }
+    
+    return handler(req);
+  };
+}
 
 /**
  * Check if current user has admin role

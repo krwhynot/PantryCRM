@@ -4,8 +4,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import sendEmail from "@/lib/sendmail";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 //Create route
-export async function POST(req: NextRequest): Promise<Response> {
+async function handlePOST(req: NextRequest): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -131,7 +137,10 @@ export async function POST(req: NextRequest): Promise<Response> {
 }
 
 //Update route
-export async function PUT(req: NextRequest): Promise<Response> {
+async function handlePUT(req: NextRequest): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -260,3 +269,8 @@ export async function PUT(req: NextRequest): Promise<Response> {
 }
 
 
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });

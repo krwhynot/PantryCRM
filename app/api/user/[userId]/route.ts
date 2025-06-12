@@ -3,7 +3,13 @@ import { requireResourceOwnership } from "@/lib/authorization";
 import { logDataAccess, logSecurityEvent } from "@/lib/security-logger";
 import { prismadb } from "@/lib/prisma";
 
-export async function GET(req: NextRequest, props: { params: Promise<{ userId: string }> }) {
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
+async function handleGET(req: NextRequest, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error;
   const params = await props.params;
   
   // SECURITY: Prevent IDOR vulnerability - verify user ownership or admin privileges
@@ -55,7 +61,10 @@ export async function GET(req: NextRequest, props: { params: Promise<{ userId: s
   }
 }
 
-export async function DELETE(req: NextRequest, props: { params: Promise<{ userId: string }> }) {
+async function handleDELETE(req: NextRequest, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error;
   const params = await props.params;
   
   // SECURITY: Only admins can delete users (high-privilege operation)
@@ -117,3 +126,7 @@ export async function DELETE(req: NextRequest, props: { params: Promise<{ userId
     return new NextResponse("Failed to deactivate user", { status: 500 });
   }
 }
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
+export const DELETE = withRateLimit(withErrorHandler(handleDELETE), { maxAttempts: 100, windowMs: 60000 });

@@ -4,7 +4,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { hash } from "bcryptjs";
 
-export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
+async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -25,3 +31,7 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 }
 
 
+
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });

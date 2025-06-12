@@ -20,7 +20,12 @@
     "optimize": "npm dedupe && npm prune",
     "clean": "if exist .next rmdir /s /q .next",
     "prebuild": "rimraf .next",
-    "build:prod": "npm run prebuild && npm run build"
+    "build:prod": "npm run prebuild && npm run build",
+    "security:audit": "npm audit --audit-level moderate",
+    "security:fix": "npm audit fix",
+    "security:add-auth": "node scripts/add-auth-to-api.js",
+    "security:maintenance": "npx ts-node scripts/security-maintenance.ts",
+    "security:test": "npm run test -- --testPathPattern=security"
   },
   "prisma": {
     "seed": "node ./prisma/seed.js"

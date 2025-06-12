@@ -4,6 +4,9 @@ import { logDataAccess, logSecurityEvent } from "@/lib/security-logger";
 import { prismadb } from "@/lib/prisma";
 import { z } from "zod";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 // Input validation schema
 const UpdateProfileSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name too long").optional(),
@@ -11,7 +14,10 @@ const UpdateProfileSchema = z.object({
   account_name: z.string().max(100, "Account name too long").optional()
 });
 
-export async function PUT(req: NextRequest, props: { params: Promise<{ userId: string }> }) {
+async function handlePUT(req: NextRequest, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error;
   const params = await props.params;
   
   // SECURITY: Prevent IDOR vulnerability - verify user ownership or admin privileges
@@ -104,3 +110,6 @@ export async function PUT(req: NextRequest, props: { params: Promise<{ userId: s
     return new NextResponse("Failed to update profile", { status: 500 });
   }
 }
+
+// Export with authentication, rate limiting, and error handling
+export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });

@@ -3,8 +3,14 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 //Create new account route
-export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -94,7 +100,10 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 }
 
 //Update account route
-export async function PUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handlePUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -189,7 +198,10 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
 }
 
 //GET all accounts route
-export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: NextRequest);
+  if (error) return error; Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -248,3 +260,9 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 }
 
 
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });

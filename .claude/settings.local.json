@@ -33,7 +33,10 @@
       "Bash(git push:*)",
       "Bash(npm run lint)",
       "Bash(DATABASE_URL=\"file:./dev.db\" npm run build:safe)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm audit:*)",
+      "Bash(node:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": []
   }

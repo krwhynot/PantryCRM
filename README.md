@@ -19,6 +19,7 @@ Kitchen Pantry CRM is a specialized B2B sales CRM for food service brands, built
 <p align="center">
    <a href="#introduction"><strong>Introduction</strong></a> ·
    <a href="#tech-stack--features"><strong>Tech Stack + Features</strong></a> ·
+   <a href="#security"><strong>Security</strong></a> ·
    <a href="#food-service-brands"><strong>Food Service Brands</strong></a> ·
    <a href="#installation"><strong>Installation</strong></a> ·
    <a href="#optimization"><strong>Optimization</strong></a> ·
@@ -50,7 +51,63 @@ Kitchen Pantry CRM is a specialized B2B sales CRM system for sales teams selling
 - **Interactions** – Record sales activities with 30-second entry workflow
 - **Settings Management** – Dynamic dropdowns for all 9 categories
 - **Dashboard** – Visual analytics with Tremor charts
-- **Touch-Optimized UI** – 44px minimum touch targets for field sales teams## Food Service Brands
+- **Touch-Optimized UI** – 44px minimum touch targets for field sales teams
+
+## Security
+
+Kitchen Pantry CRM implements enterprise-grade security measures designed specifically for food service industry compliance requirements:
+
+### 🔒 **Authentication & Authorization**
+- **Multi-Provider Authentication** – NextAuth.js with Google, GitHub, and credentials
+- **Role-Based Access Control (RBAC)** – Granular permissions for admin, manager, and user roles
+- **Timing Attack Protection** – Prevents user enumeration attacks
+- **Session Security** – Database sessions with automatic cleanup
+
+### 🛡️ **Data Protection**
+- **Input Sanitization** – DOMPurify and Zod validation throughout the application
+- **SQL Injection Prevention** – Prisma ORM with parameterized queries
+- **XSS Protection** – Comprehensive Content Security Policy and input filtering
+- **Rate Limiting** – API endpoint protection with intelligent throttling
+
+### 📊 **Security Monitoring**
+- **OWASP Compliance** – Addresses all OWASP Top 10 2021 vulnerabilities
+- **Security Event Logging** – Comprehensive audit trail for all sensitive operations
+- **Real-time Alerting** – Automated security incident detection and notification
+- **Security Dashboard** – Admin panel for monitoring security metrics
+
+### 🏭 **Food Industry Compliance**
+- **FSMA Compliance** – Supply chain traceability and audit logging
+- **GDPR/CCPA Ready** – Automated data retention and privacy controls
+- **Data Classification** – Food safety data protection levels
+- **Supplier Data Protection** – Enhanced access controls for sensitive supplier information
+
+### 🔧 **Security Maintenance**
+- **Automated Vulnerability Scanning** – Dependency monitoring and updates
+- **Data Retention Policies** – Automated archival and cleanup per regulatory requirements
+- **Legal Hold Support** – Compliance-ready data preservation
+- **Security Scripts** – Automated maintenance and monitoring tools
+
+### 📋 **Security Commands**
+```bash
+# Run security audit
+npm run security:audit
+
+# Fix vulnerabilities
+npm run security:fix
+
+# Add authentication to new routes
+npm run security:add-auth
+
+# Run security maintenance
+npm run security:maintenance
+
+# Run security tests
+npm run security:test
+```
+
+For detailed security documentation, see [SECURITY-FIXES-SUMMARY.md](./SECURITY-FIXES-SUMMARY.md).
+
+## Food Service Brands
 
 Kitchen Pantry CRM represents 11 food service brands:
 

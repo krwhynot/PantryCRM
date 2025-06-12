@@ -163,6 +163,9 @@ export const CacheStrategies = {
   // Long-term caching for static data
   STATIC: 30 * 60 * 1000, // 30 minutes
   
+  // Long-term caching for settings (rarely change)
+  LONG: 60 * 60 * 1000, // 1 hour
+  
   // Report caching
   REPORT: 15 * 60 * 1000, // 15 minutes
 } as const;
@@ -190,6 +193,8 @@ export const CacheKeys = {
     
   list: (entity: string, page: number, filters: Record<string, any>) =>
     `list:${entity}:${page}:${JSON.stringify(filters)}`,
+    
+  systemSettings: (category: string) => `settings:${category}`,
 } as const;
 
 /**

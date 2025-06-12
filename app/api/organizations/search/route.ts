@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
 import { processSearchInput } from '@/lib/input-sanitization';
 
-export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
+async function handleGET(req: NextRequest): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   try {
     const { searchParams } = new URL(req.url);
     const rawQuery = searchParams.get('query');
@@ -45,3 +51,7 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 }
 
 
+
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });

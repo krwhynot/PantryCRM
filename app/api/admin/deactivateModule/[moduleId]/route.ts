@@ -3,12 +3,18 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * API route to deactivate a module
  * Updated as part of Task 3 (Critical Dependency Fixes) to use setting model as proxy for system modules
  * This is a temporary implementation until proper module management functionality is implemented
  */
-export async function POST(req: Request, props: { params: Promise<{ moduleId: string }> }) {
+async function handlePOST(req: Request, props: { params: Promise<{ moduleId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: Request);
+  if (error) return error;
   const params = await props.params;
   const session = await getServerSession(authOptions);
 
@@ -34,3 +40,7 @@ export async function POST(req: Request, props: { params: Promise<{ moduleId: st
     return new NextResponse("Error deactivating module", { status: 500 });
   }
 }
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });

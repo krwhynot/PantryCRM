@@ -4,7 +4,13 @@ import { getServerSession } from "next-auth";
 import { prismadb } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
 
-export async function DELETE(req: Request, props: { params: Promise<{ leadId: string }> }) {
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
+async function handleDELETE(req: Request, props: { params: Promise<{ leadId: string }> }): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: Request);
+  if (error) return error;
   const params = await props.params;
   const session = await getServerSession(authOptions);
 
@@ -28,3 +34,7 @@ export async function DELETE(req: Request, props: { params: Promise<{ leadId: st
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+
+// Export with authentication, rate limiting, and error handling
+export const DELETE = withRateLimit(withErrorHandler(handleDELETE), { maxAttempts: 100, windowMs: 60000 });

@@ -7,12 +7,18 @@ import { authOptions } from "@/lib/auth";
 // import NewTaskFromCRMToWatchersEmail from "@/emails/NewTaskFromCRMToWatchers";
 import resendHelper from "@/lib/resend";
 
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Create new task from CRM in project route
  * Updated as part of Task 3 (Critical Dependency Fixes) to use interaction model as proxy for crm_Accounts_Tasks
  * This is a temporary implementation until proper task management functionality is implemented
  */
-export async function POST(req: Request) {
+async function handlePOST(req: Request): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth(req: Request);
+  if (error) return error;
   /*
   Resend.com function init - this is a helper function that will be used to send emails
   */
@@ -128,3 +134,7 @@ export async function POST(req: Request) {
     return new NextResponse("Initial error", { status: 500 });
   }
 }
+
+
+// Export with authentication, rate limiting, and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });

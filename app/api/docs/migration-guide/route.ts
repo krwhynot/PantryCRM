@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+import { requireAuth, withRateLimit } from '@/lib/security';
+import { withErrorHandler } from '@/lib/api-error-handler';
+
+async function handleGET(): Promise<NextResponse> {
+  // Check authentication
+  const { user, error } = await requireAuth();
+  if (error) return error;
   const migrationGuide = {
     title: 'Kitchen Pantry CRM API Migration Guide',
     version: '2.0',
@@ -81,3 +87,7 @@ export async function GET() {
     },
   });
 }
+
+
+// Export with authentication, rate limiting, and error handling
+export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
