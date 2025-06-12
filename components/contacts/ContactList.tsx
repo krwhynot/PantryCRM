@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -22,7 +22,7 @@ interface ContactListProps {
   selectedContactId?: string;
 }
 
-const ContactList: React.FC<ContactListProps> = ({
+const ContactList: React.FC<ContactListProps> = memo(({
   organizationId,
   onContactSelect,
   selectedContactId,
@@ -31,28 +31,29 @@ const ContactList: React.FC<ContactListProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchContacts = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(`/api/contacts?organizationId=${organizationId}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data: Contact[] = await response.json();
-        setContacts(data);
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setIsLoading(false);
+  // Memoize the fetch function to prevent recreation on every render
+  const fetchContacts = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`/api/contacts?organizationId=${organizationId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+      const data: Contact[] = await response.json();
+      setContacts(data);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [organizationId]);
 
+  useEffect(() => {
     if (organizationId) {
       fetchContacts();
     }
-  }, [organizationId]);
+  }, [fetchContacts, organizationId]);
 
   if (isLoading) {
     return (
@@ -148,6 +149,9 @@ const ContactList: React.FC<ContactListProps> = ({
       </CardContent>
     </Card>
   );
-};
+});
+
+// Add display name for React Developer Tools
+ContactList.displayName = 'ContactList';
 
 export default ContactList;

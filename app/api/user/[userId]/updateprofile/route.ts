@@ -1,16 +1,23 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { requireResourceOwnership } from "@/lib/authorization";
+import { logDataAccess, logSecurityEvent } from "@/lib/security-logger";
 import { prismadb } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { hash } from "bcryptjs";
+import { z } from "zod";
 
-export async function PUT(req: Request, props: { params: Promise<{ userId: string }> }) {
+// Input validation schema
+const UpdateProfileSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100, "Name too long").optional(),
+  username: z.string().min(3, "Username must be at least 3 characters").max(50, "Username too long").optional(),
+  account_name: z.string().max(100, "Account name too long").optional()
+});
+
+export async function PUT(req: NextRequest, props: { params: Promise<{ userId: string }> }) {
   const params = await props.params;
-  const session = await getServerSession(authOptions);
-  const { name, username, account_name } = await req.json();
-
-  if (!session) {
-    return new NextResponse("Unauthenticated", { status: 401 });
+  
+  // SECURITY: Prevent IDOR vulnerability - verify user ownership or admin privileges
+  const authResult = await requireResourceOwnership(req, params.userId, 'user');
+  if (!authResult.authorized) {
+    return authResult.error!;
   }
 
   if (!params.userId) {
@@ -18,20 +25,82 @@ export async function PUT(req: Request, props: { params: Promise<{ userId: strin
   }
 
   try {
-    const newUserPass = await prismadb.user.update({
+    const body = await req.json();
+    
+    // Validate input data
+    const validationResult = UpdateProfileSchema.safeParse(body);
+    if (!validationResult.success) {
+      logSecurityEvent('input_validation_fail', {
+        userId: authResult.user!.id,
+        endpoint: '/api/user/[userId]/updateprofile',
+        errors: validationResult.error.errors
+      }, req);
+      
+      return NextResponse.json({
+        error: "Invalid input data",
+        details: validationResult.error.errors
+      }, { status: 400 });
+    }
+
+    const { name, username, account_name } = validationResult.data;
+
+    // Check if username is already taken (if provided)
+    if (username) {
+      const existingUser = await prismadb.user.findFirst({
+        where: {
+          username: username,
+          id: { not: params.userId } // Exclude current user
+        }
+      });
+
+      if (existingUser) {
+        return NextResponse.json({
+          error: "Username already exists"
+        }, { status: 409 });
+      }
+    }
+
+    // Update user profile
+    const updatedUser = await prismadb.user.update({
       data: {
-        name: name,
-        username: username,
-        account_name: account_name,
+        ...(name && { name }),
+        ...(username && { username }),
+        ...(account_name && { account_name }),
+        updatedAt: new Date()
       },
       where: {
         id: params.userId,
       },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        account_name: true,
+        email: true,
+        updatedAt: true
+      }
     });
 
-    return NextResponse.json(newUserPass);
+    // Log the profile update for audit trail
+    logSecurityEvent('data_access', {
+      userId: authResult.user!.id,
+      action: 'PROFILE_UPDATE',
+      targetUserId: params.userId,
+      updatedFields: Object.keys(validationResult.data).filter(key => validationResult.data[key] !== undefined)
+    }, req);
+
+    return NextResponse.json({
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
   } catch (error) {
-    console.log("[UPDATE_USER_PROFILE_PUT]", error);
-    return new NextResponse("Initial error", { status: 500 });
+    logSecurityEvent('data_access', {
+      userId: authResult.user!.id,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      endpoint: '/api/user/[userId]/updateprofile',
+      action: 'PUT'
+    }, req);
+    
+    return new NextResponse("Failed to update profile", { status: 500 });
   }
 }

@@ -121,10 +121,20 @@ export function addSecurityHeaders(response: NextResponse): NextResponse {
   // Referrer policy
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   
-  // Content Security Policy
+  // Content Security Policy - Enhanced security, removed unsafe directives
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;"
+    "default-src 'self'; " +
+    "script-src 'self' 'wasm-unsafe-eval'; " + // Removed unsafe-inline and unsafe-eval
+    "style-src 'self' 'unsafe-inline'; " + // Keep unsafe-inline for CSS-in-JS frameworks
+    "img-src 'self' data: https:; " +
+    "font-src 'self' data:; " +
+    "connect-src 'self' https://*.azure.net https://*.azurewebsites.net; " + // Azure services
+    "object-src 'none'; " + // Prevent Flash/plugin execution
+    "base-uri 'self'; " + // Prevent base tag injection
+    "form-action 'self'; " + // Restrict form submissions
+    "frame-ancestors 'none'; " + // Enhanced clickjacking protection
+    "upgrade-insecure-requests" // Force HTTPS
   );
   
   return response;

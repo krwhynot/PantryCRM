@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { signIn } from "next-auth/react";
-import * as React from "react";
+import { useTransition } from "react";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -10,18 +10,42 @@ import { useToast } from "@/components/ui/use-toast";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
-  const toast = useToast();
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
 
-  const loginWithGoogle = async () => {
-    setIsLoading(true);
-
-    try {
-      await signIn("google");
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
-    }
+  const loginWithGoogle = () => {
+    startTransition(async () => {
+      try {
+        const result = await signIn("google", { 
+          redirect: false // Don't redirect immediately to handle errors gracefully
+        });
+        
+        // Check if sign-in was successful
+        if (result?.error) {
+          console.error("Authentication error:", result.error);
+          toast({
+            title: "Authentication Failed",
+            description: "Unable to sign in with Google. Please try again.",
+            variant: "destructive",
+          });
+        } else if (result?.ok) {
+          toast({
+            title: "Sign In Successful",
+            description: "Welcome to Kitchen Pantry CRM!",
+            variant: "default",
+          });
+          // Redirect after successful authentication
+          window.location.href = result.url || "/";
+        }
+      } catch (error) {
+        console.error("Unexpected authentication error:", error);
+        toast({
+          title: "Authentication Error",
+          description: "An unexpected error occurred. Please try again.",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
@@ -30,9 +54,9 @@ const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
         type="button"
         className="max-w-sm w-full bg-slate-200"
         onClick={loginWithGoogle}
-        disabled={isLoading}
+        disabled={isPending}
       >
-        {isLoading ? null : (
+        {isPending ? null : (
           <svg
             className="mr-2 h-4 w-4"
             aria-hidden="true"

@@ -30,7 +30,10 @@
       "Bash(npx prisma:*)",
       "Bash(grep:*)",
       "Bash(git add:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npm run lint)",
+      "Bash(DATABASE_URL=\"file:./dev.db\" npm run build:safe)",
+      "Bash(npx tsc:*)"
     ],
     "deny": []
   }

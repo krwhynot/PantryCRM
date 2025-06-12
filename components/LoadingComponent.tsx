@@ -8,3 +8,4 @@ const LoadingComponent = () => {
 };
 
 export default LoadingComponent;
+export { LoadingComponent };

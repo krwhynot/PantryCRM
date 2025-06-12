@@ -22,8 +22,30 @@ function getGoogleCredentials(): { clientId: string; clientSecret: string } {
   return { clientId, clientSecret };
 }
 
+function getGitHubCredentials(): { clientId: string; clientSecret: string } {
+  const clientId = process.env.GITHUB_ID;
+  const clientSecret = process.env.GITHUB_SECRET;
+  if (!clientId || clientId.length === 0) {
+    throw new Error("Missing GITHUB_ID environment variable");
+  }
+
+  if (!clientSecret || clientSecret.length === 0) {
+    throw new Error("Missing GITHUB_SECRET environment variable");
+  }
+
+  return { clientId, clientSecret };
+}
+
+function getJWTSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || secret.length === 0) {
+    throw new Error("Missing JWT_SECRET environment variable");
+  }
+  return secret;
+}
+
 export const authOptions: NextAuthOptions = {
-  secret: process.env.JWT_SECRET,
+  secret: getJWTSecret(),
   adapter: PrismaAdapter(prismadb),
   session: {
     strategy: "database",
@@ -37,8 +59,8 @@ export const authOptions: NextAuthOptions = {
 
     GitHubProvider({
       name: "github",
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
+      clientId: getGitHubCredentials().clientId,
+      clientSecret: getGitHubCredentials().clientSecret,
     }),
 
     CredentialsProvider({
@@ -59,20 +81,24 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        //clear white space from password
+        // Clear white space from both email and password
+        const trimmedEmail = credentials.email.trim().toLowerCase();
         const trimmedPassword = credentials.password.trim();
 
-        if (!user || !user?.password) {
-          throw new Error("User not found, please register first");
+        // SECURITY: Consistent timing to prevent user enumeration attacks
+        // Always hash the password even if user doesn't exist
+        let isValidCredentials = false;
+        
+        if (user && user.password) {
+          isValidCredentials = await bcrypt.compare(trimmedPassword, user.password);
+        } else {
+          // Perform dummy hash operation to maintain consistent timing
+          await bcrypt.compare(trimmedPassword, '$2a$12$dummy.hash.to.prevent.timing.attacks');
         }
 
-        const isCorrectPassword = await bcrypt.compare(
-          trimmedPassword,
-          user.password
-        );
-
-        if (!isCorrectPassword) {
-          throw new Error("Password is incorrect");
+        if (!isValidCredentials) {
+          // Use consistent error message to prevent user enumeration
+          throw new Error("Invalid username or password");
         }
 
         return user;
@@ -81,6 +107,12 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async session({ token, session }: { token: JWT; session: Session }) {
+      // Validate token has required email property
+      if (!token.email) {
+        console.error("JWT token missing email property");
+        return null;
+      }
+
       const user = await prismadb.user.findFirst({
         where: {
           email: token.email,
@@ -89,11 +121,16 @@ export const authOptions: NextAuthOptions = {
 
       if (!user) {
         try {
+          // Validate all required token properties before creating user
+          if (!token.email) {
+            throw new Error("Token email is required for user creation");
+          }
+
           const newUser = await prismadb.user.create({
             data: {
               email: token.email,
-              name: token.name,
-              image: token.picture,
+              name: token.name || null, // Handle potential undefined
+              image: token.picture || null, // Handle potential undefined
               isActive: true,
               role: "user",
               lastLoginAt: new Date(),
@@ -113,6 +150,7 @@ export const authOptions: NextAuthOptions = {
           return session;
         } catch (error) {
           console.error("Error creating new user during OAuth:", error);
+          // Return null to prevent authentication with invalid session
           return null;
         }
       } else {

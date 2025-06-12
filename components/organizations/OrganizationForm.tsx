@@ -1,8 +1,5 @@
 'use client';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useActionState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,66 +7,34 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import { createOrganizationAction, CreateOrganizationState } from '@/actions/organizations/create-organization';
 
-const OrganizationFormSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  priority: z.enum(['A', 'B', 'C', 'D']).optional(),
-  segment: z.enum(['Fine Dining', 'Fast Food', 'Healthcare', 'Catering', 'Institutional']).optional(),
-  distributor: z.enum(['Sysco', 'USF', 'PFG', 'Direct', 'Other']).optional(),
-  accountManagerId: z.string().optional(),
-  addressLine1: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().optional(),
-  zipCode: z.string().optional(),
-  phone: z.string().regex(/^\+?[\d\s\-\(\)]+$/, 'Invalid phone number format').optional(),
-  email: z.string().email('Invalid email format').optional(),
-  website: z.string().optional(),
-  notes: z.string().optional(),
-});
-
-type OrganizationFormData = z.infer<typeof OrganizationFormSchema>;
 
 interface OrganizationFormProps {
   onSuccess?: () => void;
-  initialData?: Partial<OrganizationFormData>;
+  initialData?: Record<string, any>;
 }
 
 export function OrganizationForm({ onSuccess, initialData }: OrganizationFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  
-  const form = useForm<OrganizationFormData>({
-    resolver: zodResolver(OrganizationFormSchema),
-    defaultValues: initialData || {},
-  });
+  const [state, formAction, pending] = useActionState<CreateOrganizationState | null, FormData>(
+    createOrganizationAction,
+    null
+  );
 
-  const onSubmit = async (data: OrganizationFormData) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/organizations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to create organization');
-      }
-
+  // Handle success/error states
+  useEffect(() => {
+    if (state?.success) {
       toast({ title: 'Success', description: 'Organization created successfully' });
-      form.reset();
       onSuccess?.();
-    } catch (error) {
-      toast({ 
-        title: 'Error', 
-        description: error instanceof Error ? error.message : 'Failed to create organization',
+    } else if (state?.error) {
+      toast({
+        title: 'Error',
+        description: state.error,
         variant: 'destructive'
       });
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [state, toast, onSuccess]);
 
   return (
     <Card className="w-full max-w-2xl">
@@ -77,26 +42,25 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
         <CardTitle>New Organization</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form action={formAction} className="space-y-4">
           {/* Organization Name - Required */}
           <div className="space-y-2">
             <Label htmlFor="name">Organization Name *</Label>
             <Input
               id="name"
-              {...form.register('name')}
+              name="name"
+              required
+              defaultValue={initialData?.name || ''}
               placeholder="Restaurant name, catering company, etc."
               className="min-h-[44px]" // Touch target compliance
             />
-            {form.formState.errors.name && (
-              <p className="text-sm text-red-500">{form.formState.errors.name.message}</p>
-            )}
           </div>
 
           {/* Food Service Fields Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="priority">Priority Level</Label>
-              <Select onValueChange={(value) => form.setValue('priority', value as 'A' | 'B' | 'C' | 'D')} defaultValue={initialData?.priority}>
+              <Select name="priority" defaultValue={initialData?.priority || ''}>
                 <SelectTrigger className="min-h-[44px]">
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
@@ -111,7 +75,7 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
 
             <div className="space-y-2">
               <Label htmlFor="segment">Market Segment</Label>
-              <Select onValueChange={(value) => form.setValue('segment', value as 'Fine Dining' | 'Fast Food' | 'Healthcare' | 'Catering' | 'Institutional')} defaultValue={initialData?.segment}>
+              <Select name="segment" defaultValue={initialData?.segment || ''}>
                 <SelectTrigger className="min-h-[44px]">
                   <SelectValue placeholder="Select segment" />
                 </SelectTrigger>
@@ -127,7 +91,7 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
 
             <div className="space-y-2">
               <Label htmlFor="distributor">Distributor</Label>
-              <Select onValueChange={(value) => form.setValue('distributor', value as 'Sysco' | 'USF' | 'PFG' | 'Direct' | 'Other')} defaultValue={initialData?.distributor}>
+              <Select name="distributor" defaultValue={initialData?.distributor || ''}>
                 <SelectTrigger className="min-h-[44px]">
                   <SelectValue placeholder="Select distributor" />
                 </SelectTrigger>
@@ -148,7 +112,8 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
               <Label htmlFor="phone">Phone</Label>
               <Input
                 id="phone"
-                {...form.register('phone')}
+                name="phone"
+                defaultValue={initialData?.phone || ''}
                 placeholder="(555) 123-4567"
                 className="min-h-[44px]"
               />
@@ -157,8 +122,9 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
-                {...form.register('email')}
+                defaultValue={initialData?.email || ''}
                 placeholder="contact@restaurant.com"
                 className="min-h-[44px]"
               />
@@ -169,7 +135,8 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
             <Label htmlFor="website">Website</Label>
             <Input
               id="website"
-              {...form.register('website')}
+              name="website"
+              defaultValue={initialData?.website || ''}
               placeholder="https://restaurant.com"
               className="min-h-[44px]"
             />
@@ -180,7 +147,8 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
             <Label htmlFor="addressLine1">Address</Label>
             <Input
               id="addressLine1"
-              {...form.register('addressLine1')}
+              name="addressLine1"
+              defaultValue={initialData?.addressLine1 || ''}
               placeholder="123 Main Street"
               className="min-h-[44px]"
             />
@@ -191,7 +159,8 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
               <Label htmlFor="city">City</Label>
               <Input
                 id="city"
-                {...form.register('city')}
+                name="city"
+                defaultValue={initialData?.city || ''}
                 placeholder="Houston"
                 className="min-h-[44px]"
               />
@@ -200,7 +169,8 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
               <Label htmlFor="state">State</Label>
               <Input
                 id="state"
-                {...form.register('state')}
+                name="state"
+                defaultValue={initialData?.state || ''}
                 placeholder="TX"
                 className="min-h-[44px]"
               />
@@ -209,7 +179,8 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
               <Label htmlFor="zipCode">ZIP Code</Label>
               <Input
                 id="zipCode"
-                {...form.register('zipCode')}
+                name="zipCode"
+                defaultValue={initialData?.zipCode || ''}
                 placeholder="77001"
                 className="min-h-[44px]"
               />
@@ -221,7 +192,8 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
             <Label htmlFor="notes">Notes</Label>
             <Textarea
               id="notes"
-              {...form.register('notes')}
+              name="notes"
+              defaultValue={initialData?.notes || ''}
               placeholder="Additional information about this organization..."
               className="min-h-[88px]" // Double touch target for textarea
             />
@@ -230,10 +202,10 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
           {/* Submit Button */}
           <Button 
             type="submit" 
-            disabled={isLoading}
+            disabled={pending}
             className="w-full min-h-[44px] mt-6"
           >
-            {isLoading ? 'Creating...' : 'Create Organization'}
+            {pending ? 'Creating...' : 'Create Organization'}
           </Button>
         </form>
       </CardContent>

@@ -7,8 +7,13 @@ declare global {
 
 // Azure B1 optimized Prisma configuration with connection pooling
 const createPrismaClient = () => {
-  // Construct DATABASE_URL with optimized connection parameters for Azure SQL Basic
-  const baseUrl = process.env.DATABASE_URL || '';
+  // Validate DATABASE_URL with proper error handling
+  const baseUrl = process.env.DATABASE_URL;
+  if (!baseUrl) {
+    throw new Error("DATABASE_URL environment variable is required");
+  }
+  
+  // Construct optimized connection parameters for Azure SQL Basic
   const optimizedUrl = baseUrl.includes('?') 
     ? `${baseUrl}&connection_limit=3&pool_timeout=15&connect_timeout=30&socket_timeout=60`
     : `${baseUrl}?connection_limit=3&pool_timeout=15&connect_timeout=30&socket_timeout=60`;
@@ -70,3 +75,4 @@ if (typeof window === 'undefined') {
 }
 
 export const prismadb = prisma;
+export { prisma };

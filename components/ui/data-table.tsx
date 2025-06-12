@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+const { memo, useMemo } = React;
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,11 +39,11 @@ interface DataTableProps<TData, TValue> {
   search: string;
 }
 
-export function DataTable<TData, TValue>({
+export const DataTable = memo(<TData, TValue>({
   columns,
   data,
   search,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, TValue>) => {
   const { isTouchDevice } = useDevice();
   //This is for filtering the columns
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -71,6 +72,27 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  // Memoize conditional class names to prevent inline object creation
+  const touchRowClass = useMemo(() => 
+    isTouchDevice ? "h-16 touch-target" : "", 
+    [isTouchDevice]
+  );
+
+  const touchCellClass = useMemo(() => 
+    isTouchDevice ? "py-4 px-4" : "", 
+    [isTouchDevice]
+  );
+
+  const touchButtonClass = useMemo(() => 
+    isTouchDevice ? "button-touch" : "", 
+    [isTouchDevice]
+  );
+
+  const touchButtonSize = useMemo(() => 
+    isTouchDevice ? "default" as const : "sm" as const, 
+    [isTouchDevice]
+  );
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -90,10 +112,12 @@ export function DataTable<TData, TValue>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
+            {useMemo(() => 
+              table
+                .getAllColumns()
+                .filter((column) => column.getCanHide()),
+              [table]
+            ).map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
@@ -137,13 +161,13 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={isTouchDevice ? "h-16 touch-target" : ""}
+                  className={touchRowClass}
                   data-touch-device={isTouchDevice}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell 
                       key={cell.id}
-                      className={isTouchDevice ? "py-4 px-4" : ""}
+                      className={touchCellClass}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -169,23 +193,26 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-end space-x-4 py-4">
         <Button
           variant="outline"
-          size={isTouchDevice ? "default" : "sm"}
+          size={touchButtonSize}
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className={isTouchDevice ? "button-touch" : ""}
+          className={touchButtonClass}
         >
           Previous
         </Button>
         <Button
           variant="outline"
-          size={isTouchDevice ? "default" : "sm"}
+          size={touchButtonSize}
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className={isTouchDevice ? "button-touch" : ""}
+          className={touchButtonClass}
         >
           Next
         </Button>
       </div>
     </div>
   );
-}
+}) as <TData, TValue>(props: DataTableProps<TData, TValue>) => JSX.Element;
+
+// Add display name for React Developer Tools
+DataTable.displayName = 'DataTable';
