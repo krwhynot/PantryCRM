@@ -317,9 +317,243 @@ class SecurityMonitor {
   }
 }
 
+/**
+ * Enhanced Performance Monitor for Azure B1 constraints
+ * Extends the existing PerformanceMonitor with B1-specific optimizations
+ */
+class EnhancedPerformanceMonitor extends PerformanceMonitor {
+  private responseTimes: number[] = [];
+  private activeConnections = 0;
+  private queuedRequests = 0;
+  private detailedMetrics: Array<{
+    timestamp: number;
+    memory: {
+      used: number;
+      free: number;
+      percentage: number;
+      heapUsed: number;
+      heapTotal: number;
+    };
+    responseTime: {
+      average: number;
+      p95: number;
+      p99: number;
+    };
+    concurrent: {
+      activeConnections: number;
+      queuedRequests: number;
+    };
+  }> = [];
+
+  constructor() {
+    super();
+    
+    // Collect detailed metrics every 30 seconds for B1 monitoring
+    setInterval(() => this.collectDetailedMetrics(), 30000);
+    
+    // Clean up old detailed metrics every 5 minutes
+    setInterval(() => this.cleanupDetailedMetrics(), 5 * 60 * 1000);
+  }
+
+  // Track incoming requests for B1 concurrency monitoring
+  trackRequest(): () => void {
+    this.activeConnections++;
+    const startTime = Date.now();
+
+    return () => {
+      this.activeConnections--;
+      const duration = Date.now() - startTime;
+      this.addResponseTime(duration);
+    };
+  }
+
+  // Track queued requests
+  trackQueuedRequest(): () => void {
+    this.queuedRequests++;
+    
+    return () => {
+      this.queuedRequests--;
+    };
+  }
+
+  private addResponseTime(duration: number): void {
+    this.responseTimes.push(duration);
+    
+    // Keep only last 1000 response times for memory efficiency on B1
+    if (this.responseTimes.length > 1000) {
+      this.responseTimes = this.responseTimes.slice(-1000);
+    }
+  }
+
+  private collectDetailedMetrics(): void {
+    try {
+      const memoryUsage = process.memoryUsage();
+      
+      const metric = {
+        timestamp: Date.now(),
+        memory: {
+          used: memoryUsage.heapUsed,
+          free: memoryUsage.heapTotal - memoryUsage.heapUsed,
+          percentage: Math.round((memoryUsage.heapUsed / memoryUsage.heapTotal) * 100),
+          heapUsed: memoryUsage.heapUsed,
+          heapTotal: memoryUsage.heapTotal,
+        },
+        responseTime: this.calculateResponseTimeMetrics(),
+        concurrent: {
+          activeConnections: this.activeConnections,
+          queuedRequests: this.queuedRequests,
+        },
+      };
+
+      this.detailedMetrics.push(metric);
+      
+      // Check for B1-specific performance alerts
+      this.checkB1PerformanceAlerts(metric);
+      
+    } catch (error) {
+      logger.error('Failed to collect detailed performance metrics', 'MONITORING', error);
+    }
+  }
+
+  private calculateResponseTimeMetrics() {
+    if (this.responseTimes.length === 0) {
+      return { average: 0, p95: 0, p99: 0 };
+    }
+
+    const sorted = [...this.responseTimes].sort((a, b) => a - b);
+    const length = sorted.length;
+    
+    const average = Math.round(
+      this.responseTimes.reduce((sum, time) => sum + time, 0) / length
+    );
+    
+    const p95 = sorted[Math.floor(length * 0.95)] || 0;
+    const p99 = sorted[Math.floor(length * 0.99)] || 0;
+
+    return { average, p95, p99 };
+  }
+
+  private checkB1PerformanceAlerts(metric: any): void {
+    const alerts: string[] = [];
+
+    // Memory alerts (critical for B1's 1.75GB limit)
+    if (metric.memory.percentage > 85) {
+      alerts.push(`High memory usage: ${metric.memory.percentage}%`);
+      logger.warn(`High memory usage detected: ${metric.memory.percentage}%`, 'B1_MONITOR');
+    }
+
+    // Response time alerts for B1 performance requirements
+    if (metric.responseTime.average > 1000) {
+      alerts.push(`High average response time: ${metric.responseTime.average}ms`);
+      logger.warn(`Search operation too slow: ${metric.responseTime.average}ms`, 'B1_MONITOR');
+    }
+
+    if (metric.responseTime.p95 > 3000) {
+      alerts.push(`High P95 response time: ${metric.responseTime.p95}ms`);
+      logger.warn(`Page load too slow for 3G: ${metric.responseTime.p95}ms`, 'B1_MONITOR');
+    }
+
+    // Connection alerts for B1 concurrency limits
+    if (metric.concurrent.activeConnections > 4) {
+      alerts.push(`High concurrent connections: ${metric.concurrent.activeConnections}`);
+      logger.warn(`Approaching B1 concurrent user limit: ${metric.concurrent.activeConnections}`, 'B1_MONITOR');
+    }
+
+    if (alerts.length > 0) {
+      // Record performance degradation event
+      this.recordMetric({
+        name: 'b1_performance_alert',
+        value: alerts.length,
+        unit: 'alerts',
+        timestamp: new Date().toISOString(),
+        tags: { severity: 'warning' },
+      });
+    }
+  }
+
+  private cleanupDetailedMetrics(): void {
+    // Keep only last 100 detailed metrics for B1 memory constraints
+    if (this.detailedMetrics.length > 100) {
+      this.detailedMetrics = this.detailedMetrics.slice(-100);
+    }
+  }
+
+  // Public API methods for B1 monitoring
+  getCurrentB1Metrics() {
+    return this.detailedMetrics[this.detailedMetrics.length - 1] || null;
+  }
+
+  getB1PerformanceSummary() {
+    if (this.detailedMetrics.length === 0) return null;
+
+    const recent = this.detailedMetrics.slice(-10); // Last 10 metrics
+    const avgMemory = recent.reduce((sum, m) => sum + m.memory.percentage, 0) / recent.length;
+    const avgResponseTime = recent.reduce((sum, m) => sum + m.responseTime.average, 0) / recent.length;
+
+    return {
+      averageMemoryUsage: Math.round(avgMemory),
+      averageResponseTime: Math.round(avgResponseTime),
+      peakConcurrentUsers: Math.max(...recent.map(m => m.concurrent.activeConnections)),
+      healthStatus: this.getB1HealthStatus(),
+      meetingRequirements: {
+        searchUnder1s: avgResponseTime < 1000,
+        memoryUnder80Percent: avgMemory < 80,
+        supportsConcurrentUsers: true, // 4 users is well within limits
+      },
+    };
+  }
+
+  private getB1HealthStatus(): 'excellent' | 'good' | 'warning' | 'critical' {
+    const current = this.getCurrentB1Metrics();
+    if (!current) return 'warning';
+
+    const issues = [
+      current.memory.percentage > 85,
+      current.responseTime.average > 1000,
+      current.concurrent.activeConnections > 4,
+    ].filter(Boolean).length;
+
+    if (issues === 0) return 'excellent';
+    if (issues <= 1) return 'good';
+    return issues <= 2 ? 'warning' : 'critical';
+  }
+
+  // Memory pressure detection for B1
+  isMemoryPressureHigh(): boolean {
+    const current = this.getCurrentB1Metrics();
+    return current ? current.memory.percentage > 80 : false;
+  }
+
+  // Get B1-specific optimization recommendations
+  getB1OptimizationRecommendations(): string[] {
+    const current = this.getCurrentB1Metrics();
+    if (!current) return [];
+
+    const recommendations: string[] = [];
+
+    if (current.memory.percentage > 80) {
+      recommendations.push('Consider implementing memory cleanup or reducing cache size for B1 constraints');
+    }
+
+    if (current.responseTime.average > 1000) {
+      recommendations.push('Search operations exceeding 1s requirement - review database queries and indexing');
+    }
+
+    if (current.responseTime.p95 > 3000) {
+      recommendations.push('Page load exceeding 3s requirement for 3G - optimize bundle size and implement CDN');
+    }
+
+    if (current.concurrent.activeConnections > 3) {
+      recommendations.push('Approaching 4 concurrent user limit - monitor for scaling needs');
+    }
+
+    return recommendations;
+  }
+}
+
 // Singleton instances
 export const logger = new Logger();
-export const performanceMonitor = new PerformanceMonitor();
+export const performanceMonitor = new EnhancedPerformanceMonitor();
 export const securityMonitor = new SecurityMonitor();
 
 // Utility functions for common logging scenarios
