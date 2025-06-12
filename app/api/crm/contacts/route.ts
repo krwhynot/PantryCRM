@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import sendEmail from "@/lib/sendmail";
 
 //Create route
-export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+export async function POST(req: NextRequest): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -114,7 +114,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
       }
 
       // Use placeholder implementation until Task 7 (Azure Communication Services)
-      console.log(`[EMAIL PLACEHOLDER] Would send contact notification to: ${notifyRecipient.email}`);
       
       // Call with required parameters as per the function signature
       await sendEmail({
@@ -127,13 +126,12 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 
     return NextResponse.json({ newContact }, { status: 200 });
   } catch (error) {
-    console.log("[NEW_CONTACT_POST]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }
 
 //Update route
-export async function PUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+export async function PUT(req: NextRequest): Promise<Response> {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -172,7 +170,6 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
       type,
     } = body;
 
-    console.log(assigned_account, "assigned_account");
 
     // Use Contact model as proxy for crm_Contacts
     // First, check if the contact exists
@@ -245,7 +242,6 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
       }
 
       // Use placeholder implementation until Task 7 (Azure Communication Services)
-      console.log(`[EMAIL PLACEHOLDER] Would send contact notification to: ${notifyRecipient.email}`);
       
       // Call with required parameters as per the function signature
       await sendEmail({
@@ -259,7 +255,6 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
 
     return NextResponse.json({ newContact }, { status: 200 });
   } catch (error) {
-    console.log("UPDATE_CONTACT_PUT]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

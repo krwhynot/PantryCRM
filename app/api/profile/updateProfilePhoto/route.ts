@@ -35,13 +35,11 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
         image: body.avatar, // Using 'image' field from User model
       },
     });
-    console.log("Profile photo updated");
     return NextResponse.json(
       { message: "Profile photo updated" },
       { status: 200 }
     );
   } catch (e) {
-    console.log(e);
     return NextResponse.json(
       { message: "Error updating profile photo" },
       {

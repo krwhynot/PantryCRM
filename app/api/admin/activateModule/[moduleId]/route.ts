@@ -40,7 +40,6 @@ export async function POST(req: Request, props: { params: Promise<{ moduleId: st
 
     return NextResponse.json(moduleSettings);
   } catch (error) {
-    console.log("[MODULE_ACTIVATE_POST]", error);
     return new NextResponse("Error activating module", { status: 500 });
   }
 }

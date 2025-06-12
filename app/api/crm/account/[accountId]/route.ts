@@ -26,7 +26,6 @@ export async function DELETE(req: Request, props: { params: Promise<{ accountId:
 
     return NextResponse.json({ message: "Account deleted" }, { status: 200 });
   } catch (error) {
-    console.log("[ACCOUNT_DELETE]", error);
     return new NextResponse("Error deleting organization", { status: 500 });
   }
 }

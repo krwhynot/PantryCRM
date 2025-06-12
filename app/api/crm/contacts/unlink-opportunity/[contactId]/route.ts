@@ -19,9 +19,6 @@ export async function PUT(req: Request, props: { params: Promise<{ contactId: st
 
   const { opportunityId } = body;
 
-  console.log(params.contactId, "contactId");
-  console.log(opportunityId, "opportunityId");
-
   if (!opportunityId) {
     return new NextResponse("opportunity ID is required", { status: 400 });
   }
@@ -41,7 +38,6 @@ export async function PUT(req: Request, props: { params: Promise<{ contactId: st
       },
     });
   } catch (error) {
-    console.log(error);
     return new NextResponse(
       "[CONTACTS - UNLINK - PUT] - Error, somethings went wrong",
       { status: 500 }

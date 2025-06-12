@@ -33,7 +33,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
     });
     return NextResponse.json({ message: "Feedback sent" }, { status: 200 });
   } catch (error) {
-    console.log("[FEEDBACK_POST]", error);
     return NextResponse.json({ error: "Initial error" }, { status: 500 });
   }
 }

@@ -16,7 +16,21 @@
       "mcp__sequential-thinking__sequentialthinking",
       "mcp__context7__resolve-library-id",
       "mcp__exa__web_search_exa",
-      "mcp__context7__get-library-docs"
+      "mcp__context7__get-library-docs",
+      "mcp__memory__read_graph",
+      "mcp__exa__github_search_exa",
+      "mcp__memory__create_entities",
+      "mcp__memory__add_observations",
+      "Bash(find:*)",
+      "Bash(npm run test:ci:*)",
+      "Bash(npm run build:*)",
+      "Bash(SKIP_DB_PUSH=true npm run build)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(npx prisma:*)",
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

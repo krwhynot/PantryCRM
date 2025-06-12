@@ -25,7 +25,6 @@ export async function DELETE(req: Request, props: { params: Promise<{ leadId: st
 
     return NextResponse.json({ message: "Lead deleted" }, { status: 200 });
   } catch (error) {
-    console.log("[LEAD_DELETE]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

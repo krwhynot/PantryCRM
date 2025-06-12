@@ -6,7 +6,7 @@ import { SimpleErrorBoundary } from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL! || "http://localhost:3000"
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   ),
   title: "Kitchen Pantry CRM - Food Service Industry",
   description: "Customer Relationship Management for Food Service Industry",
@@ -54,10 +54,24 @@ export default async function AppLayout({
     return redirect("/inactive");
   }
 
-  // Dynamic import to avoid next-intl imports in components
-  const SideBar = (await import("./components/SideBar")).default;
-  const Header = (await import("./components/Header")).default;
-  const Footer = (await import("./components/Footer")).default;
+  // Dynamic import to avoid next-intl imports in components with error handling
+  let SideBar, Header, Footer;
+  try {
+    const [sideBarModule, headerModule, footerModule] = await Promise.all([
+      import("./components/SideBar"),
+      import("./components/Header"),
+      import("./components/Footer")
+    ]);
+    SideBar = sideBarModule.default;
+    Header = headerModule.default;
+    Footer = footerModule.default;
+  } catch (error) {
+    console.error('Failed to load layout components:', error);
+    // Fallback to simple divs with error messages
+    SideBar = () => <div className="p-4 bg-red-100">Navigation failed to load</div>;
+    Header = () => <div className="p-4 bg-red-100">Header failed to load</div>;
+    Footer = () => <div className="p-4 bg-red-100">Footer failed to load</div>;
+  }
   // Simplified build info for Kitchen Pantry CRM
   const build = {
     version: "2.0.0",
@@ -73,10 +87,10 @@ export default async function AppLayout({
       <div className="flex flex-col h-full w-full overflow-hidden">
         <SimpleErrorBoundary message="Header failed to load">
           <Header
-            id={session.user.id as string}
-            name={session.user.name as string}
-            email={session.user.email as string}
-            avatar={session.user.image as string}
+            id={session.user.id || ""}
+            name={session.user.name || "Anonymous User"}
+            email={session.user.email || ""}
+            avatar={session.user.image || ""}
             lang={"en"} /* Fixed to English */
           />
         </SimpleErrorBoundary>

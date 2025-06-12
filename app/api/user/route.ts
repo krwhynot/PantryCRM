@@ -96,7 +96,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
       return NextResponse.json(user);
     }
   } catch (error) {
-    console.log("[USERS_POST]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }
@@ -126,7 +125,6 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 
     return NextResponse.json(users);
   } catch (error) {
-    console.log("[USERS_GET]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

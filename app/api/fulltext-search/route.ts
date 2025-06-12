@@ -3,6 +3,9 @@ import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { z } from "zod";
+import { withBatchTimeout, QUERY_TIMEOUTS } from "@/lib/query-timeout";
+import { cacheSearch } from "@/lib/result-cache";
+import { timeOperation } from "@/lib/performance-monitoring";
 
 // Input validation schema
 const searchSchema = z.object({
@@ -21,13 +24,14 @@ function sanitizeSearchInput(input: string): string {
 }
 
 export async function POST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
-  const session = await getServerSession(authOptions);
+  return timeOperation('fulltext-search', async () => {
+    const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return new NextResponse("Unauthenticated", { status: 401 });
-  }
+    if (!session) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
 
-  try {
+    try {
     const body = await req.json();
     
     // Validate input
@@ -41,91 +45,86 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 
     // Sanitize search input
     const search = sanitizeSearchInput(validation.data.data);
-    //Search in modul CRM (Oppotunities)
-    const resultsCrmOpportunities = await prismadb.opportunity.findMany({
-      where: {
-        OR: [
-          { notes: { contains: search } },
-          { principal: { contains: search } },
-          // add more fields as needed
-        ],
-      },
-    });
+    
+    // Use caching for search results to improve performance
+    const searchResults = await cacheSearch(
+      { search, timestamp: Math.floor(Date.now() / (5 * 60 * 1000)) }, // 5min cache buckets
+      async () => {
+        // Execute all search queries in parallel with timeout protection
+        const [resultsCrmOpportunities, resultsCrmAccounts, resultsCrmContacts, resultsUser] = await withBatchTimeout([
+      //Search in modul CRM (Opportunities)
+      prismadb.opportunity.findMany({
+        where: {
+          OR: [
+            { notes: { contains: search } },
+            { principal: { contains: search } },
+          ],
+        },
+        take: 50, // Limit results for performance
+      }),
 
-    //Search in modul CRM (Accounts)
-    const resultsCrmAccounts = await prismadb.organization.findMany({
-      where: {
-        OR: [
-          { description: { contains: search,  } },
-          { name: { contains: search,  } },
-          { email: { contains: search,  } },
-          // add more fields as needed
-        ],
-      },
-    });
+      //Search in modul CRM (Accounts/Organizations)
+      prismadb.organization.findMany({
+        where: {
+          OR: [
+            { name: { contains: search } },
+            { email: { contains: search } },
+            { notes: { contains: search } },
+          ],
+        },
+        take: 50, // Limit results for performance
+      }),
 
-    //Search in modul CRM (Contacts)
-    const resultsCrmContacts = await prismadb.contact.findMany({
-      where: {
-        OR: [
-          { lastName: { contains: search,  } },
-          { firstName: { contains: search,  } },
-          { email: { contains: search,  } },
-          // add more fields as needed
-        ],
-      },
-    });
+      //Search in modul CRM (Contacts)
+      prismadb.contact.findMany({
+        where: {
+          OR: [
+            { lastName: { contains: search } },
+            { firstName: { contains: search } },
+            { email: { contains: search } },
+          ],
+        },
+        take: 50, // Limit results for performance
+      }),
 
-    //Search in local user database
-    const resultsUser = await prismadb.user.findMany({
-      where: {
-        OR: [
-          { email: { contains: search } },
-          { name: { contains: search } },
-          // add more fields as needed
-        ],
-      },
-    });
+      //Search in local user database
+      prismadb.user.findMany({
+        where: {
+          OR: [
+            { email: { contains: search } },
+            { name: { contains: search } },
+          ],
+        },
+        take: 50, // Limit results for performance
+        }),
+      ], QUERY_TIMEOUTS.FAST, 'fulltext-search-batch');
 
-    // Tasks model not implemented - returning empty array
-    const resultsTasks: any[] = []; /*await prismadb.tasks.findMany({
-      where: {
-        OR: [
-          { title: { contains: search } },
-          { content: { contains: search } },
-          // add more fields as needed
-        ],
-      },
-    }); */
+        // Tasks model not implemented - returning empty array
+        const resultsTasks: any[] = [];
+        
+        // Boards model not implemented - returning empty array  
+        const reslutsProjects: any[] = [];
 
-    // Boards model not implemented - returning empty array  
-    const reslutsProjects: any[] = []; /*await prismadb.boards.findMany({
-      where: {
-        OR: [
-          { title: { contains: search } },
-          { description: { contains: search } },
-          // add more fields as needed
-        ],
-      },
-    }); */
-
-    const data = {
-      opportunities: resultsCrmOpportunities,
-      accounts: resultsCrmAccounts,
-      contacts: resultsCrmContacts,
-      users: resultsUser,
-      tasks: resultsTasks,
-      projects: reslutsProjects,
-    };
-
-    return NextResponse.json({ data }, { status: 200 });
-  } catch (error) {
-    console.error("[FULLTEXT_SEARCH_POST]", error);
-    return NextResponse.json(
-      { error: "Search operation failed" },
-      { status: 500 }
+        return {
+          opportunities: resultsCrmOpportunities,
+          accounts: resultsCrmAccounts,
+          contacts: resultsCrmContacts,
+          users: resultsUser,
+          tasks: resultsTasks,
+          projects: reslutsProjects,
+        };
+      }
     );
-  }
+
+      return NextResponse.json({ data: searchResults }, { status: 200 });
+    } catch (error) {
+      console.error("[FULLTEXT_SEARCH_POST]", error);
+      return NextResponse.json(
+        { error: "Search operation failed" },
+        { status: 500 }
+      );
+    }
+  });
 }
 
 

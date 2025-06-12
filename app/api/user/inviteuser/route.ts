@@ -55,7 +55,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
         email: email,
       },
     });
-    //console.log(checkexisting, "checkexisting");
 
     //If user already exists, return error else create user and send email
     if (checkexisting) {
@@ -103,15 +102,12 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
           }),
         });
 
-        console.log(data, "data");
 
         return NextResponse.json(user, { status: 200 });
       } catch (err) {
-        console.log(err);
       }
     }
   } catch (error) {
-    console.log("[USERACTIVATE_POST]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

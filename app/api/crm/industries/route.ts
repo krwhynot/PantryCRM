@@ -20,7 +20,6 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 
     return NextResponse.json(data);
   } catch (error) {
-    console.log("[USERS_GET]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

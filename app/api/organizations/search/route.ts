@@ -1,36 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
+import { processSearchInput } from '@/lib/input-sanitization';
 
 export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
   try {
     const { searchParams } = new URL(req.url);
-    const query = searchParams.get('query');
+    const rawQuery = searchParams.get('query');
 
-    if (!query || query.length < 2) {
-      return NextResponse.json([], { status: 200 }); // Return empty array for queries less than 2 characters
+    // Secure input processing
+    const { query, isValid } = processSearchInput(rawQuery);
+    
+    if (!isValid) {
+      return NextResponse.json([], { status: 200 }); // Return empty array for invalid queries
     }
 
-    // Implement priority-based ordering if 'priority' field exists in Organization model
-    // For now, simple search by name and city
+    // Secure search with sanitized input
     const organizations = await prismadb.organization.findMany({
       where: {
         OR: [
-          { name: { contains: query } },
-          { city: { contains: query } },
+          { name: { contains: query, mode: 'insensitive' } },
+          { city: { contains: query, mode: 'insensitive' } },
         ],
-        isActive: true, // Assuming an isActive flag for organizations
+        status: "ACTIVE", // Use consistent status field from schema
       },
       select: {
         id: true,
         name: true,
         city: true,
-        // Include priority level if available in your schema
-        // priority: { select: { label: true } },
+        priority: true, // Include priority for sorting
+        estimatedRevenue: true,
       },
-      orderBy: {
-        name: 'asc',
-      },
-      take: 10, // Limit results for performance
+      orderBy: [
+        { priority: 'asc' }, // A, B, C, D priority ordering
+        { name: 'asc' },
+      ],
+      take: 10, // Limit results for Azure SQL Basic performance
     });
 
     return NextResponse.json(organizations);

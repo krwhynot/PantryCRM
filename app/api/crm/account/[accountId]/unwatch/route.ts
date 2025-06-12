@@ -32,7 +32,6 @@ export async function POST(req: Request, props: { params: Promise<{ accountId: s
     
     // For now, we'll just log this operation since watching functionality
     // will be implemented properly in Task 7
-    console.log(`[ACCOUNT UNWATCH] User ${session.user.id} unwatched account ${accountId}`);
     
     // Verify the organization exists
     const organization = await prismadb.organization.findUnique({
@@ -44,6 +43,6 @@ export async function POST(req: Request, props: { params: Promise<{ accountId: s
     }
     return NextResponse.json({ message: "Board watched" }, { status: 200 });
   } catch (error) {
-    console.log(error);
+    // Error handling will be implemented in Task 7
   }
 }

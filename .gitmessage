@@ -1,0 +1,65 @@
+# <type>[optional scope]: <description>
+# |<----  Using a Maximum Of 50 Characters  ---->|
+
+# Explain why this change is being made
+# |<----   Try To Limit Each Line to a Maximum Of 72 Characters   ---->|
+
+# Provide links or keys to any relevant tickets, articles or other resources
+# Examples: Github issue #23, Jira KP-123, Resolves #42
+
+# --- COMMIT END ---
+# Type can be:
+#    feat     (new feature for the user)
+#    fix      (bug fix for the user)
+#    hotfix   (critical production fix)
+#    docs     (changes to documentation)
+#    style    (formatting, missing semi colons, etc; no code change)
+#    refactor (refactoring production code)
+#    perf     (performance improvements)
+#    test     (adding missing tests, refactoring tests; no production code change)
+#    build    (changes to build system or dependencies)
+#    ci       (changes to CI/CD configuration)
+#    chore    (updating tasks, package manager configs, etc; no production code change)
+# --------------------
+# Scope examples (Kitchen Pantry CRM):
+#    auth     (authentication & authorization)
+#    api      (API routes and endpoints)
+#    ui       (user interface components)
+#    db       (database schema or queries)
+#    azure    (Azure deployment and configuration)
+#    perf     (performance optimizations)
+#    search   (search functionality)
+#    org      (organization management)
+#    contact  (contact management)
+#    interact (interaction logging)
+#    mobile   (mobile/touch optimizations)
+# --------------------
+# Remember to:
+#    Capitalize the subject line
+#    Use the imperative mood in the subject line ("Add feature" not "Added feature")
+#    Do not end the subject line with a period
+#    Separate subject from body with a blank line
+#    Use the body to explain what and why vs. how
+#    Can use multiple lines with "-" for bullet points in body
+#    Reference issues and PRs in the footer
+# --------------------
+# Examples of good commit messages:
+#    feat(auth): add OAuth2 login integration
+#    fix(api): resolve organization search timeout issue
+#    docs(readme): update installation instructions
+#    refactor(ui): extract QuickInteractionEntry component logic
+#    perf(db): optimize organization query with composite indexes
+#    test(contact): add unit tests for contact validation
+#    build(deps): upgrade Next.js to v15.3.4
+#    ci(azure): configure automated deployment pipeline
+#    chore(eslint): update configuration for TypeScript compatibility
+# --------------------
+# Breaking changes:
+#    Add "!" after the type/scope: feat(api)!: restructure endpoints
+#    Include "BREAKING CHANGE:" in footer with description
+# --------------------
+# Kitchen Pantry CRM specific guidelines:
+#    - Always consider Azure SQL Basic tier performance impact
+#    - Mention touch target compliance for UI changes
+#    - Reference 30-second interaction entry workflow when relevant
+#    - Include NextCRM integration compatibility notes when applicable

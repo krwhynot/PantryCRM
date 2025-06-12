@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
@@ -92,7 +92,7 @@ model Organization {
   leads         Lead[]
   contracts     Contract[]
 
-  // Performance indexes for common queries
+  // Performance indexes optimized for Azure SQL Basic (5 DTU)
   @@index([status, priority, name]) // For filtered searches
   @@index([name]) // For text search
   @@index([email]) // For email search
@@ -100,6 +100,12 @@ model Organization {
   @@index([segment, status]) // For segment filtering
   @@index([lastContactDate]) // For follow-up queries
   @@index([nextFollowUpDate]) // For upcoming tasks
+  
+  // New composite indexes for search performance
+  @@index([status, priority, segment]) // Multi-filter queries
+  @@index([lastContactDate, nextFollowUpDate]) // Follow-up workflows
+  @@index([priority, estimatedRevenue]) // Revenue-priority analysis
+  @@index([segment, estimatedRevenue]) // Segment revenue analysis
 }
 
 model Contact {
@@ -112,7 +118,7 @@ model Contact {
   isPrimary      Boolean      @default(false)
   notes          String?
   organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   
@@ -120,11 +126,15 @@ model Contact {
   opportunities Opportunity[]
   contracts     Contract[]
 
-  // Performance indexes for common queries
+  // Performance indexes optimized for Azure SQL Basic
   @@index([organizationId, isPrimary]) // For finding primary contacts
   @@index([firstName, lastName]) // For name searches
   @@index([email]) // For email lookups
   @@index([organizationId, createdAt]) // For recent contacts by org
+  
+  // New indexes for contact search optimization
+  @@index([organizationId, position]) // Position-based contact queries
+  @@index([isPrimary, updatedAt]) // Primary contact listings
 }
 
 model Interaction {
@@ -139,17 +149,22 @@ model Interaction {
   organizationId String
   contactId      String?
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  contact        Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  contact        Contact?     @relation(fields: [contactId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
-  // Performance indexes for common queries
+  // Performance indexes optimized for Azure SQL Basic
   @@index([organizationId, date]) // For interaction history by org
   @@index([contactId, date]) // For interaction history by contact
   @@index([type, date]) // For filtering by interaction type
   @@index([date]) // For chronological queries
   @@index([nextAction]) // For follow-up tasks
   @@index([outcome, date]) // For outcome analysis
+  
+  // New indexes for interaction reporting and analytics
+  @@index([type, outcome, date]) // Type-outcome analysis
+  @@index([organizationId, type, date]) // Org-specific interaction types
+  @@index([outcome, nextAction]) // Follow-up action planning
 }
 
 // CRM Extension Models
@@ -169,7 +184,7 @@ model Opportunity {
   updatedAt         DateTime @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   // Performance indexes
   @@index([organizationId, stage])
@@ -216,7 +231,7 @@ model Contract {
   updatedAt      DateTime     @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([organizationId, status])
   @@index([status, endDate])

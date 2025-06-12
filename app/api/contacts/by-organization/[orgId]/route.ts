@@ -34,13 +34,24 @@ export async function GET(
       }
     });
     
-    // Fetch contacts with pagination
+    // Optimized query to prevent N+1 issues on Azure SQL Basic
     const contacts = await prismadb.contact.findMany({
       where: {
         organizationId: orgId
       },
-      include: {
-        position: true,  // Include contact position details
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        position: true,
+        isPrimary: true,
+        notes: true,
+        createdAt: true,
+        updatedAt: true,
+        // Minimal organization data to avoid circular references
+        organizationId: true,
       },
       skip,
       take: limit,
@@ -95,8 +106,17 @@ export async function POST(
         ...body,
         organizationId: orgId
       },
-      include: {
-        position: true  // Include position details in response
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        position: true,
+        isPrimary: true,
+        organizationId: true,
+        createdAt: true,
+        updatedAt: true
       }
     });
     

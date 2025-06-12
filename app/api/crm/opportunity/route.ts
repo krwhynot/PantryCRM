@@ -33,8 +33,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
       type,
     } = body;
 
-    //console.log(req.body, "req.body");
-
     const newOpportunity = await prismadb.opportunity.create({
       data: {
         organizationId: account, // assuming account is organization ID
@@ -71,7 +69,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 
     return NextResponse.json({ newOpportunity }, { status: 200 });
   } catch (error) {
-    console.log("[NEW_OPPORTUNITY_POST]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }
@@ -104,8 +101,6 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
       sales_stage,
       type,
     } = body;
-
-    //console.log(req.body, "req.body");
 
     const updatedOpportunity = await prismadb.opportunity.update({
       where: { id },
@@ -143,7 +138,6 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
 
     return NextResponse.json({ updatedOpportunity }, { status: 200 });
   } catch (error) {
-    console.log("[UPDATED_OPPORTUNITY_PUT]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }
@@ -176,7 +170,6 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.log("[GET_OPPORTUNITIES]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

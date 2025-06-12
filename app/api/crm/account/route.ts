@@ -89,7 +89,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
 
     return NextResponse.json({ newAccount }, { status: 200 });
   } catch (error) {
-    console.log("[NEW_ACCOUNT_POST]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }
@@ -185,7 +184,6 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
 
     return NextResponse.json({ newAccount }, { status: 200 });
   } catch (error) {
-    console.log("[UPDATE_ACCOUNT_PUT]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }
@@ -220,7 +218,7 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
           additionalFields = JSON.parse(org.description);
         }
       } catch (e) {
-        console.log("Error parsing organization description:", e);
+        // Ignore parsing errors
       }
 
       return {
@@ -245,7 +243,6 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
 
     return NextResponse.json(accounts, { status: 200 });
   } catch (error) {
-    console.log("[ACCOUNTS_GET]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

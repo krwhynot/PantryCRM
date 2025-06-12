@@ -33,8 +33,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Check if we should bypass authentication based on environment variable
-  const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true';
+  // Check if we should bypass authentication (only in development)
+  const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true' && process.env.NODE_ENV === 'development';
 
   // Render either the bypass layout or the original layout
   if (bypassAuth) {

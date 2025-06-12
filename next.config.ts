@@ -34,8 +34,10 @@ const nextConfig: NextConfig = {
   
   // Next.js 15 compatible server actions with B1 optimizations
   experimental: {
-    // React 19 RC compiler support for automatic optimizations
-    reactCompiler: true,
+    // React Compiler configured for React 18 compatibility
+    reactCompiler: {
+      target: '18' // Target React 18 since we're using React 18.2.0
+    },
     serverActions: {
       allowedOrigins: ['localhost:3000', '192.168.192.11:3000'],
       bodySizeLimit: '1mb', // Reduced for B1 memory constraints

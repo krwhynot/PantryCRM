@@ -77,18 +77,14 @@ export async function POST(req: Request) {
           where: { id: user },
         });
 
-        //console.log(notifyRecipient, "notifyRecipient");
 
         // Email sending has been migrated to Azure Communication Services
         // This is a placeholder until Task 7 implementation
-        console.log(`[EMAIL PLACEHOLDER] Would send task notification to: ${notifyRecipient?.email}`);
         
         // Email sending temporarily disabled
         // const emailResult = await resend.emails.send();
-        // console.log(`Email migration status: ${emailResult.status} - ${emailResult.message}`);
-        //console.log("Email sent to user: ", notifyRecipient?.email!);
       } catch (error) {
-        console.log(error);
+        // Error handling for email notifications
       }
     }
 
@@ -108,7 +104,6 @@ export async function POST(req: Request) {
       // In the current schema, User model doesn't have metadata field
       // This is a temporary implementation until proper watching functionality is implemented
       // For now, we'll assume no users are watching accounts
-      console.log(`[TASK WATCHERS] Account watching functionality will be implemented in Task 7`);
       const watchingUsers: typeof emailRecipients = [];
       
       //Create notifications for every user watching the specific account except the user who created the task
@@ -118,22 +113,18 @@ export async function POST(req: Request) {
             id: userWatching.id,
           },
         });
-        console.log("Send email to user: ", user?.email!);
         // Email sending has been migrated to Azure Communication Services
         // This is a placeholder until Task 7 implementation
-        console.log(`[EMAIL PLACEHOLDER] Would send task notification to watcher: ${user?.email}`);
         
         // Call the placeholder function without arguments as per implementation
         const emailResult = await resend.emails.send();
-        console.log(`Email migration status: ${emailResult.status} - ${emailResult.message}`);
       }
     } catch (error) {
-      console.log(error);
+      // Error handling for watcher notifications
     }
 
     return NextResponse.json({ status: 200 });
   } catch (error) {
-    console.log("[NEW_BOARD_POST]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

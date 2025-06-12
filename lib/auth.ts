@@ -24,9 +24,9 @@ function getGoogleCredentials(): { clientId: string; clientSecret: string } {
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.JWT_SECRET,
-  //adapter: PrismaAdapter(prismadb),
+  adapter: PrismaAdapter(prismadb),
   session: {
-    strategy: "jwt",
+    strategy: "database",
   },
 
   providers: [

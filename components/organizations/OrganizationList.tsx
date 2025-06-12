@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { Search, Plus, Building2, Users, MessageSquare } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -26,44 +26,103 @@ export function OrganizationList() {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm, 300);
 
-  const fetchOrganizations = async (search?: string) => {
+  const fetchOrganizations = useCallback(async (search?: string) => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       
-      const response = await fetch(`/api/organizations?${params.toString()}`); // Ensure params are stringified
+      const response = await fetch(`/api/organizations?${params.toString()}`);
       if (response.ok) {
         const data = await response.json();
         setOrganizations(data);
       } else {
-        // Handle non-OK responses, e.g., show a toast or log error
         console.error('Failed to fetch organizations, status:', response.status);
-        setOrganizations([]); // Clear organizations on error or set to a default state
+        setOrganizations([]);
       }
     } catch (error) {
       console.error('Error fetching organizations:', error);
-      setOrganizations([]); // Clear organizations on error
+      setOrganizations([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchOrganizations(debouncedSearch);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, fetchOrganizations]);
 
-  const getPriorityBadgeDetails = (priorityId?: string) => {
-    // This mapping should ideally come from a shared config or API
-    // Or, the API should return the label and color directly if `priority` is an object
-    switch (priorityId) {
-      case 'priority-a': return { label: 'A', color: 'bg-red-500 text-white' };
-      case 'priority-b': return { label: 'B', color: 'bg-orange-500 text-white' };
-      case 'priority-c': return { label: 'C', color: 'bg-yellow-500 text-black' }; // Ensure contrast
-      case 'priority-d': return { label: 'D', color: 'bg-gray-500 text-white' };
-      default: return { label: 'N/A', color: 'bg-gray-300 text-black' };
-    }
-  };
+  // Memoized priority badge mapping for performance
+  const priorityBadgeMap = useMemo(() => ({
+    'priority-a': { label: 'A', color: 'bg-red-500 text-white' },
+    'priority-b': { label: 'B', color: 'bg-orange-500 text-white' },
+    'priority-c': { label: 'C', color: 'bg-yellow-500 text-black' },
+    'priority-d': { label: 'D', color: 'bg-gray-500 text-white' },
+  }), []);
+
+  const getPriorityBadgeDetails = useCallback((priorityId?: string) => {
+    return priorityBadgeMap[priorityId as keyof typeof priorityBadgeMap] || 
+           { label: 'N/A', color: 'bg-gray-300 text-black' };
+  }, [priorityBadgeMap]);
+
+  // Memoized organization card component for performance
+  const OrganizationCard = memo(({ org }: { org: Organization }) => {
+    const priorityDetails = getPriorityBadgeDetails(org.priority?.id);
+    
+    return (
+      <Card className="hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer flex flex-col h-full">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-lg truncate" title={org.name}>{org.name}</h3>
+              {(org.city || org.state) && (
+                <p className="text-sm text-gray-500 truncate">
+                  {org.city}{org.city && org.state && ', '}{org.state}
+                </p>
+              )}
+            </div>
+            {org.priority && (
+              <Badge variant="outline" className={`${priorityDetails.color} border-none px-2.5 py-0.5 text-xs font-medium rounded-full`}>
+                {priorityDetails.label}
+              </Badge>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="flex-grow flex flex-col justify-between space-y-3">
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-2 text-xs">
+              {org.segment?.label && (
+                <Badge variant="secondary" className="font-normal">{org.segment.label}</Badge>
+              )}
+              {org.distributor?.label && (
+                <Badge variant="outline" className="font-normal">{org.distributor.label}</Badge>
+              )}
+            </div>
+            {org.phone && (
+              <p className="text-sm text-gray-600 truncate">{org.phone}</p>
+            )}
+          </div>
+          <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100 mt-auto">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1" title={`${org._count.contacts} contacts`}>
+                <Users className="h-3.5 w-3.5" />
+                <span>{org._count.contacts}</span>
+              </div>
+              <div className="flex items-center gap-1" title={`${org._count.interactions} interactions`}>
+                <MessageSquare className="h-3.5 w-3.5" />
+                <span>{org._count.interactions}</span>
+              </div>
+            </div>
+            <span className="text-xs">
+              {new Date(org.updatedAt).toLocaleDateString()}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  });
+  
+  OrganizationCard.displayName = 'OrganizationCard';
 
   return (
     <div className="space-y-6">
@@ -103,65 +162,9 @@ export function OrganizationList() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {organizations.map((org) => {
-            const priorityDetails = getPriorityBadgeDetails(org.priority?.id);
-            return (
-              <Card key={org.id} className="hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer flex flex-col h-full">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-lg truncate" title={org.name}>{org.name}</h3>
-                      {(org.city || org.state) && (
-                        <p className="text-sm text-gray-500 truncate">
-                          {org.city}{org.city && org.state && ', '}{org.state}
-                        </p>
-                      )}
-                    </div>
-                    {org.priority && (
-                      <Badge variant="outline" className={`${priorityDetails.color} border-none px-2.5 py-0.5 text-xs font-medium rounded-full`}>
-                        {priorityDetails.label}
-                      </Badge>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-grow flex flex-col justify-between space-y-3">
-                  <div className="space-y-2">
-                    {/* Segment and Distributor */}
-                    <div className="flex flex-wrap gap-2 text-xs">
-                      {org.segment?.label && (
-                        <Badge variant="secondary" className="font-normal">{org.segment.label}</Badge>
-                      )}
-                      {org.distributor?.label && (
-                        <Badge variant="outline" className="font-normal">{org.distributor.label}</Badge>
-                      )}
-                    </div>
-
-                    {/* Phone */}
-                    {org.phone && (
-                      <p className="text-sm text-gray-600 truncate">{org.phone}</p>
-                    )}
-                  </div>
-
-                  {/* Stats and Last Updated */}
-                  <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100 mt-auto">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1" title={`${org._count.contacts} contacts`}>
-                        <Users className="h-3.5 w-3.5" />
-                        <span>{org._count.contacts}</span>
-                      </div>
-                      <div className="flex items-center gap-1" title={`${org._count.interactions} interactions`}>
-                        <MessageSquare className="h-3.5 w-3.5" />
-                        <span>{org._count.interactions}</span>
-                      </div>
-                    </div>
-                    <span title={`Last updated: ${new Date(org.updatedAt).toLocaleString()}`}>
-                      {new Date(org.updatedAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+          {organizations.map((org) => (
+            <OrganizationCard key={org.id} org={org} />
+          ))}
         </div>
       )}
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
 
-export async function GET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<Response> {
+export async function GET(req: NextRequest): Promise<Response> {
   try {
     const { searchParams } = new URL(req.url);
     const organizationId = searchParams.get('organizationId');
@@ -15,8 +15,18 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
         organizationId,
         isActive: true,
       },
-      include: {
-        position: { select: { label: true } },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        position: true, // position is a string field, not a relation
+        isPrimary: true,
+        notes: true,
+        organizationId: true,
+        createdAt: true,
+        updatedAt: true,
       },
       orderBy: [
         { firstName: 'asc' },

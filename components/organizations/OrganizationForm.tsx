@@ -13,15 +13,16 @@ import { useToast } from '@/components/ui/use-toast';
 
 const OrganizationFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
-  priorityId: z.string().optional(),
-  segmentId: z.string().optional(),
-  distributorId: z.string().optional(),
+  priority: z.enum(['A', 'B', 'C', 'D']).optional(),
+  segment: z.enum(['Fine Dining', 'Fast Food', 'Healthcare', 'Catering', 'Institutional']).optional(),
+  distributor: z.enum(['Sysco', 'USF', 'PFG', 'Direct', 'Other']).optional(),
   accountManagerId: z.string().optional(),
-  address: z.string().optional(),
+  addressLine1: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
   zipCode: z.string().optional(),
-  phone: z.string().optional(),
+  phone: z.string().regex(/^\+?[\d\s\-\(\)]+$/, 'Invalid phone number format').optional(),
+  email: z.string().email('Invalid email format').optional(),
   website: z.string().optional(),
   notes: z.string().optional(),
 });
@@ -94,48 +95,48 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
           {/* Food Service Fields Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="priorityId">Priority Level</Label>
-              <Select onValueChange={(value) => form.setValue('priorityId', value)} defaultValue={initialData?.priorityId}>
+              <Label htmlFor="priority">Priority Level</Label>
+              <Select onValueChange={(value) => form.setValue('priority', value as 'A' | 'B' | 'C' | 'D')} defaultValue={initialData?.priority}>
                 <SelectTrigger className="min-h-[44px]">
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="priority-a">A - High Priority</SelectItem>
-                  <SelectItem value="priority-b">B - Medium Priority</SelectItem>
-                  <SelectItem value="priority-c">C - Low Priority</SelectItem>
-                  <SelectItem value="priority-d">D - Watch List</SelectItem>
+                  <SelectItem value="A">A - High Priority</SelectItem>
+                  <SelectItem value="B">B - Medium Priority</SelectItem>
+                  <SelectItem value="C">C - Low Priority</SelectItem>
+                  <SelectItem value="D">D - Watch List</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="segmentId">Market Segment</Label>
-              <Select onValueChange={(value) => form.setValue('segmentId', value)} defaultValue={initialData?.segmentId}>
+              <Label htmlFor="segment">Market Segment</Label>
+              <Select onValueChange={(value) => form.setValue('segment', value as 'Fine Dining' | 'Fast Food' | 'Healthcare' | 'Catering' | 'Institutional')} defaultValue={initialData?.segment}>
                 <SelectTrigger className="min-h-[44px]">
                   <SelectValue placeholder="Select segment" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="fine-dining">Fine Dining</SelectItem>
-                  <SelectItem value="fast-food">Fast Food</SelectItem>
-                  <SelectItem value="healthcare">Healthcare</SelectItem>
-                  <SelectItem value="catering">Catering</SelectItem>
-                  <SelectItem value="institutional">Institutional</SelectItem>
+                  <SelectItem value="Fine Dining">Fine Dining</SelectItem>
+                  <SelectItem value="Fast Food">Fast Food</SelectItem>
+                  <SelectItem value="Healthcare">Healthcare</SelectItem>
+                  <SelectItem value="Catering">Catering</SelectItem>
+                  <SelectItem value="Institutional">Institutional</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="distributorId">Distributor</Label>
-              <Select onValueChange={(value) => form.setValue('distributorId', value)} defaultValue={initialData?.distributorId}>
+              <Label htmlFor="distributor">Distributor</Label>
+              <Select onValueChange={(value) => form.setValue('distributor', value as 'Sysco' | 'USF' | 'PFG' | 'Direct' | 'Other')} defaultValue={initialData?.distributor}>
                 <SelectTrigger className="min-h-[44px]">
                   <SelectValue placeholder="Select distributor" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="sysco">Sysco</SelectItem>
-                  <SelectItem value="usf">US Foods</SelectItem>
-                  <SelectItem value="pfg">Performance Food Group</SelectItem>
-                  <SelectItem value="direct">Direct</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="Sysco">Sysco</SelectItem>
+                  <SelectItem value="USF">US Foods</SelectItem>
+                  <SelectItem value="PFG">Performance Food Group</SelectItem>
+                  <SelectItem value="Direct">Direct</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -153,22 +154,33 @@ export function OrganizationForm({ onSuccess, initialData }: OrganizationFormPro
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="website">Website</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="website"
-                {...form.register('website')}
-                placeholder="https://restaurant.com"
+                id="email"
+                type="email"
+                {...form.register('email')}
+                placeholder="contact@restaurant.com"
                 className="min-h-[44px]"
               />
             </div>
           </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="website">Website</Label>
+            <Input
+              id="website"
+              {...form.register('website')}
+              placeholder="https://restaurant.com"
+              className="min-h-[44px]"
+            />
+          </div>
 
           {/* Address Fields */}
           <div className="space-y-2">
-            <Label htmlFor="address">Address</Label>
+            <Label htmlFor="addressLine1">Address</Label>
             <Input
-              id="address"
-              {...form.register('address')}
+              id="addressLine1"
+              {...form.register('addressLine1')}
               placeholder="123 Main Street"
               className="min-h-[44px]"
             />

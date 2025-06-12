@@ -47,7 +47,6 @@ export async function PUT(req: Request, props: { params: Promise<{ opportunityId
       { status: 200 }
     );
   } catch (error) {
-    console.log("[OPPORTUNITY_UPDATE]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }
@@ -76,7 +75,6 @@ export async function DELETE(req: Request, props: { params: Promise<{ opportunit
       { status: 200 }
     );
   } catch (error) {
-    console.log("[OPPORTUNITY_DELETE]", error);
     return new NextResponse("Initial error", { status: 500 });
   }
 }

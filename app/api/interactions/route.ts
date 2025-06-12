@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
     }
     
     const body = await req.json();
-    console.log("Received interaction data:", body);
     
     // Validate the request body
     const validation = createInteractionSchema.safeParse(body);
@@ -110,7 +109,6 @@ export async function POST(req: NextRequest) {
         },
       });
       
-      console.log("Created interaction:", interaction);
       return NextResponse.json(interaction);
     } catch (dbError) {
       console.error("Database error creating interaction:", dbError);
@@ -186,22 +184,41 @@ export async function GET(req: NextRequest) {
     }
     
     try {
-      // Build the query based on provided filters
-      const query: any = {
+      // Optimized query to prevent N+1 issues on Azure SQL Basic
+      const interactions = await prismadb.interaction.findMany({
         where: {
           organizationId,
           ...(contactId && { contactId }),
           ...(typeId && { typeId }),
         },
-        include: {
-          Contact: true,
+        select: {
+          id: true,
+          type: true,
+          subject: true,
+          description: true,
+          date: true,
+          duration: true,
+          outcome: true,
+          nextAction: true,
+          organizationId: true,
+          contactId: true,
+          createdAt: true,
+          updatedAt: true,
+          // Only fetch contact name, not full contact object
+          contact: contactId ? {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true
+            }
+          } : false,
         },
         orderBy: {
-          interactionDate: "desc",
+          date: "desc",
         },
-      };
-      
-      const interactions = await prismadb.interaction.findMany(query);
+        take: 50, // Limit for Azure SQL Basic performance
+      });
       
       return NextResponse.json(interactions);
     } catch (dbError) {

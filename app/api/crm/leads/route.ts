@@ -283,13 +283,11 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
           text: `A new opportunity, created from a lead (${first_name || ""} ${last_name || ""}), has been assigned to you. You can click here for detail: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${newOpportunity.id}`,
         });
       } else {
-        console.warn(`Could not send notification email to assigned user ${assigned_to}: User or email not found.`);
       }
     }
 
     return NextResponse.json({ newOpportunity }, { status: 200 });
   } catch (error) {
-    console.log("[NEW_OPPORTUNITY_FROM_LEAD_POST]", error);
     return new NextResponse("Internal error creating opportunity from lead", { status: 500 });
   }
 }
@@ -345,7 +343,6 @@ export async function GET(req: NextRequest, context: { params: Promise<Record<st
     
     return NextResponse.json(opportunities);
   } catch (error) {
-    console.log("[OPPORTUNITIES_GET]", error);
     return new NextResponse("Internal error retrieving opportunities", { status: 500 });
   }
 }
@@ -487,13 +484,11 @@ export async function PUT(req: NextRequest, context: { params: Promise<Record<st
           text: `An opportunity, (${firstName || ""} ${lastName || ""}), has been updated and assigned to you. You can click here for detail: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${updatedOpportunity.id}`,
         });
       } else {
-        console.warn(`Could not send update notification email to assigned user ${assigned_to}: User or email not found.`);
       }
     }
 
     return NextResponse.json({ updatedOpportunity }, { status: 200 });
   } catch (error) {
-    console.log("[UPDATED_OPPORTUNITY_FROM_LEAD_PUT]", error);
     return new NextResponse("Internal error updating opportunity from lead", { status: 500 });
   }
 }

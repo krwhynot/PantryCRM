@@ -1,78 +1,441 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+#==============================================================================
+# KITCHEN PANTRY CRM - COMPREHENSIVE .GITIGNORE
+# Following industry standards for Node.js/Next.js/TypeScript projects
+#==============================================================================
 
-# dependencies
-/node_modules
+#==============================================================================
+# OPERATING SYSTEMS
+#==============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+.fseventsd
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+ehthumbs.db
+
+# Linux
+*~
+.nfs*
+
+#==============================================================================
+# EDITORS & IDEs
+#==============================================================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# Cursor AI
+.cursor/
+
+# Task Master AI
+.taskmaster/
+.roo/
+tasks.json
+tasks/
+
+#==============================================================================
+# NODE.JS & NPM
+#==============================================================================
+
+# Dependencies
+node_modules/
 /.pnp
 .pnp.js
 
-
-#jsons
-/jsons
-
-/examples
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-
-
-# debug
+# Package manager logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 
-# local env files
-.env*.local
-.env
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# vercel
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage
+.grunt
+
+# Bower dependency directory
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons
+build/Release
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Package manager choice (uncomment the one you're NOT using)
+package-lock.json  # if using yarn
+# yarn.lock         # if using npm
+
+#==============================================================================
+# NEXT.JS FRAMEWORK
+#==============================================================================
+
+# Next.js build output
+.next/
+out/
+
+# Next.js development
+.swc/
+
+# Vercel deployment
 .vercel
 
-backup
+# Turbo
+.turbo/
 
-# typescript
+#==============================================================================
+# TYPESCRIPT
+#==============================================================================
+
+# TypeScript build info
 *.tsbuildinfo
 next-env.d.ts
 
-# Added by Task Master AI
-# Logs
-logs
+# TypeScript cache
+.tscache/
+
+#==============================================================================
+# REACT & FRONTEND
+#==============================================================================
+
+# Build directories
+build/
+dist/
+
+# Storybook build outputs
+storybook-static
+
+# Temporary folders
+tmp/
+temp/
+.temp/
+
+#==============================================================================
+# TESTING & QUALITY ASSURANCE
+#==============================================================================
+
+# Jest
+.jest/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Testing coverage
+coverage/
+.nyc_output/
+
+# Test results
+junit.xml
+test-results.xml
+
+#==============================================================================
+# DATABASES & DATA
+#==============================================================================
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.db
+
+# PostgreSQL
+*.sql
+
+# MongoDB
+*.bson
+
+# Redis
+dump.rdb
+
+# Kitchen Pantry CRM specific databases
+kitchen-pantry-crm.sqlite
+pantrycrm.db
+
+#==============================================================================
+# ENVIRONMENT & CONFIGURATION
+#==============================================================================
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Configuration files with secrets
+config/secrets.yml
+config/database.yml
+config/production.rb
+secrets.json
+
+#==============================================================================
+# SECURITY & SECRETS
+#==============================================================================
+
+# API keys and secrets
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# SSH keys
+id_rsa
+id_rsa.pub
+known_hosts
+
+# GPG keys
+*.gpg
+*.asc
+
+#==============================================================================
+# AZURE & CLOUD DEPLOYMENT
+#==============================================================================
+
+# Azure
+*.azurePubxml
+*.pubxml
+*.publishproj
+.azure/
+azuredeploy.parameters.json
+
+# AWS
+.aws/
+
+# Google Cloud
+.gcloud/
+
+# Docker
+Dockerfile.prod
+docker-compose.override.yml
+.dockerignore
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+
+# Kubernetes
+*.kubeconfig
+
+#==============================================================================
+# BUILD ARTIFACTS & CACHE
+#==============================================================================
+
+# Build outputs
+build/
+dist/
+out/
+target/
+bin/
+obj/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# Temporary files
+*.tmp
+*.temp
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+#==============================================================================
+# DEVELOPMENT TOOLS
+#==============================================================================
+
+# Bundle analyzer
+bundle-analyzer/
+.bundlewatch.json
+
+# Lighthouse reports
+.lighthouse/
+
+# Performance monitoring
+.chrome/
+chromedriver
+*.deb
+
+# Hot reload
+.hot-update.json
+
+#==============================================================================
+# LOGS & MONITORING
+#==============================================================================
+
+# Application logs
+logs/
 *.log
 dev-debug.log
-# Dependency directories
-node_modules/
-# Environment variables
-# Editor directories and files
-.idea
-.vscode
-.cursor
-.roo
-.taskmaster
 
-*.suo
+# Runtime logs
+*.out
+*.err
+
+# PM2 logs
+.pm2/
+
+#==============================================================================
+# DOCUMENTATION
+#==============================================================================
+
+# Generated documentation
+docs/build/
+.docusaurus/
+
+# API documentation
+api-docs/
+
+#==============================================================================
+# KITCHEN PANTRY CRM SPECIFIC
+#==============================================================================
+
+# Claude Code files
+.claude/logs/
+.claude/cache/
+
+# Development backups
+backup/
+backup-*/
+deploy-temp/
+
+# Example and template files
+/examples
+/jsons
+
+# Chrome browser files (prevent future issues)
+chrome/
+
+# Project specific temporary files
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-# OS specific
-# Task files
-tasks.json
-tasks/ 
+*.suo
 
-# Chrome browser files (prevent future issues)
-chrome/
-chromedriver
-*.deb
-*.tar.gz
-deploy-temp/
+# Development deployment
+dev-deploy/
+staging-deploy/
+
+# Performance testing
+performance-reports/
+load-test-results/
+
+# API testing
+.insomnia/
+.postman/
+
+# Local database snapshots
+*.sql.backup
+db-snapshots/
+
+#==============================================================================
+# MICROSOFT TECHNOLOGIES
+#==============================================================================
+
+# .NET
+*.dll
+*.exe
+*.pdb
+*.user
+*.cache
+
+# Visual Studio
+.vs/
+*.userprefs
+
+# MSBuild
+obj/
+bin/
+
+#==============================================================================
+# END OF .GITIGNORE
+#==============================================================================

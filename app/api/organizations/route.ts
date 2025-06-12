@@ -4,13 +4,7 @@ import { OrganizationValidation } from '@/lib/validations/organization';
 import { withErrorHandler, dbOperation, ErrorTypes } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/security';
 
-// Input sanitization function
-function sanitizeSearchInput(input: string): string {
-  return input
-    .replace(/[<>'"]/g, '') // Remove potential XSS characters
-    .trim()
-    .substring(0, 100); // Limit length
-}
+import { processSearchInput } from '@/lib/input-sanitization';
 
 async function handleGET(req: NextRequest): Promise<NextResponse> {
   // Check authentication
@@ -27,10 +21,10 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
     status: "ACTIVE", // Only fetch active organizations by default
   };
 
-  // Text search across name and account manager
+  // Text search across name and email with secure processing
   if (q) {
-    const sanitizedQuery = sanitizeSearchInput(q);
-    if (sanitizedQuery.length > 0) {
+    const { query: sanitizedQuery, isValid } = processSearchInput(q);
+    if (isValid) {
       where.OR = [
         { name: { contains: sanitizedQuery, mode: 'insensitive' } },
         { email: { contains: sanitizedQuery, mode: 'insensitive' } }
@@ -49,7 +43,7 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
         { priority: 'asc' },
         { name: 'asc' }
       ],
-      take: 50, // Limit results for performance
+      take: 50, // Limit results for Azure SQL Basic performance
       select: {
         id: true,
         name: true,

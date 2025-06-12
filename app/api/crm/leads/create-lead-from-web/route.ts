@@ -36,7 +36,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
   }
 
   if (token.trim() !== process.env.NEXTCRM_TOKEN.trim()) {
-    console.log("Unauthorized");
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   } else {
     if (!lastName) {
@@ -94,7 +93,6 @@ export async function POST(req: NextRequest, context: { params: Promise<Record<s
       return NextResponse.json({ message: "New lead created successfully" });
       //return res.status(200).json({ json: "newContact" });
     } catch (error) {
-      console.log(error);
       return NextResponse.json(
         { message: "Error creating new lead" },
         { status: 500 }
