@@ -20,10 +20,11 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-12 px-4 py-2", // Increased from h-10 to h-12 (48px) for touch friendliness
-        sm: "h-10 rounded-md px-3", // Increased from h-9 to h-10 (40px)
-        lg: "h-12 rounded-md px-8", // Increased from h-11 to h-12 (48px)
-        icon: "h-11 w-11", // Increased from h-10 w-10 to h-11 w-11 (44px)
+        default: "h-12 px-4 py-2", // 48px - Enhanced for touch friendliness
+        sm: "h-11 rounded-md px-3 py-2", // 44px - WCAG AAA compliant minimum
+        lg: "h-14 rounded-md px-8 py-3", // 56px - Enhanced for better accessibility
+        icon: "h-11 w-11", // 44px - Meets WCAG 2.5.5 Level AAA requirement
+        touch: "h-12 w-full px-4 py-3", // 48px - Optimized for touch devices
       },
     },
     defaultVariants: {

@@ -174,43 +174,18 @@ jest.mock('next-auth/react', () => {
   };
 });
 
-// Mock Tremor UI components WITHOUT JSX
-jest.mock('@tremor/react', () => {
-  // Factory function to create component mocks without JSX
-  const createMockComponent = (testId) => {
-    return function MockComponent(props) {
-      const el = document.createElement('div');
-      el.setAttribute('data-testid', testId);
-      // Copy props to element
-      Object.entries(props).forEach(([key, value]) => {
-        if (key !== 'children') {
-          el.setAttribute(key, value);
-        }
-      });
-      // Handle children if provided
-      if (props.children) {
-        if (typeof props.children === 'string') {
-          el.textContent = props.children;
-        } else {
-          // For non-string children, we'll just append as text as a simplification
-          el.textContent = 'Mock child content';
-        }
-      }
-      return el;
-    };
-  };
-
-  // Return mocked components
-  return {
-    Card: createMockComponent('tremor-card'),
-    Title: createMockComponent('tremor-title'),
-    Text: createMockComponent('tremor-text'),
-    Metric: createMockComponent('tremor-metric'),
-    Flex: createMockComponent('tremor-flex'),
-    Grid: createMockComponent('tremor-grid'),
-    Col: createMockComponent('tremor-col')
-  };
-});
+// Mock Recharts for chart components
+jest.mock('recharts', () => ({
+  ResponsiveContainer: ({ children }) => <div data-testid="responsive-container">{children}</div>,
+  BarChart: ({ children }) => <div data-testid="bar-chart">{children}</div>,
+  AreaChart: ({ children }) => <div data-testid="area-chart">{children}</div>,
+  Bar: () => <div data-testid="bar" />,
+  Area: () => <div data-testid="area" />,
+  XAxis: () => <div data-testid="x-axis" />,
+  YAxis: () => <div data-testid="y-axis" />,
+  CartesianGrid: () => <div data-testid="cartesian-grid" />,
+  Tooltip: () => <div data-testid="tooltip" />,
+}));
 
 // Console error suppression for React Testing Library
 const originalError = console.error;

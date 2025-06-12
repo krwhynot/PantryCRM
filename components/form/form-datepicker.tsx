@@ -72,7 +72,7 @@ export const FormDatePicker = forwardRef<HTMLInputElement, FormDatePickerProps>(
             placeholder={placeholder}
             type={type}
             disabled={pending || disabled}
-            className={cn("text-sm px-2 py-1 h-7", className)}
+            className={cn("text-sm px-3 py-2 h-12 touch-target form-input-touch", className)}
             aria-describedby={`${id}-error`}
           />
           <Popover>

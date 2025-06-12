@@ -1,12 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import { Dashboard } from '../Dashboard';
 
-// Mock Tremor components
-jest.mock('@tremor/react', () => ({
-  BarChart: (props: any) => <div data-testid="tremor-bar-chart">BarChart Mock</div>,
-  Card: ({ children }: any) => <div data-testid="tremor-card">{children}</div>,
-  Metric: ({ children }: any) => <span data-testid="tremor-metric">{children}</span>,
-  Text: ({ children }: any) => <span data-testid="tremor-text">{children}</span>,
+// Mock Recharts components
+jest.mock('recharts', () => ({
+  ResponsiveContainer: ({ children }: any) => <div data-testid="responsive-container">{children}</div>,
+  BarChart: ({ children }: any) => <div data-testid="bar-chart">{children}</div>,
+  Bar: () => <div data-testid="bar" />,
+  XAxis: () => <div data-testid="x-axis" />,
+  YAxis: () => <div data-testid="y-axis" />,
+  CartesianGrid: () => <div data-testid="cartesian-grid" />,
+  Tooltip: () => <div data-testid="tooltip" />,
 }));
 
 // Mock shadcn/ui Card components
@@ -43,9 +46,9 @@ describe('Dashboard', () => {
     expect(screen.getByText('Organizations by Segment')).toBeInTheDocument(); // Checks for the chart card title
   });
 
-  it('renders the Tremor BarChart with correct data', () => {
+  it('renders the Recharts BarChart with correct data', () => {
     render(<Dashboard organizationCount={mockOrganizationCount} recentInteractions={mockRecentInteractions} />);
-    expect(screen.getByTestId('tremor-bar-chart')).toBeInTheDocument();
+    expect(screen.getByTestId('bar-chart')).toBeInTheDocument();
   });
 
   it('renders the responsive grid layout for cards', () => {

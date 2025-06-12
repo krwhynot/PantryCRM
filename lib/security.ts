@@ -1,11 +1,26 @@
 /**
  * Security utilities and middleware for the PantryCRM application
+ * LEGACY NOTICE: This file is being gradually replaced by enhanced security modules
+ * 
+ * @deprecated Use the following enhanced modules instead:
+ * - @/lib/enhanced-rate-limiter for rate limiting
+ * - @/lib/input-sanitization for input validation
+ * - @/lib/account-lockout for authentication protection
+ * - @/lib/csrf-protection for CSRF protection
+ * - @/lib/security-headers for security headers
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prismadb } from "@/lib/prisma";
+import { logSecurityEvent } from "@/lib/security-logger";
+
+// Re-export enhanced security modules for backwards compatibility
+export { withEnhancedRateLimit, RATE_LIMIT_CONFIGS } from '@/lib/enhanced-rate-limiter';
+export { withCSRFProtection, withFormCSRFProtection, withAPICSRFProtection } from '@/lib/csrf-protection';
+export { withSecurityHeaders, getSecurityConfig } from '@/lib/security-headers';
+export { accountLockoutManager, withAccountLockoutProtection } from '@/lib/account-lockout';
 
 /**
  * Input sanitization function to prevent XSS attacks

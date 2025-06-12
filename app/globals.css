@@ -132,17 +132,53 @@
     padding: 0.5rem 1rem;
   }
   
-  /* Priority level color coding */
-  .priority-a {
-    @apply bg-green-100 text-green-800 border-green-300;
+  /* Food Service Industry - Priority Level CSS Variables */
+  --priority-a: 142 71% 45%; /* Green for highest priority */
+  --priority-a-foreground: 0 0% 100%;
+  --priority-b: 45 93% 47%; /* Yellow for high priority */
+  --priority-b-foreground: 0 0% 0%;
+  --priority-c: 25 95% 53%; /* Orange for medium priority */
+  --priority-c-foreground: 0 0% 100%;
+  --priority-d: 0 84% 60%; /* Red for low priority */
+  --priority-d-foreground: 0 0% 100%;
+  
+  /* Food Service Industry - Segment Types */
+  --segment-fine-dining: 271 91% 65%;
+  --segment-fast-food: 346 77% 49%;
+  --segment-healthcare: 207 90% 54%;
+  --segment-catering: 47 96% 53%;
+  --segment-institutional: 262 52% 47%;
+  
+  /* Enhanced Touch Target Classes for Accessibility */
+  .dropdown-item-touch {
+    min-height: 44px;
+    padding: 12px 16px;
+    touch-action: manipulation;
   }
-  .priority-b {
-    @apply bg-yellow-100 text-yellow-800 border-yellow-300;
+  
+  .nav-link-touch {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+    display: inline-flex;
+    align-items: center;
+    touch-action: manipulation;
   }
-  .priority-c {
-    @apply bg-orange-100 text-orange-800 border-orange-300;
+  
+  .command-item-touch {
+    min-height: 44px;
+    padding: 12px 16px;
+    touch-action: manipulation;
   }
-  .priority-d {
-    @apply bg-red-100 text-red-800 border-red-300;
+  
+  /* Enhanced focus states for accessibility */
+  .touch-target:focus-visible {
+    outline: 3px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+  
+  /* Improved spacing for touch-friendly layouts */
+  .touch-spacing {
+    gap: 8px; /* Minimum 8px between touch targets per WCAG */
   }
 }

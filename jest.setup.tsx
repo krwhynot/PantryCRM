@@ -179,29 +179,23 @@ jest.mock('next-auth/react', () => {
   };
 });
 
-// Mock Tremor UI components
-jest.mock('@tremor/react', () => ({
-  Card: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
-    <div data-testid="tremor-card" {...props}>{children}</div>
+// Mock Recharts for chart components
+jest.mock('recharts', () => ({
+  ResponsiveContainer: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <div data-testid="responsive-container" {...props}>{children}</div>
   ),
-  Title: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
-    <h3 data-testid="tremor-title" {...props}>{children}</h3>
+  BarChart: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <div data-testid="bar-chart" {...props}>{children}</div>
   ),
-  Text: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
-    <p data-testid="tremor-text" {...props}>{children}</p>
+  AreaChart: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
+    <div data-testid="area-chart" {...props}>{children}</div>
   ),
-  Metric: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
-    <div data-testid="tremor-metric" {...props}>{children}</div>
-  ),
-  Flex: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
-    <div data-testid="tremor-flex" {...props}>{children}</div>
-  ),
-  Grid: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
-    <div data-testid="tremor-grid" {...props}>{children}</div>
-  ),
-  Col: ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => (
-    <div data-testid="tremor-col" {...props}>{children}</div>
-  )
+  Bar: (props: any) => <div data-testid="bar" {...props} />,
+  Area: (props: any) => <div data-testid="area" {...props} />,
+  XAxis: (props: any) => <div data-testid="x-axis" {...props} />,
+  YAxis: (props: any) => <div data-testid="y-axis" {...props} />,
+  CartesianGrid: (props: any) => <div data-testid="cartesian-grid" {...props} />,
+  Tooltip: (props: any) => <div data-testid="tooltip" {...props} />
 }));
 
 // Console error suppression for React Testing Library

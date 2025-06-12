@@ -26,13 +26,13 @@ export default async function DashboardPage() {
           <p className="text-sm text-muted-foreground">
             Welcome, {session.user.name}
           </p>
-          <a href="/organizations" className="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-sm font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-600/20">
+          <a href="/organizations" className="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900/20 px-4 py-3 text-sm font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-600/20 min-h-[44px] min-w-[44px] touch-target nav-link-touch">
             Organizations
           </a>
-          <a href="/organizations/new" className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-500/20">
+          <a href="/organizations/new" className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-4 py-3 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-500/20 min-h-[44px] min-w-[44px] touch-target nav-link-touch">
             New Organization
           </a>
-          <a href="/settings" className="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800/40 px-2 py-1 text-sm font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-700/30">
+          <a href="/settings" className="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800/40 px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-700/30 min-h-[44px] min-w-[44px] touch-target nav-link-touch">
             Settings
           </a>
         </div>

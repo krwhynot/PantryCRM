@@ -57,9 +57,8 @@ function checkRateLimit(email: string): boolean {
 
 // Request password reset (sends reset token via email)
 async function handlePOST(req: NextRequest): Promise<NextResponse> {
-  // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  // SECURITY FIX: Remove authentication check for password reset requests
+  // Password reset should be available to unauthenticated users
   try {
     const body = await req.json();
     
@@ -139,9 +138,8 @@ async function handlePOST(req: NextRequest): Promise<NextResponse> {
 
 // Reset password with token
 async function handlePUT(req: NextRequest): Promise<NextResponse> {
-  // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  // SECURITY FIX: Remove authentication check for token-based password reset
+  // Token validation provides sufficient authentication
   try {
     const body = await req.json();
     
@@ -196,6 +194,6 @@ async function handlePUT(req: NextRequest): Promise<NextResponse> {
 }
 
 
-// Export with authentication, rate limiting, and error handling
-export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
-export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });
+// Export with stricter rate limiting and error handling
+export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 5, windowMs: 3600000 }); // 5/hour
+export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 10, windowMs: 3600000 }); // 10/hour
