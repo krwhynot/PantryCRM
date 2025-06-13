@@ -1,0 +1,45 @@
+{
+  "performance_score": 90,
+  "fcp": 1200,
+  "lcp": 2000,
+  "tti": 3000,
+  "rps": 1000,
+  "latency_p99": 150,
+  "bundle_size": 800,
+  "memory_usage": 256,
+  "updated": "2025-06-13T00:00:00Z",
+  "thresholds": {
+    "performance_score": {
+      "min": 85,
+      "warning": 90
+    },
+    "fcp": {
+      "max": 2000,
+      "warning": 1500
+    },
+    "lcp": {
+      "max": 2500,
+      "warning": 2000
+    },
+    "tti": {
+      "max": 3500,
+      "warning": 3000
+    },
+    "rps": {
+      "min": 500,
+      "warning": 750
+    },
+    "latency_p99": {
+      "max": 300,
+      "warning": 200
+    },
+    "bundle_size": {
+      "max": 1024,
+      "warning": 900
+    },
+    "memory_usage": {
+      "max": 512,
+      "warning": 384
+    }
+  }
+}

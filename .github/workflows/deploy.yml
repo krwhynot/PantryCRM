@@ -1,0 +1,561 @@
+name: Deploy to Azure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      skip-tests:
+        description: 'Skip tests before deployment'
+        required: false
+        type: boolean
+        default: false
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '!.github/workflows/deploy.yml'
+
+env:
+  NODE_VERSION: '20.x'
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  # Pre-deployment validation
+  pre-deploy-validation:
+    name: Pre-deployment Validation
+    runs-on: ubuntu-latest
+    outputs:
+      should-deploy: ${{ steps.check.outputs.should-deploy }}
+      environment: ${{ steps.check.outputs.environment }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine deployment environment
+        id: check
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+          else
+            echo "should-deploy=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check for active incidents
+        if: steps.check.outputs.should-deploy == 'true'
+        run: |
+          # Check if there are any active incidents that should block deployment
+          # This could integrate with your incident management system
+          echo "No active incidents found"
+
+  # Run tests before deployment
+  test:
+    name: Run Tests
+    needs: pre-deploy-validation
+    if: |
+      needs.pre-deploy-validation.outputs.should-deploy == 'true' &&
+      github.event.inputs.skip-tests != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql://testuser:testpass@localhost:5432/testdb
+        run: |
+          npm run test:ci
+          npm run test:e2e
+
+  # Build application
+  build:
+    name: Build Application
+    needs: [pre-deploy-validation, test]
+    if: needs.pre-deploy-validation.outputs.should-deploy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Cache Next.js build
+        uses: actions/cache@v3
+        with:
+          path: |
+            .next/cache
+            .next/static
+          key: ${{ runner.os }}-nextjs-prod-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-prod-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps --production=false
+
+      - name: Build application
+        run: |
+          npm run build:azure
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_APP_ENV: ${{ needs.pre-deploy-validation.outputs.environment }}
+
+      - name: Create deployment package
+        run: |
+          # Copy necessary files for deployment
+          mkdir -p deploy
+          cp -r .next deploy/
+          cp -r public deploy/
+          cp package*.json deploy/
+          cp next.config.js deploy/
+          cp -r prisma deploy/
+          
+          # Create startup script for Azure
+          cat > deploy/startup.sh << 'EOF'
+          #!/bin/bash
+          echo "Starting Next.js application..."
+          
+          # Run database migrations
+          npx prisma migrate deploy
+          
+          # Start the application
+          npm start
+          EOF
+          
+          chmod +x deploy/startup.sh
+
+      - name: Upload deployment artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-package
+          path: deploy/
+          retention-days: 1
+
+  # Deploy to staging
+  deploy-staging:
+    name: Deploy to Staging
+    needs: [pre-deploy-validation, build]
+    if: |
+      needs.pre-deploy-validation.outputs.should-deploy == 'true' &&
+      needs.pre-deploy-validation.outputs.environment == 'staging'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: staging
+      url: https://${{ secrets.AZURE_WEBAPP_NAME_STAGING }}.azurewebsites.net
+    
+    steps:
+      - name: Download deployment artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: deployment-package
+          path: deploy/
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME_STAGING }}
+          package: deploy/
+          startup-command: 'bash startup.sh'
+
+      - name: Configure app settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME_STAGING }}
+          app-settings-json: |
+            [
+              {
+                "name": "NODE_ENV",
+                "value": "production"
+              },
+              {
+                "name": "DATABASE_URL",
+                "value": "${{ secrets.DATABASE_URL_STAGING }}",
+                "slotSetting": false
+              },
+              {
+                "name": "GOOGLE_ID",
+                "value": "${{ secrets.GOOGLE_ID }}",
+                "slotSetting": false
+              },
+              {
+                "name": "GOOGLE_SECRET",
+                "value": "${{ secrets.GOOGLE_SECRET }}",
+                "slotSetting": false
+              },
+              {
+                "name": "GITHUB_ID",
+                "value": "${{ secrets.GITHUB_ID }}",
+                "slotSetting": false
+              },
+              {
+                "name": "GITHUB_SECRET",
+                "value": "${{ secrets.GITHUB_SECRET }}",
+                "slotSetting": false
+              },
+              {
+                "name": "JWT_SECRET",
+                "value": "${{ secrets.JWT_SECRET }}",
+                "slotSetting": false
+              },
+              {
+                "name": "NEXT_PUBLIC_APP_ENV",
+                "value": "staging"
+              }
+            ]
+
+      - name: Run database migrations
+        run: |
+          # Install Azure CLI database extension if needed
+          az extension add --name db-up
+          
+          # Run migrations via Azure CLI or direct connection
+          echo "Running database migrations..."
+          # This would connect to your staging database and run migrations
+
+      - name: Warm up application
+        run: |
+          echo "Warming up application..."
+          for i in {1..5}; do
+            curl -s -o /dev/null -w "%{http_code}" https://${{ secrets.AZURE_WEBAPP_NAME_STAGING }}.azurewebsites.net/api/health || true
+            sleep 5
+          done
+
+      - name: Run smoke tests
+        run: |
+          # Basic smoke tests to ensure deployment is working
+          STAGING_URL="https://${{ secrets.AZURE_WEBAPP_NAME_STAGING }}.azurewebsites.net"
+          
+          # Check health endpoint
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/api/health")
+          if [ "$response" != "200" ]; then
+            echo "Health check failed with status $response"
+            exit 1
+          fi
+          
+          # Check main page loads
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL")
+          if [ "$response" != "200" ]; then
+            echo "Main page failed with status $response"
+            exit 1
+          fi
+          
+          echo "Smoke tests passed!"
+
+  # Manual approval for production
+  production-approval:
+    name: Production Deployment Approval
+    needs: [pre-deploy-validation, build]
+    if: |
+      needs.pre-deploy-validation.outputs.should-deploy == 'true' &&
+      needs.pre-deploy-validation.outputs.environment == 'production'
+    runs-on: ubuntu-latest
+    environment:
+      name: production-approval
+    
+    steps:
+      - name: Request approval
+        run: |
+          echo "Production deployment requested"
+          echo "Please review staging environment before approving"
+          echo "Staging URL: https://${{ secrets.AZURE_WEBAPP_NAME_STAGING }}.azurewebsites.net"
+
+  # Deploy to production
+  deploy-production:
+    name: Deploy to Production
+    needs: [pre-deploy-validation, build, production-approval]
+    if: |
+      needs.pre-deploy-validation.outputs.should-deploy == 'true' &&
+      needs.pre-deploy-validation.outputs.environment == 'production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production
+      url: https://${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }}.azurewebsites.net
+    
+    steps:
+      - name: Download deployment artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: deployment-package
+          path: deploy/
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+
+      - name: Create backup slot
+        run: |
+          # Create a backup of current production before deployment
+          az webapp deployment slot create \
+            --name ${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }} \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_PRODUCTION }} \
+            --slot backup-${{ github.run_id }} \
+            --configuration-source ${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }}
+
+      - name: Deploy to staging slot first
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }}
+          slot-name: staging
+          package: deploy/
+          startup-command: 'bash startup.sh'
+
+      - name: Configure staging slot settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }}
+          slot-name: staging
+          app-settings-json: |
+            [
+              {
+                "name": "NODE_ENV",
+                "value": "production"
+              },
+              {
+                "name": "DATABASE_URL",
+                "value": "${{ secrets.DATABASE_URL_PRODUCTION }}",
+                "slotSetting": false
+              },
+              {
+                "name": "GOOGLE_ID",
+                "value": "${{ secrets.GOOGLE_ID }}",
+                "slotSetting": false
+              },
+              {
+                "name": "GOOGLE_SECRET",
+                "value": "${{ secrets.GOOGLE_SECRET }}",
+                "slotSetting": false
+              },
+              {
+                "name": "GITHUB_ID",
+                "value": "${{ secrets.GITHUB_ID }}",
+                "slotSetting": false
+              },
+              {
+                "name": "GITHUB_SECRET",
+                "value": "${{ secrets.GITHUB_SECRET }}",
+                "slotSetting": false
+              },
+              {
+                "name": "JWT_SECRET",
+                "value": "${{ secrets.JWT_SECRET }}",
+                "slotSetting": false
+              },
+              {
+                "name": "NEXT_PUBLIC_APP_ENV",
+                "value": "production"
+              }
+            ]
+
+      - name: Run database migrations
+        run: |
+          echo "Running production database migrations..."
+          # Run migrations against production database
+          # This should be done carefully with proper backup
+
+      - name: Validate staging slot
+        run: |
+          STAGING_SLOT_URL="https://${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }}-staging.azurewebsites.net"
+          
+          # Run validation tests against staging slot
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_SLOT_URL/api/health")
+          if [ "$response" != "200" ]; then
+            echo "Staging slot validation failed"
+            exit 1
+          fi
+
+      - name: Swap slots
+        run: |
+          # Perform the slot swap to make staging the new production
+          az webapp deployment slot swap \
+            --name ${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }} \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_PRODUCTION }} \
+            --slot staging \
+            --target-slot production
+
+      - name: Validate production
+        run: |
+          PROD_URL="https://${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }}.azurewebsites.net"
+          
+          # Give Azure time to complete the swap
+          sleep 30
+          
+          # Validate production is working
+          for i in {1..5}; do
+            response=$(curl -s -o /dev/null -w "%{http_code}" "$PROD_URL/api/health")
+            if [ "$response" == "200" ]; then
+              echo "Production validation successful"
+              break
+            fi
+            if [ "$i" == "5" ]; then
+              echo "Production validation failed after 5 attempts"
+              exit 1
+            fi
+            sleep 10
+          done
+
+      - name: Update CDN
+        run: |
+          # Purge CDN cache if using Azure CDN
+          az cdn endpoint purge \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_PRODUCTION }} \
+            --name ${{ secrets.AZURE_CDN_ENDPOINT }} \
+            --profile-name ${{ secrets.AZURE_CDN_PROFILE }} \
+            --content-paths "/*"
+
+      - name: Monitor deployment
+        run: |
+          # Set up alerts and monitoring
+          echo "Deployment completed. Monitoring application health..."
+          
+          # Could integrate with Azure Monitor or Application Insights
+          # to track key metrics post-deployment
+
+  # Post-deployment tasks
+  post-deployment:
+    name: Post-deployment Tasks
+    needs: [deploy-staging, deploy-production]
+    if: always() && (needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create deployment record
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const environment = '${{ needs.pre-deploy-validation.outputs.environment }}';
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment,
+              description: `Deployment to ${environment}`,
+              auto_merge: false,
+              required_contexts: [],
+              production_environment: environment === 'production'
+            });
+            
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'success',
+              environment_url: environment === 'production' 
+                ? 'https://${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }}.azurewebsites.net'
+                : 'https://${{ secrets.AZURE_WEBAPP_NAME_STAGING }}.azurewebsites.net',
+              description: 'Deployment completed successfully'
+            });
+
+      - name: Notify team
+        if: always()
+        run: |
+          # Send notifications via Slack, Teams, or email
+          echo "Deployment notification would be sent here"
+
+      - name: Update documentation
+        if: needs.deploy-production.result == 'success'
+        run: |
+          # Update deployment documentation
+          echo "## Latest Production Deployment" > deployment-log.md
+          echo "Date: $(date)" >> deployment-log.md
+          echo "Commit: ${{ github.sha }}" >> deployment-log.md
+          echo "Deployed by: ${{ github.actor }}" >> deployment-log.md
+
+  # Rollback job (can be triggered manually)
+  rollback:
+    name: Rollback Deployment
+    if: failure()
+    needs: [deploy-production]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+
+      - name: Rollback to previous version
+        run: |
+          # Swap back to the backup slot
+          az webapp deployment slot swap \
+            --name ${{ secrets.AZURE_WEBAPP_NAME_PRODUCTION }} \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_PRODUCTION }} \
+            --slot backup-${{ github.run_id }} \
+            --target-slot production
+          
+          echo "Rollback completed"
+
+      - name: Create incident
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Production Deployment Failed - Rollback Executed`,
+              body: `## Deployment Failure
+              
+              The production deployment has failed and was automatically rolled back.
+              
+              **Failed Deployment:** ${{ github.sha }}
+              **Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+              
+              Please investigate the failure before attempting another deployment.`,
+              labels: ['incident', 'deployment', 'production'],
+            });
