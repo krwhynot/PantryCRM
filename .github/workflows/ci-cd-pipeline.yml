@@ -67,7 +67,7 @@ jobs:
       # Checkout with optimized fetch depth
       # Reference: https://github.com/actions/checkout
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 2  # Needed for proper diff analysis
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
       # Setup Node.js with caching
       # Reference: https://github.com/actions/setup-node
       - name: "⚙️ Setup Node.js ${{ env.NODE_VERSION }}"
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -85,7 +85,7 @@ jobs:
       # Reference: https://github.com/actions/cache
       - name: "📦 Cache Dependencies"
         id: cache-deps
-        uses: actions/cache@v4
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             ~/.npm
@@ -105,7 +105,7 @@ jobs:
       
       # Cache Prisma client generation
       - name: "🗄️ Cache Prisma Client"
-        uses: actions/cache@v4
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             node_modules/.prisma
@@ -133,7 +133,7 @@ jobs:
       # Cache Next.js build output
       - name: "🏗️ Cache Next.js Build"
         id: cache-build
-        uses: actions/cache@v4
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             .next/cache
@@ -178,7 +178,7 @@ jobs:
       
       # Upload build artifacts for deployment
       - name: "📤 Upload Build Artifacts"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
         with:
           name: build-artifacts-${{ github.sha }}
           path: |
@@ -205,13 +205,13 @@ jobs:
     
     steps:
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0  # Full history for better analysis
       
       # Setup Node.js for dependency scanning
       - name: "⚙️ Setup Node.js"
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -223,7 +223,7 @@ jobs:
       # CodeQL Analysis for SAST
       # Reference: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning
       - name: "🔍 Initialize CodeQL"
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@afb54ba388a7dca6ecae48f608c4ff05ff4cc77a # v3.25.15
         with:
           languages: javascript,typescript,actions
           config-file: ./.github/codeql/codeql-config.yml
@@ -231,18 +231,18 @@ jobs:
       
       # Autobuild for CodeQL analysis
       - name: "🏗️ Autobuild for CodeQL"
-        uses: github/codeql-action/autobuild@v3
+        uses: github/codeql-action/autobuild@afb54ba388a7dca6ecae48f608c4ff05ff4cc77a # v3.25.15
       
       # Perform CodeQL Analysis
       - name: "🔬 Perform CodeQL Analysis"
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@afb54ba388a7dca6ecae48f608c4ff05ff4cc77a # v3.25.15
         with:
-          category: "/language:${{matrix.language}}"
+          category: "/language:javascript"
       
       # Dependency vulnerability scanning
       # Reference: https://docs.github.com/en/code-security/dependabot/dependabot-alerts/about-dependabot-alerts
       - name: "🛡️ Run Dependency Scan"
-        uses: securecodewarrior/github-action-add-sarif@v1
+        uses: securecodewarrior/github-action-add-sarif@33dee6ff9fbbf8a6b17c5e49b1eb3f2c3b42fa54 # v1
         if: always()
         with:
           sarif-file: 'dependency-scan-results.sarif'
@@ -262,7 +262,7 @@ jobs:
       
       # Check for secrets in codebase
       - name: "🕵️ Scan for Secrets"
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@2746648a21a0b67fb4e46062c59803d8a3dff9e5 # v3.82.6
         with:
           path: ./
           base: main
@@ -281,7 +281,7 @@ jobs:
     
     steps:
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       
       # Build Docker image for scanning
       - name: "🐳 Build Docker Image"
@@ -320,14 +320,14 @@ jobs:
     
     steps:
       - name: "📥 Download Build Artifacts"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           name: build-artifacts-${{ github.sha }}
       
       # Azure Login using OIDC
       # Reference: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure
       - name: "🔐 Azure Login"
-        uses: azure/login@v1
+        uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -335,7 +335,7 @@ jobs:
       
       # Deploy to Azure App Service (Development slot)
       - name: "🚀 Deploy to Azure App Service"
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@de617f46172a906d0617bb0e50d81e9e3aec24c8 # v3.0.1
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'development'
@@ -365,19 +365,19 @@ jobs:
     
     steps:
       - name: "📥 Download Build Artifacts"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           name: build-artifacts-${{ github.sha }}
       
       - name: "🔐 Azure Login"
-        uses: azure/login@v1
+        uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
       - name: "🚀 Deploy to Azure App Service"
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@de617f46172a906d0617bb0e50d81e9e3aec24c8 # v3.0.1
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'staging'
@@ -414,12 +414,12 @@ jobs:
     
     steps:
       - name: "📥 Download Build Artifacts"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           name: build-artifacts-${{ github.sha }}
       
       - name: "🔐 Azure Login"
-        uses: azure/login@v1
+        uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -427,7 +427,7 @@ jobs:
       
       # Deploy to production with blue-green strategy
       - name: "🌟 Deploy to Production"
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@de617f46172a906d0617bb0e50d81e9e3aec24c8 # v3.0.1
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
@@ -465,10 +465,10 @@ jobs:
     
     steps:
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       
       - name: "🔐 Azure Login"
-        uses: azure/login@v1
+        uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}

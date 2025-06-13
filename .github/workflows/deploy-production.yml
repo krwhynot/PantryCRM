@@ -55,7 +55,7 @@ jobs:
     
     steps:
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ github.event.inputs.release_tag }}
           fetch-depth: 0
@@ -124,24 +124,24 @@ jobs:
     
     steps:
       - name: "📥 Checkout Release"
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ github.event.inputs.release_tag }}
       
       - name: "⚙️ Setup Node.js"
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
       
       # Install dependencies and build for production
       - name: "📦 Install Dependencies"
-        run: npm ci --only=production --prefer-offline
+        run: npm ci --legacy-peer-deps --prefer-offline
       
       - name: "🔄 Generate Prisma Client"
         run: npx prisma generate
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
       
       - name: "🏗️ Build for Production"
         run: npm run build:azure
@@ -168,7 +168,7 @@ jobs:
       
       # Azure authentication using OIDC
       - name: "🔐 Azure Login"
-        uses: azure/login@v1
+        uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -186,7 +186,7 @@ jobs:
       
       # Deploy to staging slot first
       - name: "🎭 Deploy to Staging Slot"
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@de617f46172a906d0617bb0e50d81e9e3aec24c8 # v3.0.1
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'staging-temp'
@@ -293,10 +293,10 @@ jobs:
     
     steps:
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       
       - name: "🔐 Azure Login"
-        uses: azure/login@v1
+        uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
