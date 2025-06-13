@@ -9,7 +9,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
 
 async function handlePUT(req: Request, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: Request);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   const params = await props.params;
   const session = await getServerSession(authOptions);

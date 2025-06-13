@@ -106,7 +106,8 @@ async function handlePOST(req: NextRequest): Promise<NextResponse> {
   // Check authentication using the standardized method
   const { user, error } = await requireAuth(req);
   if (error) return error;
-    
+  
+  try {
     const body = await req.json();
     
     // Check if this is a bulk operation
@@ -201,6 +202,7 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
   const { user, error } = await requireAuth(req);
   if (error) return error;
 
+  try {
     const url = new URL(req.url);
     const organizationId = url.searchParams.get("organizationId");
     const contactId = url.searchParams.get("contactId");

@@ -5,16 +5,16 @@ import { withErrorHandler } from '@/lib/api-error-handler';
 
 async function handleDELETE(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   // Task functionality not implemented in current schema
   return new NextResponse("Task functionality not implemented", { status: 501 });
 }
 
 async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   // Task functionality not implemented in current schema
   return new NextResponse("Task functionality not implemented", { status: 501 });
 }

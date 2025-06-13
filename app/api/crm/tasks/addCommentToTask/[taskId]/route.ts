@@ -5,7 +5,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
 
 async function handlePOST(req: Request, props: { params: Promise<{ taskId: string }> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: Request);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   // Task functionality not implemented in current schema
   return new NextResponse("Task functionality not implemented", { status: 501 });

@@ -6,8 +6,8 @@ import { withErrorHandler } from '@/lib/api-error-handler';
 
 async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   try {
     // Get all settings with optimized selection
     const settings = await prismadb.setting.findMany({
@@ -46,8 +46,8 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
 
 async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   try {
     const body = await req.json();
     

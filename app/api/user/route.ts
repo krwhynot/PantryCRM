@@ -10,8 +10,8 @@ import { withErrorHandler } from '@/lib/api-error-handler';
 
 async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   try {
     const body = await req.json();
     const { name, username, email, language, password, confirmPassword } = body;
@@ -108,8 +108,8 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
 
 async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   const session = await getServerSession(authOptions);
 
   if (!session) {

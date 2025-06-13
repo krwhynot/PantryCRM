@@ -16,7 +16,7 @@ const UpdateProfileSchema = z.object({
 
 async function handlePUT(req: NextRequest, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   const params = await props.params;
   

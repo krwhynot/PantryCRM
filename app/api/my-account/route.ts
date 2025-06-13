@@ -5,7 +5,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
 
 async function handlePOST(req: NextRequest): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   // Account functionality not implemented in current schema
   return new NextResponse("Account functionality not implemented", { status: 501 });
@@ -13,7 +13,7 @@ async function handlePOST(req: NextRequest): Promise<NextResponse> {
 
 async function handleGET(req: NextRequest): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   // Account functionality not implemented in current schema
   return new NextResponse("Account functionality not implemented", { status: 501 });
@@ -21,7 +21,7 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
 
 async function handlePUT(req: NextRequest): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   // Account functionality not implemented in current schema
   return new NextResponse("Account functionality not implemented", { status: 501 });

@@ -13,7 +13,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
  */
 async function handleGET(req: NextRequest): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   try {
     // Check authentication

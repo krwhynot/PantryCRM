@@ -28,8 +28,8 @@ function sanitizeSearchInput(input: string): string {
 
 async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   return timeOperation('fulltext-search', async () => {
     const session = await getServerSession(authOptions);
 

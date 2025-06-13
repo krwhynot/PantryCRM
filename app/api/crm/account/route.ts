@@ -9,8 +9,8 @@ import { withErrorHandler } from '@/lib/api-error-handler';
 //Create new account route
 async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -102,8 +102,8 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
 //Update account route
 async function handlePUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
@@ -200,8 +200,8 @@ async function handlePUT(req: NextRequest, context: { params: Promise<Record<str
 //GET all accounts route
 async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
-  if (error) return error; Promise<Response> {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });

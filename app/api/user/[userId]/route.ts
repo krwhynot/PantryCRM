@@ -8,7 +8,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
 
 async function handleGET(req: NextRequest, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   const params = await props.params;
   
@@ -63,7 +63,7 @@ async function handleGET(req: NextRequest, props: { params: Promise<{ userId: st
 
 async function handleDELETE(req: NextRequest, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: NextRequest);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   const params = await props.params;
   

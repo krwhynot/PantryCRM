@@ -17,7 +17,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
  */
 async function handlePOST(req: Request): Promise<NextResponse> {
   // Check authentication
-  const { user, error } = await requireAuth(req: Request);
+  const { user, error } = await requireAuth(req);
   if (error) return error;
   /*
   Resend.com function init - this is a helper function that will be used to send emails
@@ -26,13 +26,13 @@ async function handlePOST(req: Request): Promise<NextResponse> {
 
   const session = await getServerSession(authOptions);
   const body = await req.json();
-  const { title, user, priority, content, account, dueDateAt } = body;
+  const { title, user: assignedUserId, priority, content, account, dueDateAt } = body;
 
   if (!session) {
     return new NextResponse("Unauthenticated", { status: 401 });
   }
 
-  if (!title || !user || !priority || !content || !account) {
+  if (!title || !assignedUserId || !priority || !content || !account) {
     return new NextResponse("Missing one of the task data ", { status: 400 });
   }
 
@@ -64,7 +64,7 @@ async function handlePOST(req: Request): Promise<NextResponse> {
         notes: `[TASK] ${title}\n\n${content}\n\n---\nTask Priority: ${priority}`,
         followUpDate: dueDateAt,
         isCompleted: false,
-        userId: user,
+        userId: assignedUserId,
         organizationId: account,
         interactionDate: new Date(), // Required field based on our schema
         typeId: typeId // Required field based on our schema
@@ -76,11 +76,11 @@ async function handlePOST(req: Request): Promise<NextResponse> {
     });
 
     //Notification to user who is not a task creator or Account watcher
-    if (user !== session.user.id) {
+    if (assignedUserId !== session.user.id) {
       try {
         // Use user model instead of users
         const notifyRecipient = await prismadb.user.findUnique({
-          where: { id: user },
+          where: { id: assignedUserId },
         });
 
 
