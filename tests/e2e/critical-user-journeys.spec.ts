@@ -145,7 +145,7 @@ test.describe('Critical User Journeys - Food Service CRM', () => {
       test.skip(!isMobile, 'This test is only for mobile devices');
       
       // Step 1: Offline data access
-      await page.setOffline(true);
+      await page.context().setOffline(true);
       
       // Verify offline indicator appears
       await expect(page.locator('[data-testid="offline-indicator"]')).toBeVisible();
@@ -177,7 +177,7 @@ test.describe('Critical User Journeys - Food Service CRM', () => {
       await expect(page.locator('[data-testid="sync-pending-indicator"]')).toContainText('2 pending');
       
       // Step 4: Sync when online
-      await page.setOffline(false);
+      await page.context().setOffline(false);
       
       // Wait for sync indicator
       await expect(page.locator('[data-testid="sync-indicator"]')).toContainText('Syncing...');

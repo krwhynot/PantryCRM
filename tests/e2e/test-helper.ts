@@ -126,16 +126,16 @@ export class TestHelper {
   async simulateNetworkCondition(condition: 'offline' | 'slow' | 'fast') {
     switch (condition) {
       case 'offline':
-        await this.page.setOffline(true);
+        await this.page.context().setOffline(true);
         break;
       case 'slow':
-        await this.page.setOffline(false);
+        await this.page.context().setOffline(false);
         await this.page.route('**/*', route => {
           setTimeout(() => route.continue(), 2000);
         });
         break;
       case 'fast':
-        await this.page.setOffline(false);
+        await this.page.context().setOffline(false);
         await this.page.unroute('**/*');
         break;
     }
@@ -241,7 +241,7 @@ export class TestHelper {
    */
   async mockGeolocation(latitude: number, longitude: number) {
     await this.page.context().grantPermissions(['geolocation']);
-    await this.page.setGeolocation({ latitude, longitude });
+    await this.page.context().setGeolocation({ latitude, longitude });
   }
 
   /**

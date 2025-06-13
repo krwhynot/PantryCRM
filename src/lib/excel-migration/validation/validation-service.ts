@@ -531,7 +531,7 @@ export class ValidationService {
     return zodError.errors.map(err => ({
       row: rowNumber,
       field: err.path.join('.'),
-      value: err.input,
+      value: (err as any).input || 'N/A',
       message: err.message,
       errorType: this.getErrorType(err),
       severity: this.getErrorSeverity(err)

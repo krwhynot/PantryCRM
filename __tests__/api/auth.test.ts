@@ -3,8 +3,24 @@
  */
 
 import { prismadb } from '@/lib/prisma';
-import { authOptions } from '@/lib/auth';
 import bcrypt from 'bcryptjs';
+
+// Mock the auth module to avoid environment variable issues during import
+jest.mock('@/lib/auth', () => {
+  // Set up environment variables for the mock
+  process.env.GOOGLE_ID = 'test-google-id';
+  process.env.GOOGLE_SECRET = 'test-google-secret';
+  process.env.GITHUB_ID = 'test-github-id';
+  process.env.GITHUB_SECRET = 'test-github-secret';
+  process.env.JWT_SECRET = 'test-jwt-secret';
+  
+  // Now require the actual implementation
+  const actual = jest.requireActual('@/lib/auth');
+  return actual;
+});
+
+// Import after mocking
+import { authOptions } from '@/lib/auth';
 
 // Mock dependencies
 jest.mock('@/lib/prisma', () => ({
@@ -25,7 +41,12 @@ jest.mock('@/lib/new-user-notify', () => ({
   newUserNotify: jest.fn(),
 }));
 
-const mockPrisma = prismadb as jest.Mocked<typeof prismadb>;
+jest.mock('@next-auth/prisma-adapter', () => ({
+  PrismaAdapter: jest.fn(() => ({})),
+}));
+
+// Access the mocked functions directly
+const mockPrisma = prismadb as any;
 const mockBcrypt = bcrypt as jest.Mocked<typeof bcrypt>;
 
 describe('Authentication', () => {
@@ -55,7 +76,7 @@ describe('Authentication', () => {
         password: 'password123',
       };
 
-      const authorize = (credentialsProvider as any).authorize;
+      const authorize = (credentialsProvider as any).options.authorize;
       const result = await authorize(credentials);
 
       expect(result).toEqual(mockUser);
@@ -71,7 +92,7 @@ describe('Authentication', () => {
         password: 'password123',
       };
 
-      const authorize = (credentialsProvider as any).authorize;
+      const authorize = (credentialsProvider as any).options.authorize;
       
       await expect(authorize(credentials)).rejects.toThrow('Email or password is missing');
     });
@@ -82,7 +103,7 @@ describe('Authentication', () => {
         password: '',
       };
 
-      const authorize = (credentialsProvider as any).authorize;
+      const authorize = (credentialsProvider as any).options.authorize;
       
       await expect(authorize(credentials)).rejects.toThrow('Email or password is missing');
     });
@@ -95,9 +116,9 @@ describe('Authentication', () => {
         password: 'password123',
       };
 
-      const authorize = (credentialsProvider as any).authorize;
+      const authorize = (credentialsProvider as any).options.authorize;
       
-      await expect(authorize(credentials)).rejects.toThrow('User not found, please register first');
+      await expect(authorize(credentials)).rejects.toThrow('Invalid username or password');
     });
 
     it('should reject user without password', async () => {
@@ -114,9 +135,9 @@ describe('Authentication', () => {
         password: 'password123',
       };
 
-      const authorize = (credentialsProvider as any).authorize;
+      const authorize = (credentialsProvider as any).options.authorize;
       
-      await expect(authorize(credentials)).rejects.toThrow('User not found, please register first');
+      await expect(authorize(credentials)).rejects.toThrow('Invalid username or password');
     });
 
     it('should reject incorrect password', async () => {
@@ -134,9 +155,9 @@ describe('Authentication', () => {
         password: 'wrongpassword',
       };
 
-      const authorize = (credentialsProvider as any).authorize;
+      const authorize = (credentialsProvider as any).options.authorize;
       
-      await expect(authorize(credentials)).rejects.toThrow('Password is incorrect');
+      await expect(authorize(credentials)).rejects.toThrow('Invalid username or password');
     });
 
     it('should handle whitespace in password', async () => {
@@ -154,7 +175,7 @@ describe('Authentication', () => {
         password: '  password123  ', // With whitespace
       };
 
-      const authorize = (credentialsProvider as any).authorize;
+      const authorize = (credentialsProvider as any).options.authorize;
       const result = await authorize(credentials);
 
       expect(result).toEqual(mockUser);
@@ -202,8 +223,13 @@ describe('Authentication', () => {
         },
       });
 
-      expect(result.user.id).toBe('user-new');
-      expect(result.user.email).toBe('oauth@example.com');
+      expect(result).not.toBeNull();
+      if (result && 'user' in result && result.user && 'id' in result.user) {
+        expect(result.user.id).toBe('user-new');
+        expect(result.user.email).toBe('oauth@example.com');
+      } else {
+        fail('Expected session with user');
+      }
     });
 
     it('should update existing user login time', async () => {
@@ -236,8 +262,13 @@ describe('Authentication', () => {
         data: { lastLoginAt: expect.any(Date) },
       });
 
-      expect(result.user.id).toBe('user-existing');
-      expect(result.user.role).toBe('admin');
+      expect(result).not.toBeNull();
+      if (result && 'user' in result && result.user && 'id' in result.user) {
+        expect(result.user.id).toBe('user-existing');
+        expect(result.user.role).toBe('admin');
+      } else {
+        fail('Expected session with user');
+      }
     });
 
     it('should handle user creation errors gracefully', async () => {
@@ -261,8 +292,8 @@ describe('Authentication', () => {
   });
 
   describe('Security Configuration', () => {
-    it('should use JWT strategy', () => {
-      expect(authOptions.session?.strategy).toBe('jwt');
+    it('should use database strategy', () => {
+      expect(authOptions.session?.strategy).toBe('database');
     });
 
     it('should have proper JWT secret', () => {

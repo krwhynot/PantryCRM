@@ -313,7 +313,7 @@ test.describe('Food Service Industry Workflows', () => {
       await page.goto('/');
       
       // Go offline
-      await page.setOffline(true);
+      await page.context().setOffline(true);
       
       // Navigate to orders
       await page.click('[data-testid="orders-tab"]');
@@ -331,7 +331,7 @@ test.describe('Food Service Industry Workflows', () => {
       await expect(page.locator('[data-testid="sync-queue"]')).toContainText('1 order pending');
       
       // Go back online
-      await page.setOffline(false);
+      await page.context().setOffline(false);
       
       // Verify sync occurs
       await expect(page.locator('[data-testid="sync-status"]')).toContainText('Syncing...');
@@ -349,7 +349,7 @@ test.describe('Food Service Industry Workflows', () => {
       
       // Mock geolocation
       await page.context().grantPermissions(['geolocation']);
-      await page.setGeolocation({ latitude: 40.7128, longitude: -74.0060 });
+      await page.context().setGeolocation({ latitude: 40.7128, longitude: -74.0060 });
       
       await page.click('[data-testid="start-delivery-btn"]');
       

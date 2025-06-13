@@ -226,7 +226,7 @@ test.describe('Mobile Responsiveness - Food Service CRM', () => {
       await page.goto('/');
       
       // Go offline
-      await page.setOffline(true);
+      await page.context().setOffline(true);
       
       // Check for offline indicator
       await expect(page.locator('[data-testid="network-status"]')).toBeVisible();
@@ -269,7 +269,7 @@ test.describe('Mobile Responsiveness - Food Service CRM', () => {
       await page.goto('/');
       
       // Go offline
-      await page.setOffline(true);
+      await page.context().setOffline(true);
       
       // Add some offline data
       await page.click('[data-testid="add-organization-btn"]');
@@ -280,7 +280,7 @@ test.describe('Mobile Responsiveness - Food Service CRM', () => {
       await expect(page.locator('[data-testid="sync-pending-indicator"]')).toContainText('1 pending');
       
       // Go back online
-      await page.setOffline(false);
+      await page.context().setOffline(false);
       
       // Check for back online message
       await expect(page.locator('[data-testid="network-status"]')).toContainText(networkTestScenarios.backOnline.expectedMessage);

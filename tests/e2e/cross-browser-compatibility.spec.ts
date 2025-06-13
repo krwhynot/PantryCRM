@@ -247,9 +247,10 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
       
       // Add performance measurement
       await page.addInitScript(() => {
-        window.performanceMarks = [];
-        window.markPerformance = (label) => {
-          window.performanceMarks.push({
+        // Define the interface globally
+        (window as any).performanceMarks = [];
+        (window as any).markPerformance = (label: string) => {
+          (window as any).performanceMarks.push({
             label,
             time: performance.now()
           });
@@ -258,7 +259,7 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
       
       // Simulate loading large dataset
       await page.evaluate(() => {
-        window.markPerformance('start-large-data');
+        (window as any).markPerformance('start-large-data');
         
         // Simulate 1000 organization records
         const largeDataset = Array.from({ length: 1000 }, (_, i) => ({
@@ -275,13 +276,13 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
           div.textContent = org.name;
         });
         
-        window.markPerformance('end-large-data');
+        (window as any).markPerformance('end-large-data');
       });
       
       const performanceData = await page.evaluate(() => {
-        const marks = window.performanceMarks;
-        const start = marks.find(m => m.label === 'start-large-data');
-        const end = marks.find(m => m.label === 'end-large-data');
+        const marks = (window as any).performanceMarks;
+        const start = marks.find((m: any) => m.label === 'start-large-data');
+        const end = marks.find((m: any) => m.label === 'end-large-data');
         return end.time - start.time;
       });
       
@@ -303,7 +304,7 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
       expect(typeof onlineStatus).toBe('boolean');
       
       // Test offline simulation
-      await page.setOffline(true);
+      await page.context().setOffline(true);
       
       const offlineStatus = await page.evaluate(() => {
         return navigator.onLine;
@@ -316,7 +317,7 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
         expect(offlineStatus).toBe(false);
       }
       
-      await page.setOffline(false);
+      await page.context().setOffline(false);
     });
 
     test('should handle Connection API where available', async ({ page, browserName }) => {
