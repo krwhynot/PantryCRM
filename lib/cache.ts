@@ -6,6 +6,9 @@
  * Tier 3: API response caching with stale-while-revalidate
  */
 
+// Import Azure B1 optimizer for dynamic cache sizing
+import { azureB1Optimizer } from './azure-b1-optimizations';
+
 interface CacheEntry<T> {
   data: T;
   timestamp: number;
@@ -98,12 +101,12 @@ class MemoryCache {
     let oldestKey: string | null = null;
     let oldestTime = Date.now();
 
-    for (const [key, entry] of this.cache.entries()) {
+    this.cache.forEach((entry, key) => {
       if (entry.timestamp < oldestTime) {
         oldestTime = entry.timestamp;
         oldestKey = key;
       }
-    }
+    });
 
     if (oldestKey) {
       this.cache.delete(oldestKey);
@@ -112,11 +115,11 @@ class MemoryCache {
 
   private cleanup(): void {
     const now = Date.now();
-    for (const [key, entry] of this.cache.entries()) {
+    this.cache.forEach((entry, key) => {
       if (now - entry.timestamp > entry.ttl) {
         this.cache.delete(key);
       }
-    }
+    });
     this.updateMemoryUsage();
   }
 
@@ -126,8 +129,19 @@ class MemoryCache {
   }
 }
 
-// Global cache instance
-const memoryCache = new MemoryCache(500); // Reduced for B1 constraints
+// Global cache instance with Azure B1 optimization
+
+// Dynamically adjust cache size based on available memory
+const getOptimalCacheSize = (): number => {
+  const usage = azureB1Optimizer.getCurrentResourceUsage();
+  const memoryPressure = usage.memory.percentage;
+  
+  if (memoryPressure > 80) return 200;      // Reduce cache under pressure
+  if (memoryPressure > 60) return 350;      // Moderate reduction
+  return 500;                               // Normal size
+};
+
+const memoryCache = new MemoryCache(getOptimalCacheSize());
 
 /**
  * Database query caching wrapper
@@ -297,6 +311,151 @@ export function isCacheHealthy(): boolean {
     stats.memoryUsage < 100 * 1024 * 1024 && // < 100MB
     stats.hitRate > 50 // > 50% hit rate
   );
+}
+
+// Enhanced cache utilities for Azure SQL Basic optimization
+export class StaticDataCache {
+  // Cache system settings (rarely change, frequently accessed)
+  static async getCachedSettings(prisma: any) {
+    const cacheKey = CacheKeys.systemSettings('all');
+    
+    return cachedQuery(
+      cacheKey,
+      () => prisma.systemSetting.findMany({
+        orderBy: { key: 'asc' }
+      }),
+      CacheStrategies.LONG // 1 hour cache
+    );
+  }
+  
+  // Cache interaction types and pipeline stages (static data)
+  static getCachedInteractionTypes() {
+    const cacheKey = 'static:interaction_types';
+    
+    let types = memoryCache.get(cacheKey);
+    if (types) {
+      return types;
+    }
+    
+    // These are defined in the API route and don't change
+    types = [
+      "email",
+      "call", 
+      "in-person",
+      "demo",
+      "quote",
+      "follow-up"
+    ];
+    
+    // Cache for 1 hour (static data)
+    memoryCache.set(cacheKey, types, CacheStrategies.LONG);
+    
+    return types;
+  }
+  
+  static getCachedPipelineStages() {
+    const cacheKey = 'static:pipeline_stages';
+    
+    let stages = memoryCache.get(cacheKey);
+    if (stages) {
+      return stages;
+    }
+    
+    stages = [
+      "lead-discovery",
+      "contacted", 
+      "sampled-visited",
+      "follow-up",
+      "close"
+    ];
+    
+    // Cache for 1 hour (static data)
+    memoryCache.set(cacheKey, stages, CacheStrategies.LONG);
+    
+    return stages;
+  }
+  
+  // Cache organization metadata for dropdowns/filters
+  static async getCachedOrganizationMetadata(prisma: any) {
+    const cacheKey = 'metadata:organizations';
+    
+    return cachedQuery(
+      cacheKey,
+      async () => {
+        // Fetch distinct values for dropdowns/filters with optimized queries
+        const [priorities, segments, types] = await Promise.all([
+          prisma.organization.findMany({
+            select: { priority: true },
+            distinct: ['priority'],
+            where: { priority: { not: null } }
+          }),
+          prisma.organization.findMany({
+            select: { segment: true },
+            distinct: ['segment'],
+            where: { segment: { not: null } }
+          }),
+          prisma.organization.findMany({
+            select: { type: true },
+            distinct: ['type'],
+            where: { type: { not: null } }
+          })
+        ]);
+        
+        return {
+          priorities: priorities.map(p => p.priority).filter(Boolean),
+          segments: segments.map(s => s.segment).filter(Boolean),
+          types: types.map(t => t.type).filter(Boolean)
+        };
+      },
+      CacheStrategies.REPORT // 15 minutes cache
+    );
+  }
+
+  // Cache contact positions for dropdown optimization
+  static async getCachedContactPositions(prisma: any) {
+    const cacheKey = 'metadata:contact_positions';
+    
+    return cachedQuery(
+      cacheKey,
+      async () => {
+        const positions = await prisma.contact.findMany({
+          select: { position: true },
+          distinct: ['position'],
+          where: { 
+            position: { 
+              not: null,
+              not: ''
+            }
+          }
+        });
+        
+        return positions.map(p => p.position).filter(Boolean).sort();
+      },
+      CacheStrategies.REPORT // 15 minutes cache
+    );
+  }
+
+  // Invalidate specific cache entries when data changes
+  static invalidateSettings() {
+    memoryCache.delete(CacheKeys.systemSettings('all'));
+    console.debug('Cache invalidated: system settings');
+  }
+  
+  static invalidateOrganizationMetadata() {
+    memoryCache.delete('metadata:organizations');
+    console.debug('Cache invalidated: organization metadata');
+  }
+  
+  static invalidateContactMetadata() {
+    memoryCache.delete('metadata:contact_positions');
+    console.debug('Cache invalidated: contact metadata');
+  }
+  
+  static invalidateStaticData() {
+    memoryCache.delete('static:interaction_types');
+    memoryCache.delete('static:pipeline_stages');
+    console.debug('Cache invalidated: static data');
+  }
 }
 
 export { memoryCache };

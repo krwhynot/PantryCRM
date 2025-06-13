@@ -431,27 +431,67 @@ export function withEnhancedRateLimit<T extends any[], R>(
 }
 
 /**
- * Predefined rate limit configurations for different endpoint types
+ * Enhanced rate limit configurations with tiered user limits
  */
 export const RATE_LIMIT_CONFIGS = {
   authentication: {
-    maxAttempts: 5,
-    windowMs: 3600000, // 1 hour
-    progressivePenalty: true,
-    userAware: false
+    basic: {
+      maxAttempts: 5,
+      windowMs: 3600000, // 1 hour
+      progressivePenalty: true,
+      userAware: false
+    },
+    premium: {
+      maxAttempts: 15,
+      windowMs: 3600000, // 1 hour
+      progressivePenalty: false, // Reduced penalty for premium users
+      userAware: false
+    }
   },
   search: {
-    maxAttempts: 30,
-    windowMs: 60000, // 1 minute
-    progressivePenalty: false,
+    authenticated: {
+      maxAttempts: 50,
+      windowMs: 60000, // 1 minute
+      progressivePenalty: false,
+      userAware: true,
+      skipSuccessfulRequests: true,
+      burstAllowance: 10 // Allow burst requests
+    },
+    anonymous: {
+      maxAttempts: 15,
+      windowMs: 60000, // 1 minute
+      progressivePenalty: true,
+      userAware: false,
+      burstAllowance: 3
+    }
+  },
+  reports: {
+    concurrent: 2, // Max concurrent reports per user
+    maxAttempts: 10,
+    windowMs: 3600000, // 1 hour
+    progressivePenalty: true,
     userAware: true,
-    skipSuccessfulRequests: true
+    queueDepth: 5
   },
   crud: {
-    maxAttempts: 20,
-    windowMs: 60000, // 1 minute
-    progressivePenalty: true,
-    userAware: true
+    read: {
+      maxAttempts: 100,
+      windowMs: 60000, // 1 minute
+      progressivePenalty: false,
+      userAware: true
+    },
+    write: {
+      maxAttempts: 20,
+      windowMs: 60000, // 1 minute
+      progressivePenalty: true,
+      userAware: true
+    },
+    delete: {
+      maxAttempts: 5,
+      windowMs: 60000, // 1 minute
+      progressivePenalty: true, // Strict penalty for deletions
+      userAware: true
+    }
   },
   admin: {
     maxAttempts: 10,
@@ -466,3 +506,61 @@ export const RATE_LIMIT_CONFIGS = {
     userAware: false
   }
 } as const;
+
+/**
+ * User role types for tiered rate limiting
+ */
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  PREMIUM = 'premium',
+  BASIC = 'basic'
+}
+
+/**
+ * Enhanced rate limiting with user role support
+ */
+export interface EnhancedRateLimitConfig extends RateLimitConfig {
+  burstAllowance?: number;
+  concurrent?: number;
+  queueDepth?: number;
+}
+
+/**
+ * Get appropriate rate limit config based on user role and operation type
+ */
+export function getRateLimitConfig(
+  operation: string,
+  userRole?: UserRole,
+  isAuthenticated = false
+): EnhancedRateLimitConfig {
+  switch (operation) {
+    case 'authentication':
+      return userRole === UserRole.PREMIUM || userRole === UserRole.ADMIN
+        ? RATE_LIMIT_CONFIGS.authentication.premium
+        : RATE_LIMIT_CONFIGS.authentication.basic;
+    
+    case 'search':
+      return isAuthenticated
+        ? RATE_LIMIT_CONFIGS.search.authenticated
+        : RATE_LIMIT_CONFIGS.search.anonymous;
+    
+    case 'reports':
+      return RATE_LIMIT_CONFIGS.reports;
+    
+    case 'crud_read':
+      return RATE_LIMIT_CONFIGS.crud.read;
+    
+    case 'crud_write':
+      return RATE_LIMIT_CONFIGS.crud.write;
+    
+    case 'crud_delete':
+      return RATE_LIMIT_CONFIGS.crud.delete;
+    
+    case 'admin':
+      return RATE_LIMIT_CONFIGS.admin;
+    
+    default:
+      return RATE_LIMIT_CONFIGS.public;
+  }
+}

@@ -20,8 +20,9 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json([], { status: 200 }); // Return empty array for invalid queries
     }
 
-    // Secure search with sanitized input
+    // Enhanced search with relation load strategy optimization
     const organizations = await prismadb.organization.findMany({
+      relationLoadStrategy: "join", // Use database JOIN for optimal Azure SQL Basic performance
       where: {
         OR: [
           { name: { contains: query, mode: 'insensitive' } },
@@ -35,6 +36,18 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
         city: true,
         priority: true, // Include priority for sorting
         estimatedRevenue: true,
+        // Include primary contact for enhanced search results
+        contacts: {
+          take: 1,
+          where: { isPrimary: true },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone: true,
+          },
+        },
       },
       orderBy: [
         { priority: 'asc' }, // A, B, C, D priority ordering

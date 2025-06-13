@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { OptimizedDonutChart } from "@/components/tremor/OptimizedDonutChart";
 
 interface Interaction {
   id: string;
@@ -66,21 +67,17 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </Card>
       </div>
 
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Organizations by Segment</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BarChart
-            className="mt-4 h-72"
-            data={segmentData}
-            index="segment"
-            categories={["count"]}
-            colors={["blue"]}
-            yAxisWidth={48}
-          />
-        </CardContent>
-      </Card>
+      <div className="mt-6">
+        <OptimizedDonutChart
+          data={segmentData}
+          title="Organizations by Segment"
+          colors={["blue", "cyan", "indigo", "violet", "fuchsia"]}
+          className="w-full"
+          showLegend={true}
+          enableTooltip={true}
+          showLabel={false}
+        />
+      </div>
     </div>
   );
 };

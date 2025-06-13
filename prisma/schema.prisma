@@ -106,6 +106,13 @@ model Organization {
   @@index([lastContactDate, nextFollowUpDate]) // Follow-up workflows
   @@index([priority, estimatedRevenue]) // Revenue-priority analysis
   @@index([segment, estimatedRevenue]) // Segment revenue analysis
+  
+  // Enhanced indexes for common query patterns
+  @@index([city, status]) // For location-based searches
+  @@index([phone]) // For phone number lookups
+  @@index([createdAt, status]) // For recent active organizations
+  @@index([zipCode, state]) // For geographic queries
+  @@index([type, status]) // For prospect/customer filtering
 }
 
 model Contact {
@@ -165,6 +172,12 @@ model Interaction {
   @@index([type, outcome, date]) // Type-outcome analysis
   @@index([organizationId, type, date]) // Org-specific interaction types
   @@index([outcome, nextAction]) // Follow-up action planning
+  
+  // Enhanced interaction performance indexes
+  @@index([organizationId, outcome, date]) // For outcome analysis by org
+  @@index([type, organizationId]) // For type-specific org queries
+  @@index([duration, date]) // For duration analysis
+  @@index([subject]) // For subject-based searches
 }
 
 // CRM Extension Models

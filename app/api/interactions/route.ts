@@ -3,26 +3,17 @@ import { prismadb } from "@/lib/prisma";
 import { z } from "zod";
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
+import { StaticDataCache } from '@/lib/cache';
 import crypto from "crypto";
 
-// Define allowed interaction types based on requirements
-const interactionTypes = [
-  "email",
-  "call",
-  "in-person",
-  "demo",
-  "quote",
-  "follow-up"
-];
+// Use cached static data for improved Azure SQL Basic performance
+function getInteractionTypes() {
+  return StaticDataCache.getCachedInteractionTypes();
+}
 
-// Define sales pipeline stages based on requirements
-const pipelineStages = [
-  "lead-discovery",
-  "contacted",
-  "sampled-visited",
-  "follow-up",
-  "close"
-];
+function getPipelineStages() {
+  return StaticDataCache.getCachedPipelineStages();
+}
 
 // Validation schema for creating interactions
 const createInteractionSchema = z.object({
@@ -36,6 +27,81 @@ const createInteractionSchema = z.object({
   isCompleted: z.boolean().default(false),
 });
 
+// Validation schema for bulk interaction creation
+const createBulkInteractionsSchema = z.object({
+  interactions: z.array(createInteractionSchema).min(1).max(50), // Limit to 50 for Azure Basic tier
+  skipDuplicates: z.boolean().default(true)
+});
+
+// Bulk interaction creation handler for improved Azure SQL Basic performance
+async function handleBulkInteractionCreation(body: any, userId: string): Promise<NextResponse> {
+  try {
+    // Validate bulk request
+    const validation = createBulkInteractionsSchema.safeParse(body);
+    
+    if (!validation.success) {
+      console.error("Bulk validation error:", validation.error.errors);
+      return NextResponse.json(
+        { error: validation.error.errors[0].message },
+        { status: 400 }
+      );
+    }
+    
+    const { interactions, skipDuplicates } = validation.data;
+    
+    // Validate all organizations exist (batch check for efficiency)
+    const organizationIds = [...new Set(interactions.map(i => i.organizationId))];
+    const existingOrgs = await prismadb.organization.findMany({
+      where: { id: { in: organizationIds } },
+      select: { id: true }
+    });
+    
+    const validOrgIds = new Set(existingOrgs.map(org => org.id));
+    const invalidInteractions = interactions.filter(i => !validOrgIds.has(i.organizationId));
+    
+    if (invalidInteractions.length > 0) {
+      return NextResponse.json(
+        { error: `Invalid organization IDs: ${invalidInteractions.map(i => i.organizationId).join(', ')}` },
+        { status: 404 }
+      );
+    }
+    
+    // Prepare data for bulk insert
+    const interactionData = interactions.map(interaction => ({
+      id: crypto.randomUUID(),
+      organizationId: interaction.organizationId,
+      contactId: interaction.contactId,
+      userId,
+      interactionDate: interaction.interactionDate,
+      typeId: interaction.typeId,
+      notes: interaction.notes,
+      followUpDate: interaction.followUpDate,
+      isCompleted: interaction.isCompleted,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+    
+    // Bulk create interactions for optimal Azure SQL Basic performance
+    const result = await prismadb.interaction.createMany({
+      data: interactionData,
+      skipDuplicates
+    });
+    
+    return NextResponse.json({
+      success: true,
+      count: result.count,
+      message: `Successfully created ${result.count} interactions`
+    });
+    
+  } catch (dbError) {
+    console.error("Database error creating bulk interactions:", dbError);
+    return NextResponse.json(
+      { error: "Failed to create interactions" },
+      { status: 500 }
+    );
+  }
+}
+
 async function handlePOST(req: NextRequest): Promise<NextResponse> {
   // Check authentication using the standardized method
   const { user, error } = await requireAuth(req);
@@ -43,7 +109,14 @@ async function handlePOST(req: NextRequest): Promise<NextResponse> {
     
     const body = await req.json();
     
-    // Validate the request body
+    // Check if this is a bulk operation
+    const isBulkOperation = Array.isArray(body.interactions);
+    
+    if (isBulkOperation) {
+      return handleBulkInteractionCreation(body, user.id);
+    }
+    
+    // Single interaction validation
     const validation = createInteractionSchema.safeParse(body);
     
     if (!validation.success) {
@@ -178,8 +251,9 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
     }
     
     try {
-      // Optimized query to prevent N+1 issues on Azure SQL Basic
+      // Optimized query with relation load strategy to prevent N+1 issues on Azure SQL Basic
       const interactions = await prismadb.interaction.findMany({
+        relationLoadStrategy: "join", // Use database JOIN for optimal performance
         where: {
           organizationId,
           ...(contactId && { contactId }),
@@ -198,15 +272,24 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
           contactId: true,
           createdAt: true,
           updatedAt: true,
-          // Only fetch contact name, not full contact object
-          contact: contactId ? {
+          // Include contact and organization details with JOIN strategy
+          contact: {
             select: {
               id: true,
               firstName: true,
               lastName: true,
-              email: true
+              email: true,
+              phone: true,
+              position: true,
             }
-          } : false,
+          },
+          organization: {
+            select: {
+              id: true,
+              name: true,
+              priority: true,
+            }
+          },
         },
         orderBy: {
           date: "desc",

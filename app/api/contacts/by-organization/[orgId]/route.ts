@@ -42,8 +42,9 @@ async function handleGET(
       }
     });
     
-    // Optimized query to prevent N+1 issues on Azure SQL Basic
+    // Optimized query with relation load strategy to prevent N+1 issues on Azure SQL Basic
     const contacts = await prismadb.contact.findMany({
+      relationLoadStrategy: "join", // Use database JOIN for optimal performance
       where: {
         organizationId: orgId
       },
@@ -58,8 +59,19 @@ async function handleGET(
         notes: true,
         createdAt: true,
         updatedAt: true,
-        // Minimal organization data to avoid circular references
         organizationId: true,
+        // Include recent interactions for better contact context
+        interactions: {
+          take: 3,
+          orderBy: { date: 'desc' },
+          select: {
+            id: true,
+            type: true,
+            subject: true,
+            date: true,
+            outcome: true,
+          },
+        },
       },
       skip,
       take: limit,

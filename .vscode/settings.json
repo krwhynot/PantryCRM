@@ -45,5 +45,6 @@
     "source.fixAll.eslint": "explicit"
   },
   "files.autoSave": "onFocusChange",
-  "extensions.ignoreRecommendations": true
+  "extensions.ignoreRecommendations": true,
+  "remote.autoForwardPortsFallback": 0
 }

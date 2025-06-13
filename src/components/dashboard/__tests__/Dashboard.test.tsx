@@ -43,12 +43,17 @@ describe('Dashboard', () => {
     expect(screen.getByTestId('organization-count')).toBeInTheDocument(); // Checks for the metric display
     expect(screen.getByText('Recent Interactions')).toBeInTheDocument(); // Checks for the card title
     expect(screen.getByTestId('recent-interactions')).toBeInTheDocument(); // Checks for the metric display
-    expect(screen.getByText('Organizations by Segment')).toBeInTheDocument(); // Checks for the chart card title
+    expect(screen.getAllByText('Organizations by Segment')).toHaveLength(2); // Card title and chart title
   });
 
-  it('renders the Recharts BarChart with correct data', () => {
+  it('renders the chart placeholder with correct data', () => {
     render(<Dashboard organizationCount={mockOrganizationCount} recentInteractions={mockRecentInteractions} />);
-    expect(screen.getByTestId('bar-chart')).toBeInTheDocument();
+    expect(screen.getByTestId('chart-placeholder')).toBeInTheDocument();
+    // Verify segment data is displayed
+    expect(screen.getByText('Fine Dining')).toBeInTheDocument();
+    expect(screen.getByText('120')).toBeInTheDocument();
+    expect(screen.getByText('Fast Food')).toBeInTheDocument();
+    expect(screen.getByText('80')).toBeInTheDocument();
   });
 
   it('renders the responsive grid layout for cards', () => {

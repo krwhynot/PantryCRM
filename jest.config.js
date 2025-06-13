@@ -16,10 +16,16 @@ const customJestConfig = {
   // Module name mapping for path aliases
   moduleNameMapper: {
     '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/actions/(.*)$': '<rootDir>/actions/$1',
     '^@/lib/prisma.ts$': '<rootDir>/lib/prisma.ts',
     '^@/lib/(.*)$': '<rootDir>/lib/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^~/(.*)$': '<rootDir>/$1'
+    '^~/(.*)$': '<rootDir>/$1',
+    // Handle recharts and other optional dependencies
+    '^recharts$': '<rootDir>/__mocks__/recharts.js',
+    // Add support for CSS modules and static assets
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/__mocks__/fileMock.js'
   },
   
   // Use Next.js SWC transformer for faster tests
