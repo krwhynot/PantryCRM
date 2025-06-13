@@ -67,7 +67,7 @@ jobs:
       # Checkout with optimized fetch depth
       # Reference: https://github.com/actions/checkout
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 2  # Needed for proper diff analysis
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
       # Setup Node.js with caching
       # Reference: https://github.com/actions/setup-node
       - name: "⚙️ Setup Node.js ${{ env.NODE_VERSION }}"
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -85,7 +85,7 @@ jobs:
       # Reference: https://github.com/actions/cache
       - name: "📦 Cache Dependencies"
         id: cache-deps
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.npm
@@ -105,7 +105,7 @@ jobs:
       
       # Cache Prisma client generation
       - name: "🗄️ Cache Prisma Client"
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             node_modules/.prisma
@@ -133,7 +133,7 @@ jobs:
       # Cache Next.js build output
       - name: "🏗️ Cache Next.js Build"
         id: cache-build
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             .next/cache
@@ -178,7 +178,7 @@ jobs:
       
       # Upload build artifacts for deployment
       - name: "📤 Upload Build Artifacts"
-        uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: build-artifacts-${{ github.sha }}
           path: |
@@ -205,13 +205,13 @@ jobs:
     
     steps:
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0  # Full history for better analysis
       
       # Setup Node.js for dependency scanning
       - name: "⚙️ Setup Node.js"
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -281,7 +281,7 @@ jobs:
     
     steps:
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       
       # Build Docker image for scanning
       - name: "🐳 Build Docker Image"
@@ -320,7 +320,7 @@ jobs:
     
     steps:
       - name: "📥 Download Build Artifacts"
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: build-artifacts-${{ github.sha }}
       
@@ -365,7 +365,7 @@ jobs:
     
     steps:
       - name: "📥 Download Build Artifacts"
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: build-artifacts-${{ github.sha }}
       
@@ -414,7 +414,7 @@ jobs:
     
     steps:
       - name: "📥 Download Build Artifacts"
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: build-artifacts-${{ github.sha }}
       
@@ -465,7 +465,7 @@ jobs:
     
     steps:
       - name: "📥 Checkout Repository"
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       
       - name: "🔐 Azure Login"
         uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.1
