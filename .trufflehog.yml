@@ -1,0 +1,95 @@
+# TruffleHog Configuration for PantryCRM
+# Secret scanning configuration for pre-commit hooks and CI/CD
+
+# Include specific file types for scanning
+include:
+  - "*.js"
+  - "*.ts"
+  - "*.tsx"
+  - "*.json"
+  - "*.yml"
+  - "*.yaml"
+  - "*.env*"
+  - "*.config.*"
+  - "*.sh"
+  - "*.md"
+
+# Exclude directories and files that don't need scanning
+exclude:
+  - node_modules/
+  - .next/
+  - dist/
+  - build/
+  - coverage/
+  - test-results/
+  - playwright-report/
+  - "*.test.ts"
+  - "*.test.js"
+  - "*.spec.ts"
+  - "*.spec.js"
+
+# Custom rules for detecting secrets
+rules:
+  - name: "Azure Connection Strings"
+    regex: "(?i)(DefaultEndpointsProtocol=https?;.*AccountKey=)[a-zA-Z0-9+/=]{64,}"
+    description: "Azure Storage Account connection strings"
+    
+  - name: "Azure SQL Connection Strings"
+    regex: "(?i)(sqlserver://.*password=)[^;\\s]+"
+    description: "Azure SQL Database connection strings"
+    
+  - name: "JWT Secrets"
+    regex: "(?i)(jwt[_-]?secret[\"']?\\s*[:=]\\s*[\"']?)[a-zA-Z0-9+/=]{32,}"
+    description: "JWT secret keys"
+    
+  - name: "OAuth Client Secrets"
+    regex: "(?i)(client[_-]?secret[\"']?\\s*[:=]\\s*[\"']?)[a-zA-Z0-9._-]{20,}"
+    description: "OAuth client secrets"
+    
+  - name: "API Keys"
+    regex: "(?i)(api[_-]?key[\"']?\\s*[:=]\\s*[\"']?)[a-zA-Z0-9._-]{20,}"
+    description: "Generic API keys"
+
+# Allowlist for known safe patterns (example values, placeholders)
+allowlist:
+  # Common placeholder patterns
+  - "your-secret-key-here"
+  - "your-api-key-here"
+  - "your-client-secret"
+  - "dummy-secret"
+  - "change-this-in-production"
+  - "example-key"
+  - "placeholder"
+  - "YourSecurePassword123!"  # Known placeholder from examples
+  
+  # Development/test patterns
+  - "test-key"
+  - "dev-secret"
+  - "mock-api-key"
+  - "localhost"
+  - "127.0.0.1"
+  
+  # Common example domains
+  - "example.com"
+  - "yourdomain.com"
+  - "yourcompany.com"
+
+# Verification settings
+verify: true
+concurrency: 10
+max_depth: 50
+
+# Output format for CI/CD integration
+output_format: "json"
+include_detectors:
+  - "all"
+
+# Enable GitHub detection for better accuracy
+github:
+  enabled: true
+  
+# Exclude known false positives
+false_positive_repos:
+  - "example"
+  - "template"
+  - "demo"

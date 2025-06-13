@@ -243,6 +243,14 @@ pantrycrm.db
 .env.production.local
 .env*.local
 
+# Environment backups and production files (SECURITY)
+*.env.backup
+*.env.prod
+*.env.production
+.env.backup*
+.env.prod*
+.env.production*
+
 # Configuration files with secrets
 config/secrets.yml
 config/database.yml
