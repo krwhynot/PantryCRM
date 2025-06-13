@@ -2,8 +2,9 @@ import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { User, LogOut, Search } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { GlobalSearch } from "@/components/ui/global-search";
 
 type Props = {
   id: string;
@@ -17,15 +18,24 @@ const Header = ({ id, name, email, avatar }: Props) => {
   return (
     <>
       <div className="flex h-20 justify-between items-center p-5 space-x-5">
-        <div className="flex justify-center ">
+        <div className="flex items-center gap-4">
           {/* Food Service CRM - Phase 2 Core Features */}
-          <h1 className="text-xl font-bold">Kitchen Pantry CRM</h1>
+          <h1 className="text-xl font-bold whitespace-nowrap">Kitchen Pantry CRM</h1>
+          
+          {/* Global Search - Maria's quick access feature */}
+          <div className="hidden md:block flex-1 max-w-md">
+            <GlobalSearch className="w-full" />
+          </div>
         </div>
+        
         <div className="flex items-center gap-3">
-          {/* Simplified header with only essential components */}
-          <button className="p-2 rounded-md hover:bg-muted">
-            <Search className="h-5 w-5" />
-          </button>
+          {/* Mobile search toggle */}
+          <div className="md:hidden">
+            <GlobalSearch 
+              className="w-64" 
+              placeholder="Quick search..."
+            />
+          </div>
           <ThemeToggle />
           
           {/* Simple avatar dropdown replacement */}

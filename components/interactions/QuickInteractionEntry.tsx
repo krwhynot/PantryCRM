@@ -14,6 +14,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { useDebounce } from 'use-debounce';
+import { useAutoSave } from '@/hooks/useAutoSave';
+import { useSessionRecovery } from '@/hooks/useSessionRecovery';
+import { SessionRecoveryDialog } from '@/components/ui/session-recovery-dialog';
+import { SyncStatusIndicator } from '@/components/ui/sync-status-indicator';
+import { VoiceInput } from '@/components/ui/voice-input';
 
 // Assuming these interfaces exist or will be created
 interface Organization {
@@ -67,6 +72,7 @@ const QuickInteractionEntry: React.FC<QuickInteractionEntryProps> = ({ onSuccess
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState<boolean | null>(null);
+  const [draftSaved, setDraftSaved] = useState(false);
 
   const orgSearchInputRef = useRef<HTMLInputElement>(null);
   const notesTextareaRef = useRef<HTMLTextAreaElement>(null);
@@ -86,6 +92,47 @@ const QuickInteractionEntry: React.FC<QuickInteractionEntryProps> = ({ onSuccess
   const watchedContactId = watch('contactId');
   const watchedInteractionType = watch('type');
   const watchedNotes = watch('notes');
+
+  // Get all form data for auto-save
+  const formData = watch();
+
+  // Auto-save functionality
+  const { saveDraft, clearDraft } = useAutoSave(formData, {
+    key: 'quick-interaction-entry',
+    delay: 3000,
+    enabled: true,
+    onSaveSuccess: () => {
+      setDraftSaved(true);
+      setTimeout(() => setDraftSaved(false), 1000);
+    }
+  });
+
+  // Session recovery functionality
+  const {
+    showRestoreDialog,
+    draftData,
+    restoreFromDraft,
+    discardDraft,
+    formatDraftAge
+  } = useSessionRecovery('interaction', 'quick-entry', {
+    maxAge: 60 * 60 * 1000, // 1 hour
+    autoRestore: false
+  });
+
+  // Handle draft restoration
+  const handleRestoreDraft = async () => {
+    const restoredData = await restoreFromDraft();
+    if (restoredData) {
+      // Restore form values
+      if (restoredData.organizationId) setValue('organizationId', restoredData.organizationId);
+      if (restoredData.contactId) setValue('contactId', restoredData.contactId);
+      if (restoredData.type) setValue('type', restoredData.type);
+      if (restoredData.notes) setValue('notes', restoredData.notes);
+      
+      // Restore related state if available
+      // This would require storing additional state in the draft
+    }
+  };
 
   // Timer effect
   useEffect(() => {
@@ -195,6 +242,8 @@ const QuickInteractionEntry: React.FC<QuickInteractionEntryProps> = ({ onSuccess
       }
 
       setSubmitSuccess(true);
+      // Clear draft on successful submission
+      await clearDraft();
       resetForm();
       onSuccess?.();
     } catch (e) {
@@ -235,7 +284,8 @@ const QuickInteractionEntry: React.FC<QuickInteractionEntryProps> = ({ onSuccess
   const notesCharCount = watchedNotes?.length || 0;
 
   return (
-    <Card className="w-full max-w-2xl mx-auto mt-8">
+    <>
+    <Card className="w-full max-w-2xl mx-auto mt-8 relative">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           Quick Interaction Entry
@@ -385,19 +435,48 @@ const QuickInteractionEntry: React.FC<QuickInteractionEntryProps> = ({ onSuccess
 
           {/* Notes Field */}
           <div className="grid w-full items-center gap-1.5">
-            <Label htmlFor="notes">Notes</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="notes">Notes</Label>
+              <VoiceInput
+                onTranscription={(text) => {
+                  const currentNotes = watchedNotes || '';
+                  const newNotes = currentNotes ? `${currentNotes} ${text}` : text;
+                  setValue('notes', newNotes.slice(0, 500)); // Respect max length
+                  
+                  // Focus the textarea after voice input
+                  setTimeout(() => {
+                    notesTextareaRef.current?.focus();
+                  }, 100);
+                }}
+                onError={(error) => {
+                  console.error('Voice input error:', error);
+                  // Could show a toast notification here
+                }}
+                className="flex-shrink-0"
+              />
+            </div>
             <Textarea
               id="notes"
-              placeholder="Add notes (max 500 characters)"
+              placeholder="Add notes (max 500 characters) - Auto-saved locally"
               {...register('notes')}
-              className="min-h-[80px] h-[44px]" // Ensure min height for touch
+              className="min-h-[88px] resize-none touch-target auto-expand"
               maxLength={500}
               ref={notesTextareaRef}
+              rows={3}
               onKeyDown={(e) => {
                 if (!e.shiftKey && e.key === 'Tab') {
                   e.preventDefault();
                   submitButtonRef.current?.focus();
                 }
+              }}
+              onChange={(e) => {
+                // Auto-expand based on content
+                e.target.style.height = 'auto';
+                e.target.style.height = `${Math.max(88, e.target.scrollHeight)}px`;
+                
+                // Call original onChange for react-hook-form
+                const { onChange } = register('notes');
+                onChange(e);
               }}
             />
             <p className="text-sm text-gray-500 text-right">{notesCharCount}/500</p>
@@ -422,7 +501,26 @@ const QuickInteractionEntry: React.FC<QuickInteractionEntryProps> = ({ onSuccess
           )}
         </form>
       </CardContent>
+      
+      {/* Draft saved indicator */}
+      {draftSaved && (
+        <div className="absolute top-2 right-2 bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
+          Draft saved
+        </div>
+      )}
     </Card>
+    
+    {/* Session Recovery Dialog */}
+    <SessionRecoveryDialog
+      open={showRestoreDialog}
+      onRestore={handleRestoreDraft}
+      onDiscard={discardDraft}
+      draftAge={formatDraftAge}
+    />
+    
+    {/* Sync Status Indicator */}
+    <SyncStatusIndicator />
+  </>
   );
 };
 

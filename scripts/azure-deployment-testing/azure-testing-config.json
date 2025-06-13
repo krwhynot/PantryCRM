@@ -1,0 +1,41 @@
+{
+  "azureConfig": {
+    "subscriptionId": "YOUR_SUBSCRIPTION_ID",
+    "resourceGroupName": "pantry-crm-prod-rg",
+    "location": "eastus",
+    "environment": "prod",
+    "appName": "pantry-crm"
+  },
+  "b1Constraints": {
+    "maxMemoryMB": 1750,
+    "warningMemoryThreshold": 80,
+    "criticalMemoryThreshold": 85,
+    "maxInstances": 3,
+    "maxDTU": 5,
+    "maxStorageGB": 2
+  },
+  "performanceTargets": {
+    "searchResponseTimeMs": 1000,
+    "reportGenerationTimeMs": 10000,
+    "pageLoadTime3GMs": 3000,
+    "concurrentUsers": 4,
+    "cacheHitRatePercent": 80,
+    "uptimePercent": 99.5
+  },
+  "testEndpoints": {
+    "local": "http://localhost:3000",
+    "staging": "https://pantry-crm-staging-app.azurewebsites.net",
+    "production": "https://pantry-crm-prod-app.azurewebsites.net"
+  },
+  "monitoring": {
+    "applicationInsightsName": "pantry-crm-prod-insights",
+    "logAnalyticsWorkspace": "pantry-crm-prod-logs",
+    "healthCheckEndpoint": "/api/health/b1-performance"
+  },
+  "testUsers": {
+    "broker": "broker1@foodservice.com",
+    "field": "field1@foodservice.com", 
+    "manager": "manager1@foodservice.com",
+    "admin": "admin@foodservice.com"
+  }
+}

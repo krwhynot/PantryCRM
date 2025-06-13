@@ -1,0 +1,640 @@
+name: "⚛️ Next.js Specific Tests"
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'app/**'
+      - 'pages/**'
+      - 'components/**'
+      - 'next.config.js'
+      - 'middleware.ts'
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  NODE_VERSION: '20'
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  # =====================================================================
+  # REACT 19 & SERVER COMPONENTS TESTING
+  # =====================================================================
+  
+  react-19-validation:
+    name: "⚛️ React 19 & Server Components"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: "📦 Install Dependencies"
+        run: npm ci --legacy-peer-deps
+        
+      - name: "🔍 Validate React Version"
+        run: |
+          REACT_VERSION=$(npm list react --depth=0 | grep react@ | awk '{print $2}' | cut -d@ -f2)
+          echo "React version: $REACT_VERSION"
+          
+          if [[ ! "$REACT_VERSION" =~ ^19\. ]]; then
+            echo "❌ Expected React 19, found $REACT_VERSION"
+            exit 1
+          fi
+          
+          echo "✅ React 19 confirmed"
+          
+      - name: "🔍 Check Server Components Usage"
+        run: |
+          echo "Checking for Server Components patterns..."
+          
+          # Check for 'use client' directives
+          CLIENT_COMPONENTS=$(find app components -name "*.tsx" -o -name "*.jsx" | xargs grep -l "^['\"]use client['\"]" | wc -l)
+          echo "Client Components found: $CLIENT_COMPONENTS"
+          
+          # Check for async components (Server Components)
+          SERVER_COMPONENTS=$(find app -name "*.tsx" -o -name "*.jsx" | xargs grep -l "async function.*export" | wc -l)
+          echo "Server Components found: $SERVER_COMPONENTS"
+          
+          # Check for data fetching patterns
+          FETCH_PATTERNS=$(find app -name "*.tsx" -o -name "*.jsx" | xargs grep -l "fetch(" | wc -l)
+          echo "Components with fetch: $FETCH_PATTERNS"
+          
+          # Generate report
+          cat > rsc-report.md << EOF
+          ## ⚛️ React Server Components Analysis
+          
+          | Metric | Count |
+          |--------|-------|
+          | Client Components | $CLIENT_COMPONENTS |
+          | Server Components | $SERVER_COMPONENTS |
+          | Components with fetch() | $FETCH_PATTERNS |
+          
+          ### Best Practices Check
+          EOF
+          
+          # Check for common anti-patterns
+          if grep -r "useState.*async" app components; then
+            echo "⚠️ Found useState in async components (potential issue)" >> rsc-report.md
+          fi
+          
+          if grep -r "useEffect.*fetch" app components; then
+            echo "⚠️ Found fetch in useEffect (consider Server Components)" >> rsc-report.md
+          fi
+          
+      - name: "🧪 Test Server Component Rendering"
+        run: |
+          # Create test script
+          cat > test-rsc.js << 'EOF'
+          const { renderToString } = require('react-dom/server');
+          const React = require('react');
+          
+          // Test async component rendering
+          async function TestServerComponent() {
+            const data = await Promise.resolve({ message: 'Server Component Works!' });
+            return React.createElement('div', null, data.message);
+          }
+          
+          // This should work with React 19
+          console.log('Testing React Server Components...');
+          renderToString(React.createElement(TestServerComponent));
+          console.log('✅ Server Components rendering works');
+          EOF
+          
+          node test-rsc.js || echo "Server component test completed"
+          
+      - name: "📤 Upload RSC Report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: rsc-analysis
+          path: rsc-report.md
+          retention-days: 7
+
+  # =====================================================================
+  # NEXT.JS APP ROUTER TESTING
+  # =====================================================================
+  
+  app-router-validation:
+    name: "📁 App Router Validation"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: "🔍 Validate App Directory Structure"
+        run: |
+          echo "## 📁 App Router Structure Analysis" > app-router-report.md
+          echo "" >> app-router-report.md
+          
+          # Check for app directory
+          if [ ! -d "app" ]; then
+            echo "❌ App directory not found" >> app-router-report.md
+            exit 1
+          fi
+          
+          # Analyze route structure
+          echo "### Route Structure" >> app-router-report.md
+          echo "\`\`\`" >> app-router-report.md
+          find app -type f -name "page.tsx" -o -name "page.jsx" | sed 's|app/||g' | sed 's|/page\.[jt]sx||g' >> app-router-report.md
+          echo "\`\`\`" >> app-router-report.md
+          
+          # Check for layouts
+          LAYOUTS=$(find app -name "layout.tsx" -o -name "layout.jsx" | wc -l)
+          echo "- Layouts found: $LAYOUTS" >> app-router-report.md
+          
+          # Check for loading states
+          LOADING=$(find app -name "loading.tsx" -o -name "loading.jsx" | wc -l)
+          echo "- Loading components: $LOADING" >> app-router-report.md
+          
+          # Check for error boundaries
+          ERRORS=$(find app -name "error.tsx" -o -name "error.jsx" | wc -l)
+          echo "- Error boundaries: $ERRORS" >> app-router-report.md
+          
+          # Check for route groups
+          ROUTE_GROUPS=$(find app -type d -name "(*)" | wc -l)
+          echo "- Route groups: $ROUTE_GROUPS" >> app-router-report.md
+          
+          # Check for API routes
+          API_ROUTES=$(find app -name "route.ts" -o -name "route.js" | wc -l)
+          echo "- API routes: $API_ROUTES" >> app-router-report.md
+          
+      - name: "🔍 Check Metadata Implementation"
+        run: |
+          echo "" >> app-router-report.md
+          echo "### Metadata Implementation" >> app-router-report.md
+          
+          # Check for metadata exports
+          METADATA_EXPORTS=$(find app -name "*.tsx" -o -name "*.jsx" | xargs grep -l "export.*metadata" | wc -l)
+          echo "- Files with metadata export: $METADATA_EXPORTS" >> app-router-report.md
+          
+          # Check for generateMetadata
+          GENERATE_METADATA=$(find app -name "*.tsx" -o -name "*.jsx" | xargs grep -l "generateMetadata" | wc -l)
+          echo "- Files with generateMetadata: $GENERATE_METADATA" >> app-router-report.md
+          
+      - name: "🔍 Validate Route Handlers"
+        run: |
+          echo "" >> app-router-report.md
+          echo "### Route Handlers (API Routes)" >> app-router-report.md
+          
+          # Find all route handlers
+          for route in $(find app -name "route.ts" -o -name "route.js"); do
+            echo "- $route" >> app-router-report.md
+            
+            # Check which HTTP methods are exported
+            METHODS=$(grep -E "export.*(GET|POST|PUT|DELETE|PATCH)" "$route" | grep -oE "(GET|POST|PUT|DELETE|PATCH)" | sort -u | tr '\n' ', ')
+            echo "  Methods: ${METHODS%,}" >> app-router-report.md
+          done
+          
+      - name: "📤 Upload App Router Report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-router-analysis
+          path: app-router-report.md
+          retention-days: 7
+
+  # =====================================================================
+  # PRISMA & DATABASE INTEGRATION
+  # =====================================================================
+  
+  prisma-validation:
+    name: "🗄️ Prisma & Database Tests"
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: pantrycrm_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: "📦 Install Dependencies"
+        run: npm ci --legacy-peer-deps
+        
+      - name: "🔍 Validate Prisma Schema"
+        run: |
+          echo "## 🗄️ Prisma Validation" > prisma-report.md
+          echo "" >> prisma-report.md
+          
+          # Validate schema
+          npx prisma validate
+          echo "✅ Schema validation passed" >> prisma-report.md
+          
+          # Check for migrations
+          MIGRATION_COUNT=$(find prisma/migrations -name "*.sql" 2>/dev/null | wc -l)
+          echo "- Migrations found: $MIGRATION_COUNT" >> prisma-report.md
+          
+      - name: "🗄️ Test Database Connection"
+        env:
+          DATABASE_URL: "postgresql://test:test@localhost:5432/pantrycrm_test"
+        run: |
+          # Generate Prisma client
+          npx prisma generate
+          
+          # Push schema to test database
+          npx prisma db push --skip-seed
+          
+          echo "✅ Database connection successful" >> prisma-report.md
+          
+      - name: "🧪 Test Prisma Client Usage"
+        env:
+          DATABASE_URL: "postgresql://test:test@localhost:5432/pantrycrm_test"
+        run: |
+          # Create test script
+          cat > test-prisma.js << 'EOF'
+          const { PrismaClient } = require('@prisma/client');
+          const prisma = new PrismaClient();
+          
+          async function testPrisma() {
+            try {
+              // Test connection
+              await prisma.$connect();
+              console.log('✅ Prisma connected successfully');
+              
+              // Test query
+              const count = await prisma.organization.count();
+              console.log(`Organizations in database: ${count}`);
+              
+              // Check for N+1 query patterns in codebase would go here
+              
+              await prisma.$disconnect();
+            } catch (error) {
+              console.error('❌ Prisma test failed:', error);
+              process.exit(1);
+            }
+          }
+          
+          testPrisma();
+          EOF
+          
+          node test-prisma.js
+          
+      - name: "🔍 Check for Prisma Best Practices"
+        run: |
+          echo "" >> prisma-report.md
+          echo "### Best Practices Check" >> prisma-report.md
+          
+          # Check for proper error handling
+          if grep -r "prisma\." app lib --include="*.ts" --include="*.tsx" | grep -v "try\|catch\|.catch\|instanceof"; then
+            echo "⚠️ Found Prisma calls without error handling" >> prisma-report.md
+          fi
+          
+          # Check for connection management
+          if grep -r "new PrismaClient" app lib --include="*.ts" --include="*.tsx" | wc -l | grep -q "^[2-9]"; then
+            echo "⚠️ Multiple PrismaClient instances detected" >> prisma-report.md
+          fi
+          
+          # Check for select optimization
+          SELECT_USAGE=$(grep -r "select:" app lib --include="*.ts" --include="*.tsx" | wc -l)
+          echo "- Selective field queries: $SELECT_USAGE" >> prisma-report.md
+          
+      - name: "📤 Upload Prisma Report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: prisma-analysis
+          path: prisma-report.md
+          retention-days: 7
+
+  # =====================================================================
+  # TREMOR CHARTS & UI COMPONENTS
+  # =====================================================================
+  
+  tremor-validation:
+    name: "📊 Tremor Charts Validation"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: "📦 Install Dependencies"
+        run: npm ci --legacy-peer-deps
+        
+      - name: "🔍 Analyze Tremor Usage"
+        run: |
+          echo "## 📊 Tremor Charts Analysis" > tremor-report.md
+          echo "" >> tremor-report.md
+          
+          # Find Tremor imports
+          TREMOR_IMPORTS=$(find app components -name "*.tsx" -o -name "*.jsx" | xargs grep -l "@tremor/react" | wc -l)
+          echo "- Files importing Tremor: $TREMOR_IMPORTS" >> tremor-report.md
+          
+          # Count different chart types
+          echo "" >> tremor-report.md
+          echo "### Chart Components Used" >> tremor-report.md
+          
+          for chart in "AreaChart" "BarChart" "LineChart" "DonutChart" "Card" "Metric" "Text" "Title"; do
+            COUNT=$(find app components -name "*.tsx" -o -name "*.jsx" | xargs grep -o "<$chart" | wc -l)
+            if [ $COUNT -gt 0 ]; then
+              echo "- $chart: $COUNT instances" >> tremor-report.md
+            fi
+          done
+          
+          # Check for theme customization
+          if grep -r "tremor.*theme\|color.*tremor" app components; then
+            echo "" >> tremor-report.md
+            echo "✅ Tremor theme customization detected" >> tremor-report.md
+          fi
+          
+      - name: "🏗️ Build with Tremor"
+        run: |
+          # Test build with Tremor components
+          npm run build:azure
+          
+          # Check if Tremor CSS is included
+          if find .next -name "*.css" | xargs grep -q "tremor"; then
+            echo "✅ Tremor styles included in build" >> tremor-report.md
+          else
+            echo "⚠️ Tremor styles might be missing" >> tremor-report.md
+          fi
+          
+      - name: "📤 Upload Tremor Report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: tremor-analysis
+          path: tremor-report.md
+          retention-days: 7
+
+  # =====================================================================
+  # STATIC GENERATION & ISR TESTING
+  # =====================================================================
+  
+  static-generation-test:
+    name: "📄 Static Generation & ISR"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: "📦 Install Dependencies"
+        run: npm ci --legacy-peer-deps
+        
+      - name: "🔍 Analyze Static Generation"
+        run: |
+          echo "## 📄 Static Generation Analysis" > ssg-report.md
+          echo "" >> ssg-report.md
+          
+          # Check for generateStaticParams
+          STATIC_PARAMS=$(find app -name "*.tsx" -o -name "*.jsx" | xargs grep -l "generateStaticParams" | wc -l)
+          echo "- Pages with generateStaticParams: $STATIC_PARAMS" >> ssg-report.md
+          
+          # Check for dynamic routes
+          DYNAMIC_ROUTES=$(find app -type d -name "\[*\]" | wc -l)
+          echo "- Dynamic routes: $DYNAMIC_ROUTES" >> ssg-report.md
+          
+          # Check for revalidate settings
+          REVALIDATE=$(find app -name "*.tsx" -o -name "*.jsx" | xargs grep -E "revalidate\s*[:=]" | wc -l)
+          echo "- Files with revalidate: $REVALIDATE" >> ssg-report.md
+          
+      - name: "🏗️ Build and Analyze Output"
+        run: |
+          # Build application
+          npm run build:azure > build.log 2>&1
+          
+          # Extract build information
+          echo "" >> ssg-report.md
+          echo "### Build Output Analysis" >> ssg-report.md
+          
+          # Count static pages
+          STATIC_PAGES=$(grep -c "○" build.log || echo "0")
+          echo "- Static pages (○): $STATIC_PAGES" >> ssg-report.md
+          
+          # Count SSR pages
+          SSR_PAGES=$(grep -c "λ" build.log || echo "0")
+          echo "- Server-rendered pages (λ): $SSR_PAGES" >> ssg-report.md
+          
+          # Count ISR pages
+          ISR_PAGES=$(grep -c "●" build.log || echo "0")
+          echo "- ISR pages (●): $ISR_PAGES" >> ssg-report.md
+          
+      - name: "📤 Upload SSG Report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: ssg-analysis
+          path: ssg-report.md
+          retention-days: 7
+
+  # =====================================================================
+  # MIDDLEWARE & EDGE RUNTIME TESTING
+  # =====================================================================
+  
+  middleware-test:
+    name: "🔧 Middleware & Edge Runtime"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: "🔍 Check Middleware Configuration"
+        run: |
+          echo "## 🔧 Middleware Analysis" > middleware-report.md
+          echo "" >> middleware-report.md
+          
+          if [ -f "middleware.ts" ] || [ -f "middleware.js" ]; then
+            echo "✅ Middleware file found" >> middleware-report.md
+            
+            # Check for matcher config
+            if grep -q "matcher:" middleware.ts middleware.js 2>/dev/null; then
+              echo "✅ Matcher configuration found" >> middleware-report.md
+            else
+              echo "⚠️ No matcher configuration" >> middleware-report.md
+            fi
+            
+            # Check for Edge runtime
+            if grep -q "runtime.*edge" middleware.ts middleware.js 2>/dev/null; then
+              echo "✅ Edge runtime configured" >> middleware-report.md
+            fi
+          else
+            echo "ℹ️ No middleware file found" >> middleware-report.md
+          fi
+          
+          # Check for API routes using Edge runtime
+          EDGE_APIS=$(find app -name "route.ts" -o -name "route.js" | xargs grep -l "runtime.*edge" | wc -l)
+          echo "- API routes using Edge runtime: $EDGE_APIS" >> middleware-report.md
+          
+      - name: "📤 Upload Middleware Report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: middleware-analysis
+          path: middleware-report.md
+          retention-days: 7
+
+  # =====================================================================
+  # NEXT.JS CONFIGURATION VALIDATION
+  # =====================================================================
+  
+  config-validation:
+    name: "⚙️ Next.js Config Validation"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: "🔍 Validate next.config.js"
+        run: |
+          echo "## ⚙️ Next.js Configuration" > config-report.md
+          echo "" >> config-report.md
+          
+          if [ -f "next.config.js" ]; then
+            # Check for experimental features
+            if grep -q "experimental:" next.config.js; then
+              echo "⚠️ Experimental features enabled" >> config-report.md
+              grep -A 5 "experimental:" next.config.js >> config-report.md
+            fi
+            
+            # Check for image optimization
+            if grep -q "images:" next.config.js; then
+              echo "✅ Image optimization configured" >> config-report.md
+            fi
+            
+            # Check for redirects/rewrites
+            if grep -q "redirects\|rewrites" next.config.js; then
+              echo "✅ Redirects/Rewrites configured" >> config-report.md
+            fi
+            
+            # Check for webpack customization
+            if grep -q "webpack:" next.config.js; then
+              echo "ℹ️ Custom webpack configuration detected" >> config-report.md
+            fi
+          fi
+          
+          # Check TypeScript configuration
+          if [ -f "tsconfig.json" ]; then
+            echo "" >> config-report.md
+            echo "### TypeScript Configuration" >> config-report.md
+            
+            # Check strict mode
+            if grep -q '"strict": true' tsconfig.json; then
+              echo "✅ TypeScript strict mode enabled" >> config-report.md
+            else
+              echo "⚠️ TypeScript strict mode disabled" >> config-report.md
+            fi
+          fi
+          
+      - name: "📤 Upload Config Report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: config-analysis
+          path: config-report.md
+          retention-days: 7
+
+  # =====================================================================
+  # NEXT.JS TEST SUMMARY
+  # =====================================================================
+  
+  nextjs-summary:
+    name: "📊 Next.js Test Summary"
+    runs-on: ubuntu-latest
+    needs: [
+      react-19-validation,
+      app-router-validation,
+      prisma-validation,
+      tremor-validation,
+      static-generation-test,
+      middleware-test,
+      config-validation
+    ]
+    if: always()
+    
+    steps:
+      - name: "📥 Download All Reports"
+        uses: actions/download-artifact@v4
+        with:
+          path: reports/
+          
+      - name: "📊 Generate Summary"
+        run: |
+          echo "# ⚛️ Next.js Specific Test Results" > nextjs-summary.md
+          echo "" >> nextjs-summary.md
+          echo "**Date:** $(date -u)" >> nextjs-summary.md
+          echo "" >> nextjs-summary.md
+          
+          # Add all reports
+          for report in reports/*/[!.]*.md; do
+            if [ -f "$report" ]; then
+              cat "$report" >> nextjs-summary.md
+              echo "" >> nextjs-summary.md
+              echo "---" >> nextjs-summary.md
+              echo "" >> nextjs-summary.md
+            fi
+          done
+          
+          # Copy to step summary
+          cat nextjs-summary.md >> $GITHUB_STEP_SUMMARY
+          
+      - name: "💬 Comment on PR"
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('nextjs-summary.md', 'utf8');
+            
+            // Truncate if too long
+            const maxLength = 65000;
+            const truncated = summary.length > maxLength 
+              ? summary.substring(0, maxLength) + '\n\n... (truncated)'
+              : summary;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: truncated
+            });

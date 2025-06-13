@@ -28,7 +28,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
-import { FingerprintIcon } from "lucide-react";
+import { FingerprintIcon, Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import {
   Dialog,
@@ -40,6 +40,8 @@ import {
 } from "@/components/ui/dialog";
 
 import LoadingComponent from "@/components/LoadingComponent";
+import { useOfflineAuth } from "@/hooks/useOfflineAuth";
+import { OfflineLoginCard } from "@/components/auth/OfflineLoginCard";
 
 export function LoginComponent() {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +53,17 @@ export function LoginComponent() {
   const { toast } = useToast();
 
   const router = useRouter();
+  
+  // Offline authentication support
+  const {
+    shouldShowOfflineOption,
+    cachedUser,
+    getCacheAge,
+    getTimeUntilExpiry,
+    handleOfflineLogin,
+    clearCachedAuth,
+    cacheAuthData
+  } = useOfflineAuth();
 
   const formSchema = z.object({
     email: z.string().min(3).max(50),
@@ -102,6 +115,13 @@ export function LoginComponent() {
         });
         setIsLoading(false);
       } else {
+        // Cache successful login for offline use
+        await cacheAuthData({
+          email: data.email,
+          name: data.email.split('@')[0], // Fallback name
+          id: data.email
+        });
+        
         toast({
           title: "Success",
           description: "Successfully logged in",
@@ -148,6 +168,40 @@ export function LoginComponent() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  // Show offline login option if available
+  if (shouldShowOfflineOption && cachedUser) {
+    return (
+      <div className="space-y-4">
+        <OfflineLoginCard
+          userName={cachedUser.name}
+          userEmail={cachedUser.email}
+          cacheAge={getCacheAge()}
+          timeUntilExpiry={getTimeUntilExpiry()}
+          onOfflineLogin={handleOfflineLogin}
+          onClearCache={clearCachedAuth}
+          className="min-w-80 w-full md:min-w-96 md:w-fit"
+        />
+        
+        {/* Option to show regular login */}
+        <Card className="p-3 min-w-80 w-full md:min-w-96 md:w-fit">
+          <CardContent className="text-center">
+            <p className="text-sm text-gray-600 mb-2">
+              Connection restored? 
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.location.reload()}
+              className="touch-target"
+            >
+              Try Online Login
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -212,22 +266,25 @@ export function LoginComponent() {
                   <FormItem>
                     <FormLabel className="text-left">Password</FormLabel>
                     <FormControl>
-                      <div className="flex items-center space-x-5 border rounded-md">
+                      <div className="relative">
                         <Input
                           disabled={isLoading}
                           placeholder="Password"
-                          className="border-0"
                           type={show ? "text" : "password"}
+                          className="pr-12"
                           {...field}
                         />
-                        <span
-                          onClick={() => {
-                            setShow(!show);
-                          }}
-                          className="text-sm cursor-pointer m-2"
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full w-12 px-3 py-2 hover:bg-transparent touch-target"
+                          onClick={() => setShow(!show)}
+                          aria-label={show ? "Hide password" : "Show password"}
+                          disabled={isLoading}
                         >
-                          {show ? "Hide" : "Show"}
-                        </span>
+                          {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
                       </div>
                     </FormControl>
                     <FormMessage />

@@ -3,6 +3,15 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
 import { SimpleErrorBoundary } from "@/components/ErrorBoundary";
+import dynamic from "next/dynamic";
+
+// Dynamically import SyncStatusIndicator for global sync status
+const SyncStatusIndicator = dynamic(
+  () => import('@/components/ui/sync-status-indicator'),
+  {
+    ssr: false
+  }
+);
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -80,7 +89,7 @@ export default async function AppLayout({
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden relative">
       <SimpleErrorBoundary message="Navigation sidebar failed to load">
         <SideBar build={build} />
       </SimpleErrorBoundary>
@@ -103,6 +112,9 @@ export default async function AppLayout({
           <Footer />
         </SimpleErrorBoundary>
       </div>
+      
+      {/* Global Sync Status Indicator - Fixed position for Maria's field visibility */}
+      <SyncStatusIndicator />
     </div>
   );
 }

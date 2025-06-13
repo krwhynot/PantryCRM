@@ -1,0 +1,43 @@
+# Act Configuration for PantryCRM GitHub Actions Testing
+# This file configures nektos/act for local workflow validation
+# Optimized for Azure B1 tier testing
+
+# Use medium runner image for better compatibility
+--platform ubuntu-latest=catthehacker/ubuntu:act-latest
+--platform ubuntu-22.04=catthehacker/ubuntu:act-22.04
+--platform ubuntu-20.04=catthehacker/ubuntu:act-20.04
+
+# Resource constraints to simulate Azure B1 (1.75 GB RAM, 1 Core)
+--container-options "--memory=1750m --cpus=1"
+
+# Enable privileged mode for Docker operations
+--privileged
+
+# Use local .env.act for secrets
+--env-file .env.act
+
+# Use local act event files
+--eventpath .github/act-events/
+
+# Artifact server for testing artifact upload/download
+--artifact-server-path /tmp/act-artifacts
+
+# Disable automatic cleanup for debugging
+--no-skip-checkout
+
+# Enable verbose logging for troubleshooting
+--verbose
+
+# Set job timeout (10 minutes)
+--job-timeout 10m
+
+# Use Docker socket for container operations
+--container-daemon-socket
+
+# Cache Docker layers
+--reuse
+
+# Matrix configuration for testing multiple Node versions
+--matrix node-version:18
+--matrix node-version:20
+--matrix node-version:latest

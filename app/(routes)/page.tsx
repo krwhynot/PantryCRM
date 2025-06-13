@@ -2,6 +2,17 @@ import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import the favorites component
+const FavoriteOrganizations = dynamic(
+  () => import('@/components/organizations/FavoriteOrganizations'),
+  {
+    loading: () => <div className="h-64 animate-pulse bg-gray-200 rounded-lg"></div>,
+    ssr: false
+  }
+);
 
 export const metadata: Metadata = {
   title: "Kitchen Pantry CRM - Dashboard",
@@ -36,6 +47,13 @@ export default async function DashboardPage() {
             Settings
           </a>
         </div>
+      </div>
+      
+      {/* Favorite Organizations - Maria's Priority Access */}
+      <div className="mb-8">
+        <Suspense fallback={<div className="h-64 animate-pulse bg-gray-200 rounded-lg"></div>}>
+          <FavoriteOrganizations maxItems={4} />
+        </Suspense>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
