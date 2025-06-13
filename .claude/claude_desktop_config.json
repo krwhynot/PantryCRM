@@ -1,0 +1,107 @@
+{
+    "globalShortcut": "Cmd+Shift+Space",
+    "performance": {
+        "tokenCache": {
+            "maxSize": "2048MB",
+            "persistence": "24h",
+            "compression": true
+        },
+        "concurrency": {
+            "maxParallelTasks": 8,
+            "mcpServerPool": 6,
+            "fileOperations": 4
+        },
+        "optimization": {
+            "preloadCommonFiles": true,
+            "aggressiveCaching": true,
+            "contextWindowSize": 200000,
+            "streamingThreshold": 50000
+        }
+    },
+    "mcpServers": {
+        "memory": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-memory",
+                "R:/Projects/PantryCRM/.windsurf/memory.json"
+            ],
+            "env": {
+                "MEMORY_HEAP_SIZE": "8192",
+                "MEMORY_CACHE_SIZE": "2048",
+                "MEMORY_GC_AGGRESSIVE": "true",
+                "MEMORY_COMPRESSION": "true"
+            }
+        },
+        "sequential-thinking": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-sequential-thinking"
+            ],
+            "env": {
+                "MAX_THOUGHTS": "25",
+                "BRANCH_LIMIT": "4",
+                "REVISION_DEPTH": "5",
+                "MEMORY_ALLOCATION": "4096"
+            }
+        },
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-filesystem",
+                "R:/Projects"
+            ],
+            "env": {
+                "FILE_CACHE_SIZE": "1024",
+                "MAX_FILE_SIZE": "10485760",
+                "CONCURRENT_READS": "8",
+                "BUFFER_SIZE": "65536"
+            }
+        },
+        "tavily": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-tavily"
+            ],
+            "env": {
+                "TAVILY_API_KEY": "your_api_key",
+                "RATE_LIMIT": "100",
+                "CONCURRENT_REQUESTS": "8",
+                "CACHE_TTL": "3600"
+            }
+        },
+        "context7": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-context7"
+            ],
+            "env": {
+                "CONTEXT7_API_KEY": "your_api_key",
+                "DOC_CACHE_SIZE": "512",
+                "PARALLEL_QUERIES": "4"
+            }
+        },
+        "exa": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-exa"
+            ],
+            "env": {
+                "EXA_API_KEY": "your_api_key",
+                "SEARCH_CONCURRENCY": "6",
+                "RESULT_CACHE_SIZE": "256"
+            }
+        },
+        "desktop-commander": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-desktop-commander"
+            ],
+            "env": {
+                "SHELL": "/bin/bash",
+                "MAX_CONCURRENT_COMMANDS": "4",
+                "COMMAND_TIMEOUT": "300",
+                "OUTPUT_BUFFER_SIZE": "1048576"
+            }
+        }
+    }
+}

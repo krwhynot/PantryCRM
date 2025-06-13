@@ -1,0 +1,318 @@
+# Artillery Search Performance Testing for PantryCRM
+# Focused on search functionality under concurrent load
+# Tests critical search scenarios for food service operations
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    # Quick ramp-up to test search under immediate load
+    - duration: 15
+      arrivalRate: 1
+      rampTo: 4
+      name: "Search load ramp-up"
+    
+    # Sustained search load testing
+    - duration: 180
+      arrivalRate: 4
+      name: "Sustained search load"
+    
+    # Peak search scenarios (lunch rush simulation)
+    - duration: 60
+      arrivalRate: 8
+      name: "Peak search load"
+
+  # Search-specific performance thresholds
+  ensure:
+    # Search queries should complete within 1 second for field operations
+    - max: 1000
+      name: "Search response time under 1s"
+    
+    # Database queries should not exceed 500ms
+    - max: 500
+      name: "Database query time under 500ms"
+    
+    # P99 search response under 2 seconds
+    - percentile: 99
+      max: 2000
+      name: "P99 search time under 2s"
+
+  # Search test data variables
+  variables:
+    # Common search terms used by food brokers
+    searchTerms: 
+      - "restaurant"
+      - "bistro" 
+      - "cafe"
+      - "grill"
+      - "kitchen"
+      - "food"
+      - "catering"
+      - "pizza"
+      - "burger"
+      - "sushi"
+    
+    # Organization types for filtering
+    orgTypes: ["FINE_DINING", "FAST_FOOD", "CASUAL_DINING", "CAFE"]
+    
+    # Priority levels for search filtering
+    priorities: ["A", "B", "C"]
+    
+    # Territory-based searches
+    territories: ["NORTHEAST", "SOUTHEAST", "MIDWEST", "WEST"]
+    
+    # Contact roles
+    contactRoles: ["DECISION_MAKER", "INFLUENCER", "USER", "GATEKEEPER"]
+    
+    # Revenue ranges for financial searches
+    revenueRanges: ["0-50000", "50000-100000", "100000-200000", "200000+"]
+
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+    statsd:
+      host: localhost
+      port: 8125
+      prefix: "pantrycrm.search"
+
+scenarios:
+  # Scenario 1: Organization Search by Name (35% of search traffic)
+  - name: "Organization Name Search"
+    weight: 35
+    flow:
+      # Authenticate
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "search_user{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Basic organization name search
+      - get:
+          url: "/api/organizations/search?q={{ $pick(searchTerms) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Organization Name Search"
+      
+      # Refined search with filters
+      - get:
+          url: "/api/organizations/search?q={{ $pick(searchTerms) }}&type={{ $pick(orgTypes) }}&priority={{ $pick(priorities) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Filtered Organization Search"
+      
+      # Paginated search results
+      - get:
+          url: "/api/organizations/search?q={{ $pick(searchTerms) }}&page=2&limit=20"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Paginated Search Results"
+
+  # Scenario 2: Territory-Based Search (25% of search traffic)
+  - name: "Territory-Based Search"
+    weight: 25
+    flow:
+      # Authenticate
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "territory_user{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Search organizations by territory
+      - get:
+          url: "/api/organizations/search?territory={{ $pick(territories) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Territory Organization Search"
+      
+      # Search within territory by revenue range
+      - get:
+          url: "/api/organizations/search?territory={{ $pick(territories) }}&revenue={{ $pick(revenueRanges) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Territory Revenue Search"
+      
+      # Complex territory search with multiple filters
+      - get:
+          url: "/api/organizations/search?territory={{ $pick(territories) }}&type={{ $pick(orgTypes) }}&priority={{ $pick(priorities) }}&sort=revenue_desc"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Complex Territory Search"
+
+  # Scenario 3: Contact Search (20% of search traffic)
+  - name: "Contact Search"
+    weight: 20
+    flow:
+      # Authenticate
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "contact_user{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Search contacts by name
+      - get:
+          url: "/api/contacts/search?q=chef"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Contact Name Search"
+      
+      # Search contacts by role
+      - get:
+          url: "/api/contacts/search?role={{ $pick(contactRoles) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Contact Role Search"
+      
+      # Search contacts by organization type
+      - get:
+          url: "/api/contacts/search?orgType={{ $pick(orgTypes) }}&role={{ $pick(contactRoles) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Contact Organization Type Search"
+      
+      # Email-based contact search
+      - get:
+          url: "/api/contacts/search?email=@restaurant.com"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Contact Email Search"
+
+  # Scenario 4: Interaction History Search (15% of search traffic)
+  - name: "Interaction History Search"
+  weight: 15
+    flow:
+      # Authenticate
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "history_user{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Search interactions by subject/content
+      - get:
+          url: "/api/interactions/search?q=menu planning"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Interaction Content Search"
+      
+      # Search interactions by date range
+      - get:
+          url: "/api/interactions/search?dateFrom=2024-01-01&dateTo=2024-12-31"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Interaction Date Range Search"
+      
+      # Search interactions by type and outcome
+      - get:
+          url: "/api/interactions/search?type=SALES_CALL&outcome=POSITIVE"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Interaction Type Search"
+      
+      # Complex interaction search with organization filter
+      - get:
+          url: "/api/interactions/search?orgId={{ $randomInt(1, 100) }}&type=ORDER_PLACEMENT&dateFrom=2024-01-01"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Complex Interaction Search"
+
+  # Scenario 5: Global Search (5% of search traffic)
+  - name: "Global Search"
+    weight: 5
+    flow:
+      # Authenticate
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "global_user{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Global search across all entities
+      - get:
+          url: "/api/search/global?q={{ $pick(searchTerms) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Global Entity Search"
+      
+      # Advanced global search with entity type filter
+      - get:
+          url: "/api/search/global?q={{ $pick(searchTerms) }}&entities=organizations,contacts"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Filtered Global Search"
+      
+      # Global search with fuzzy matching
+      - get:
+          url: "/api/search/global?q={{ $pick(searchTerms) }}&fuzzy=true"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Fuzzy Global Search"
+
+  # Scenario 6: Autocomplete/Typeahead Search (15% - rapid fire requests)
+  - name: "Autocomplete Search"
+    weight: 15
+    flow:
+      # Authenticate
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "autocomplete_user{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Simulate typing "rest" for "restaurant"
+      - get:
+          url: "/api/search/autocomplete?q=r"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Autocomplete Single Char"
+      
+      - get:
+          url: "/api/search/autocomplete?q=re"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Autocomplete Two Chars"
+      
+      - get:
+          url: "/api/search/autocomplete?q=res"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Autocomplete Three Chars"
+      
+      - get:
+          url: "/api/search/autocomplete?q=rest"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Autocomplete Four Chars"
+      
+      # Organization-specific autocomplete
+      - get:
+          url: "/api/organizations/autocomplete?q={{ $pick(searchTerms) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Organization Autocomplete"
+      
+      # Contact-specific autocomplete
+      - get:
+          url: "/api/contacts/autocomplete?q=chef"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Contact Autocomplete"

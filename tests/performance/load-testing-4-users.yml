@@ -1,0 +1,301 @@
+# Artillery Load Testing Configuration for PantryCRM Food Service CRM
+# Testing 4 concurrent users performing typical food service workflows
+# Based on Artillery best practices for Node.js applications
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    # Ramp-up phase: Start with 1 user, scale to 4 over 30 seconds
+    - duration: 30
+      arrivalRate: 1
+      rampTo: 4
+      name: "Ramp-up to 4 concurrent users"
+    
+    # Sustained load: Maintain 4 concurrent users for 2 minutes
+    - duration: 120
+      arrivalRate: 4
+      name: "Sustained load - 4 concurrent users"
+    
+    # Peak load simulation: Brief spike to 8 users for 30 seconds
+    - duration: 30
+      arrivalRate: 8
+      name: "Peak load simulation"
+    
+    # Cool-down phase: Reduce back to 2 users
+    - duration: 30
+      arrivalRate: 2
+      name: "Cool-down phase"
+
+  # Performance thresholds for food service CRM operations
+  ensure:
+    # API response times should be under 2 seconds for field operations
+    - max: 2000
+      name: "Response time under 2s"
+    
+    # Error rate should be less than 1% for business operations
+    - max: 1
+      name: "Error rate under 1%"
+    
+    # P95 response time under 3 seconds for mobile field workers
+    - percentile: 95
+      max: 3000
+      name: "P95 response time under 3s"
+
+  # Variables for test data
+  variables:
+    orgTypes: ["FINE_DINING", "FAST_FOOD", "CASUAL_DINING", "CAFE"]
+    priorities: ["A", "B", "C"]
+    territories: ["NORTHEAST", "SOUTHEAST", "MIDWEST", "WEST"]
+    
+  # Plugins for enhanced monitoring
+  plugins:
+    metrics-by-endpoint: {}
+    cloudwatch: 
+      region: "us-east-1"
+      namespace: "PantryCRM/LoadTest"
+
+scenarios:
+  # Scenario 1: Food Broker Daily Workflow (40% of traffic)
+  - name: "Food Broker Daily Workflow"
+    weight: 40
+    flow:
+      # Login as food broker
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "broker{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.user.id"
+              as: "userId"
+            - json: "$.sessionToken"
+              as: "sessionToken"
+          headers:
+            Content-Type: "application/json"
+      
+      # View dashboard - critical for daily operations
+      - get:
+          url: "/"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # Check territory performance
+      - get:
+          url: "/api/territory/performance"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # View organization list (paginated)
+      - get:
+          url: "/api/organizations?page=1&limit=20&territory={{ $pick(territories) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # Search for specific restaurant type
+      - get:
+          url: "/api/organizations/search?type={{ $pick(orgTypes) }}&priority={{ $pick(priorities) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # View specific organization details
+      - get:
+          url: "/api/organizations/{{ $randomInt(1, 100) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # Log interaction with customer
+      - post:
+          url: "/api/interactions"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            organizationId: "{{ $randomInt(1, 100) }}"
+            type: "SALES_CALL"
+            subject: "Monthly check-in call"
+            description: "Discussed menu planning for {{ $pick(['spring', 'summer', 'fall', 'winter']) }} season"
+            outcome: "POSITIVE"
+      
+      # Check commission summary
+      - get:
+          url: "/api/commission/summary?period=current_month"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+
+  # Scenario 2: Mobile Field Operations (30% of traffic)
+  - name: "Mobile Field Operations"
+    weight: 30
+    flow:
+      # Mobile login
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "field{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Sync offline data first
+      - post:
+          url: "/api/sync/upload"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            pendingInteractions: 2
+            pendingOrders: 1
+            lastSyncTimestamp: "{{ $timestamp() }}"
+      
+      # Get customer route for today
+      - get:
+          url: "/api/route/today"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # Check in at customer location
+      - post:
+          url: "/api/visits/checkin"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            organizationId: "{{ $randomInt(1, 100) }}"
+            location:
+              latitude: 40.7128
+              longitude: -74.0060
+            timestamp: "{{ $timestamp() }}"
+      
+      # Place order for customer
+      - post:
+          url: "/api/orders"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            organizationId: "{{ $randomInt(1, 100) }}"
+            items:
+              - productId: "{{ $randomInt(1, 50) }}"
+                quantity: "{{ $randomInt(5, 50) }}"
+                unitPrice: "{{ $randomFloat(10, 100) }}"
+            deliveryDate: "{{ $futureDate('YYYY-MM-DD', 3) }}"
+            specialInstructions: "Deliver to kitchen entrance"
+      
+      # Check out from customer location
+      - post:
+          url: "/api/visits/checkout"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            visitId: "{{ $randomInt(1, 1000) }}"
+            notes: "Customer satisfied with service"
+            outcome: "ORDER_PLACED"
+
+  # Scenario 3: Management Reporting (20% of traffic)
+  - name: "Management Reporting"
+    weight: 20
+    flow:
+      # Login as manager
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "manager{{ $randomInt(1, 2) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Generate sales report by territory
+      - get:
+          url: "/api/reports/sales?territory=all&period=current_month"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # Generate commission report
+      - get:
+          url: "/api/reports/commission?period=current_quarter"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # Export customer data (CSV)
+      - get:
+          url: "/api/export/organizations?format=csv&territory={{ $pick(territories) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # View performance dashboard
+      - get:
+          url: "/api/analytics/dashboard"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+      
+      # Generate territory comparison report
+      - get:
+          url: "/api/reports/territory-comparison?quarters=4"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+
+  # Scenario 4: Customer Data Management (10% of traffic)
+  - name: "Customer Data Management"
+    weight: 10
+    flow:
+      # Login as data manager
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "data@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Create new organization
+      - post:
+          url: "/api/organizations"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            name: "Test Restaurant {{ $randomInt(1000, 9999) }}"
+            type: "{{ $pick(orgTypes) }}"
+            priority: "{{ $pick(priorities) }}"
+            territory: "{{ $pick(territories) }}"
+            contact: "manager{{ $randomInt(1, 100) }}@restaurant.com"
+            phone: "+1-555-{{ $randomInt(1000, 9999) }}"
+            address: "123 Food St, City, State 12345"
+      
+      # Update organization data
+      - put:
+          url: "/api/organizations/{{ $randomInt(1, 100) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            revenue: "{{ $randomInt(50000, 500000) }}"
+            lastContactDate: "{{ $timestamp() }}"
+      
+      # Add contact to organization
+      - post:
+          url: "/api/contacts"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            organizationId: "{{ $randomInt(1, 100) }}"
+            firstName: "Chef"
+            lastName: "Manager"
+            title: "Executive Chef"
+            email: "chef{{ $randomInt(1, 100) }}@restaurant.com"
+            role: "DECISION_MAKER"
+      
+      # Bulk update organization priorities
+      - post:
+          url: "/api/organizations/bulk-update"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+            Content-Type: "application/json"
+          json:
+            organizationIds: ["{{ $randomInt(1, 100) }}", "{{ $randomInt(1, 100) }}"]
+            updates:
+              priority: "{{ $pick(priorities) }}"

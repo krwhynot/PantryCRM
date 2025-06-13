@@ -1,0 +1,4007 @@
+{
+  "timestamp": "2025-06-13T03:52:22.085Z",
+  "sheets": [
+    {
+      "name": "Team Performance Dashboard",
+      "actualHeaders": [
+        "Column1",
+        "Column2",
+        "Column3",
+        "Column4",
+        "Column5",
+        "Column6",
+        "Column7",
+        "Column8",
+        "Column9",
+        "Column10",
+        "Column11",
+        "Column12",
+        "Column13",
+        "Column14",
+        "Column15",
+        "Column16",
+        "Column17",
+        "Column18",
+        "Column19",
+        "Column20",
+        "Column21",
+        "Column22",
+        "Column23",
+        "Column24",
+        "Column25",
+        "Column26",
+        "Column27",
+        "Column28"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 36,
+      "dataRows": 35,
+      "columnMapping": [
+        {
+          "index": 1,
+          "header": "Column2",
+          "sampleValues": [
+            "Interactions"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        }
+      ]
+    },
+    {
+      "name": "Principal Interactions Tracker ",
+      "actualHeaders": [
+        "Column1",
+        "Column2",
+        "Column3",
+        "Column4",
+        "Column5",
+        "Column6",
+        "Column7",
+        "Column8",
+        "Column9",
+        "Column10",
+        "Column11",
+        "Column12",
+        "Column13",
+        "Column14",
+        "Column15",
+        "Column16",
+        "Column17",
+        "Column18",
+        "Column19",
+        "Column20",
+        "Column21",
+        "Column22",
+        "Column23",
+        "Column24",
+        "Column25",
+        "Column26",
+        "Column27",
+        "Column28"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 74,
+      "dataRows": 73,
+      "columnMapping": [
+        {
+          "index": 1,
+          "header": "Column2",
+          "sampleValues": [
+            "Interactions",
+            "Organizations List"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        }
+      ]
+    },
+    {
+      "name": "Principal Opportunites Tracker",
+      "actualHeaders": [
+        "Column1",
+        "Column2",
+        "Column3",
+        "Column4",
+        "Column5",
+        "Column6",
+        "Column7",
+        "Column8",
+        "Column9",
+        "Column10",
+        "Column11",
+        "Column12",
+        "Column13",
+        "Column14",
+        "Column15",
+        "Column16",
+        "Column17",
+        "Column18",
+        "Column19",
+        "Column20",
+        "Column21",
+        "Column22",
+        "Column23",
+        "Column24",
+        "Column25",
+        "Column26",
+        "Column27",
+        "Column28",
+        "Column29",
+        "Column30",
+        "Column31",
+        "Column32",
+        "Column33",
+        "Column34",
+        "Column35",
+        "Column36",
+        "Column37",
+        "Column38",
+        "Column39",
+        "Column40"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 99,
+      "dataRows": 98,
+      "columnMapping": [
+        {
+          "index": 1,
+          "header": "Column2",
+          "sampleValues": [
+            "Sales Activity Summary "
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 39,
+          "header": "Column40",
+          "sampleValues": [
+            0
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 1
+        }
+      ]
+    },
+    {
+      "name": "OrgStagesPivot",
+      "actualHeaders": [
+        "STAGE (DropDown)",
+        "Lead-discovery-1",
+        "Column3",
+        "Column4",
+        "STAGE (DropDown)",
+        "Contacted-phone/email-2",
+        "Column7",
+        "Column8",
+        "STAGE (DropDown)",
+        "Sampled/Visited invite-3",
+        "Column11",
+        "Column12",
+        "STAGE (DropDown)",
+        "Follow-up-4",
+        "Column15",
+        "Column16",
+        "STAGE (DropDown)",
+        "Feedback- received-5",
+        "Column19",
+        "STAGE (DropDown)",
+        "demo-cookup-6",
+        "Column22",
+        "Column23",
+        "STAGE (DropDown)",
+        "SOLD-7",
+        "Column26",
+        "Column27",
+        "Column28",
+        "Column29",
+        "Column30",
+        "Column31",
+        "Column32",
+        "Column33"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 150,
+      "dataRows": 149,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "STAGE (DropDown)",
+          "sampleValues": [
+            "Row Labels",
+            "Hailstorm Brewing",
+            "Lettuce Entertain You"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 4
+        },
+        {
+          "index": 4,
+          "header": "STAGE (DropDown)",
+          "sampleValues": [
+            "Row Labels"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 8,
+          "header": "STAGE (DropDown)",
+          "sampleValues": [
+            "Row Labels",
+            "All Nite Mobile Cafe",
+            "ANDERSON FOODS"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 79
+        },
+        {
+          "index": 12,
+          "header": "STAGE (DropDown)",
+          "sampleValues": [
+            "Row Labels"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 16,
+          "header": "STAGE (DropDown)",
+          "sampleValues": [
+            "Row Labels"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 19,
+          "header": "STAGE (DropDown)",
+          "sampleValues": [
+            "Row Labels"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 23,
+          "header": "STAGE (DropDown)",
+          "sampleValues": [
+            "Row Labels"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        }
+      ]
+    },
+    {
+      "name": "Principal Interactions",
+      "actualHeaders": [
+        "Start of Week",
+        "5/26/2025",
+        "Column3",
+        "Column4",
+        "Column5",
+        "Column6",
+        "Column7"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 59,
+      "dataRows": 58,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Start of Week",
+          "sampleValues": [
+            "PRINCIPAL",
+            "Weeks' Total Interactions",
+            "Row Labels"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 1,
+          "header": "5/26/2025",
+          "sampleValues": [
+            "Kaufholds",
+            "Count of INTERACTION  (Dropdown)",
+            4
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 4
+        },
+        {
+          "index": 4,
+          "header": "Column5",
+          "sampleValues": [
+            "DATE",
+            "Count of INTERACTION  (Dropdown)",
+            "Row Labels"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 5,
+          "header": "Column6",
+          "sampleValues": [
+            "All",
+            "Column Labels",
+            "In Person"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 6,
+          "header": "Column7",
+          "sampleValues": [
+            "Grand Total",
+            4,
+            4
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        }
+      ]
+    },
+    {
+      "name": "Principal Opportunities ",
+      "actualHeaders": [
+        "Row Labels",
+        "Count of STAGE (DropDown)",
+        "Column3",
+        "Row Labels",
+        "Count of STATUS (DropDown)"
+      ],
+      "dataStartRow": 3,
+      "totalRows": 21,
+      "dataRows": 18,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Row Labels",
+          "sampleValues": [
+            "Sampled/Visited invite-3",
+            "Lead-discovery-1",
+            "order support-8"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 8
+        },
+        {
+          "index": 1,
+          "header": "Count of STAGE (DropDown)",
+          "sampleValues": [
+            78,
+            3,
+            1
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 8
+        },
+        {
+          "index": 2,
+          "header": "Column3",
+          "sampleValues": [
+            "Grand Total",
+            75,
+            75
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 3,
+          "header": "Row Labels",
+          "sampleValues": [
+            "Open",
+            "Grand Total"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        },
+        {
+          "index": 4,
+          "header": "Count of STATUS (DropDown)",
+          "sampleValues": [
+            82,
+            82
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 2
+        }
+      ]
+    },
+    {
+      "name": "Organizations",
+      "actualHeaders": [
+        "Column1",
+        "Column2",
+        "ORGANIZATIONS",
+        "SEGMENT\r\n(DROPDOWN)",
+        "DISTRIBUTOR \r\n(DROPDOWN)",
+        "Column6",
+        "PRIMARY ACCT. MANAGER \r\n(DROPDOWN)",
+        "SECONDARY ACCT. MANAGER \r\n(DROPDOWN)",
+        "WEEKLY PRIORITY-DATED MONDAYS",
+        "LINKEDIN",
+        "PHONE",
+        "STREET ADDRESS",
+        "CITY",
+        "STATE\r\n(DROPDOWN)",
+        "ZIP CODE",
+        "NOTES"
+      ],
+      "dataStartRow": 3,
+      "totalRows": 2287,
+      "dataRows": 2284,
+      "columnMapping": [
+        {
+          "index": 1,
+          "header": "Column2",
+          "sampleValues": [
+            "PRIORITY-FOCUS (A-D) A-highest \r\n(DropDown)",
+            "B",
+            "D"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 74
+        },
+        {
+          "index": 2,
+          "header": "ORGANIZATIONS",
+          "sampleValues": [
+            "Organizations",
+            "040 KITCHEN INC",
+            "2d Restaurant"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 3,
+          "header": "SEGMENT\r\n(DROPDOWN)",
+          "sampleValues": [
+            "SEGMENT\r\n(DropDown)",
+            "Distributor",
+            "Distributor"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 57
+        },
+        {
+          "index": 4,
+          "header": "DISTRIBUTOR \r\n(DROPDOWN)",
+          "sampleValues": [
+            "DISTRIBUTOR \r\n(DropDown)",
+            "PFG",
+            "Greco"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 15
+        },
+        {
+          "index": 5,
+          "header": "Column6",
+          "sampleValues": [
+            "Distr Rep"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 6,
+          "header": "PRIMARY ACCT. MANAGER \r\n(DROPDOWN)",
+          "sampleValues": [
+            "PRIMARY ACCT. MANAGER \r\n(DropDown)",
+            "Gary",
+            "Dale"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 83
+        },
+        {
+          "index": 7,
+          "header": "SECONDARY ACCT. MANAGER \r\n(DROPDOWN)",
+          "sampleValues": [
+            "SECONDARY ACCT. MANAGER \r\n(DropDown)",
+            "Dale",
+            "Dale"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 7
+        },
+        {
+          "index": 8,
+          "header": "WEEKLY PRIORITY-DATED MONDAYS",
+          "sampleValues": [
+            "Weekly Priority-dated Mondays",
+            45810,
+            45810
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 9,
+          "header": "LINKEDIN",
+          "sampleValues": [
+            "LINKEDIN"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 10,
+          "header": "PHONE",
+          "sampleValues": [
+            "PHONE",
+            "+1 (312) 867-0110",
+            "+1 (312) 363-2431"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 13
+        },
+        {
+          "index": 11,
+          "header": "STREET ADDRESS",
+          "sampleValues": [
+            "STREET ADDRESS",
+            "4601 lincoln Highway",
+            "1024 N. Ashland Ave., Chicago, IL 60622 "
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 17
+        },
+        {
+          "index": 12,
+          "header": "CITY",
+          "sampleValues": [
+            "CITY",
+            "Chicago",
+            "Chicago"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 33
+        },
+        {
+          "index": 13,
+          "header": "STATE\r\n(DROPDOWN)",
+          "sampleValues": [
+            "STATE\r\n(DropDown)",
+            "IN",
+            "IL"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 40
+        },
+        {
+          "index": 14,
+          "header": "ZIP CODE",
+          "sampleValues": [
+            "Zip Code",
+            60622,
+            60614
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 12
+        },
+        {
+          "index": 15,
+          "header": "NOTES",
+          "sampleValues": [
+            "NOTES",
+            "Hubbard Inn, MASQ joy, district parlay joy, parlay, LINKIN PARK, HVAC, pub, LIQR taco pub Cardoza's pub Café Banda never have I ever ",
+            "email about samples cheese curds"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 18
+        }
+      ]
+    },
+    {
+      "name": "Contacts",
+      "actualHeaders": [
+        "Contacts",
+        "Column2",
+        "Instructions:",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.",
+        "Column5",
+        "Column6",
+        "Column7",
+        "Column8",
+        "Column9",
+        "Column10",
+        "Column11",
+        "Column12",
+        "Column13",
+        "Column14",
+        "Column15",
+        "Column16",
+        "Column17"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 1955,
+      "dataRows": 1954,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Contacts",
+          "sampleValues": [
+            "PRIORITY\r\n(Formula)",
+            "D",
+            "B"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 1,
+          "header": "Column2",
+          "sampleValues": [
+            "FULL NAME (FIRST, LAST)",
+            "Yu",
+            "Kidwell"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 97
+        },
+        {
+          "index": 2,
+          "header": "Instructions:",
+          "sampleValues": [
+            "Organizations (DropDown)",
+            "2d Restaurant",
+            "7 Monks Taproom Grand Rapids"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 3,
+          "header": "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.",
+          "sampleValues": [
+            "POSITION\r\n(DropDown)",
+            "Distributor Rep",
+            "Manager"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 19
+        },
+        {
+          "index": 4,
+          "header": "Column5",
+          "sampleValues": [
+            "EMAIL",
+            "tellez@aactax.com",
+            "aliceandfriendsvegankitchen@gmail.com"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 50
+        },
+        {
+          "index": 5,
+          "header": "Column6",
+          "sampleValues": [
+            "PHONE",
+            "+1 (224) 735-2450",
+            "+1 (224) 735-2450"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 12
+        },
+        {
+          "index": 6,
+          "header": "Column7",
+          "sampleValues": [
+            "ACCT. MANAGER\r\n(DropDown)",
+            "Q",
+            "Michell"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 18
+        },
+        {
+          "index": 7,
+          "header": "Column8",
+          "sampleValues": [
+            "LINKEDIN",
+            "908 N Halsted St\r\nChicago, IL  60642\r\nUnited States"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        },
+        {
+          "index": 8,
+          "header": "Column9",
+          "sampleValues": [
+            "STREET ADDRESS",
+            "4601 Lincoln Highway",
+            "111 W Campbell St"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 9
+        },
+        {
+          "index": 9,
+          "header": "Column10",
+          "sampleValues": [
+            "CITY",
+            "Matteson",
+            "Chicago "
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 10,
+          "header": "Column11",
+          "sampleValues": [
+            "STATE\r\n(DropDown)",
+            "IL"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        },
+        {
+          "index": 11,
+          "header": "Column12",
+          "sampleValues": [
+            "ZIP",
+            60607,
+            60191
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 12,
+          "header": "Column13",
+          "sampleValues": [
+            "NOTES",
+            "In charge of all purchases for store",
+            "Urban Belly, The Table at Crate, Sol Toro, MJ23 Sports Bar Michael Jordan's Steakhouse, Hi-Fi Chicken and Beer, Brassierie 1783"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 13,
+          "header": "Column14",
+          "sampleValues": [
+            "Filtered Contacts",
+            "NO PRIORITY",
+            "NO PRIORITY"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 16,
+          "header": "Column17",
+          "sampleValues": [
+            "2d Restaurant|Yu",
+            "7 Monks Taproom Grand Rapids|",
+            "A Plus Inc DBA: Noodles Etc|Kidwell"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 98
+        }
+      ]
+    },
+    {
+      "name": "ContactsData",
+      "actualHeaders": [
+        "0",
+        "7 Monks Taproom Grand Rapids",
+        "Brent,Mike",
+        "Brent",
+        "Mike",
+        "Column6",
+        "Column7",
+        "Column8",
+        "Column9",
+        "Column10",
+        "Column11",
+        "Column12",
+        "Column13",
+        "Column14",
+        "Column15",
+        "Column16",
+        "Column17",
+        "Column18",
+        "Column19",
+        "Column20",
+        "Column21",
+        "Column22",
+        "Column23",
+        "Column24",
+        "Column25",
+        "Column26",
+        "Column27",
+        "Column28",
+        "Column29",
+        "Column30",
+        "Column31",
+        "Column32",
+        "Column33",
+        "Column34",
+        "Column35",
+        "Column36",
+        "Column37",
+        "Column38",
+        "Column39",
+        "Column40",
+        "Column41",
+        "Column42",
+        "Column43",
+        "Column44",
+        "Column45",
+        "Column46",
+        "Column47",
+        "Column48",
+        "Column49",
+        "Column50",
+        "Column51"
+      ],
+      "dataStartRow": 3,
+      "totalRows": 1557,
+      "dataRows": 1554,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "0",
+          "sampleValues": [
+            "Kidwell",
+            0,
+            "Rose"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 1,
+          "header": "7 Monks Taproom Grand Rapids",
+          "sampleValues": [
+            "A Plus Inc DBA: Noodles Etc",
+            "A.Fusion",
+            "A.Fusion"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 2,
+          "header": "Brent,Mike",
+          "sampleValues": [
+            "Joe Fitzgerald ,Joe Fitzgerald",
+            "No Contacts",
+            "Exec chef Elton Mann and  Brady Cohen GM ,Brady Cohen,Brady Cohen"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 66
+        },
+        {
+          "index": 3,
+          "header": "Brent",
+          "sampleValues": [
+            "Joe Fitzgerald ",
+            "No Contacts",
+            "Exec chef Elton Mann and  Brady Cohen GM "
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 66
+        },
+        {
+          "index": 4,
+          "header": "Mike",
+          "sampleValues": [
+            "Joe Fitzgerald",
+            "Brady Cohen",
+            "Brady Cohen"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 39
+        },
+        {
+          "index": 5,
+          "header": "Column6",
+          "sampleValues": [
+            "Brady Cohen",
+            "Brady Cohen",
+            "Brady Cohen"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 30
+        },
+        {
+          "index": 6,
+          "header": "Column7",
+          "sampleValues": [
+            "Kristina Clark",
+            "eric prall",
+            "Lauren Frazier"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 21
+        },
+        {
+          "index": 7,
+          "header": "Column8",
+          "sampleValues": [
+            "Ron Peterson",
+            "Eric prall",
+            "Stephen Hess"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 20
+        },
+        {
+          "index": 8,
+          "header": "Column9",
+          "sampleValues": [
+            "Tim Gernaat",
+            "Chef Megan Punches",
+            "Kristen Hettinga"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 18
+        },
+        {
+          "index": 9,
+          "header": "Column10",
+          "sampleValues": [
+            "Mike Hiskes",
+            "Mike Hiskes",
+            "Mike Hiskes"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 10,
+          "header": "Column11",
+          "sampleValues": [
+            "Rob Renninger",
+            "Rob Renninger",
+            "Rob Renninger"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 11,
+          "header": "Column12",
+          "sampleValues": [
+            "Rachel Sohovich",
+            "Rachel Sohovich",
+            "Rachel Sohovich"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 12,
+          "header": "Column13",
+          "sampleValues": [
+            "Matt Stielow",
+            "Matt Stielow",
+            "Matt Stielow"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 13,
+          "header": "Column14",
+          "sampleValues": [
+            "Mike Hiskes",
+            "Mike Hiskes",
+            "Mike Hiskes"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 14,
+          "header": "Column15",
+          "sampleValues": [
+            "Jene braden",
+            "Jene braden",
+            "Jene braden"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 15,
+          "header": "Column16",
+          "sampleValues": [
+            "Sherri Brown",
+            "Sherri Brown",
+            "Sherri Brown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 16,
+          "header": "Column17",
+          "sampleValues": [
+            "Dana Kinsman",
+            "Dana Kinsman",
+            "Dana Kinsman"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 17,
+          "header": "Column18",
+          "sampleValues": [
+            "Brandon Girard",
+            "Brandon Girard",
+            "Brandon Girard"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 18,
+          "header": "Column19",
+          "sampleValues": [
+            "Michael Schultz",
+            "Michael Schultz",
+            "Michael Schultz"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 19,
+          "header": "Column20",
+          "sampleValues": [
+            "Darryl White",
+            "Darryl White",
+            "Darryl White"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 20,
+          "header": "Column21",
+          "sampleValues": [
+            "Miranda Heinrich",
+            "Miranda Heinrich",
+            "Miranda Heinrich"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 21,
+          "header": "Column22",
+          "sampleValues": [
+            "Derek Winter",
+            "Derek Winter",
+            "Derek Winter"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 22,
+          "header": "Column23",
+          "sampleValues": [
+            "Philip Bakousidis",
+            "Philip Bakousidis",
+            "Philip Bakousidis"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 23,
+          "header": "Column24",
+          "sampleValues": [
+            " Michael Gunderson",
+            " Michael Gunderson",
+            " Michael Gunderson"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 24,
+          "header": "Column25",
+          "sampleValues": [
+            "Jasen Anthony",
+            "Jasen Anthony",
+            "Jasen Anthony"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 25,
+          "header": "Column26",
+          "sampleValues": [
+            "Jodi Ward",
+            "Jodi Ward",
+            "Jodi Ward"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 26,
+          "header": "Column27",
+          "sampleValues": [
+            "Paula Ball",
+            "Paula Ball",
+            "Paula Ball"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 27,
+          "header": "Column28",
+          "sampleValues": [
+            "Kevin Green",
+            "Kevin Green",
+            "Kevin Green"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 28,
+          "header": "Column29",
+          "sampleValues": [
+            "Patrick Kaufman",
+            "Patrick Kaufman",
+            "Patrick Kaufman"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 29,
+          "header": "Column30",
+          "sampleValues": [
+            "Christine Michel",
+            "Christine Michel",
+            "Christine Michel"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 30,
+          "header": "Column31",
+          "sampleValues": [
+            "Kevin Green ",
+            "Kevin Green ",
+            "Kevin Green "
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 31,
+          "header": "Column32",
+          "sampleValues": [
+            "Sam Butler",
+            "Sam Butler",
+            "Sam Butler"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 32,
+          "header": "Column33",
+          "sampleValues": [
+            "Dave Hampel",
+            "Dave Hampel",
+            "Dave Hampel"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 33,
+          "header": "Column34",
+          "sampleValues": [
+            "Ryan Treharne",
+            "Ryan Treharne",
+            "Ryan Treharne"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 34,
+          "header": "Column35",
+          "sampleValues": [
+            "chad bruinsslot",
+            "chad bruinsslot",
+            "chad bruinsslot"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 35,
+          "header": "Column36",
+          "sampleValues": [
+            "Joe Ihl",
+            "Joe Ihl",
+            "Joe Ihl"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 36,
+          "header": "Column37",
+          "sampleValues": [
+            "Freddy Sheir",
+            "Freddy Sheir",
+            "Freddy Sheir"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 37,
+          "header": "Column38",
+          "sampleValues": [
+            "Chad Bruinslott",
+            "Chad Bruinslott",
+            "Chad Bruinslott"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 38,
+          "header": "Column39",
+          "sampleValues": [
+            "Erin Rogers",
+            "Erin Rogers",
+            "Erin Rogers"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 39,
+          "header": "Column40",
+          "sampleValues": [
+            "Brittany Bradley",
+            "Brittany Bradley",
+            "Brittany Bradley"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 40,
+          "header": "Column41",
+          "sampleValues": [
+            "Kevin Skukalek",
+            "Kevin Skukalek",
+            "Kevin Skukalek"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 41,
+          "header": "Column42",
+          "sampleValues": [
+            "Matt Dalicandro",
+            "Matt Dalicandro",
+            "Matt Dalicandro"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 42,
+          "header": "Column43",
+          "sampleValues": [
+            "Maranda Thompson",
+            "Maranda Thompson",
+            "Maranda Thompson"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 43,
+          "header": "Column44",
+          "sampleValues": [
+            "Lauren Vanryn",
+            "Lauren Vanryn",
+            "Lauren Vanryn"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 44,
+          "header": "Column45",
+          "sampleValues": [
+            "alex wagner",
+            "alex wagner",
+            "alex wagner"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 45,
+          "header": "Column46",
+          "sampleValues": [
+            "Aric Nichols",
+            "Aric Nichols",
+            "Aric Nichols"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 46,
+          "header": "Column47",
+          "sampleValues": [
+            "Martin Hart",
+            "Martin Hart",
+            "Martin Hart"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 47,
+          "header": "Column48",
+          "sampleValues": [
+            "Graham Garrett",
+            "Graham Garrett",
+            "Graham Garrett"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 48,
+          "header": "Column49",
+          "sampleValues": [
+            "Ethan Weinberger",
+            "Ethan Weinberger",
+            "Ethan Weinberger"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 49,
+          "header": "Column50",
+          "sampleValues": [
+            "Maranda Thompson",
+            "Maranda Thompson",
+            "Maranda Thompson"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        },
+        {
+          "index": 50,
+          "header": "Column51",
+          "sampleValues": [
+            "Zack Lockhart",
+            "Zack Lockhart",
+            "Zack Lockhart"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 14
+        }
+      ]
+    },
+    {
+      "name": "Opportunities",
+      "actualHeaders": [
+        "Column1",
+        "PRIORITY\r\n(Formula)",
+        "Organizations\r\n(DropDown)",
+        "OPPORTUNITY NAME",
+        "Start Date",
+        "Start of Week",
+        "STATUS\r\n(DropDown)",
+        "STAGE\r\n(DropDown)",
+        "EXP. SOLD-7",
+        "PROBABILITY",
+        "PRINCIPAL",
+        "PRODUCT\r\n(DropDown)",
+        "CASES \r\nPer Week\r\nVOLUME",
+        "DEAL OWNER\r\n(DropDown)",
+        "SOURCE\r\n(DropDown)",
+        "LOSS REASON\r\n(DropDown)",
+        "Notes",
+        "Column18",
+        "Helper Lookup",
+        "Column20",
+        "Column21"
+      ],
+      "dataStartRow": 3,
+      "totalRows": 1071,
+      "dataRows": 1068,
+      "columnMapping": [
+        {
+          "index": 1,
+          "header": "PRIORITY\r\n(Formula)",
+          "sampleValues": [
+            "D",
+            "B",
+            "A"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 2,
+          "header": "Organizations\r\n(DropDown)",
+          "sampleValues": [
+            "A.Fusion",
+            "Atlantic Food Distributors ",
+            "Bavarian Inn/cheese trap"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 3,
+          "header": "OPPORTUNITY NAME",
+          "sampleValues": [
+            "LTO-Q3 (2024)",
+            "Curd program",
+            "kaufholds curdtown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 4,
+          "header": "Start Date",
+          "sampleValues": [
+            45658,
+            45658,
+            45724
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 5,
+          "header": "Start of Week",
+          "sampleValues": [
+            45656,
+            45656,
+            45719
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 6,
+          "header": "STATUS\r\n(DropDown)",
+          "sampleValues": [
+            "SOLD-7d",
+            "Open",
+            "Open"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 7,
+          "header": "STAGE\r\n(DropDown)",
+          "sampleValues": [
+            "SOLD-7",
+            "SOLD-7",
+            "SOLD-7"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 8,
+          "header": "EXP. SOLD-7",
+          "sampleValues": [
+            45550,
+            45658,
+            45731
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 87
+        },
+        {
+          "index": 9,
+          "header": "PROBABILITY",
+          "sampleValues": [
+            1,
+            1,
+            1
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 83
+        },
+        {
+          "index": 10,
+          "header": "PRINCIPAL",
+          "sampleValues": [
+            "Kaufholds",
+            "Kaufholds",
+            "Kaufholds"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 11,
+          "header": "PRODUCT\r\n(DropDown)",
+          "sampleValues": [
+            "Unknown",
+            "Unknown",
+            "Dill Pickle"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 67
+        },
+        {
+          "index": 12,
+          "header": "CASES \r\nPer Week\r\nVOLUME",
+          "sampleValues": [
+            50,
+            10,
+            3
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 18
+        },
+        {
+          "index": 13,
+          "header": "DEAL OWNER\r\n(DropDown)",
+          "sampleValues": [
+            "Q",
+            "Gary",
+            "Gary"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 93
+        },
+        {
+          "index": 14,
+          "header": "SOURCE\r\n(DropDown)",
+          "sampleValues": [
+            "MFB",
+            "Principal",
+            "Principal"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 32
+        },
+        {
+          "index": 15,
+          "header": "LOSS REASON\r\n(DropDown)",
+          "sampleValues": [
+            "Competitor"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 16,
+          "header": "Notes",
+          "sampleValues": [
+            "Trying out 2 flavors (original& Jalapeno) w/ table tents",
+            "Will order dill thru dot/gfs",
+            "emailed inviting a sampling"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 48
+        },
+        {
+          "index": 18,
+          "header": "Helper Lookup",
+          "sampleValues": [
+            "D",
+            "B",
+            "A"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 71
+        }
+      ]
+    },
+    {
+      "name": "Interactions",
+      "actualHeaders": [
+        "Column1",
+        "PRIORITY (Formula)",
+        "DATE",
+        "Start of Week",
+        "INTERACTION \r\n(Dropdown)",
+        "Organizations\r\n(Formula)",
+        "ACCT.    MANAGER \r\n(Dropdown)",
+        "OPPORTUNITY",
+        "CONTACT \r\n(Dropdown)",
+        "PRINCIPAL",
+        "NOTES",
+        "Column12",
+        "Column13",
+        "Column14"
+      ],
+      "dataStartRow": 4,
+      "totalRows": 3474,
+      "dataRows": 3470,
+      "columnMapping": [
+        {
+          "index": 1,
+          "header": "PRIORITY (Formula)",
+          "sampleValues": [
+            "A",
+            "B",
+            "A+"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 2,
+          "header": "DATE",
+          "sampleValues": [
+            45576,
+            45597,
+            45602
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 3,
+          "header": "Start of Week",
+          "sampleValues": [
+            45572,
+            45593,
+            45600
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 4,
+          "header": "INTERACTION \r\n(Dropdown)",
+          "sampleValues": [
+            "In Person",
+            "Email",
+            "In Person"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 98
+        },
+        {
+          "index": 5,
+          "header": "Organizations\r\n(Formula)",
+          "sampleValues": [
+            "Sysco Chicago",
+            "Earl G. Dumplins",
+            "Midwest Foods"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 66
+        },
+        {
+          "index": 6,
+          "header": "ACCT.    MANAGER \r\n(Dropdown)",
+          "sampleValues": [
+            "Sue",
+            "Gary",
+            "Dale"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 7,
+          "header": "OPPORTUNITY",
+          "sampleValues": [
+            "VAF",
+            "Frites Street 3/8\" and chips",
+            "VAF"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 8,
+          "header": "CONTACT \r\n(Dropdown)",
+          "sampleValues": [
+            "Chris Eliopulis",
+            "Joe Fitzgerald ",
+            "Billy Mix"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 47
+        },
+        {
+          "index": 9,
+          "header": "PRINCIPAL",
+          "sampleValues": [
+            "VAF",
+            "Frites Street",
+            "VAF"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 10,
+          "header": "NOTES",
+          "sampleValues": [
+            "Chris says Sysco does not sell hydroponic becuase it has not sold in the past. MFB will sample customers and give him feedback. VAF is better priced and safer product than standard produce.",
+            "Met Joe while making calls. Need to set up a meeting to discuss further.",
+            "Chef Billy loves the product. Waiting for Testa to get the product live able to sell. Should be week of 12/9"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 59
+        }
+      ]
+    },
+    {
+      "name": "One Thing",
+      "actualHeaders": [
+        "MICHELL",
+        "Column2",
+        "Per month",
+        "KAUFHOLDS",
+        "MCCRUM",
+        "TCCF",
+        "ANNASEA",
+        "VAF",
+        "RR",
+        "BB",
+        "OFK",
+        "SWAP",
+        "VALLEY LAHVOSH"
+      ],
+      "dataStartRow": 10,
+      "totalRows": 91,
+      "dataRows": 81,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "MICHELL",
+          "sampleValues": [
+            "W/Craig, Gary,Dale,Sue",
+            "DALE",
+            "GARY"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 1,
+          "header": "Column2",
+          "sampleValues": [
+            "Annual Goal",
+            "Volume Metric",
+            "USF Streator/Bensenville/WI/"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 67
+        },
+        {
+          "index": 2,
+          "header": "Per month",
+          "sampleValues": [
+            "A new distributor for MFB, a new principals item;=a new distribution",
+            "See cell D2-E8",
+            1
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 31
+        },
+        {
+          "index": 3,
+          "header": "KAUFHOLDS",
+          "sampleValues": [
+            "Add 9 new distributions",
+            "1.2 M dollars",
+            "A-B-C-D-E-F-G-H"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 13
+        },
+        {
+          "index": 4,
+          "header": "MCCRUM",
+          "sampleValues": [
+            "Add 9 new distributions",
+            "Grow by 15%",
+            "A-B-C-D-E-F-G-H"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 5,
+          "header": "TCCF",
+          "sampleValues": [
+            "Add 4 new distributions",
+            "A-B-C-D-E-F-G-H",
+            "Lipari tep positioning for stores"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 6,
+          "header": "ANNASEA",
+          "sampleValues": [
+            "Add 4 new distributions",
+            "A-B-C-D-E-F-G-H",
+            "A1"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 4
+        },
+        {
+          "index": 7,
+          "header": "VAF",
+          "sampleValues": [
+            "Add 4 new distributions",
+            "A-B-C-D-E-F-G-H",
+            "Email response from,JEFF GIBSON VP"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 8,
+          "header": "RR",
+          "sampleValues": [
+            "Add 4 new distributions",
+            "A-B-C-D-E-F-G-H",
+            "USF MI/?OH natl account A1 "
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 9,
+          "header": "BB",
+          "sampleValues": [
+            "Add 4 new distributions",
+            "A-B-C-D-E-F-G-H"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        },
+        {
+          "index": 10,
+          "header": "OFK",
+          "sampleValues": [
+            "Add 4 new distributions",
+            "A-B-C-D-E-F-G-H"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        },
+        {
+          "index": 11,
+          "header": "SWAP",
+          "sampleValues": [
+            "Add 4 new distributions",
+            "A-B-C-D-E-F-G-H"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        }
+      ]
+    },
+    {
+      "name": "Dropdowns",
+      "actualHeaders": [
+        "Column1",
+        "PRIORITY",
+        "SEGMENT",
+        "DISTRIBUTOR-A priority w/w weekly",
+        "ACCT. MANAGER",
+        "STAGE-8 point sales funnel",
+        "POSITION",
+        "REASON",
+        "SOURCE",
+        "INTERACTION",
+        "STATUS",
+        "PRINCIPAL",
+        "PRODUCT",
+        "Column14",
+        "Column15",
+        "Column16",
+        "Column17",
+        "Column18",
+        "Column19"
+      ],
+      "dataStartRow": 3,
+      "totalRows": 940,
+      "dataRows": 937,
+      "columnMapping": [
+        {
+          "index": 1,
+          "header": "PRIORITY",
+          "sampleValues": [
+            "A",
+            "B",
+            "C"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 2,
+          "header": "SEGMENT",
+          "sampleValues": [
+            "Chain/Group Member",
+            "Group Purchasing Organization",
+            "Gastropub"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 32
+        },
+        {
+          "index": 3,
+          "header": "DISTRIBUTOR-A priority w/w weekly",
+          "sampleValues": [
+            "Sysco",
+            "USF",
+            "PFG"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 33
+        },
+        {
+          "index": 4,
+          "header": "ACCT. MANAGER",
+          "sampleValues": [
+            "Craig",
+            "Brent",
+            "Dale"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 11
+        },
+        {
+          "index": 5,
+          "header": "STAGE-8 point sales funnel",
+          "sampleValues": [
+            "Lead-discovery-1",
+            "Contacted-phone/email-2",
+            "Sampled/Visited invite-3"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 10
+        },
+        {
+          "index": 6,
+          "header": "POSITION",
+          "sampleValues": [
+            "Exec Chef",
+            "Manager",
+            "Buyer"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 10
+        },
+        {
+          "index": 7,
+          "header": "REASON",
+          "sampleValues": [
+            "Price",
+            "Functionality",
+            "Competitor"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 8,
+          "header": "SOURCE",
+          "sampleValues": [
+            "Walk-In",
+            "Email",
+            "Food Show"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 16
+        },
+        {
+          "index": 9,
+          "header": "INTERACTION",
+          "sampleValues": [
+            "Email",
+            "Call",
+            "In Person"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 11
+        },
+        {
+          "index": 10,
+          "header": "STATUS",
+          "sampleValues": [
+            "Open",
+            "Closed",
+            "Lost"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 11,
+          "header": "PRINCIPAL",
+          "sampleValues": [
+            "Kaufholds",
+            "Kaufholds",
+            "Kaufholds"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 32
+        },
+        {
+          "index": 12,
+          "header": "PRODUCT",
+          "sampleValues": [
+            "Curdtown -Original Curds",
+            "Jalapeno Curds",
+            "Garlic Curds"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 29
+        },
+        {
+          "index": 15,
+          "header": "Column16",
+          "sampleValues": [
+            "Principal List",
+            "Kaufholds",
+            0
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 13
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "actualHeaders": [
+        "Column1",
+        "Kaufholds",
+        "Frites Street",
+        "Better Balance",
+        "VAF",
+        "Ofk",
+        "Annasea",
+        "Wicks",
+        "RJC",
+        "Kayco",
+        "Abdale",
+        "Mccrum",
+        "Rapid Rasoi",
+        "SWAP",
+        "Never Better",
+        "TCFB",
+        "Mrs Ressler's",
+        "Column18",
+        "Column19",
+        "Column20",
+        "Column21",
+        "Column22",
+        "Column23"
+      ],
+      "dataStartRow": 3,
+      "totalRows": 942,
+      "dataRows": 939,
+      "columnMapping": [
+        {
+          "index": 1,
+          "header": "Kaufholds",
+          "sampleValues": [
+            "Garlic",
+            "Jalapeno",
+            "Dill Pickle"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 12
+        },
+        {
+          "index": 2,
+          "header": "Frites Street",
+          "sampleValues": [
+            "Frites street 3/8",
+            "Frites street 1/4 ",
+            "Frites street 1/2"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 12
+        },
+        {
+          "index": 3,
+          "header": "Better Balance",
+          "sampleValues": [
+            "Better Balance hot dogs",
+            "Shreds",
+            "Cheese"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 4,
+          "header": "VAF",
+          "sampleValues": [
+            "Red Romaine",
+            "Bibb Lettuce",
+            "Green Romaine"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 9
+        },
+        {
+          "index": 5,
+          "header": "Ofk",
+          "sampleValues": [
+            "Potato pancake",
+            "Crepes",
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 6,
+          "header": "Annasea",
+          "sampleValues": [
+            "Bulk pack",
+            "Ahi Tuna",
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 7,
+          "header": "Wicks",
+          "sampleValues": [
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 8,
+          "header": "RJC",
+          "sampleValues": [
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 9,
+          "header": "Kayco",
+          "sampleValues": [
+            "Wonder juice",
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        },
+        {
+          "index": 10,
+          "header": "Abdale",
+          "sampleValues": [
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 11,
+          "header": "Mccrum",
+          "sampleValues": [
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 12,
+          "header": "Rapid Rasoi",
+          "sampleValues": [
+            "Dehli Tikka Masala",
+            "Makhani",
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 13,
+          "header": "SWAP",
+          "sampleValues": [
+            "Chicken"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 14,
+          "header": "Never Better",
+          "sampleValues": [
+            "1 oz pouch",
+            "parmesan",
+            "mozzarrella"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 4
+        }
+      ]
+    },
+    {
+      "name": "betterBalance",
+      "actualHeaders": [
+        "PRIORITY\r\n(Formula)",
+        "Organizations\r\n(DropDown)",
+        "OPPORTUNITY NAME",
+        "Start Date",
+        "Start of Week",
+        "STATUS\r\n(DropDown)",
+        "STAGE\r\n(DropDown)",
+        "EXP. CLOSE",
+        "PROBABILITY",
+        "PRINCIPAL",
+        "PRODUCT\r\n(DropDown)",
+        "CASES \r\nPer Week\r\nVOLUME",
+        "DEAL OWNER\r\n(DropDown)",
+        "Notes"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 41,
+      "dataRows": 40,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "PRIORITY\r\n(Formula)",
+          "sampleValues": [
+            "A",
+            "A",
+            "A"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 37
+        },
+        {
+          "index": 1,
+          "header": "Organizations\r\n(DropDown)",
+          "sampleValues": [
+            "Gordon Food Service",
+            "University of Notre Dame",
+            "Northern Hasserot"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 37
+        },
+        {
+          "index": 2,
+          "header": "OPPORTUNITY NAME",
+          "sampleValues": [
+            "HPS ",
+            "HPS",
+            "HPS"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 37
+        },
+        {
+          "index": 3,
+          "header": "Start Date",
+          "sampleValues": [
+            45664,
+            45669,
+            45669
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 37
+        },
+        {
+          "index": 4,
+          "header": "Start of Week",
+          "sampleValues": [
+            45663,
+            45670,
+            45670
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 37
+        },
+        {
+          "index": 5,
+          "header": "STATUS\r\n(DropDown)",
+          "sampleValues": [
+            "Open",
+            "Open",
+            "Open"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 37
+        },
+        {
+          "index": 6,
+          "header": "STAGE\r\n(DropDown)",
+          "sampleValues": [
+            "Contacted-phone/email",
+            "Contacted-phone/email",
+            "Contacted-phone/email"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 34
+        },
+        {
+          "index": 7,
+          "header": "EXP. CLOSE",
+          "sampleValues": [
+            45809,
+            "Gary",
+            "Gary"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 27
+        },
+        {
+          "index": 8,
+          "header": "PROBABILITY",
+          "sampleValues": [
+            0.25,
+            "MFB",
+            "MFB"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 30
+        },
+        {
+          "index": 9,
+          "header": "PRINCIPAL",
+          "sampleValues": [
+            "Better Balance",
+            "Better Balance",
+            "Better Balance"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 37
+        },
+        {
+          "index": 10,
+          "header": "PRODUCT\r\n(DropDown)",
+          "sampleValues": [
+            "Better Balance hot dogs",
+            "Better Balance hot dogs",
+            "Better Balance hot dogs"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 31
+        },
+        {
+          "index": 11,
+          "header": "CASES \r\nPer Week\r\nVOLUME",
+          "sampleValues": [
+            70,
+            4
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 2
+        },
+        {
+          "index": 12,
+          "header": "DEAL OWNER\r\n(DropDown)",
+          "sampleValues": [
+            "Gary",
+            "Gary",
+            "Gary"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 33
+        },
+        {
+          "index": 13,
+          "header": "Notes",
+          "sampleValues": [
+            "Will be going with the hot dog. ",
+            "top",
+            "Sold the Better Balance hot dog. "
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 11
+        }
+      ]
+    },
+    {
+      "name": "Detail1",
+      "actualHeaders": [
+        "PRIORITY (Formula)",
+        "INTERACTION \r\n(Dropdown)",
+        "DATE",
+        "ACCT.    MANAGER \r\n(Dropdown)",
+        "OPPORTUNITY",
+        "CONTACT \r\n(Dropdown)",
+        "PRINCIPAL \r\n(Formula)",
+        "Organizations\r\n(Formula)",
+        "NOTES"
+      ],
+      "dataStartRow": 3,
+      "totalRows": 22,
+      "dataRows": 19,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "PRIORITY (Formula)",
+          "sampleValues": [
+            "A",
+            "A",
+            "NO ORG NAME"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 19
+        },
+        {
+          "index": 1,
+          "header": "INTERACTION \r\n(Dropdown)",
+          "sampleValues": [
+            "Email",
+            "Email",
+            "In Person"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 18
+        },
+        {
+          "index": 2,
+          "header": "DATE",
+          "sampleValues": [
+            45622,
+            45629,
+            45657
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 19
+        },
+        {
+          "index": 3,
+          "header": "ACCT.    MANAGER \r\n(Dropdown)",
+          "sampleValues": [
+            "Gary",
+            "Gary",
+            "Dale"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 19
+        },
+        {
+          "index": 4,
+          "header": "OPPORTUNITY",
+          "sampleValues": [
+            "Annasea bulk",
+            "Bulk kits",
+            "Annasea"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 19
+        },
+        {
+          "index": 5,
+          "header": "CONTACT \r\n(Dropdown)",
+          "sampleValues": [
+            "Terry Comer",
+            "Bill Kim",
+            "Nick Albanos"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 7
+        },
+        {
+          "index": 6,
+          "header": "PRINCIPAL \r\n(Formula)",
+          "sampleValues": [
+            "Annasea",
+            "Annasea",
+            "Annasea"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 19
+        },
+        {
+          "index": 7,
+          "header": "Organizations\r\n(Formula)",
+          "sampleValues": [
+            "Superior",
+            "EuroUSA",
+            "Powers Health"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 19
+        },
+        {
+          "index": 8,
+          "header": "NOTES",
+          "sampleValues": [
+            "Set introductory teams meeting for 12/9 ",
+            "Left them a 2 tuna and one salmon sample pack with sauce. They were opening 2nd location in Lexington KY",
+            "Left Nick samples and emailed for followup connect"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 7
+        }
+      ]
+    },
+    {
+      "name": "Distributor Reps",
+      "actualHeaders": [
+        "Gilroy, Dan",
+        "President",
+        "Senior Management",
+        "Daniel.Gilroy@pfgc.com",
+        "Column5",
+        "C",
+        "Column7",
+        "Column8",
+        "Column9"
+      ],
+      "dataStartRow": 2,
+      "totalRows": 546,
+      "dataRows": 544,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Gilroy, Dan",
+          "sampleValues": [
+            "Vanderhoff, Patrick",
+            "Hollandsworth, Michelle",
+            "Harris, Don"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 1,
+          "header": "President",
+          "sampleValues": [
+            "Vice-President, Sales",
+            "Regional Sales Manager",
+            "Business Development Manager (BDM)"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 87
+        },
+        {
+          "index": 2,
+          "header": "Senior Management",
+          "sampleValues": [
+            "Senior Management",
+            "Sales Management",
+            "Sales Management"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 87
+        },
+        {
+          "index": 3,
+          "header": "Daniel.Gilroy@pfgc.com",
+          "sampleValues": [
+            "Patrick.Vanderhoff@pfgc.com",
+            "Michelle.Hollandsworth@pfgc.com",
+            "Don.Harris@pfgc.com"
+          ],
+          "dataType": "email",
+          "nonEmptyCount": 87
+        },
+        {
+          "index": 4,
+          "header": "Column5",
+          "sampleValues": [
+            "248-824-4063*",
+            "219-378-8937*",
+            "847-846-6211*"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 5,
+          "header": "C",
+          "sampleValues": [
+            "C",
+            "C",
+            "C"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 6,
+          "header": "Column7",
+          "sampleValues": [
+            "Bugaboo in Cedar Lake, IN"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 8,
+          "header": "Column9",
+          "sampleValues": [
+            45608
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 1
+        }
+      ]
+    },
+    {
+      "name": "Strategic Plan",
+      "actualHeaders": [
+        "Step",
+        "Action",
+        "Result Expected",
+        "Position or Person Responsible",
+        "McCRUM",
+        "SWAP",
+        "RAPID RASOI",
+        "VAF",
+        "BB",
+        "KAUFHOLDS",
+        "TCCF",
+        "Target Completion Date",
+        "Actual Completion Date",
+        "Comments"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 133,
+      "dataRows": 132,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Step",
+          "sampleValues": [
+            "Step",
+            "Step",
+            1
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 90
+        },
+        {
+          "index": 1,
+          "header": "Action",
+          "sampleValues": [
+            "Interview",
+            "START OF PLAN",
+            "Review Brokerage Contract"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 98
+        },
+        {
+          "index": 2,
+          "header": "Result Expected",
+          "sampleValues": [
+            "Determine day 1 for the Principal",
+            "Determine the high pay off products",
+            "Responsibility for results"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 82
+        },
+        {
+          "index": 3,
+          "header": "Position or Person Responsible",
+          "sampleValues": [
+            "Sue",
+            "Sue",
+            "Sue/Dale"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 76
+        },
+        {
+          "index": 4,
+          "header": "McCRUM",
+          "sampleValues": [
+            "CAROL/SUE",
+            "BRENT",
+            "DEFINE"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 16
+        },
+        {
+          "index": 5,
+          "header": "SWAP",
+          "sampleValues": [
+            "Unknown",
+            "Unknown",
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 9
+        },
+        {
+          "index": 6,
+          "header": "RAPID RASOI",
+          "sampleValues": [
+            "Unknown",
+            "Unknown",
+            "Unknown"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 9
+        }
+      ]
+    },
+    {
+      "name": "Novi-Swap",
+      "actualHeaders": [
+        "WASHINGTON TWP SCHOOLS WAREHOUSE"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 44,
+      "dataRows": 43,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "WASHINGTON TWP SCHOOLS WAREHOUSE",
+          "sampleValues": [
+            "BAY CLIFF HEALTH CAMP",
+            "Bronson Behavioral Hospital",
+            "BROWN JUG"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 43
+        }
+      ]
+    },
+    {
+      "name": "PFG codes",
+      "actualHeaders": [
+        "262678",
+        "Kaufholds",
+        "Original",
+        "Column4",
+        "Column5",
+        "Column6",
+        "Column7",
+        "Column8",
+        "Column9",
+        "Column10",
+        "Column11",
+        "Column12"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 31,
+      "dataRows": 30,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "262678",
+          "sampleValues": [
+            353883,
+            556012,
+            727622
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 28
+        },
+        {
+          "index": 1,
+          "header": "Kaufholds",
+          "sampleValues": [
+            "Kaufholds",
+            "Kaufholds",
+            "Kaufholds"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 28
+        },
+        {
+          "index": 2,
+          "header": "Original",
+          "sampleValues": [
+            "Jalapeno Flavor",
+            "Garlic Flavor",
+            "Sriracha Flavor"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 26
+        },
+        {
+          "index": 6,
+          "header": "Column7",
+          "sampleValues": [
+            1,
+            1,
+            1
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 12
+        },
+        {
+          "index": 10,
+          "header": "Column11",
+          "sampleValues": [
+            "J0034",
+            56650
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 2
+        }
+      ]
+    },
+    {
+      "name": "GFS ROSEMONT Followup",
+      "actualHeaders": [
+        "",
+        "Customer Name",
+        "Booth visitor",
+        "Visitor email",
+        "Gfs rep",
+        "",
+        "",
+        ""
+      ],
+      "dataStartRow": 1,
+      "totalRows": 177,
+      "dataRows": 176,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "",
+          "sampleValues": [
+            "DALE",
+            "\r\n",
+            "\r\n"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 1,
+          "header": "Customer Name",
+          "sampleValues": [
+            "10Forty Banquets & Catering",
+            "ABBOTT AP6D DEPT GE03",
+            "ABBOTT AP6D DEPT GE03"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 2,
+          "header": "Booth visitor",
+          "sampleValues": [
+            "Maria Arteaga",
+            "Scott Padbury",
+            "Scott Padbury"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 3,
+          "header": "Visitor email",
+          "sampleValues": [
+            "maria.catering82@yahoo.com",
+            "scott.padbury@abbott.com",
+            "scott.padbury@abbott.com"
+          ],
+          "dataType": "email",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 4,
+          "header": "Gfs rep",
+          "sampleValues": [
+            "\r\n",
+            "michael.mocogni@gfs.com",
+            "michael.mocogni@gfs.com"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 99
+        },
+        {
+          "index": 5,
+          "header": "",
+          "sampleValues": [
+            "\r\n",
+            "100 Abbott Park Rd Ste 6",
+            "100 Abbott Park Rd Ste 6"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 6,
+          "header": "",
+          "sampleValues": [
+            "Munster",
+            "Abbott Park",
+            "Abbott Park"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        },
+        {
+          "index": 7,
+          "header": "",
+          "sampleValues": [
+            "\r\n",
+            "\r\n",
+            "\r\n"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 100
+        }
+      ]
+    },
+    {
+      "name": "Distributor codes",
+      "actualHeaders": [
+        "Kaufholds",
+        "Original",
+        "2/5#",
+        "1",
+        "Kau-1",
+        "10514646",
+        "30104K",
+        "636051",
+        "Column9",
+        "262678",
+        "C6368",
+        "13776",
+        "7100811",
+        "7287907",
+        "72150",
+        "1613",
+        "Column17",
+        "Column18",
+        "Column19",
+        "Column20",
+        "Kau1",
+        "Column22",
+        "Column23",
+        "Column24",
+        "Column25",
+        "Column26",
+        "Column27",
+        "Column28",
+        "Column29",
+        "Column30",
+        "Column31",
+        "Column32"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 615,
+      "dataRows": 614,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Kaufholds",
+          "sampleValues": [
+            "Kaufholds",
+            "Kaufholds",
+            "Kaufholds"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 92
+        },
+        {
+          "index": 1,
+          "header": "Original",
+          "sampleValues": [
+            "Jalapeno Flavor",
+            "Garlic Flavor",
+            "Sriracha Flavor"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 92
+        },
+        {
+          "index": 2,
+          "header": "2/5#",
+          "sampleValues": [
+            "2/5#",
+            "2/5#",
+            "2/5#"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 77
+        },
+        {
+          "index": 3,
+          "header": "1",
+          "sampleValues": [
+            2,
+            3,
+            6
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 77
+        },
+        {
+          "index": 4,
+          "header": "Kau-1",
+          "sampleValues": [
+            "Kaul-3",
+            "Kau-2",
+            "BBB51100"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 13
+        },
+        {
+          "index": 5,
+          "header": "10514646",
+          "sampleValues": [
+            10514697,
+            10514662,
+            "Chefs Warehouse"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 6,
+          "header": "30104K",
+          "sampleValues": [
+            "30138K",
+            "30106K",
+            51323
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 15
+        },
+        {
+          "index": 7,
+          "header": "636051",
+          "sampleValues": [
+            248205,
+            345398,
+            183719
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 15
+        },
+        {
+          "index": 8,
+          "header": "Column9",
+          "sampleValues": [
+            183718,
+            "GFS EPO",
+            "183718"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 9,
+          "header": "262678",
+          "sampleValues": [
+            353883,
+            556012,
+            727622
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 12
+        },
+        {
+          "index": 10,
+          "header": "C6368",
+          "sampleValues": [
+            "E0402",
+            "J0034",
+            56650
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 10
+        },
+        {
+          "index": 11,
+          "header": "13776",
+          "sampleValues": [
+            13740,
+            14040,
+            "Stanz"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 12,
+          "header": "7100811",
+          "sampleValues": [
+            1214543,
+            7040196,
+            7187282
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 64
+        },
+        {
+          "index": 13,
+          "header": "7287907",
+          "sampleValues": [
+            4423331,
+            9214197,
+            4901893
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 77
+        },
+        {
+          "index": 14,
+          "header": "72150",
+          "sampleValues": [
+            72153,
+            72155,
+            "Wabash"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 6
+        },
+        {
+          "index": 15,
+          "header": "1613",
+          "sampleValues": [
+            1619,
+            1616,
+            "Wilkens"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 7
+        },
+        {
+          "index": 16,
+          "header": "Column17",
+          "sampleValues": [
+            88534,
+            957956,
+            957955
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 5
+        },
+        {
+          "index": 17,
+          "header": "Column18",
+          "sampleValues": [
+            190662,
+            190663,
+            195344
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 4
+        },
+        {
+          "index": 18,
+          "header": "Column19",
+          "sampleValues": [
+            6516,
+            6529,
+            6518
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 4
+        },
+        {
+          "index": 19,
+          "header": "Column20",
+          "sampleValues": [
+            "874BAR511000",
+            "874BAR511737",
+            "Tony's Fine Foods"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 20,
+          "header": "Kau1",
+          "sampleValues": [
+            "Kau3",
+            "Kau2",
+            644274
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 42
+        },
+        {
+          "index": 21,
+          "header": "Column22",
+          "sampleValues": [
+            49020,
+            48970,
+            48990
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 4
+        },
+        {
+          "index": 22,
+          "header": "Column23",
+          "sampleValues": [
+            251755,
+            251752,
+            251758
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 7
+        },
+        {
+          "index": 23,
+          "header": "Column24",
+          "sampleValues": [
+            8208,
+            8210,
+            "Waugh"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 24,
+          "header": "Column25",
+          "sampleValues": [
+            "Waukesha"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 25,
+          "header": "Column26",
+          "sampleValues": [
+            "Kohl Wholesale "
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 27,
+          "header": "Column28",
+          "sampleValues": [
+            "POD Foods"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 28,
+          "header": "Column29",
+          "sampleValues": [
+            "Restaurant Depot"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 29,
+          "header": "Column30",
+          "sampleValues": [
+            2390595,
+            2390594,
+            2390593
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 30,
+          "header": "Column31",
+          "sampleValues": [
+            "RDP Foodservice",
+            3018565,
+            3018529
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        },
+        {
+          "index": 31,
+          "header": "Column32",
+          "sampleValues": [
+            "Ritchie's Food Distributor ",
+            460525,
+            460526
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 3
+        }
+      ]
+    },
+    {
+      "name": "GFS BB GR SHOW",
+      "actualHeaders": [
+        "Sales Rep Name",
+        "Sales Rep Email",
+        "Customer ID",
+        "Customer Name",
+        "Address",
+        "City",
+        "State",
+        "Zip",
+        "Attendee Name",
+        "Attendee ID",
+        "Attendee Email",
+        "Product Number",
+        "Lead Question",
+        "Column14",
+        "Comment",
+        "Column16"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 98,
+      "dataRows": 97,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Sales Rep Name",
+          "sampleValues": [
+            "Ashley Lutjens",
+            "Shawn Hoppenrath",
+            "Aaron Wartenberg"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 93
+        },
+        {
+          "index": 1,
+          "header": "Sales Rep Email",
+          "sampleValues": [
+            "ashley.lutjens@gfs.com",
+            "shawn.hoppenrath@gfs.com",
+            "aaron.wartenberg@gfs.com"
+          ],
+          "dataType": "email",
+          "nonEmptyCount": 93
+        },
+        {
+          "index": 2,
+          "header": "Customer ID",
+          "sampleValues": [
+            722389338,
+            100017919,
+            202000011
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 3,
+          "header": "Customer Name",
+          "sampleValues": [
+            876,
+            "AMWAY - NON FOOD PURCHASING",
+            "ANTRIM COUNTY SENIOR CITIZEN CTR"
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 4,
+          "header": "Address",
+          "sampleValues": [
+            "876 Michigan Ave",
+            "187 MONROE AVE NW",
+            "308 CAYUGA"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 92
+        },
+        {
+          "index": 5,
+          "header": "City",
+          "sampleValues": [
+            "Baldwin",
+            "GRAND RAPIDS",
+            "BELLAIRE"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 92
+        },
+        {
+          "index": 6,
+          "header": "State",
+          "sampleValues": [
+            "MI",
+            "MI",
+            "MI"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 92
+        },
+        {
+          "index": 7,
+          "header": "Zip",
+          "sampleValues": [
+            "49304-7123",
+            "49503-2621",
+            49615
+          ],
+          "dataType": "phone",
+          "nonEmptyCount": 92
+        },
+        {
+          "index": 8,
+          "header": "Attendee Name",
+          "sampleValues": [
+            "Richard Gutowski",
+            "Josh Brack",
+            "Jan Clark"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 9,
+          "header": "Attendee ID",
+          "sampleValues": [
+            "BSKD",
+            "VZXW",
+            "FIVK"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 10,
+          "header": "Attendee Email",
+          "sampleValues": [
+            "richard.gutowski.88@gmail.com",
+            "addam@brunch-house.com",
+            "clarkj@antrimcounty.org"
+          ],
+          "dataType": "email",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 11,
+          "header": "Product Number",
+          "sampleValues": [
+            "517436-MV15124",
+            "517436-MV15124",
+            "517436-MV15124"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 12,
+          "header": "Lead Question",
+          "sampleValues": [
+            "Lead with Comment",
+            "Lead with Comment",
+            "Lead with Comment"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 13,
+          "header": "Column14",
+          "sampleValues": [
+            "Reports & Analytics Copyright © 2014–2024 Perenso"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        },
+        {
+          "index": 14,
+          "header": "Comment",
+          "sampleValues": [
+            "Kids menu",
+            "Devon concession’s ",
+            "Seniors"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 90
+        },
+        {
+          "index": 15,
+          "header": "Column16",
+          "sampleValues": [
+            "Page 1 of 1"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 1
+        }
+      ]
+    },
+    {
+      "name": "GFS LL Leads",
+      "actualHeaders": [
+        "Customer Name",
+        "Location",
+        "Channel",
+        "GFS rep",
+        "Customer Contact",
+        "Status",
+        "8-point Sales Stage",
+        "Last Order Date",
+        "Column9",
+        "Column10",
+        "Column11",
+        "Column12"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 338,
+      "dataRows": 337,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Customer Name",
+          "sampleValues": [
+            "ISU",
+            "Science of Spirituality - Veggie Fest Chicago",
+            "Cumin bowl"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 98
+        },
+        {
+          "index": 1,
+          "header": "Location",
+          "sampleValues": [
+            "Normal, IL",
+            "Lisle",
+            "Chicago"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 83
+        },
+        {
+          "index": 2,
+          "header": "Channel",
+          "sampleValues": [
+            "C&U",
+            "Commercial",
+            "Commercial"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 95
+        },
+        {
+          "index": 3,
+          "header": "GFS rep",
+          "sampleValues": [
+            "Stephen Hess",
+            "Sal DiBenedetto",
+            "used to be Eric Fine who left"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 76
+        },
+        {
+          "index": 4,
+          "header": "Customer Contact",
+          "sampleValues": [
+            "Kristina/Jeff",
+            "Alvaro Garcia",
+            "Chiguas Mendez"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 37
+        },
+        {
+          "index": 5,
+          "header": "Status",
+          "sampleValues": [
+            "anchor account to open GFS stocking, wind down after Exe chef Matt left",
+            "trying to get on their schedule for cooking class",
+            "current customer"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 65
+        },
+        {
+          "index": 6,
+          "header": "8-point Sales Stage",
+          "sampleValues": [
+            "FollowUp Ordering",
+            "CheckIn to Repeat Orders",
+            "CheckIn to Repeat Orders"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 65
+        },
+        {
+          "index": 7,
+          "header": "Last Order Date",
+          "sampleValues": [
+            45866,
+            45815,
+            45871
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 10
+        }
+      ]
+    },
+    {
+      "name": "GFS BB sales 2024",
+      "actualHeaders": [
+        "Fiscal Month",
+        "Customer Delivering Plant",
+        "Customer Market Segment",
+        "Customer Unit DESC",
+        "Billed Case Qty"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 45,
+      "dataRows": 44,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Fiscal Month",
+          "sampleValues": [
+            "November",
+            "November",
+            "October"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 43
+        },
+        {
+          "index": 1,
+          "header": "Customer Delivering Plant",
+          "sampleValues": [
+            "Brighton, MI",
+            "Brighton, MI",
+            "Brighton, MI"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 43
+        },
+        {
+          "index": 2,
+          "header": "Customer Market Segment",
+          "sampleValues": [
+            "Healthcare",
+            "Independent",
+            "Independent"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 43
+        },
+        {
+          "index": 3,
+          "header": "Customer Unit DESC",
+          "sampleValues": [
+            "Ccl 4540 Walter Reuther",
+            "CHERRY CREEK GOLF COURSE",
+            "Friends Of Town Center"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 43
+        },
+        {
+          "index": 4,
+          "header": "Billed Case Qty",
+          "sampleValues": [
+            3,
+            1,
+            1
+          ],
+          "dataType": "number",
+          "nonEmptyCount": 44
+        }
+      ]
+    },
+    {
+      "name": "HPS CONTRACT MGMNT",
+      "actualHeaders": [
+        "AVI Foodsystems, Inc."
+      ],
+      "dataStartRow": 1,
+      "totalRows": 34,
+      "dataRows": 33,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "AVI Foodsystems, Inc.",
+          "sampleValues": [
+            "AVI Foodsystems, Inc.",
+            "AVI St. Thomas Aquinas  HS/MS",
+            "BF Food Systems, LLC"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 33
+        }
+      ]
+    },
+    {
+      "name": "HPSC&U",
+      "actualHeaders": [
+        "Ashland University"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 27,
+      "dataRows": 26,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Ashland University",
+          "sampleValues": [
+            "AVI - University of Akron Concessions",
+            "Central Michigan University",
+            "Cleary University"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 26
+        }
+      ]
+    },
+    {
+      "name": "HPS K-12 Tristate",
+      "actualHeaders": [
+        "Bartholomew Cons. School Corp."
+      ],
+      "dataStartRow": 1,
+      "totalRows": 53,
+      "dataRows": 52,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Bartholomew Cons. School Corp.",
+          "sampleValues": [
+            "Bishop Dwenger High School",
+            "Bishop Luers High School",
+            "Blackhawk Christian School"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 52
+        }
+      ]
+    },
+    {
+      "name": "Sheet1",
+      "actualHeaders": [
+        "Direct Food Services"
+      ],
+      "dataStartRow": 1,
+      "totalRows": 80,
+      "dataRows": 79,
+      "columnMapping": [
+        {
+          "index": 0,
+          "header": "Direct Food Services",
+          "sampleValues": [
+            "Earl G. Dumplins",
+            "Lucrezia",
+            "Mister B's Pizza and Wings Bowling Green KY"
+          ],
+          "dataType": "string",
+          "nonEmptyCount": 79
+        }
+      ]
+    }
+  ],
+  "mappingSuggestions": {
+    "Organizations": [
+      {
+        "excelColumn": "ORGANIZATIONS",
+        "dbField": "name",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "SEGMENT\r\n(DROPDOWN)",
+        "dbField": "segment",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "WEEKLY PRIORITY-DATED MONDAYS",
+        "dbField": "priority",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "PHONE",
+        "dbField": "phone",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "CITY",
+        "dbField": "city",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "NOTES",
+        "dbField": "notes",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "DISTRIBUTOR \r\n(DROPDOWN)",
+        "dbField": "distributor",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "PRIMARY ACCT. MANAGER \r\n(DROPDOWN)",
+        "dbField": "accountManager",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "STREET ADDRESS",
+        "dbField": "address",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "STATE\r\n(DROPDOWN)",
+        "dbField": "state",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "ZIP CODE",
+        "dbField": "zipCode",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      }
+    ],
+    "Contacts": [
+      {
+        "excelColumn": "Contacts",
+        "dbField": "fullName",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.",
+        "dbField": "organizationName",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      }
+    ],
+    "Opportunities": [
+      {
+        "excelColumn": "Organizations\r\n(DropDown)",
+        "dbField": "organizationName",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "OPPORTUNITY NAME",
+        "dbField": "name",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "STATUS\r\n(DropDown)",
+        "dbField": "status",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "STAGE\r\n(DropDown)",
+        "dbField": "stage",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "PROBABILITY",
+        "dbField": "probability",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "PRINCIPAL",
+        "dbField": "principal",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "Start Date",
+        "dbField": "startDate",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "PRODUCT\r\n(DropDown)",
+        "dbField": "product",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "CASES \r\nPer Week\r\nVOLUME",
+        "dbField": "value",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "DEAL OWNER\r\n(DropDown)",
+        "dbField": "owner",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      }
+    ],
+    "Interactions": [
+      {
+        "excelColumn": "DATE",
+        "dbField": "date",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "INTERACTION \r\n(Dropdown)",
+        "dbField": "type",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "Organizations\r\n(Formula)",
+        "dbField": "organizationName",
+        "confidence": "high",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "OPPORTUNITY",
+        "dbField": "opportunity",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "PRINCIPAL",
+        "dbField": "principal",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "NOTES",
+        "dbField": "notes",
+        "confidence": "high",
+        "reason": "Exact match"
+      },
+      {
+        "excelColumn": "ACCT.    MANAGER \r\n(Dropdown)",
+        "dbField": "accountManager",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      },
+      {
+        "excelColumn": "CONTACT \r\n(Dropdown)",
+        "dbField": "contactName",
+        "confidence": "medium",
+        "reason": "Contains keyword"
+      }
+    ]
+  }
+}

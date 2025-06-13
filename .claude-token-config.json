@@ -1,0 +1,9 @@
+{
+    "monitoring": {
+        "track_usage": true,
+        "alert_threshold": 50000,
+        "daily_limit": 100000,
+        "report_frequency": "session",
+        "cost_tracking": true
+    }
+}

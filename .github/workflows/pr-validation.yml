@@ -1,0 +1,476 @@
+# Pull Request Validation Workflow for PantryCRM
+# Comprehensive validation for all pull requests with quality gates
+# Reference: https://docs.github.com/en/actions/using-workflows/triggering-a-workflow
+
+name: "🔍 PR Validation"
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_target:
+    branches: [ main, develop ]
+    types: [opened, synchronize, reopened]
+
+# Cancel previous runs on new commits
+concurrency:
+  group: pr-validation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+
+# Minimal permissions for PR validation
+# Reference: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#permissions
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  security-events: write
+
+jobs:
+  # ===================================================================
+  # PR METADATA VALIDATION
+  # ===================================================================
+  
+  pr-metadata:
+    name: "📋 PR Metadata Validation"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: "📥 Checkout PR"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      # Validate PR title follows conventional commits
+      - name: "📝 Validate PR Title"
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          scopes: |
+            api
+            ui
+            auth
+            db
+            security
+            performance
+            azure
+            cicd
+          requireScope: false
+          disallowScopes: |
+            release
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            doesn't start with an uppercase character.
+      
+      # Check PR description exists and is meaningful
+      - name: "📄 Validate PR Description"
+        run: |
+          pr_body="${{ github.event.pull_request.body }}"
+          
+          if [ -z "$pr_body" ] || [ ${#pr_body} -lt 50 ]; then
+            echo "❌ PR description is too short or missing"
+            echo "Please provide a meaningful description (at least 50 characters)"
+            exit 1
+          fi
+          
+          # Check for required sections
+          if [[ ! "$pr_body" =~ "## Changes" ]] && [[ ! "$pr_body" =~ "## What changed" ]] && [[ ! "$pr_body" =~ "## Summary" ]]; then
+            echo "⚠️ PR description should include a 'Changes' or 'Summary' section"
+          fi
+          
+          echo "✅ PR description is valid"
+      
+      # Check for linked issues
+      - name: "🔗 Check Linked Issues"
+        run: |
+          pr_body="${{ github.event.pull_request.body }}"
+          
+          if [[ "$pr_body" =~ (fixes|closes|resolves)\ #[0-9]+ ]] || [[ "$pr_body" =~ (Fixes|Closes|Resolves)\ #[0-9]+ ]]; then
+            echo "✅ PR links to an issue"
+          else
+            echo "⚠️ Consider linking this PR to an issue using 'Fixes #123' or 'Closes #123'"
+          fi
+
+  # ===================================================================
+  # CODE QUALITY CHECKS
+  # ===================================================================
+  
+  code-quality:
+    name: "🧹 Code Quality"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: "📥 Checkout PR"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0  # Full history for better analysis
+      
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: "📦 Install Dependencies"
+        run: npm ci --prefer-offline --no-audit
+      
+      # ESLint with GitHub annotations
+      - name: "🔍 ESLint"
+        run: |
+          npx eslint . \
+            --ext .js,.jsx,.ts,.tsx \
+            --format @microsoft/eslint-formatter-sarif \
+            --output-file eslint-results.sarif \
+            || true
+          
+          # Also run with default formatter for readable output
+          npx eslint . --ext .js,.jsx,.ts,.tsx
+        continue-on-error: true
+      
+      # Upload ESLint results
+      - name: "📤 Upload ESLint Results"
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: eslint-results.sarif
+        continue-on-error: true
+      
+      # TypeScript compilation check
+      - name: "📋 TypeScript Check"
+        run: npm run typecheck
+      
+      # Prettier formatting check
+      - name: "💅 Check Formatting"
+        run: |
+          if ! npx prettier --check .; then
+            echo "❌ Code formatting issues found"
+            echo "Run 'npm run format' to fix formatting issues"
+            exit 1
+          fi
+          echo "✅ Code formatting is correct"
+      
+      # Check for TODO/FIXME comments
+      - name: "📝 Check TODO Comments"
+        run: |
+          todos=$(grep -r "TODO\|FIXME\|XXX\|HACK" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" src/ lib/ || true)
+          
+          if [ -n "$todos" ]; then
+            echo "⚠️ Found TODO/FIXME comments:"
+            echo "$todos"
+            echo ""
+            echo "Consider addressing these before merging or create issues for tracking"
+          else
+            echo "✅ No TODO/FIXME comments found"
+          fi
+        continue-on-error: true
+
+  # ===================================================================
+  # SECURITY VALIDATION
+  # ===================================================================
+  
+  security-validation:
+    name: "🔒 Security Validation"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: "📥 Checkout PR"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: "📦 Install Dependencies"
+        run: npm ci --prefer-offline --no-audit
+      
+      # CodeQL security analysis for PR
+      - name: "🔍 Initialize CodeQL"
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript,typescript
+          queries: security-and-quality
+      
+      - name: "🏗️ Autobuild"
+        uses: github/codeql-action/autobuild@v3
+      
+      - name: "🔬 Perform CodeQL Analysis"
+        uses: github/codeql-action/analyze@v3
+      
+      # Check for hardcoded secrets
+      - name: "🕵️ Scan for Secrets"
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
+          extra_args: --debug --only-verified
+      
+      # NPM audit for vulnerabilities
+      - name: "🛡️ NPM Security Audit"
+        run: |
+          npm audit --audit-level moderate || {
+            echo "❌ Security vulnerabilities found in dependencies"
+            echo "Please review and address the vulnerabilities above"
+            exit 1
+          }
+          echo "✅ No security vulnerabilities found in dependencies"
+      
+      # Check for sensitive file changes
+      - name: "📁 Check Sensitive Files"
+        run: |
+          sensitive_files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -E "(\.env|\.key|\.pem|\.p12|\.crt|config|secret)" || true)
+          
+          if [ -n "$sensitive_files" ]; then
+            echo "⚠️ Changes detected in potentially sensitive files:"
+            echo "$sensitive_files"
+            echo ""
+            echo "Please ensure no secrets are committed and sensitive changes are reviewed carefully"
+          else
+            echo "✅ No sensitive file changes detected"
+          fi
+        continue-on-error: true
+
+  # ===================================================================
+  # PERFORMANCE IMPACT ANALYSIS
+  # ===================================================================
+  
+  performance-analysis:
+    name: "⚡ Performance Analysis"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: "📥 Checkout PR"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: "📦 Install Dependencies"
+        run: npm ci --prefer-offline --no-audit
+      
+      # Generate Prisma client for build
+      - name: "🔄 Generate Prisma Client"
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+      
+      # Build and analyze bundle size
+      - name: "📦 Build and Analyze Bundle"
+        run: |
+          npm run build:azure
+          
+          # Check if bundle analyzer is available
+          if [ -f "scripts/analyze-bundle.js" ]; then
+            npm run analyze:simple
+          else
+            echo "Bundle analyzer not available, skipping detailed analysis"
+          fi
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+          JWT_SECRET: "dummy-secret"
+          NEXTAUTH_SECRET: "dummy-secret"
+          NEXTAUTH_URL: "https://dummy.example.com"
+      
+      # Memory usage test (Azure B1 optimization)
+      - name: "🧠 Memory Usage Test"
+        run: |
+          if [ -f "tests/performance/memory-usage-test.js" ]; then
+            npm run test:performance:memory
+          else
+            echo "Memory usage test not available, skipping"
+          fi
+        continue-on-error: true
+      
+      # Check for large file additions
+      - name: "📏 Check File Sizes"
+        run: |
+          large_files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | xargs -I {} sh -c 'if [ -f "{}" ] && [ $(stat -f%z "{}" 2>/dev/null || stat -c%s "{}" 2>/dev/null || echo 0) -gt 1048576 ]; then echo "{}"; fi' || true)
+          
+          if [ -n "$large_files" ]; then
+            echo "⚠️ Large files (>1MB) detected:"
+            echo "$large_files"
+            echo ""
+            echo "Consider optimizing these files or using Git LFS for binary assets"
+          else
+            echo "✅ No large files detected"
+          fi
+        continue-on-error: true
+
+  # ===================================================================
+  # TEST VALIDATION
+  # ===================================================================
+  
+  test-validation:
+    name: "🧪 Test Validation"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: "📥 Checkout PR"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: "⚙️ Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: "📦 Install Dependencies"
+        run: npm ci --prefer-offline --no-audit
+      
+      - name: "🔄 Generate Prisma Client"
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+      
+      # Run unit tests with coverage
+      - name: "🧪 Run Unit Tests"
+        run: npm run test:ci
+        env:
+          NODE_ENV: test
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+      
+      # Check test coverage
+      - name: "📊 Check Test Coverage"
+        run: |
+          if [ -f "coverage/lcov.info" ]; then
+            echo "Test coverage report generated"
+            # Could integrate with coverage reporting tools
+          else
+            echo "No coverage report found"
+          fi
+        continue-on-error: true
+      
+      # Verify new code has tests
+      - name: "🎯 Check Test Coverage for New Code"
+        run: |
+          # Get changed files
+          changed_files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '\.(test|spec)\.' | grep -v node_modules || true)
+          
+          if [ -n "$changed_files" ]; then
+            echo "Changed source files:"
+            echo "$changed_files"
+            
+            # Check if corresponding test files exist
+            missing_tests=""
+            for file in $changed_files; do
+              test_file1="${file%.*}.test.${file##*.}"
+              test_file2="${file%.*}.spec.${file##*.}"
+              
+              if [ ! -f "$test_file1" ] && [ ! -f "$test_file2" ]; then
+                missing_tests="$missing_tests\n$file"
+              fi
+            done
+            
+            if [ -n "$missing_tests" ]; then
+              echo "⚠️ Files without corresponding tests:"
+              echo -e "$missing_tests"
+              echo ""
+              echo "Consider adding tests for new functionality"
+            else
+              echo "✅ All changed files have corresponding tests"
+            fi
+          else
+            echo "No source files changed"
+          fi
+        continue-on-error: true
+
+  # ===================================================================
+  # PR SUMMARY
+  # ===================================================================
+  
+  pr-summary:
+    name: "📊 PR Summary"
+    runs-on: ubuntu-latest
+    needs: [pr-metadata, code-quality, security-validation, performance-analysis, test-validation]
+    if: always() && github.event.pull_request.draft == false
+    
+    steps:
+      - name: "📊 Generate PR Summary"
+        run: |
+          echo "# 🔍 Pull Request Validation Summary" > pr-summary.md
+          echo "" >> pr-summary.md
+          
+          # Job status summary
+          echo "## Job Status" >> pr-summary.md
+          echo "| Job | Status |" >> pr-summary.md
+          echo "|-----|--------|" >> pr-summary.md
+          echo "| PR Metadata | ${{ needs.pr-metadata.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> pr-summary.md
+          echo "| Code Quality | ${{ needs.code-quality.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> pr-summary.md
+          echo "| Security | ${{ needs.security-validation.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> pr-summary.md
+          echo "| Performance | ${{ needs.performance-analysis.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> pr-summary.md
+          echo "| Tests | ${{ needs.test-validation.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> pr-summary.md
+          echo "" >> pr-summary.md
+          
+          # Overall status
+          if [[ "${{ needs.pr-metadata.result }}" == "success" && "${{ needs.code-quality.result }}" == "success" && "${{ needs.security-validation.result }}" == "success" && "${{ needs.test-validation.result }}" == "success" ]]; then
+            echo "## ✅ Overall Status: READY TO MERGE" >> pr-summary.md
+            echo "All validation checks have passed. This PR is ready for review and merge." >> pr-summary.md
+          else
+            echo "## ❌ Overall Status: NEEDS ATTENTION" >> pr-summary.md
+            echo "Some validation checks have failed. Please review and address the issues above." >> pr-summary.md
+          fi
+          
+          echo "" >> pr-summary.md
+          echo "---" >> pr-summary.md
+          echo "*Automated validation completed at $(date)*" >> pr-summary.md
+          
+          cat pr-summary.md
+      
+      # Comment on PR with summary (if permissions allow)
+      - name: "💬 Comment on PR"
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('pr-summary.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+        continue-on-error: true

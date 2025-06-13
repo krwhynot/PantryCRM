@@ -421,3 +421,72 @@ export async function getConnectionPoolStats() {
     };
   }
 }
+
+/**
+ * Enhanced monitoring with buffer cache hit ratio and DTU metrics
+ * Based on Microsoft SQL Server performance monitoring best practices
+ */
+export async function getEnhancedPerformanceMetrics() {
+  try {
+    // Buffer cache hit ratio - critical Azure SQL performance metric
+    const bufferCacheResult = await prismadb.$queryRaw<Array<{ cntr_value: number }>>`
+      SELECT cntr_value 
+      FROM sys.dm_os_performance_counters 
+      WHERE counter_name = 'Buffer cache hit ratio'
+      AND instance_name = ''
+    `;
+
+    // Buffer cache hit ratio base
+    const bufferCacheBaseResult = await prismadb.$queryRaw<Array<{ cntr_value: number }>>`
+      SELECT cntr_value 
+      FROM sys.dm_os_performance_counters 
+      WHERE counter_name = 'Buffer cache hit ratio base'
+      AND instance_name = ''
+    `;
+
+    // Page life expectancy - memory pressure indicator
+    const pageLifeResult = await prismadb.$queryRaw<Array<{ cntr_value: number }>>`
+      SELECT cntr_value 
+      FROM sys.dm_os_performance_counters 
+      WHERE counter_name = 'Page life expectancy'
+    `;
+
+    // Batch requests per second
+    const batchRequestsResult = await prismadb.$queryRaw<Array<{ cntr_value: number }>>`
+      SELECT cntr_value 
+      FROM sys.dm_os_performance_counters 
+      WHERE counter_name = 'Batch Requests/sec'
+    `;
+
+    // Calculate buffer cache hit ratio percentage
+    const bufferCache = bufferCacheResult[0]?.cntr_value || 0;
+    const bufferCacheBase = bufferCacheBaseResult[0]?.cntr_value || 1;
+    const hitRatio = bufferCacheBase > 0 ? (bufferCache / bufferCacheBase) * 100 : 0;
+
+    // Connection pool stats
+    const poolStats = await getConnectionPoolStats();
+
+    return {
+      bufferCacheHitRatio: hitRatio,
+      pageLifeExpectancy: pageLifeResult[0]?.cntr_value || 0,
+      batchRequestsPerSec: batchRequestsResult[0]?.cntr_value || 0,
+      connectionPool: poolStats,
+      timestamp: new Date().toISOString(),
+      azureBasicRecommendations: {
+        bufferCacheOptimal: hitRatio >= 95,
+        pageLifeOptimal: (pageLifeResult[0]?.cntr_value || 0) >= 300,
+        connectionOptimal: poolStats.azureBasicOptimal,
+      }
+    };
+  } catch (error) {
+    console.warn('Enhanced performance metrics not available:', error);
+    return {
+      bufferCacheHitRatio: 'unknown',
+      pageLifeExpectancy: 'unknown',
+      batchRequestsPerSec: 'unknown',
+      connectionPool: await getConnectionPoolStats(),
+      timestamp: new Date().toISOString(),
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
+}

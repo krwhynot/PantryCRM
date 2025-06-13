@@ -1,12 +1,32 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import PWAInstaller from '@/components/PWAInstaller'
+import NetworkStatus from '@/components/NetworkStatus'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Kitchen Pantry CRM',
   description: 'Food Service Customer Relationship Management',
+  manifest: '/manifest.json',
+  themeColor: '#3b82f6',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'PantryCRM',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'msapplication-TileColor': '#3b82f6',
+    'msapplication-config': '/browserconfig.xml',
+  }
 }
 
 export default function RootLayout({
@@ -17,6 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <NetworkStatus />
         <div className="min-h-screen bg-gray-50">
           <nav className="bg-white shadow-sm border-b border-gray-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,6 +54,24 @@ export default function RootLayout({
             {children}
           </main>
         </div>
+        <PWAInstaller />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                      console.log('SW registered: ', registration);
+                    })
+                    .catch(function(registrationError) {
+                      console.log('SW registration failed: ', registrationError);
+                    });
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   )

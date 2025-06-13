@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PantryCRM - Offline</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      padding: 48px 32px;
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+    }
+    
+    .icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      opacity: 0.8;
+    }
+    
+    h1 {
+      color: #1a202c;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    
+    .subtitle {
+      color: #3b82f6;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    
+    p {
+      color: #4a5568;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    
+    .features {
+      text-align: left;
+      margin-bottom: 32px;
+    }
+    
+    .feature {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      color: #2d3748;
+      font-size: 14px;
+    }
+    
+    .feature-icon {
+      background: #e6fffa;
+      color: #2d3748;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-size: 12px;
+    }
+    
+    .retry-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-right: 12px;
+      touch-action: manipulation;
+      min-height: 48px;
+    }
+    
+    .retry-btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+    
+    .retry-btn:active {
+      transform: translateY(0);
+    }
+    
+    .secondary-btn {
+      background: #f7fafc;
+      color: #4a5568;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+      touch-action: manipulation;
+      min-height: 48px;
+    }
+    
+    .secondary-btn:hover {
+      background: #edf2f7;
+      border-color: #cbd5e0;
+    }
+    
+    .status {
+      background: #fed7d7;
+      color: #c53030;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .status-icon {
+      margin-right: 8px;
+      font-size: 16px;
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 32px 24px;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .buttons {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .retry-btn, .secondary-btn {
+        width: 100%;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">🍽️</div>
+    <h1>PantryCRM</h1>
+    <p class="subtitle">Kitchen Pantry Management System</p>
+    
+    <div class="status">
+      <span class="status-icon pulse">🔴</span>
+      <span id="connection-status">You're currently offline</span>
+    </div>
+    
+    <p>Don't worry! Your CRM data is safely stored locally and will automatically sync when your connection is restored.</p>
+    
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">💾</div>
+        <span>Local data access available</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔄</div>
+        <span>Auto-sync when reconnected</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📝</div>
+        <span>Form drafts saved automatically</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <span>Fast offline performance</span>
+      </div>
+    </div>
+    
+    <div class="buttons">
+      <button class="retry-btn" onclick="checkConnection()">
+        Try Again
+      </button>
+      <a href="/" class="secondary-btn">
+        Go to Dashboard
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Check network status
+    function updateConnectionStatus() {
+      const statusElement = document.getElementById('connection-status');
+      const statusContainer = statusElement.parentElement;
+      
+      if (navigator.onLine) {
+        statusElement.textContent = "Connection restored!";
+        statusContainer.style.background = '#c6f6d5';
+        statusContainer.style.color = '#22543d';
+        statusContainer.querySelector('.status-icon').textContent = '🟢';
+        statusContainer.querySelector('.status-icon').classList.remove('pulse');
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1500);
+      } else {
+        statusElement.textContent = "You're currently offline";
+        statusContainer.style.background = '#fed7d7';
+        statusContainer.style.color = '#c53030';
+        statusContainer.querySelector('.status-icon').textContent = '🔴';
+        statusContainer.querySelector('.status-icon').classList.add('pulse');
+      }
+    }
+    
+    function checkConnection() {
+      updateConnectionStatus();
+      
+      if (navigator.onLine) {
+        window.location.reload();
+      } else {
+        // Provide feedback that we're still offline
+        const button = document.querySelector('.retry-btn');
+        const originalText = button.textContent;
+        button.textContent = 'Still offline...';
+        button.style.background = '#9ca3af';
+        
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.style.background = '#3b82f6';
+        }, 2000);
+      }
+    }
+    
+    // Listen for online/offline events
+    window.addEventListener('online', updateConnectionStatus);
+    window.addEventListener('offline', updateConnectionStatus);
+    
+    // Initial status check
+    updateConnectionStatus();
+    
+    // Periodic connection check
+    setInterval(() => {
+      if (navigator.onLine) {
+        updateConnectionStatus();
+      }
+    }, 5000);
+  </script>
+</body>
+</html>

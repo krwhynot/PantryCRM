@@ -1,0 +1,168 @@
+Based on your Kitchen Pantry CRM project at R:\Projects\PantryCRM and your comprehensive Excel migration needs, here are the optimal Opus 4 configuration settings:
+
+Core Token Optimization Settings
+1. Context Window Management
+json{
+  "claude_code": {
+    "model": "claude-opus-4-20250514",
+    "max_tokens": 4096,
+    "temperature": 0.3,
+    "context_window_strategy": "sliding",
+    "context_retention": 0.4,
+    "file_chunk_size": 2000,
+    "cache_enabled": true,
+    "cache_ttl": 14400
+  }
+}
+2. Smart Context Loading
+powershell# Create .claudecontext file for selective file loading
+New-Item -Path "R:\Projects\PantryCRM\.claudecontext" -ItemType File
+
+# Content for .claudecontext:
+yamlpriority_files:
+  - excel/CRM-WORKBOOK.xlsx
+  - src/lib/excel-migration/*.ts
+  - prisma/schema.prisma
+  - docs/migration-plan.md
+
+exclude_patterns:
+  - node_modules/**
+  - .next/**
+  - dist/**
+  - "*.test.ts"
+  - "*.spec.ts"
+  - coverage/**
+  - build/**
+
+max_file_size: 50000  # 50KB limit per file
+chunk_large_files: true
+Excel Migration-Specific Optimizations
+3. Streaming Configuration for Large Files
+json{
+  "excel_processing": {
+    "streaming_enabled": true,
+    "batch_size": 1000,
+    "memory_limit_mb": 512,
+    "progress_reporting": true,
+    "checkpoint_frequency": 5000
+  }
+}
+4. MCP Tool Priority Matrix
+yaml# High Priority (Use First)
+- filesystem: FREE, direct file access
+- sequential-thinking: FREE, complex reasoning
+- memory: FREE, persist findings
+
+# Medium Priority (Use Selectively)  
+- context7: Targeted docs only
+- research_paper_search: Validation only
+
+# Low Priority (Minimize Usage)
+- web_search_exa: ~$0.01 per search
+- tavily-search: Current info only
+- perplexity_ask: Avoid redundancy
+Optimal Usage Patterns
+5. Token-Efficient Commands
+powershell# Instead of: "Please analyze the entire Excel workbook structure"
+claude --brief "Map excel sheets: structure only"
+
+# Instead of: "Generate comprehensive migration code"
+claude --code "excel->db pipeline: streaming, types, validation"
+
+# Instead of: "Explain the migration process step by step"
+claude --plan "migration phases: checkpoints, rollback"
+6. Response Format Configuration
+json{
+  "response_preferences": {
+    "format": "concise",
+    "code_comments": "minimal",
+    "explanations": "on_request",
+    "examples": "single",
+    "verbose_errors": false,
+    "include_alternatives": false
+  }
+}
+Advanced Caching Strategy
+7. Persistent Analysis Cache
+powershell# Create cache directory
+New-Item -Path "R:\Projects\PantryCRM\.claude-cache" -ItemType Directory
+
+# Cache configuration
+$cacheConfig = @{
+  "excel_analysis": {
+    "cache_duration": "7d",
+    "invalidate_on": ["schema.prisma", "CRM-WORKBOOK.xlsx"]
+  },
+  "migration_plan": {
+    "cache_duration": "24h",
+    "checkpoint_results": true
+  }
+}
+Specific Excel Migration Optimizations
+8. Chunked Processing Configuration
+yamlexcel_migration:
+  phases:
+    - name: "structure_analysis"
+      max_tokens: 1000
+      cache: true
+      
+    - name: "data_validation"  
+      max_tokens: 500
+      batch_process: true
+      
+    - name: "transformation"
+      max_tokens: 2000
+      stream: true
+      
+    - name: "rollback_planning"
+      max_tokens: 800
+      persist: true
+Token Usage Monitoring
+9. Usage Tracking Setup
+powershell# Token usage monitor
+$tokenConfig = @"
+{
+  "monitoring": {
+    "track_usage": true,
+    "alert_threshold": 50000,
+    "daily_limit": 100000,
+    "report_frequency": "session",
+    "cost_tracking": true
+  }
+}
+"@
+
+# Save to project
+$tokenConfig | Out-File "R:\Projects\PantryCRM\.claude-token-config.json"
+Practical Implementation Tips
+10. Session Management
+
+• Start each session with structure analysis only
+• Cache worksheet mappings for 7 days
+• Use checkpoint files to resume work
+• Implement progressive loading for large datasets
+
+11. Cost-Effective Workflow
+powershell# Phase 1: Analysis (Low token usage)
+claude --analyze "excel structure" --cache
+
+# Phase 2: Planning (Medium token usage)
+claude --plan "migration strategy" --brief
+
+# Phase 3: Implementation (High token usage)
+claude --implement "phase:validation" --checkpoint
+
+# Phase 4: Testing (Minimal tokens)
+claude --test "migration:integrity" --summary
+Emergency Token Conservation
+12. Fallback Mode
+yamlemergency_mode:
+  triggers:
+    - daily_usage > 80000
+    - session_usage > 20000
+    
+  actions:
+    - response_limit: 500
+    - disable_explanations: true
+    - code_only: true
+    - no_alternatives: true

@@ -1,0 +1,3565 @@
+[
+  {
+    "name": "Team Performance Dashboard",
+    "rowCount": 35,
+    "columnCount": 28,
+    "headers": [
+      "Column1",
+      "Column2",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16",
+      "Column17",
+      "Column18",
+      "Column19",
+      "Column20",
+      "Column21",
+      "Column22",
+      "Column23",
+      "Column24",
+      "Column25",
+      "Column26",
+      "Column27",
+      "Column28"
+    ],
+    "dataTypes": {
+      "Column1": [],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [],
+      "Column4": [],
+      "Column5": [],
+      "Column6": [],
+      "Column7": [],
+      "Column8": [],
+      "Column9": [],
+      "Column10": [],
+      "Column11": [],
+      "Column12": [],
+      "Column13": [],
+      "Column14": [],
+      "Column15": [],
+      "Column16": [],
+      "Column17": [],
+      "Column18": [],
+      "Column19": [],
+      "Column20": [],
+      "Column21": [],
+      "Column22": [],
+      "Column23": [],
+      "Column24": [],
+      "Column25": [],
+      "Column26": [],
+      "Column27": [],
+      "Column28": []
+    },
+    "sampleData": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "Column2": "Interactions"
+      },
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  {
+    "name": "Principal Interactions Tracker ",
+    "rowCount": 73,
+    "columnCount": 28,
+    "headers": [
+      "Column1",
+      "Column2",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16",
+      "Column17",
+      "Column18",
+      "Column19",
+      "Column20",
+      "Column21",
+      "Column22",
+      "Column23",
+      "Column24",
+      "Column25",
+      "Column26",
+      "Column27",
+      "Column28"
+    ],
+    "dataTypes": {
+      "Column1": [],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [],
+      "Column4": [],
+      "Column5": [],
+      "Column6": [],
+      "Column7": [],
+      "Column8": [],
+      "Column9": [],
+      "Column10": [],
+      "Column11": [],
+      "Column12": [],
+      "Column13": [],
+      "Column14": [],
+      "Column15": [],
+      "Column16": [],
+      "Column17": [],
+      "Column18": [],
+      "Column19": [],
+      "Column20": [],
+      "Column21": [],
+      "Column22": [],
+      "Column23": [],
+      "Column24": [],
+      "Column25": [],
+      "Column26": [],
+      "Column27": [],
+      "Column28": []
+    },
+    "sampleData": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "Column2": "Interactions"
+      },
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  {
+    "name": "Principal Opportunites Tracker",
+    "rowCount": 98,
+    "columnCount": 40,
+    "headers": [
+      "Column1",
+      "Column2",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16",
+      "Column17",
+      "Column18",
+      "Column19",
+      "Column20",
+      "Column21",
+      "Column22",
+      "Column23",
+      "Column24",
+      "Column25",
+      "Column26",
+      "Column27",
+      "Column28",
+      "Column29",
+      "Column30",
+      "Column31",
+      "Column32",
+      "Column33",
+      "Column34",
+      "Column35",
+      "Column36",
+      "Column37",
+      "Column38",
+      "Column39",
+      "Column40"
+    ],
+    "dataTypes": {
+      "Column1": [],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [],
+      "Column4": [],
+      "Column5": [],
+      "Column6": [],
+      "Column7": [],
+      "Column8": [],
+      "Column9": [],
+      "Column10": [],
+      "Column11": [],
+      "Column12": [],
+      "Column13": [],
+      "Column14": [],
+      "Column15": [],
+      "Column16": [],
+      "Column17": [],
+      "Column18": [],
+      "Column19": [],
+      "Column20": [],
+      "Column21": [],
+      "Column22": [],
+      "Column23": [],
+      "Column24": [],
+      "Column25": [],
+      "Column26": [],
+      "Column27": [],
+      "Column28": [],
+      "Column29": [],
+      "Column30": [],
+      "Column31": [],
+      "Column32": [],
+      "Column33": [],
+      "Column34": [],
+      "Column35": [],
+      "Column36": [],
+      "Column37": [],
+      "Column38": [],
+      "Column39": [],
+      "Column40": []
+    },
+    "sampleData": [
+      {},
+      {},
+      {},
+      {},
+      {
+        "Column2": "Sales Activity Summary "
+      },
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  {
+    "name": "OrgStagesPivot",
+    "rowCount": 149,
+    "columnCount": 33,
+    "headers": [
+      "STAGE (DropDown)",
+      "Lead-discovery-1",
+      "Column3",
+      "Column4",
+      "STAGE (DropDown)",
+      "Contacted-phone/email-2",
+      "Column7",
+      "Column8",
+      "STAGE (DropDown)",
+      "Sampled/Visited invite-3",
+      "Column11",
+      "Column12",
+      "STAGE (DropDown)",
+      "Follow-up-4",
+      "Column15",
+      "Column16",
+      "STAGE (DropDown)",
+      "Feedback- received-5",
+      "Column19",
+      "STAGE (DropDown)",
+      "demo-cookup-6",
+      "Column22",
+      "Column23",
+      "STAGE (DropDown)",
+      "SOLD-7",
+      "Column26",
+      "Column27",
+      "Column28",
+      "Column29",
+      "Column30",
+      "Column31",
+      "Column32",
+      "Column33"
+    ],
+    "dataTypes": {
+      "STAGE (DropDown)": [
+        "string"
+      ],
+      "Lead-discovery-1": [],
+      "Column3": [],
+      "Column4": [],
+      "Contacted-phone/email-2": [],
+      "Column7": [],
+      "Column8": [],
+      "Sampled/Visited invite-3": [],
+      "Column11": [],
+      "Column12": [],
+      "Follow-up-4": [],
+      "Column15": [],
+      "Column16": [],
+      "Feedback- received-5": [],
+      "Column19": [],
+      "demo-cookup-6": [],
+      "Column22": [],
+      "Column23": [],
+      "SOLD-7": [],
+      "Column26": [],
+      "Column27": [],
+      "Column28": [],
+      "Column29": [],
+      "Column30": [],
+      "Column31": [],
+      "Column32": [],
+      "Column33": []
+    },
+    "sampleData": [
+      {},
+      {
+        "STAGE (DropDown)": "Row Labels"
+      },
+      {
+        "STAGE (DropDown)": "All Nite Mobile Cafe"
+      },
+      {
+        "STAGE (DropDown)": "ANDERSON FOODS"
+      },
+      {
+        "STAGE (DropDown)": "Battle Alley Brewing Company"
+      },
+      {
+        "STAGE (DropDown)": "BAY CLIFF HEALTH CAMP"
+      },
+      {
+        "STAGE (DropDown)": "Belva "
+      },
+      {
+        "STAGE (DropDown)": "BENS SUPERCENTER"
+      },
+      {
+        "STAGE (DropDown)": "Bluebird"
+      },
+      {
+        "STAGE (DropDown)": "BOARDWALK (THE)"
+      }
+    ]
+  },
+  {
+    "name": "Principal Interactions",
+    "rowCount": 58,
+    "columnCount": 7,
+    "headers": [
+      "Start of Week",
+      "5/26/2025",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7"
+    ],
+    "dataTypes": {
+      "Start of Week": [
+        "string"
+      ],
+      "5/26/2025": [
+        "string",
+        "number"
+      ],
+      "Column3": [],
+      "Column4": [],
+      "Column5": [
+        "string"
+      ],
+      "Column6": [
+        "string",
+        "number"
+      ],
+      "Column7": [
+        "string",
+        "number"
+      ]
+    },
+    "sampleData": [
+      {
+        "Start of Week": "PRINCIPAL",
+        "5/26/2025": "Kaufholds"
+      },
+      {
+        "Start of Week": "Weeks' Total Interactions"
+      },
+      {
+        "Start of Week": "Row Labels",
+        "5/26/2025": "Count of INTERACTION  (Dropdown)"
+      },
+      {
+        "Start of Week": "In Person",
+        "5/26/2025": 4
+      },
+      {
+        "Start of Week": "Grand Total",
+        "5/26/2025": 4
+      },
+      {
+        "Column5": "DATE",
+        "Column6": "All"
+      },
+      {},
+      {
+        "Column5": "Count of INTERACTION  (Dropdown)",
+        "Column6": "Column Labels"
+      },
+      {
+        "Column5": "Row Labels",
+        "Column6": "In Person",
+        "Column7": "Grand Total"
+      },
+      {
+        "Column5": "5/26/2025",
+        "Column6": 4,
+        "Column7": 4
+      }
+    ]
+  },
+  {
+    "name": "Principal Opportunities ",
+    "rowCount": 20,
+    "columnCount": 5,
+    "headers": [
+      "Opportunites by Stage",
+      "Column2",
+      "Column3",
+      "Opportunities Current Status",
+      "Column5"
+    ],
+    "dataTypes": {
+      "Opportunites by Stage": [
+        "string"
+      ],
+      "Column2": [
+        "string",
+        "number"
+      ],
+      "Column3": [],
+      "Opportunities Current Status": [
+        "string"
+      ],
+      "Column5": [
+        "string",
+        "number"
+      ]
+    },
+    "sampleData": [
+      {},
+      {
+        "Opportunites by Stage": "Row Labels",
+        "Column2": "Count of STAGE (DropDown)",
+        "Opportunities Current Status": "Row Labels",
+        "Column5": "Count of STATUS (DropDown)"
+      },
+      {
+        "Opportunites by Stage": "Sampled/Visited invite-3",
+        "Column2": 78,
+        "Opportunities Current Status": "Open",
+        "Column5": 82
+      },
+      {
+        "Opportunites by Stage": "Lead-discovery-1",
+        "Column2": 3,
+        "Opportunities Current Status": "Grand Total",
+        "Column5": 82
+      },
+      {
+        "Opportunites by Stage": "order support-8",
+        "Column2": 1
+      },
+      {
+        "Opportunites by Stage": "Grand Total",
+        "Column2": 82
+      },
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  {
+    "name": "Organizations",
+    "rowCount": 2286,
+    "columnCount": 16,
+    "headers": [
+      "Column1",
+      "Column2",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16"
+    ],
+    "dataTypes": {
+      "Column1": [],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [
+        "string"
+      ],
+      "Column4": [
+        "string"
+      ],
+      "Column5": [
+        "string"
+      ],
+      "Column6": [
+        "string"
+      ],
+      "Column7": [
+        "string"
+      ],
+      "Column8": [
+        "string"
+      ],
+      "Column9": [
+        "string"
+      ],
+      "Column10": [
+        "string"
+      ],
+      "Column11": [
+        "string"
+      ],
+      "Column12": [
+        "string"
+      ],
+      "Column13": [
+        "string"
+      ],
+      "Column14": [
+        "string"
+      ],
+      "Column15": [
+        "string"
+      ],
+      "Column16": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {
+        "Column3": "Instructions:",
+        "Column4": "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.",
+        "Column15": "x"
+      },
+      {
+        "Column3": "ORGANIZATIONS",
+        "Column4": "SEGMENT\r\n(DROPDOWN)",
+        "Column5": "DISTRIBUTOR \r\n(DROPDOWN)",
+        "Column7": "PRIMARY ACCT. MANAGER \r\n(DROPDOWN)",
+        "Column8": "SECONDARY ACCT. MANAGER \r\n(DROPDOWN)",
+        "Column9": "WEEKLY PRIORITY-DATED MONDAYS",
+        "Column10": "LINKEDIN",
+        "Column11": "PHONE",
+        "Column12": "STREET ADDRESS",
+        "Column13": "CITY",
+        "Column14": "STATE\r\n(DROPDOWN)",
+        "Column15": "ZIP CODE",
+        "Column16": "NOTES"
+      },
+      {
+        "Column2": "PRIORITY-FOCUS (A-D) A-highest \r\n(DropDown)",
+        "Column3": "Organizations",
+        "Column4": "SEGMENT\r\n(DropDown)",
+        "Column5": "DISTRIBUTOR \r\n(DropDown)",
+        "Column6": "Distr Rep",
+        "Column7": "PRIMARY ACCT. MANAGER \r\n(DropDown)",
+        "Column8": "SECONDARY ACCT. MANAGER \r\n(DropDown)",
+        "Column9": "Weekly Priority-dated Mondays",
+        "Column10": "LINKEDIN",
+        "Column11": "PHONE",
+        "Column12": "STREET ADDRESS",
+        "Column13": "CITY",
+        "Column14": "STATE\r\n(DropDown)",
+        "Column15": "Zip Code",
+        "Column16": "NOTES"
+      },
+      {
+        "Column2": "B",
+        "Column3": "040 KITCHEN INC"
+      },
+      {
+        "Column2": "D",
+        "Column3": "2d Restaurant"
+      },
+      {
+        "Column3": "7 K FARMS, INC.",
+        "Column4": "Distributor",
+        "Column14": "IN"
+      },
+      {
+        "Column2": "B",
+        "Column3": "7 Monks Taproom Grand Rapids",
+        "Column7": "Gary"
+      },
+      {
+        "Column2": "A+",
+        "Column3": "8 hospitality group",
+        "Column7": "Dale",
+        "Column16": "Hubbard Inn, MASQ joy, district parlay joy, parlay, LINKIN PARK, HVAC, pub, LIQR taco pub Cardoza's pub Café Banda never have I ever "
+      },
+      {
+        "Column3": "86 FOOD SERVICE",
+        "Column13": "Chicago",
+        "Column14": "IL"
+      },
+      {
+        "Column3": "90 miles Cuban cafe"
+      }
+    ]
+  },
+  {
+    "name": "Contacts",
+    "rowCount": 1954,
+    "columnCount": 17,
+    "headers": [
+      "         Contacts",
+      "Column3",
+      "Instructions:",
+      "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16",
+      "Column17",
+      "Column18"
+    ],
+    "dataTypes": {
+      "         Contacts": [
+        "string"
+      ],
+      "Column3": [
+        "string"
+      ],
+      "Instructions:": [
+        "string"
+      ],
+      "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": [
+        "string"
+      ],
+      "Column6": [
+        "string"
+      ],
+      "Column7": [
+        "string"
+      ],
+      "Column8": [
+        "string"
+      ],
+      "Column9": [
+        "string"
+      ],
+      "Column10": [
+        "string"
+      ],
+      "Column11": [
+        "string"
+      ],
+      "Column12": [
+        "string"
+      ],
+      "Column13": [
+        "string"
+      ],
+      "Column14": [
+        "string"
+      ],
+      "Column15": [
+        "string"
+      ],
+      "Column16": [],
+      "Column17": [],
+      "Column18": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {},
+      {
+        "         Contacts": "PRIORITY\r\n(Formula)",
+        "Column3": "FULL NAME (FIRST, LAST)",
+        "Instructions:": "Organizations (DropDown)",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "POSITION\r\n(DropDown)",
+        "Column6": "EMAIL",
+        "Column7": "PHONE",
+        "Column8": "ACCT. MANAGER\r\n(DropDown)",
+        "Column9": "LINKEDIN",
+        "Column10": "STREET ADDRESS",
+        "Column11": "CITY",
+        "Column12": "STATE\r\n(DropDown)",
+        "Column13": "ZIP",
+        "Column14": "NOTES",
+        "Column15": "Filtered Contacts"
+      },
+      {
+        "         Contacts": "D",
+        "Column3": "Yu",
+        "Instructions:": "2d Restaurant",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "Distributor Rep",
+        "Column15": "NO PRIORITY",
+        "Column18": "2d Restaurant|Yu"
+      },
+      {
+        "         Contacts": "B",
+        "Instructions:": "7 Monks Taproom Grand Rapids",
+        "Column15": "NO PRIORITY",
+        "Column18": "7 Monks Taproom Grand Rapids|"
+      },
+      {
+        "         Contacts": "A",
+        "Column3": "Kidwell",
+        "Instructions:": "A Plus Inc DBA: Noodles Etc",
+        "Column15": "NO PRIORITY",
+        "Column18": "A Plus Inc DBA: Noodles Etc|Kidwell"
+      },
+      {
+        "         Contacts": "D",
+        "Instructions:": "A.Fusion",
+        "Column15": "NO PRIORITY",
+        "Column18": "A.Fusion|"
+      },
+      {
+        "         Contacts": "D",
+        "Column3": "Rose",
+        "Instructions:": "A.Fusion",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "Manager",
+        "Column8": "Q",
+        "Column10": "4601 Lincoln Highway",
+        "Column11": "Matteson",
+        "Column12": "IL",
+        "Column15": "NO PRIORITY",
+        "Column18": "A.Fusion|Rose"
+      },
+      {
+        "         Contacts": "NO PRIORITY",
+        "Column3": "Tellez",
+        "Instructions:": "Advanced Accounting Cntr, Ltd",
+        "Column6": "tellez@aactax.com",
+        "Column15": "NO PRIORITY",
+        "Column18": "Advanced Accounting Cntr, Ltd|Tellez"
+      },
+      {
+        "         Contacts": "NO PRIORITY",
+        "Column3": "Figueroa",
+        "Instructions:": "Agents Harmony",
+        "Column15": "NO PRIORITY",
+        "Column18": "Agents Harmony|Figueroa"
+      },
+      {
+        "         Contacts": "D",
+        "Column3": "Thor",
+        "Instructions:": "Alice & Friends-Ashland",
+        "Column6": "aliceandfriendsvegankitchen@gmail.com",
+        "Column15": "NO PRIORITY",
+        "Column18": "Alice & Friends-Ashland|Thor"
+      }
+    ]
+  },
+  {
+    "name": "ContactsData",
+    "rowCount": 1556,
+    "columnCount": 51,
+    "headers": [
+      "Operator",
+      "FULL NAME",
+      "You want the filtered results to appear in column C.",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16",
+      "Column17",
+      "Column18",
+      "Column19",
+      "Column20",
+      "Column21",
+      "Column22",
+      "Column23",
+      "Column24",
+      "Column25",
+      "Column26",
+      "Column27",
+      "Column28",
+      "Column29",
+      "Column30",
+      "Column31",
+      "Column32",
+      "Column33",
+      "Column34",
+      "Column35",
+      "Column36",
+      "Column37",
+      "Column38",
+      "Column39",
+      "Column40",
+      "Column41",
+      "Column42",
+      "Column43",
+      "Column44",
+      "Column45",
+      "Column46",
+      "Column47",
+      "Column48",
+      "Column49",
+      "Column50",
+      "Column51"
+    ],
+    "dataTypes": {
+      "Operator": [
+        "string",
+        "number"
+      ],
+      "FULL NAME": [
+        "string"
+      ],
+      "You want the filtered results to appear in column C.": [
+        "string"
+      ],
+      "Column4": [
+        "string"
+      ],
+      "Column5": [
+        "string"
+      ],
+      "Column6": [
+        "string"
+      ],
+      "Column7": [],
+      "Column8": [],
+      "Column9": [],
+      "Column10": [],
+      "Column11": [],
+      "Column12": [],
+      "Column13": [],
+      "Column14": [],
+      "Column15": [],
+      "Column16": [],
+      "Column17": [],
+      "Column18": [],
+      "Column19": [],
+      "Column20": [],
+      "Column21": [],
+      "Column22": [],
+      "Column23": [],
+      "Column24": [],
+      "Column25": [],
+      "Column26": [],
+      "Column27": [],
+      "Column28": [],
+      "Column29": [],
+      "Column30": [],
+      "Column31": [],
+      "Column32": [],
+      "Column33": [],
+      "Column34": [],
+      "Column35": [],
+      "Column36": [],
+      "Column37": [],
+      "Column38": [],
+      "Column39": [],
+      "Column40": [],
+      "Column41": [],
+      "Column42": [],
+      "Column43": [],
+      "Column44": [],
+      "Column45": [],
+      "Column46": [],
+      "Column47": [],
+      "Column48": [],
+      "Column49": [],
+      "Column50": [],
+      "Column51": []
+    },
+    "sampleData": [
+      {
+        "Operator": "Yu",
+        "FULL NAME": "2d Restaurant",
+        "You want the filtered results to appear in column C.": "Chris Eliopulis",
+        "Column4": "Chris Eliopulis"
+      },
+      {
+        "Operator": 0,
+        "FULL NAME": "7 Monks Taproom Grand Rapids",
+        "You want the filtered results to appear in column C.": "Brent,Mike",
+        "Column4": "Brent",
+        "Column5": "Mike"
+      },
+      {
+        "Operator": "Kidwell",
+        "FULL NAME": "A Plus Inc DBA: Noodles Etc",
+        "You want the filtered results to appear in column C.": "Joe Fitzgerald ,Joe Fitzgerald",
+        "Column4": "Joe Fitzgerald ",
+        "Column5": "Joe Fitzgerald"
+      },
+      {
+        "Operator": 0,
+        "FULL NAME": "A.Fusion",
+        "You want the filtered results to appear in column C.": "",
+        "Column4": ""
+      },
+      {
+        "Operator": "Rose",
+        "FULL NAME": "A.Fusion",
+        "You want the filtered results to appear in column C.": "No Contacts",
+        "Column4": "No Contacts"
+      },
+      {
+        "Operator": "Tellez",
+        "FULL NAME": "Advanced Accounting Cntr, Ltd",
+        "You want the filtered results to appear in column C.": "Exec chef Elton Mann and  Brady Cohen GM ,Brady Cohen,Brady Cohen",
+        "Column4": "Exec chef Elton Mann and  Brady Cohen GM ",
+        "Column5": "Brady Cohen",
+        "Column6": "Brady Cohen"
+      },
+      {
+        "Operator": "Figueroa",
+        "FULL NAME": "Agents Harmony",
+        "You want the filtered results to appear in column C.": "No Contacts",
+        "Column4": "No Contacts"
+      },
+      {
+        "Operator": "Thor",
+        "FULL NAME": "Alice & Friends-Ashland",
+        "You want the filtered results to appear in column C.": "No Contacts",
+        "Column4": "No Contacts"
+      },
+      {
+        "Operator": "Darryl",
+        "FULL NAME": "All Ways Catering",
+        "You want the filtered results to appear in column C.": "Exec chef Elton Mann and  Brady Cohen GM ,Brady Cohen,Brady Cohen",
+        "Column4": "Exec chef Elton Mann and  Brady Cohen GM ",
+        "Column5": "Brady Cohen",
+        "Column6": "Brady Cohen"
+      },
+      {
+        "Operator": "Rodriguez",
+        "FULL NAME": "Amg",
+        "You want the filtered results to appear in column C.": "Exec chef Elton Mann and  Brady Cohen GM ,Brady Cohen,Brady Cohen",
+        "Column4": "Exec chef Elton Mann and  Brady Cohen GM ",
+        "Column5": "Brady Cohen",
+        "Column6": "Brady Cohen"
+      }
+    ]
+  },
+  {
+    "name": "Opportunities",
+    "rowCount": 1070,
+    "columnCount": 21,
+    "headers": [
+      "         Opportunities",
+      "Column2",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Instructions:",
+      "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16",
+      "Column17",
+      "Column18",
+      "Column19",
+      "Column20",
+      "Column21"
+    ],
+    "dataTypes": {
+      "         Opportunities": [],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [
+        "string"
+      ],
+      "Column4": [
+        "string"
+      ],
+      "Column5": [
+        "string",
+        "date"
+      ],
+      "Column6": [
+        "string",
+        "date"
+      ],
+      "Column7": [
+        "string"
+      ],
+      "Column8": [
+        "string"
+      ],
+      "Column9": [
+        "string",
+        "date"
+      ],
+      "Column10": [
+        "string",
+        "number"
+      ],
+      "Instructions:": [
+        "string"
+      ],
+      "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": [
+        "string"
+      ],
+      "Column13": [
+        "string",
+        "number"
+      ],
+      "Column14": [
+        "string"
+      ],
+      "Column15": [
+        "string"
+      ],
+      "Column16": [
+        "string"
+      ],
+      "Column17": [
+        "string"
+      ],
+      "Column18": [],
+      "Column19": [
+        "string",
+        "number"
+      ],
+      "Column20": [],
+      "Column21": []
+    },
+    "sampleData": [
+      {},
+      {
+        "Column2": "PRIORITY\r\n(Formula)",
+        "Column3": "Organizations\r\n(DropDown)",
+        "Column4": "OPPORTUNITY NAME",
+        "Column5": "Start Date",
+        "Column6": "Start of Week",
+        "Column7": "STATUS\r\n(DropDown)",
+        "Column8": "STAGE\r\n(DropDown)",
+        "Column9": "EXP. SOLD-7",
+        "Column10": "PROBABILITY",
+        "Instructions:": "PRINCIPAL",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "PRODUCT\r\n(DropDown)",
+        "Column13": " CASES \r\nPer Week\r\nVOLUME",
+        "Column14": "DEAL OWNER\r\n(DropDown)",
+        "Column15": "SOURCE\r\n(DropDown)",
+        "Column16": "LOSS REASON\r\n(DropDown)",
+        "Column17": "Notes",
+        "Column19": "Helper Lookup"
+      },
+      {
+        "Column2": "D",
+        "Column3": "A.Fusion",
+        "Column4": "LTO-Q3 (2024)",
+        "Column5": "2025-01-01T00:00:00.000Z",
+        "Column6": "2024-12-30T00:00:00.000Z",
+        "Column7": "SOLD-7d",
+        "Column8": "SOLD-7",
+        "Column9": "2024-09-15T00:00:00.000Z",
+        "Column10": 1,
+        "Instructions:": "Kaufholds",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "Unknown",
+        "Column14": "Q",
+        "Column15": "MFB",
+        "Column17": "Trying out 2 flavors (original& Jalapeno) w/ table tents",
+        "Column19": "D"
+      },
+      {
+        "Column2": "B",
+        "Column3": "Atlantic Food Distributors ",
+        "Column4": "Curd program",
+        "Column5": "2025-01-01T00:00:00.000Z",
+        "Column6": "2024-12-30T00:00:00.000Z",
+        "Column7": "Open",
+        "Column8": "SOLD-7",
+        "Column9": "2025-01-01T00:00:00.000Z",
+        "Instructions:": "Kaufholds",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "Unknown",
+        "Column13": 50,
+        "Column14": "Gary",
+        "Column15": "Principal",
+        "Column19": "B"
+      },
+      {
+        "Column2": "A",
+        "Column3": "Bavarian Inn/cheese trap",
+        "Column4": "kaufholds curdtown",
+        "Column5": "2025-03-08T00:00:00.000Z",
+        "Column6": "2025-03-03T00:00:00.000Z",
+        "Column7": "Open",
+        "Column8": "SOLD-7",
+        "Column9": "2025-03-15T00:00:00.000Z",
+        "Column10": 1,
+        "Instructions:": "Kaufholds",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "Dill Pickle",
+        "Column13": 10,
+        "Column14": "Gary",
+        "Column17": "Will order dill thru dot/gfs",
+        "Column19": "A"
+      },
+      {
+        "Column2": "A",
+        "Column3": "Big Eds BBQ",
+        "Column4": "Frites Street",
+        "Column5": "2025-01-16T00:00:00.000Z",
+        "Column6": "2025-01-13T00:00:00.000Z",
+        "Column7": "Open",
+        "Column8": "SOLD-7",
+        "Column9": "2025-02-01T00:00:00.000Z",
+        "Column10": 1,
+        "Instructions:": "Frites Street",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "Frites street  waffle",
+        "Column14": "Michell",
+        "Column15": "Principal",
+        "Column19": "A"
+      },
+      {
+        "Column2": "A",
+        "Column3": "Caplinger",
+        "Column4": "Annasea and Kaufholds",
+        "Column5": "2025-02-07T00:00:00.000Z",
+        "Column6": "2025-02-03T00:00:00.000Z",
+        "Column7": "Open",
+        "Column8": "Feedback- received-5",
+        "Column9": "2025-03-01T00:00:00.000Z",
+        "Column10": 1,
+        "Instructions:": "Annasea",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "Bulk pack",
+        "Column14": "Gary",
+        "Column17": "emailed inviting a sampling",
+        "Column19": "A"
+      },
+      {
+        "Column2": "A",
+        "Column3": "Dukes Alehouse",
+        "Column4": "VAF",
+        "Column5": "2025-01-01T00:00:00.000Z",
+        "Column6": "2024-12-30T00:00:00.000Z",
+        "Column7": "SOLD-7d",
+        "Column8": "SOLD-7",
+        "Column10": 0.99,
+        "Instructions:": "VAF",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "All",
+        "Column14": "Michell",
+        "Column15": "Already Known",
+        "Column17": "Chef loved the 3/8\". USF",
+        "Column19": "A"
+      },
+      {
+        "Column2": "A",
+        "Column3": "EuroUSA",
+        "Column4": "Poke",
+        "Column5": "2025-01-01T00:00:00.000Z",
+        "Column6": "2024-12-30T00:00:00.000Z",
+        "Column7": "Open",
+        "Column8": "Feedback- received-5",
+        "Column9": "2024-12-05T00:00:00.000Z",
+        "Column10": 1,
+        "Instructions:": "Annasea",
+        "Enter your Opportunities in the table below. An Opportunity is a deal, potential sale, or any other business opportunity. \r\nThe Opportunities listed here can be referenced via dropdowns in the other input sheets.": "Unknown",
+        "Column14": "Gary",
+        "Column15": "Principal",
+        "Column17": "Street exclusivity and full sales support for $3/cs marketing allowance-paid quarterly billback",
+        "Column19": "A"
+      },
+      {
+        "Column2": "NO PRIORITY",
+        "Column3": "Jesse Oaks ",
+        "Column4": "Kaufhold's",
+        "Column5": "2025-02-17T00:00:00.000Z",
+        "Column6": "2025-02-17T00:00:00.000Z",
+        "Column7": "SOLD-7d",
+        "Column8": "SOLD-7",
+        "Column9": "2025-02-17T00:00:00.000Z",
+        "Column10": 1,
+        "Instructions:": "Kaufholds",
+        "Column13": 3,
+        "Column14": "Michell",
+        "Column17": "Turned business over to kaufhold's from Molly's cheese curds. ",
+        "Column19": 0
+      }
+    ]
+  },
+  {
+    "name": "Interactions",
+    "rowCount": 3473,
+    "columnCount": 14,
+    "headers": [
+      "Column1",
+      "Column2",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14"
+    ],
+    "dataTypes": {
+      "Column1": [],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [
+        "string",
+        "date"
+      ],
+      "Column4": [
+        "string",
+        "date"
+      ],
+      "Column5": [
+        "string"
+      ],
+      "Column6": [
+        "string"
+      ],
+      "Column7": [
+        "string"
+      ],
+      "Column8": [
+        "string"
+      ],
+      "Column9": [
+        "string"
+      ],
+      "Column10": [
+        "string"
+      ],
+      "Column11": [
+        "string"
+      ],
+      "Column12": [],
+      "Column13": [],
+      "Column14": []
+    },
+    "sampleData": [
+      {
+        "Column2": "         Interactions"
+      },
+      {},
+      {
+        "Column2": "PRIORITY (Formula)",
+        "Column3": "DATE",
+        "Column4": "Start of Week",
+        "Column5": "INTERACTION \r\n(Dropdown)",
+        "Column6": "Organizations\r\n(Formula)",
+        "Column7": "ACCT.    MANAGER \r\n(Dropdown)",
+        "Column8": "OPPORTUNITY\r\n",
+        "Column9": "CONTACT \r\n(Dropdown)",
+        "Column10": "PRINCIPAL",
+        "Column11": "NOTES"
+      },
+      {
+        "Column2": "A",
+        "Column3": "2024-10-11T00:00:00.000Z",
+        "Column4": "2024-10-07T00:00:00.000Z",
+        "Column5": "In Person",
+        "Column6": "Sysco Chicago",
+        "Column7": "Sue",
+        "Column8": "VAF",
+        "Column9": "Chris Eliopulis",
+        "Column10": "VAF",
+        "Column11": "Chris says Sysco does not sell hydroponic becuase it has not sold in the past. MFB will sample customers and give him feedback. VAF is better priced and safer product than standard produce."
+      },
+      {
+        "Column2": "B",
+        "Column3": "2024-11-01T00:00:00.000Z",
+        "Column4": "2024-10-28T00:00:00.000Z",
+        "Column5": "Email",
+        "Column6": "Earl G. Dumplins",
+        "Column7": "Gary",
+        "Column8": "Frites Street 3/8\" and chips",
+        "Column10": "Frites Street"
+      },
+      {
+        "Column2": "A+",
+        "Column3": "2024-11-06T00:00:00.000Z",
+        "Column4": "2024-11-04T00:00:00.000Z",
+        "Column5": "In Person",
+        "Column6": "Midwest Foods",
+        "Column7": "Dale",
+        "Column8": "VAF",
+        "Column9": "Joe Fitzgerald ",
+        "Column10": "VAF",
+        "Column11": "Met Joe while making calls. Need to set up a meeting to discuss further."
+      },
+      {
+        "Column2": "NO PRIORITY",
+        "Column3": "2024-11-15T00:00:00.000Z",
+        "Column4": "2024-11-11T00:00:00.000Z",
+        "Column5": "In Person",
+        "Column7": "Dale",
+        "Column8": "VAF",
+        "Column10": "VAF"
+      },
+      {
+        "Column2": "D",
+        "Column3": "2024-11-15T00:00:00.000Z",
+        "Column4": "2024-11-11T00:00:00.000Z",
+        "Column5": "In Person",
+        "Column6": "Innsbrook",
+        "Column7": "Dale",
+        "Column8": "VAF",
+        "Column9": "Billy Mix",
+        "Column10": "VAF",
+        "Column11": "Chef Billy loves the product. Waiting for Testa to get the product live able to sell. Should be week of 12/9"
+      },
+      {
+        "Column2": "A",
+        "Column3": "2024-11-13T00:00:00.000Z",
+        "Column4": "2024-11-11T00:00:00.000Z",
+        "Column5": "Email",
+        "Column6": "Planks Tavern on the Water",
+        "Column7": "Gary",
+        "Column8": "Frites Street 3/8\" and chips",
+        "Column10": "Frites Street"
+      },
+      {
+        "Column2": "NO ORG NAME",
+        "Column3": "2024-11-11T00:00:00.000Z",
+        "Column4": "2024-11-11T00:00:00.000Z",
+        "Column5": "Email",
+        "Column6": "OSU",
+        "Column7": "Michell",
+        "Column8": "OPP3",
+        "Column10": "TCCF"
+      }
+    ]
+  },
+  {
+    "name": "VAF Sales Blitz",
+    "rowCount": 0,
+    "columnCount": 1,
+    "headers": [
+      "Column1"
+    ],
+    "dataTypes": {
+      "Column1": []
+    },
+    "sampleData": []
+  },
+  {
+    "name": "One Thing",
+    "rowCount": 90,
+    "columnCount": 13,
+    "headers": [
+      "Column1",
+      "Column2",
+      "Column3",
+      "Could be dropdown 1 ",
+      "Could be dropdown 2",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13"
+    ],
+    "dataTypes": {
+      "Column1": [
+        "string"
+      ],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [
+        "string"
+      ],
+      "Could be dropdown 1 ": [
+        "string"
+      ],
+      "Could be dropdown 2": [
+        "string"
+      ],
+      "Column6": [
+        "string"
+      ],
+      "Column7": [
+        "string"
+      ],
+      "Column8": [
+        "string"
+      ],
+      "Column9": [
+        "string"
+      ],
+      "Column10": [
+        "string"
+      ],
+      "Column11": [
+        "string"
+      ],
+      "Column12": [
+        "string"
+      ],
+      "Column13": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {
+        "Column2": "What is the One thing I have to do this week that in so doing, will increase The likelihood of my distributor stocking the principal or adding a new item from the principal, or growing volume on a stocked item?",
+        "Column3": "A",
+        "Could be dropdown 1 ": "CALL/MEET/EMAIL",
+        "Could be dropdown 2": "B.  Schedule/Attend a DM meeting"
+      },
+      {
+        "Column3": "A1",
+        "Could be dropdown 1 ": "a distributor category manager to present principal/item",
+        "Could be dropdown 2": "C.  W/w a distributor rep"
+      },
+      {
+        "Column3": "A2",
+        "Could be dropdown 1 ": "a distributor chef or culinary teamate to demo a principal/item",
+        "Could be dropdown 2": "D.  Call on distributor rep suggested lead "
+      },
+      {
+        "Column3": "A3",
+        "Could be dropdown 1 ": "a GPO affiliated with their distributor responsibility to present principal/item",
+        "Could be dropdown 2": "E.  Call/email/visit an A account in the CRM and complete a PIF"
+      },
+      {
+        "Column3": "A4",
+        "Could be dropdown 1 ": "a Distributor Multi-unit Account Manager to present principal/item",
+        "Could be dropdown 2": "F.  Send a sample to distributor HQ, DM, Distributor Rep"
+      },
+      {
+        "Column3": "A5",
+        "Could be dropdown 1 ": "a Multi-Unit Restaurant buyer/chef/GM to present principal/item",
+        "Could be dropdown 2": "G.  attend a food show"
+      },
+      {
+        "Could be dropdown 2": "H.  Present Abdale/Dot as a supply option thru the distributor"
+      },
+      {
+        "Column3": "Week/Quarter Focus # 1-4"
+      },
+      {
+        "Column1": "MICHELL",
+        "Column3": "Per month",
+        "Could be dropdown 1 ": "KAUFHOLDS",
+        "Could be dropdown 2": "MCCRUM",
+        "Column6": "TCCF",
+        "Column7": "ANNASEA",
+        "Column8": "VAF",
+        "Column9": "RR",
+        "Column10": "BB",
+        "Column11": "OFK",
+        "Column12": "SWAP",
+        "Column13": "VALLEY LAHVOSH"
+      },
+      {
+        "Column1": "W/Craig, Gary,Dale,Sue",
+        "Column2": "Annual Goal",
+        "Column3": "A new distributor for MFB, a new principals item;=a new distribution",
+        "Could be dropdown 1 ": "Add 9 new distributions",
+        "Could be dropdown 2": "Add 9 new distributions",
+        "Column6": "Add 4 new distributions",
+        "Column7": "Add 4 new distributions",
+        "Column8": "Add 4 new distributions",
+        "Column9": "Add 4 new distributions",
+        "Column10": "Add 4 new distributions",
+        "Column11": "Add 4 new distributions",
+        "Column12": "Add 4 new distributions"
+      }
+    ]
+  },
+  {
+    "name": "Dropdowns",
+    "rowCount": 939,
+    "columnCount": 19,
+    "headers": [
+      "Column1",
+      "         Dropdowns",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Instructions:",
+      "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16",
+      "Column17",
+      "Column18",
+      "Column19"
+    ],
+    "dataTypes": {
+      "Column1": [],
+      "         Dropdowns": [
+        "string"
+      ],
+      "Column3": [
+        "string"
+      ],
+      "Column4": [
+        "string"
+      ],
+      "Column5": [
+        "string"
+      ],
+      "Instructions:": [
+        "string"
+      ],
+      "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": [
+        "string"
+      ],
+      "Column8": [
+        "string"
+      ],
+      "Column9": [
+        "string"
+      ],
+      "Column10": [
+        "string"
+      ],
+      "Column11": [
+        "string"
+      ],
+      "Column12": [
+        "string"
+      ],
+      "Column13": [
+        "string"
+      ],
+      "Column14": [],
+      "Column15": [],
+      "Column16": [
+        "string",
+        "number"
+      ],
+      "Column17": [],
+      "Column18": [],
+      "Column19": []
+    },
+    "sampleData": [
+      {},
+      {
+        "         Dropdowns": "PRIORITY",
+        "Column3": "SEGMENT",
+        "Column4": "DISTRIBUTOR-A priority w/w weekly",
+        "Column5": "ACCT. MANAGER",
+        "Instructions:": "STAGE-8 point sales funnel",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "POSITION",
+        "Column8": "REASON",
+        "Column9": "SOURCE",
+        "Column10": "INTERACTION",
+        "Column11": "STATUS",
+        "Column12": "PRINCIPAL",
+        "Column13": "PRODUCT"
+      },
+      {
+        "         Dropdowns": "A",
+        "Column3": "Chain/Group Member",
+        "Column4": "Sysco",
+        "Column5": "Craig",
+        "Instructions:": "Lead-discovery-1",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "Exec Chef",
+        "Column8": "Price",
+        "Column9": "Walk-In",
+        "Column10": "Email",
+        "Column11": "Open",
+        "Column12": "Kaufholds",
+        "Column13": "Curdtown -Original Curds",
+        "Column16": "Principal List"
+      },
+      {
+        "         Dropdowns": "B",
+        "Column3": "Group Purchasing Organization",
+        "Column4": "USF",
+        "Column5": "Brent",
+        "Instructions:": "Contacted-phone/email-2",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "Manager",
+        "Column8": "Functionality",
+        "Column9": "Email",
+        "Column10": "Call",
+        "Column11": "Closed",
+        "Column12": "Kaufholds",
+        "Column13": "Jalapeno Curds",
+        "Column16": "Kaufholds"
+      },
+      {
+        "         Dropdowns": "C",
+        "Column3": "Gastropub",
+        "Column4": "PFG",
+        "Column5": "Dale",
+        "Instructions:": "Sampled/Visited invite-3",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "Buyer",
+        "Column8": "Competitor",
+        "Column9": "Food Show",
+        "Column10": "In Person",
+        "Column11": "Lost",
+        "Column12": "Kaufholds",
+        "Column13": "Garlic Curds",
+        "Column16": 0
+      },
+      {
+        "         Dropdowns": "D",
+        "Column3": "Fine Dining",
+        "Column4": "GFS",
+        "Column5": "Gary",
+        "Instructions:": "Follow-up-4",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "Sous Chef",
+        "Column8": "Complaint",
+        "Column9": "Networking",
+        "Column10": "Distributor visited & reported",
+        "Column11": "Abandoned",
+        "Column12": "Kaufholds",
+        "Column13": "Sriracha Curds",
+        "Column16": "Frites Street"
+      },
+      {
+        "         Dropdowns": "A+",
+        "Column3": "Casual",
+        "Column4": "Greco",
+        "Column5": "Michell",
+        "Instructions:": "Feedback- received-5",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "Owner",
+        "Column8": "Other",
+        "Column9": "Website",
+        "Column10": "W/w rep",
+        "Column11": "On Hold",
+        "Column12": "Kaufholds",
+        "Column13": "Dill Pickle Curds",
+        "Column16": "Better Balance"
+      },
+      {
+        "Column3": "Gastropub",
+        "Column4": "Raydia",
+        "Column5": "Q",
+        "Instructions:": "demo-cookup-6",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "Distributor Rep",
+        "Column8": "Change Distributor",
+        "Column9": "Heralded",
+        "Column10": "W/w MFB associate",
+        "Column11": "Distributer Challenge",
+        "Column12": "Kaufholds",
+        "Column13": "Chesapeake Curds",
+        "Column16": "VAF"
+      },
+      {
+        "Column3": "Fast food",
+        "Column4": "Wabash",
+        "Column5": "Bob",
+        "Instructions:": "SOLD-7",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "Executive",
+        "Column9": "Principal",
+        "Column10": "Demo/sampled",
+        "Column13": "Yellow Curds",
+        "Column16": "Ofk"
+      },
+      {
+        "Column3": "Pizza",
+        "Column4": "CW ",
+        "Column5": "Carol",
+        "Instructions:": "order support-8",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "POC (Point of Contact)",
+        "Column9": "Cust Svce",
+        "Column10": "Quoted price",
+        "Column12": "Kaufholds",
+        "Column13": "Bakeable Curds 2 - 5 LB Bags",
+        "Column16": "Annasea"
+      }
+    ]
+  },
+  {
+    "name": "Products",
+    "rowCount": 941,
+    "columnCount": 23,
+    "headers": [
+      "Column1",
+      "Products",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Instructions:",
+      "Column7",
+      "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12",
+      "Column13",
+      "Column14",
+      "Column15",
+      "Column16",
+      "Column17",
+      "Column18",
+      "Column19",
+      "Column20",
+      "Column21",
+      "Column22",
+      "Column23"
+    ],
+    "dataTypes": {
+      "Column1": [],
+      "Products": [
+        "string"
+      ],
+      "Column3": [
+        "string"
+      ],
+      "Column4": [
+        "string"
+      ],
+      "Column5": [
+        "string"
+      ],
+      "Instructions:": [
+        "string"
+      ],
+      "Column7": [
+        "string"
+      ],
+      "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": [
+        "string"
+      ],
+      "Column9": [
+        "string"
+      ],
+      "Column10": [
+        "string"
+      ],
+      "Column11": [
+        "string"
+      ],
+      "Column12": [
+        "string"
+      ],
+      "Column13": [
+        "string"
+      ],
+      "Column14": [
+        "string"
+      ],
+      "Column15": [
+        "string"
+      ],
+      "Column16": [
+        "string"
+      ],
+      "Column17": [
+        "string"
+      ],
+      "Column18": [],
+      "Column19": [],
+      "Column20": [],
+      "Column21": [],
+      "Column22": [],
+      "Column23": []
+    },
+    "sampleData": [
+      {},
+      {
+        "Products": "Kaufholds",
+        "Column3": "Frites Street",
+        "Column4": "Better Balance",
+        "Column5": "VAF",
+        "Instructions:": "Ofk",
+        "Column7": "Annasea",
+        "The columns below control dropdown menus in \r\nthe input sheets. Change the entries below to match your \r\nnaming system and sales process": "Wicks",
+        "Column9": "RJC",
+        "Column10": "Kayco",
+        "Column11": "Abdale",
+        "Column12": "Mccrum",
+        "Column13": "Rapid Rasoi",
+        "Column14": "SWAP",
+        "Column15": "Never Better",
+        "Column16": "TCFB",
+        "Column17": "Mrs Ressler's"
+      },
+      {
+        "Products": "Garlic",
+        "Column3": "Frites street 3/8",
+        "Column4": "Better Balance hot dogs",
+        "Column5": "Red Romaine",
+        "Instructions:": "Potato pancake",
+        "Column7": "Bulk pack",
+        "Column10": "Wonder juice",
+        "Column13": "Dehli Tikka Masala",
+        "Column14": "Chicken",
+        "Column15": "1 oz pouch"
+      },
+      {
+        "Products": "Jalapeno",
+        "Column3": "Frites street 1/4 ",
+        "Column4": "Shreds",
+        "Column5": "Bibb Lettuce",
+        "Instructions:": "Crepes",
+        "Column13": "Makhani",
+        "Column15": "parmesan"
+      },
+      {
+        "Products": "Dill Pickle",
+        "Column3": "Frites street 1/2",
+        "Column4": "Cheese",
+        "Column5": "Green Romaine",
+        "Column7": "Ahi Tuna",
+        "Column15": "mozzarrella"
+      },
+      {
+        "Products": "Original White Cheddar",
+        "Column3": "Frites street 3/4",
+        "Column4": "Crumble",
+        "Column5": "Chef's Mix",
+        "Column15": "cheddar"
+      },
+      {
+        "Products": "Yellow Curds",
+        "Column3": "Frites street crinkle",
+        "Column5": "Viola Editable Flowers"
+      },
+      {
+        "Products": "Sirracha",
+        "Column3": "Frites street  waffle",
+        "Column5": "Micros"
+      },
+      {
+        "Products": "Cajun",
+        "Column3": "Frites street cottage",
+        "Column5": "All"
+      },
+      {
+        "Products": "Bakeable",
+        "Column3": "Frites street lattice",
+        "Column5": "VAF BLITZ"
+      }
+    ]
+  },
+  {
+    "name": "betterBalance",
+    "rowCount": 40,
+    "columnCount": 14,
+    "headers": [
+      "PRIORITY\r\n(Formula)",
+      "Organizations\r\n(DropDown)",
+      "OPPORTUNITY NAME",
+      "Start Date",
+      "Start of Week",
+      "STATUS\r\n(DropDown)",
+      "STAGE\r\n(DropDown)",
+      "EXP. CLOSE",
+      "PROBABILITY",
+      "PRINCIPAL",
+      "PRODUCT\r\n(DropDown)",
+      " CASES \r\nPer Week\r\nVOLUME",
+      "DEAL OWNER\r\n(DropDown)",
+      "Notes"
+    ],
+    "dataTypes": {
+      "PRIORITY\r\n(Formula)": [
+        "string"
+      ],
+      "Organizations\r\n(DropDown)": [
+        "string"
+      ],
+      "OPPORTUNITY NAME": [
+        "string"
+      ],
+      "Start Date": [
+        "date"
+      ],
+      "Start of Week": [
+        "date"
+      ],
+      "STATUS\r\n(DropDown)": [
+        "string"
+      ],
+      "STAGE\r\n(DropDown)": [
+        "string"
+      ],
+      "EXP. CLOSE": [
+        "date",
+        "string"
+      ],
+      "PROBABILITY": [
+        "number",
+        "string"
+      ],
+      "PRINCIPAL": [
+        "string"
+      ],
+      "PRODUCT\r\n(DropDown)": [
+        "string"
+      ],
+      " CASES \r\nPer Week\r\nVOLUME": [],
+      "DEAL OWNER\r\n(DropDown)": [
+        "string"
+      ],
+      "Notes": []
+    },
+    "sampleData": [
+      {
+        "PRIORITY\r\n(Formula)": "A",
+        "Organizations\r\n(DropDown)": "Gordon Food Service",
+        "OPPORTUNITY NAME": "HPS ",
+        "Start Date": "2025-01-07T00:00:00.000Z",
+        "Start of Week": "2025-01-06T00:00:00.000Z",
+        "STATUS\r\n(DropDown)": "Open",
+        "STAGE\r\n(DropDown)": "Contacted-phone/email",
+        "EXP. CLOSE": "2025-06-01T00:00:00.000Z",
+        "PROBABILITY": 0.25,
+        "PRINCIPAL": "Better Balance",
+        "PRODUCT\r\n(DropDown)": "Better Balance hot dogs",
+        "DEAL OWNER\r\n(DropDown)": "Gary"
+      },
+      {},
+      {},
+      {},
+      {
+        "PRIORITY\r\n(Formula)": "A",
+        "Organizations\r\n(DropDown)": "University of Notre Dame",
+        "OPPORTUNITY NAME": "HPS",
+        "Start Date": "2025-01-12T00:00:00.000Z",
+        "Start of Week": "2025-01-13T00:00:00.000Z",
+        "STATUS\r\n(DropDown)": "Open",
+        "STAGE\r\n(DropDown)": "Contacted-phone/email",
+        "EXP. CLOSE": "Gary",
+        "PROBABILITY": "MFB",
+        "PRINCIPAL": "Better Balance",
+        "PRODUCT\r\n(DropDown)": "Better Balance hot dogs",
+        "DEAL OWNER\r\n(DropDown)": "Gary"
+      },
+      {
+        "PRIORITY\r\n(Formula)": "A",
+        "Organizations\r\n(DropDown)": "Northern Hasserot",
+        "OPPORTUNITY NAME": "HPS",
+        "Start Date": "2025-01-12T00:00:00.000Z",
+        "Start of Week": "2025-01-13T00:00:00.000Z",
+        "STATUS\r\n(DropDown)": "Open",
+        "STAGE\r\n(DropDown)": "Contacted-phone/email",
+        "EXP. CLOSE": "Gary",
+        "PROBABILITY": "MFB",
+        "PRINCIPAL": "Better Balance",
+        "PRODUCT\r\n(DropDown)": "Better Balance hot dogs",
+        "DEAL OWNER\r\n(DropDown)": "Gary"
+      },
+      {
+        "PRIORITY\r\n(Formula)": "A",
+        "Organizations\r\n(DropDown)": "Northern Hasserot",
+        "OPPORTUNITY NAME": "HPS",
+        "Start Date": "2025-01-13T00:00:00.000Z",
+        "Start of Week": "2025-01-13T00:00:00.000Z",
+        "STATUS\r\n(DropDown)": "Open",
+        "STAGE\r\n(DropDown)": "Contacted-phone/email",
+        "EXP. CLOSE": "Gary",
+        "PROBABILITY": "MFB",
+        "PRINCIPAL": "Better Balance",
+        "PRODUCT\r\n(DropDown)": "Better Balance hot dogs",
+        "DEAL OWNER\r\n(DropDown)": "Gary"
+      },
+      {
+        "PRIORITY\r\n(Formula)": "A",
+        "Organizations\r\n(DropDown)": "Lipari",
+        "OPPORTUNITY NAME": "HPS",
+        "Start Date": "2025-01-12T00:00:00.000Z",
+        "Start of Week": "2025-01-13T00:00:00.000Z",
+        "STATUS\r\n(DropDown)": "Open",
+        "STAGE\r\n(DropDown)": "Contacted-phone/email",
+        "EXP. CLOSE": "Gary",
+        "PROBABILITY": "MFB",
+        "PRINCIPAL": "Better Balance",
+        "PRODUCT\r\n(DropDown)": "Better Balance hot dogs",
+        "DEAL OWNER\r\n(DropDown)": "Gary"
+      },
+      {
+        "PRIORITY\r\n(Formula)": "A",
+        "Organizations\r\n(DropDown)": "Sysco GR",
+        "OPPORTUNITY NAME": "HPS",
+        "Start Date": "2025-01-12T00:00:00.000Z",
+        "Start of Week": "2025-01-13T00:00:00.000Z",
+        "STATUS\r\n(DropDown)": "Open",
+        "STAGE\r\n(DropDown)": "Contacted-phone/email",
+        "EXP. CLOSE": "Gary",
+        "PROBABILITY": "MFB",
+        "PRINCIPAL": "Better Balance",
+        "PRODUCT\r\n(DropDown)": "Better Balance hot dogs",
+        "DEAL OWNER\r\n(DropDown)": "Gary"
+      },
+      {
+        "PRIORITY\r\n(Formula)": "A",
+        "Organizations\r\n(DropDown)": "Notre Dame",
+        "OPPORTUNITY NAME": "HPS",
+        "Start Date": "2025-01-12T00:00:00.000Z",
+        "Start of Week": "2025-01-13T00:00:00.000Z",
+        "STATUS\r\n(DropDown)": "Open",
+        "STAGE\r\n(DropDown)": "Contacted-phone/email",
+        "EXP. CLOSE": "Gary",
+        "PROBABILITY": "MFB",
+        "PRINCIPAL": "Better Balance",
+        "PRODUCT\r\n(DropDown)": "Better Balance hot dogs",
+        "DEAL OWNER\r\n(DropDown)": "Gary"
+      }
+    ]
+  },
+  {
+    "name": "Detail1",
+    "rowCount": 21,
+    "columnCount": 9,
+    "headers": [
+      "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea",
+      "Column2",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9"
+    ],
+    "dataTypes": {
+      "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": [
+        "string",
+        "number"
+      ],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [
+        "string",
+        "date"
+      ],
+      "Column4": [
+        "string"
+      ],
+      "Column5": [
+        "string"
+      ],
+      "Column6": [
+        "string"
+      ],
+      "Column7": [
+        "string"
+      ],
+      "Column8": [
+        "string"
+      ],
+      "Column9": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {},
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": "PRIORITY (Formula)",
+        "Column2": "INTERACTION \r\n(Dropdown)",
+        "Column3": "DATE",
+        "Column4": "ACCT.    MANAGER \r\n(Dropdown)",
+        "Column5": "OPPORTUNITY\r\n",
+        "Column6": "CONTACT \r\n(Dropdown)",
+        "Column7": "PRINCIPAL \r\n(Formula)",
+        "Column8": "Organizations\r\n(Formula)",
+        "Column9": "NOTES"
+      },
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": "A",
+        "Column2": "Email",
+        "Column3": "2024-11-26T00:00:00.000Z",
+        "Column4": "Gary",
+        "Column5": "Annasea bulk",
+        "Column7": "Annasea",
+        "Column8": "Superior"
+      },
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": "A",
+        "Column2": "Email",
+        "Column3": "2024-12-03T00:00:00.000Z",
+        "Column4": "Gary",
+        "Column5": "Bulk kits",
+        "Column6": "Terry Comer",
+        "Column7": "Annasea",
+        "Column8": "EuroUSA",
+        "Column9": "Set introductory teams meeting for 12/9 "
+      },
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": "NO ORG NAME",
+        "Column2": "In Person",
+        "Column3": "2024-12-31T00:00:00.000Z",
+        "Column4": "Dale",
+        "Column5": "Annasea",
+        "Column7": "Annasea",
+        "Column8": "Powers Health"
+      },
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": 0,
+        "Column2": "In Person",
+        "Column3": "2024-12-27T00:00:00.000Z",
+        "Column4": "Brent",
+        "Column5": "Kaufhold's",
+        "Column7": "Annasea",
+        "Column8": "Ski Daddy's"
+      },
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": 0,
+        "Column2": "In Person",
+        "Column3": "2024-12-28T00:00:00.000Z",
+        "Column4": "Brent",
+        "Column5": "Annasea",
+        "Column7": "Annasea",
+        "Column8": "Fuel Nutrition",
+        "Column9": "Left them a 2 tuna and one salmon sample pack with sauce. They were opening 2nd location in Lexington KY"
+      },
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": 0,
+        "Column2": "In Person",
+        "Column3": "2024-12-09T00:00:00.000Z",
+        "Column4": "Michell ",
+        "Column5": "Annesa",
+        "Column6": "Bill Kim",
+        "Column7": "Annasea",
+        "Column8": "The Table At Crate "
+      },
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": "B",
+        "Column2": "In Person",
+        "Column3": "2024-12-09T00:00:00.000Z",
+        "Column4": "Gary",
+        "Column5": "Annasea bulk pack intro request",
+        "Column6": "Nick Albanos",
+        "Column7": "Annasea",
+        "Column8": "Albanos Pasta",
+        "Column9": "Left Nick samples and emailed for followup connect"
+      },
+      {
+        "Details for Count of INTERACTION \r\n(Dropdown) - PRINCIPAL \r\n(Formula): Annasea": "A",
+        "Column2": "In Person",
+        "Column3": "2024-12-09T00:00:00.000Z",
+        "Column4": "Gary",
+        "Column5": "Annasea bulk pack intro request",
+        "Column6": "Chef Eddie",
+        "Column7": "Annasea",
+        "Column8": "Pavlou Group",
+        "Column9": "Chris was w/GFS Mike and Rob. Gfs want 80%of spend for pricing. Chris took samples and relays to chefs at Radius and Maple"
+      }
+    ]
+  },
+  {
+    "name": "Distributor Reps",
+    "rowCount": 545,
+    "columnCount": 9,
+    "headers": [
+      "PFG",
+      "Column2",
+      "Column3",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9"
+    ],
+    "dataTypes": {
+      "PFG": [
+        "string"
+      ],
+      "Column2": [
+        "string"
+      ],
+      "Column3": [
+        "string"
+      ],
+      "Column4": [
+        "string"
+      ],
+      "Column5": [
+        "string"
+      ],
+      "Column6": [
+        "string"
+      ],
+      "Column7": [],
+      "Column8": [],
+      "Column9": []
+    },
+    "sampleData": [
+      {
+        "PFG": "Gilroy, Dan",
+        "Column2": "President",
+        "Column3": "Senior Management",
+        "Column4": "Daniel.Gilroy@pfgc.com",
+        "Column6": "C"
+      },
+      {
+        "PFG": "Vanderhoff, Patrick",
+        "Column2": "Vice-President, Sales",
+        "Column3": "Senior Management",
+        "Column4": "Patrick.Vanderhoff@pfgc.com",
+        "Column5": "248-824-4063*",
+        "Column6": "C"
+      },
+      {
+        "Column3": "Sales Management"
+      },
+      {
+        "PFG": "Hollandsworth, Michelle",
+        "Column2": "Regional Sales Manager",
+        "Column3": "Sales Management",
+        "Column4": "Michelle.Hollandsworth@pfgc.com",
+        "Column5": "219-378-8937*",
+        "Column6": "C"
+      },
+      {
+        "PFG": "Harris, Don",
+        "Column2": "Business Development Manager (BDM)",
+        "Column3": "Sales Management",
+        "Column4": "Don.Harris@pfgc.com",
+        "Column5": "847-846-6211*",
+        "Column6": "C"
+      },
+      {
+        "PFG": "Ritter, Brad",
+        "Column2": "Business Develop Mgr (BDM) - Michigan",
+        "Column3": "Sales Management",
+        "Column4": "Bradley.Ritter@pfgc.com",
+        "Column5": "331‐290‐1220",
+        "Column6": "C"
+      },
+      {
+        "PFG": "D'Arco, Gino",
+        "Column2": "Business Develop Mgr (BDM) - Michigan",
+        "Column3": "Sales Management",
+        "Column4": "Gino.Darco@pfgc.com",
+        "Column5": "331-2867652",
+        "Column6": "C"
+      },
+      {
+        "PFG": "Darby, Michele",
+        "Column2": "Director of Marketing",
+        "Column3": "Sales Management",
+        "Column4": "Michele.Darby@pfgc.com",
+        "Column5": "331-684-1550",
+        "Column6": "W"
+      },
+      {
+        "PFG": "SALES SPECIALIST TEAM & MANAGERS under Jim Rieck"
+      },
+      {
+        "PFG": "Rieck, Jim",
+        "Column2": "Director of Business Resources and New Business",
+        "Column4": "Jim.Rieck@pfgc.com",
+        "Column5": "262-389-2217*",
+        "Column6": "C"
+      }
+    ]
+  },
+  {
+    "name": "Strategic Plan",
+    "rowCount": 132,
+    "columnCount": 14,
+    "headers": [
+      "Step",
+      "Action",
+      "Result Expected",
+      "Position or Person Responsible",
+      "McCRUM",
+      "SWAP",
+      "RAPID RASOI",
+      "VAF",
+      "BB",
+      "KAUFHOLDS",
+      "TCCF",
+      "Target Completion Date",
+      "Actual Completion Date",
+      "Comments"
+    ],
+    "dataTypes": {
+      "Step": [
+        "string",
+        "number"
+      ],
+      "Action": [
+        "string"
+      ],
+      "Result Expected": [
+        "string"
+      ],
+      "Position or Person Responsible": [
+        "string"
+      ],
+      "McCRUM": [
+        "string"
+      ],
+      "SWAP": [
+        "string"
+      ],
+      "RAPID RASOI": [
+        "string"
+      ],
+      "VAF": [],
+      "BB": [],
+      "KAUFHOLDS": [],
+      "TCCF": [],
+      "Target Completion Date": [],
+      "Actual Completion Date": [],
+      "Comments": []
+    },
+    "sampleData": [
+      {
+        "Step": "Step",
+        "Action": "Interview"
+      },
+      {
+        "Step": "Step",
+        "Action": "START OF PLAN",
+        "Result Expected": "Determine day 1 for the Principal",
+        "Position or Person Responsible": "Sue"
+      },
+      {
+        "Step": 1,
+        "Action": "Review Brokerage Contract",
+        "Result Expected": "Determine the high pay off products",
+        "Position or Person Responsible": "Sue",
+        "McCRUM": "CAROL/SUE",
+        "SWAP": "Unknown",
+        "RAPID RASOI": "Unknown"
+      },
+      {
+        "Step": 2,
+        "Action": "Assign Acct Manager",
+        "Result Expected": "Responsibility for results",
+        "Position or Person Responsible": "Sue/Dale",
+        "McCRUM": "BRENT",
+        "SWAP": "Unknown",
+        "RAPID RASOI": "Unknown"
+      },
+      {
+        "Step": 3,
+        "Action": "Sales Mgr/ Account Mgr is:",
+        "Result Expected": "Will oversee all activities."
+      },
+      {
+        "Step": 4,
+        "Action": "MFB region is",
+        "Position or Person Responsible": "Broker Contract",
+        "McCRUM": "DEFINE",
+        "SWAP": "Unknown",
+        "RAPID RASOI": "Unknown"
+      },
+      {
+        "Step": 5,
+        "Action": "Complete Customer Service Info Form",
+        "Result Expected": "Updated information for order set up & initial sales",
+        "Position or Person Responsible": "Customer Service-Carol",
+        "SWAP": "Unknown",
+        "RAPID RASOI": "Unknown"
+      },
+      {
+        "Step": 6,
+        "Action": "Complete Accounting Form",
+        "Result Expected": "Updated information for collecting MFB's money.",
+        "Position or Person Responsible": "Accounting-Sue/designate",
+        "SWAP": "Unknown",
+        "RAPID RASOI": "Unknown"
+      },
+      {
+        "Step": 7,
+        "Action": "Complete Sales Info Form",
+        "Result Expected": "Get RSM's goals",
+        "Position or Person Responsible": "Dale",
+        "SWAP": "Unknown",
+        "RAPID RASOI": "Unknown"
+      },
+      {
+        "Step": 8,
+        "Action": "Review Sales History",
+        "Result Expected": "Choose high payoff targets and know current accounts.",
+        "Position or Person Responsible": "Dale/Gary/Craig",
+        "McCRUM": "DEFINE",
+        "SWAP": "Unknown",
+        "RAPID RASOI": "Unknown"
+      }
+    ]
+  },
+  {
+    "name": "Novi-Swap",
+    "rowCount": 43,
+    "columnCount": 1,
+    "headers": [
+      "WASHINGTON TWP SCHOOLS WAREHOUSE"
+    ],
+    "dataTypes": {
+      "WASHINGTON TWP SCHOOLS WAREHOUSE": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "BAY CLIFF HEALTH CAMP"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "Bronson Behavioral Hospital"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "BROWN JUG"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "CASCADE HILLS COUNTRY CLUB  18682E"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "CHURCHILL'S FOOD & SPIRITS"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "COMMUNITY PROGRAMS"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "Crowes Nest Café"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "Double Down Desserts"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "FLAT ROCK CARE CENTER"
+      },
+      {
+        "WASHINGTON TWP SCHOOLS WAREHOUSE": "GARLAND LODGE FOOD AND BEVERAGE"
+      }
+    ]
+  },
+  {
+    "name": "PFG codes",
+    "rowCount": 30,
+    "columnCount": 12,
+    "headers": [
+      "262678",
+      "Kaufholds",
+      "Original ",
+      "Column4",
+      "Column5",
+      "Column6",
+      "Column7",
+      "Column8",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12"
+    ],
+    "dataTypes": {
+      "262678": [
+        "number"
+      ],
+      "Kaufholds": [
+        "string"
+      ],
+      "Original ": [
+        "string"
+      ],
+      "Column4": [],
+      "Column5": [],
+      "Column6": [],
+      "Column7": [
+        "number"
+      ],
+      "Column8": [],
+      "Column9": [],
+      "Column10": [],
+      "Column11": [],
+      "Column12": []
+    },
+    "sampleData": [
+      {
+        "262678": 353883,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Jalapeno Flavor"
+      },
+      {
+        "262678": 556012,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Garlic Flavor",
+        "Column7": 1
+      },
+      {
+        "262678": 727622,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Sriracha Flavor"
+      },
+      {
+        "262678": 97326,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Chesapeake Bay Flavor"
+      },
+      {
+        "262678": 536699,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Sample Kits Fryer Ready 3/1#"
+      },
+      {
+        "262678": 577217,
+        "Kaufholds": "Entice Curds (Curdtown PFG Private Label) ",
+        "Original ": "Original ",
+        "Column7": 1
+      },
+      {
+        "262678": 577216,
+        "Kaufholds": "Entice Curds (Curdtown PFG Private Label) ",
+        "Original ": "Seasoned ",
+        "Column7": 1
+      },
+      {
+        "262678": 555481,
+        "Kaufholds": "Beetology",
+        "Original ": "Beet and Veggie"
+      },
+      {
+        "262678": 555484,
+        "Kaufholds": "Beetology",
+        "Original ": "Beet and Tropical Fruit"
+      },
+      {
+        "262678": 555482,
+        "Kaufholds": "Beetology",
+        "Original ": "Beet and Lemon and GInger",
+        "Column7": 1
+      }
+    ]
+  },
+  {
+    "name": "GFS ROSEMONT Followup",
+    "rowCount": 176,
+    "columnCount": 8,
+    "headers": [
+      "\r\n",
+      "Customer Name",
+      "Booth visitor",
+      "Visitor email ",
+      "Gfs rep",
+      "\r\n",
+      "\r\n",
+      "\r\n"
+    ],
+    "dataTypes": {
+      "\r\n": [
+        "string"
+      ],
+      "Customer Name": [
+        "string"
+      ],
+      "Booth visitor": [
+        "string"
+      ],
+      "Visitor email ": [
+        "string"
+      ],
+      "Gfs rep": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "10Forty Banquets & Catering",
+        "Booth visitor": "Maria Arteaga",
+        "Visitor email ": "maria.catering82@yahoo.com",
+        "Gfs rep": "\r\n"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "ABBOTT AP6D DEPT GE03",
+        "Booth visitor": "Scott Padbury",
+        "Visitor email ": "scott.padbury@abbott.com",
+        "Gfs rep": "michael.mocogni@gfs.com"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "ABBOTT AP6D DEPT GE03",
+        "Booth visitor": "Scott Padbury",
+        "Visitor email ": "scott.padbury@abbott.com",
+        "Gfs rep": "michael.mocogni@gfs.com"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "ABBOTT AP6D DEPT GE03",
+        "Booth visitor": "Joe Cecchini",
+        "Visitor email ": "joseph.cecchini@abbott.com",
+        "Gfs rep": "michael.mocogni@gfs.com"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "ABBVIE AP30",
+        "Booth visitor": "Jovani Gomez",
+        "Visitor email ": "Jovani.gomez@abbvie.com",
+        "Gfs rep": "michael.mocogni@gfs.com"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "ABBVIE M1",
+        "Booth visitor": "Tyler ringer",
+        "Visitor email ": "tyler.ringer@abbvie.com",
+        "Gfs rep": "michael.mocogni@gfs.com"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "ACARATH MONTESSORI",
+        "Booth visitor": "Kristin Addison",
+        "Visitor email ": "addison.kristin@yahoo.com",
+        "Gfs rep": "\r\n"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "AGING AND DISABILITY RESOURCE CENTE",
+        "Booth visitor": "Autumn Cihlar",
+        "Visitor email ": "Acihlar@co.door.wi.us",
+        "Gfs rep": "\r\n"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "AMERICAN ACCORD FOOD CORPORATION",
+        "Booth visitor": "Molala Salah",
+        "Visitor email ": "qirat62@yahoo.com",
+        "Gfs rep": "jennifer.toomey@gfs.com"
+      },
+      {
+        "\r\n": "\r\n",
+        "Customer Name": "Ami-Gos Tacos",
+        "Booth visitor": "ami cleveland",
+        "Visitor email ": "amigostacos62656@gmail.com",
+        "Gfs rep": "\r\n"
+      }
+    ]
+  },
+  {
+    "name": "Distributor codes",
+    "rowCount": 614,
+    "columnCount": 32,
+    "headers": [
+      "Kaufholds",
+      "Original ",
+      "2/5#",
+      "1",
+      "Kau-1",
+      "10514646",
+      "30104K",
+      "636051",
+      "Column9",
+      "262678",
+      "C6368",
+      "13776",
+      "7100811",
+      "7287907",
+      "72150",
+      "1613",
+      "Column17",
+      "Column18",
+      "Column19",
+      "Column20",
+      "Kau1",
+      "Column22",
+      "Column23",
+      "Column24",
+      "Column25",
+      "Column26",
+      "Column27",
+      "Column28",
+      "Column29",
+      "Column30",
+      "Column31",
+      "Column32"
+    ],
+    "dataTypes": {
+      "1": [
+        "number",
+        "string"
+      ],
+      "1613": [
+        "number"
+      ],
+      "13776": [
+        "number"
+      ],
+      "72150": [
+        "number"
+      ],
+      "262678": [
+        "number"
+      ],
+      "636051": [
+        "number"
+      ],
+      "7100811": [
+        "number"
+      ],
+      "7287907": [
+        "number"
+      ],
+      "10514646": [
+        "number"
+      ],
+      "Kaufholds": [
+        "string"
+      ],
+      "Original ": [
+        "string"
+      ],
+      "2/5#": [
+        "string"
+      ],
+      "Kau-1": [
+        "string"
+      ],
+      "30104K": [
+        "string"
+      ],
+      "Column9": [
+        "number"
+      ],
+      "C6368": [
+        "string"
+      ],
+      "Column17": [
+        "number"
+      ],
+      "Column18": [
+        "number"
+      ],
+      "Column19": [
+        "number"
+      ],
+      "Column20": [
+        "string"
+      ],
+      "Kau1": [
+        "string"
+      ],
+      "Column22": [],
+      "Column23": [],
+      "Column24": [],
+      "Column25": [],
+      "Column26": [],
+      "Column27": [],
+      "Column28": [],
+      "Column29": [],
+      "Column30": [],
+      "Column31": [],
+      "Column32": []
+    },
+    "sampleData": [
+      {
+        "1": 2,
+        "1613": 1619,
+        "13776": 13740,
+        "72150": 72153,
+        "262678": 353883,
+        "636051": 248205,
+        "7100811": 1214543,
+        "7287907": 4423331,
+        "10514646": 10514697,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Jalapeno Flavor",
+        "2/5#": "2/5#",
+        "Kau-1": "Kaul-3",
+        "30104K": "30138K",
+        "Column9": 183718,
+        "C6368": "E0402",
+        "Kau1": "Kau3"
+      },
+      {
+        "1": 3,
+        "1613": 1616,
+        "13776": 14040,
+        "72150": 72155,
+        "262678": 556012,
+        "636051": 345398,
+        "7100811": 7040196,
+        "7287907": 9214197,
+        "10514646": 10514662,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Garlic Flavor",
+        "2/5#": "2/5#",
+        "Kau-1": "Kau-2",
+        "30104K": "30106K",
+        "Kau1": "Kau2"
+      },
+      {
+        "1": 6,
+        "262678": 727622,
+        "636051": 183719,
+        "7100811": 7187282,
+        "7287907": 4901893,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Sriracha Flavor",
+        "2/5#": "2/5#"
+      },
+      {
+        "1": "Garlic",
+        "7287907": 1570108,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Chef's Line brand from US Foods"
+      },
+      {
+        "7100811": 7241173,
+        "7287907": 1013547,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Yellow Breaded Cheese Curd",
+        "2/5#": "2/5#"
+      },
+      {
+        "636051": 471906,
+        "7287907": 1032832,
+        "Kaufholds": "Kaufholds",
+        "Original ": "Dill Pickle ",
+        "2/5#": "2/5#"
+      },
+      {
+        "1": 51100,
+        "7100811": 7265384,
+        "7287907": 1013717,
+        "Kaufholds": "Better Balance",
+        "Original ": "Vegan Plant-Based Cheese Sauce",
+        "2/5#": "4/2.2 lb",
+        "Kau-1": "BBB51100",
+        "Column20": "874BAR511000"
+      },
+      {
+        "1": 51099,
+        "7100811": 7248231,
+        "7287907": 1013711,
+        "Kaufholds": "Better Balance",
+        "Original ": "Vegan Plant-Based Shreds ",
+        "2/5#": "2/ 2.2 lb",
+        "Kau-1": "BBB51099",
+        "Column17": 88534,
+        "Column18": 190662,
+        "Column19": 6516
+      },
+      {
+        "1": 51173,
+        "7100811": 7265429,
+        "7287907": 1013716,
+        "Kaufholds": "Better Balance",
+        "Original ": "Vegan Plant-Based Sour Cream",
+        "2/5#": "12/ 16 oz",
+        "Kau-1": "BBB51173",
+        "Column19": 6529,
+        "Column20": "874BAR511737"
+      },
+      {
+        "1": 51014,
+        "7100811": 7265401,
+        "7287907": 1011686,
+        "Kaufholds": "Better Balance",
+        "Original ": "Vegan Ground Pea Protein",
+        "2/5#": "2 /5 lb",
+        "Kau-1": "BBB51014",
+        "Column18": 190663,
+        "Column19": 6518
+      }
+    ]
+  },
+  {
+    "name": "GFS BB GR SHOW",
+    "rowCount": 97,
+    "columnCount": 16,
+    "headers": [
+      "Sales Rep Name",
+      "Sales Rep Email",
+      "Customer ID",
+      "Customer Name",
+      "Address",
+      "City",
+      "State",
+      "Zip",
+      "Attendee Name",
+      "Attendee ID",
+      "Attendee Email",
+      "Product Number",
+      "Lead Question",
+      "Column14",
+      "Comment",
+      "Column16"
+    ],
+    "dataTypes": {
+      "Sales Rep Name": [
+        "string"
+      ],
+      "Sales Rep Email": [
+        "string"
+      ],
+      "Customer ID": [
+        "number",
+        "string"
+      ],
+      "Customer Name": [
+        "number",
+        "string"
+      ],
+      "Address": [
+        "string"
+      ],
+      "City": [
+        "string"
+      ],
+      "State": [
+        "string"
+      ],
+      "Zip": [
+        "string",
+        "number"
+      ],
+      "Attendee Name": [
+        "string"
+      ],
+      "Attendee ID": [
+        "string"
+      ],
+      "Attendee Email": [
+        "string"
+      ],
+      "Product Number": [
+        "string"
+      ],
+      "Lead Question": [
+        "string"
+      ],
+      "Column14": [],
+      "Comment": [
+        "string"
+      ],
+      "Column16": []
+    },
+    "sampleData": [
+      {
+        "Sales Rep Name": "Ashley Lutjens",
+        "Sales Rep Email": "ashley.lutjens@gfs.com",
+        "Customer ID": 722389338,
+        "Customer Name": 876,
+        "Address": "876 Michigan Ave",
+        "City": "Baldwin",
+        "State": "MI",
+        "Zip": "49304-7123",
+        "Attendee Name": "Richard Gutowski",
+        "Attendee ID": "BSKD",
+        "Attendee Email": "richard.gutowski.88@gmail.com",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Kids menu"
+      },
+      {
+        "Sales Rep Name": "Shawn Hoppenrath",
+        "Sales Rep Email": "shawn.hoppenrath@gfs.com",
+        "Customer ID": 100017919,
+        "Customer Name": "AMWAY - NON FOOD PURCHASING",
+        "Address": "187 MONROE AVE NW",
+        "City": "GRAND RAPIDS",
+        "State": "MI",
+        "Zip": "49503-2621",
+        "Attendee Name": "Josh Brack",
+        "Attendee ID": "VZXW",
+        "Attendee Email": "addam@brunch-house.com",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Devon concession’s "
+      },
+      {
+        "Sales Rep Name": "Aaron Wartenberg",
+        "Sales Rep Email": "aaron.wartenberg@gfs.com",
+        "Customer ID": 202000011,
+        "Customer Name": "ANTRIM COUNTY SENIOR CITIZEN CTR",
+        "Address": "308 CAYUGA",
+        "City": "BELLAIRE",
+        "State": "MI",
+        "Zip": 49615,
+        "Attendee Name": "Jan Clark",
+        "Attendee ID": "FIVK",
+        "Attendee Email": "clarkj@antrimcounty.org",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Seniors"
+      },
+      {
+        "Sales Rep Name": "Brian Shreffler",
+        "Sales Rep Email": "brian.shreffler@gfs.com",
+        "Customer ID": 722658034,
+        "Customer Name": "Arnie's Drive Inn",
+        "Address": "28102 M 152",
+        "City": "Dowagiac",
+        "State": "MI",
+        "Zip": "49047-8901",
+        "Attendee Name": "Julian Hart",
+        "Attendee ID": "ROXD",
+        "Attendee Email": "julianhart0413@gmail.com",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Carries Beyond"
+      },
+      {
+        "Sales Rep Name": "Sam Butler",
+        "Sales Rep Email": "sam.butler@gfs.com",
+        "Customer ID": 722614476,
+        "Customer Name": "Association Service Office YMCA",
+        "Address": "475 Lake Michigan Dr NW",
+        "City": "Grand Rapids",
+        "State": "MI",
+        "Zip": "49504-5600",
+        "Attendee Name": "julie Clairmont",
+        "Attendee ID": "SAZK",
+        "Attendee Email": "Jclairmont@grymca.org",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Serve kids"
+      },
+      {
+        "Sales Rep Name": "Megan Punches",
+        "Sales Rep Email": "megan.punches@gfs.com",
+        "Customer ID": 100177044,
+        "Customer Name": "BARUCH- EVERGREEN TERRACE ASSISTED",
+        "Address": "801 FULLER AVE",
+        "City": "BIG RAPIDS",
+        "State": "MI",
+        "Zip": "49307-2106",
+        "Attendee Name": "Dawn Gould",
+        "Attendee ID": "WZIZ",
+        "Attendee Email": "laura.whaley@baruchsls.org",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Not interested"
+      },
+      {
+        "Sales Rep Name": "Anthony  Vitale",
+        "Sales Rep Email": "anthony.vitale@gfs.com",
+        "Customer ID": 991110001,
+        "Customer Name": "BEACHPLACE",
+        "Address": "2215 OTTAWA BEACH RD",
+        "City": "HOLLAND",
+        "State": "MI",
+        "Zip": "49424-2344",
+        "Attendee Name": "Stephanie  Dykert",
+        "Attendee ID": "AONK",
+        "Attendee Email": "sdyker@gmail.com",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Holland"
+      },
+      {
+        "Sales Rep Name": "daniel mcKisson",
+        "Sales Rep Email": "daniel.mckisson@gfs.com",
+        "Customer ID": 100152824,
+        "Customer Name": "BEAMERS RESTAURANT-SPARTAN WEST BC",
+        "Address": "2253 W US-10",
+        "City": "LUDINGTON",
+        "State": "MI",
+        "Zip": "49431-8706",
+        "Attendee Name": "Guest 2 ...",
+        "Attendee ID": "AVSM",
+        "Attendee Email": "slimmendonald@gmail.com",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Bowling ally"
+      },
+      {
+        "Sales Rep Name": "Doug Bovee",
+        "Sales Rep Email": "douglas.bovee@gfs.com",
+        "Customer ID": 100027202,
+        "Customer Name": "BEAR LAKE INN",
+        "Address": "19 W BEAR LAKE RD NE",
+        "City": "KALKASKA",
+        "State": "MI",
+        "Zip": 49646,
+        "Attendee Name": "Karren  Laurence",
+        "Attendee ID": "FKVX",
+        "Attendee Email": "bklaurenceinc@rocketmail.com",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Casual dining sells vegan"
+      },
+      {
+        "Customer ID": "RP7ZPJ4W3M",
+        "Customer Name": "BIG GUY FOODS",
+        "Attendee Name": "MELOOD ABUGASEA",
+        "Attendee ID": "TREB",
+        "Attendee Email": "BIGGUYFOODS@GMAIL.COM",
+        "Product Number": "517436-MV15124",
+        "Lead Question": "Lead with Comment",
+        "Comment": "Needs  vegetarian options"
+      }
+    ]
+  },
+  {
+    "name": "GFS LL Leads",
+    "rowCount": 337,
+    "columnCount": 12,
+    "headers": [
+      "Customer Name",
+      "Location",
+      "Channel",
+      "GFS rep",
+      "Customer Contact",
+      "Status",
+      "8-point Sales Stage",
+      "Last Order Date",
+      "Column9",
+      "Column10",
+      "Column11",
+      "Column12"
+    ],
+    "dataTypes": {
+      "Customer Name": [
+        "string"
+      ],
+      "Location": [
+        "string"
+      ],
+      "Channel": [
+        "string"
+      ],
+      "GFS rep": [
+        "string"
+      ],
+      "Customer Contact": [
+        "string"
+      ],
+      "Status": [
+        "string"
+      ],
+      "8-point Sales Stage": [
+        "string"
+      ],
+      "Last Order Date": [
+        "date"
+      ],
+      "Column9": [],
+      "Column10": [],
+      "Column11": [],
+      "Column12": []
+    },
+    "sampleData": [
+      {
+        "Customer Name": "ISU",
+        "Location": "Normal, IL",
+        "Channel": "C&U",
+        "GFS rep": "Stephen Hess",
+        "Status": "anchor account to open GFS stocking, wind down after Exe chef Matt left",
+        "8-point Sales Stage": "FollowUp Ordering"
+      },
+      {
+        "Customer Name": "Science of Spirituality - Veggie Fest Chicago",
+        "Location": "Lisle",
+        "Channel": "Commercial",
+        "GFS rep": "Sal DiBenedetto",
+        "Status": "trying to get on their schedule for cooking class",
+        "8-point Sales Stage": "CheckIn to Repeat Orders",
+        "Last Order Date": "2025-07-28T00:00:00.000Z"
+      },
+      {
+        "Customer Name": "Cumin bowl",
+        "Location": "Chicago",
+        "Channel": "Commercial",
+        "GFS rep": "used to be Eric Fine who left",
+        "Status": "current customer",
+        "8-point Sales Stage": "CheckIn to Repeat Orders",
+        "Last Order Date": "2025-06-07T00:00:00.000Z"
+      },
+      {
+        "Customer Name": "Honey Jam Cafe",
+        "Location": "Chicagoland",
+        "Channel": "Multi-unit",
+        "GFS rep": "Pat Lyons",
+        "Customer Contact": "Kristina/Jeff",
+        "Status": "current customer",
+        "8-point Sales Stage": "CheckIn to Repeat Orders",
+        "Last Order Date": "2025-08-02T00:00:00.000Z"
+      },
+      {
+        "Customer Name": "Drury Lane Theatre, banquet hall",
+        "Location": "Oakbrook",
+        "Channel": "Commercial",
+        "GFS rep": "Pat Lyons",
+        "Customer Contact": "Alvaro Garcia",
+        "Status": "continue to reach out to Chef Garcia-likes the product but hasn't implemented",
+        "8-point Sales Stage": "FollowUp Ordering",
+        "Last Order Date": "2025-06-28T00:00:00.000Z"
+      },
+      {
+        "Customer Name": "Pomegranate Restaurant & Cafe",
+        "Location": "Aurora",
+        "Channel": "Commercial",
+        "GFS rep": "Pat Lyons",
+        "Customer Contact": "Chiguas Mendez",
+        "Status": "continue to reach out to Chef Chiguas-owners have purchased the product for themselves",
+        "8-point Sales Stage": "FollowUp Ordering",
+        "Last Order Date": "2025-06-17T00:00:00.000Z"
+      },
+      {
+        "Customer Name": "Ashton Place",
+        "Status": "no movement"
+      },
+      {
+        "Customer Name": "Bolingbrook golf club & banquet",
+        "Location": "Bolingbrook",
+        "Channel": "Commercial",
+        "GFS rep": "Pat Lyons",
+        "Status": "no movement",
+        "8-point Sales Stage": "Follow Up"
+      },
+      {
+        "Customer Name": "Matrix Club Naperville",
+        "Location": "Naperville",
+        "Channel": "Commercial",
+        "GFS rep": "Pat Lyons",
+        "Customer Contact": "Alonso Beckford",
+        "Status": "great relationship with Chef Alonso.  He has purchased and using",
+        "8-point Sales Stage": "FollowUp Ordering",
+        "Last Order Date": "2025-07-30T00:00:00.000Z"
+      },
+      {
+        "Customer Name": "Peaches' Cafe/UofC",
+        "Location": "Chicago",
+        "Channel": "C&U",
+        "Customer Contact": "Trillis/Shawn/Cliff",
+        "Status": "rolling out a LL Soba noodle bowl and trying a panini and rice bowl",
+        "8-point Sales Stage": "Post-Order Support"
+      }
+    ]
+  },
+  {
+    "name": "GFS BB sales 2024",
+    "rowCount": 44,
+    "columnCount": 5,
+    "headers": [
+      "Fiscal Month",
+      "Customer Delivering Plant",
+      "Customer Market Segment",
+      "Customer Unit DESC",
+      "Billed Case Qty"
+    ],
+    "dataTypes": {
+      "Fiscal Month": [
+        "string"
+      ],
+      "Customer Delivering Plant": [
+        "string"
+      ],
+      "Customer Market Segment": [
+        "string"
+      ],
+      "Customer Unit DESC": [
+        "string"
+      ],
+      "Billed Case Qty": [
+        "number"
+      ]
+    },
+    "sampleData": [
+      {
+        "Fiscal Month": "November",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Healthcare",
+        "Customer Unit DESC": "Ccl 4540 Walter Reuther",
+        "Billed Case Qty": 3
+      },
+      {
+        "Fiscal Month": "November",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Independent",
+        "Customer Unit DESC": "CHERRY CREEK GOLF COURSE",
+        "Billed Case Qty": 1
+      },
+      {
+        "Fiscal Month": "October",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Independent",
+        "Customer Unit DESC": "Friends Of Town Center",
+        "Billed Case Qty": 1
+      },
+      {
+        "Fiscal Month": "September",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "GFS Store Managed",
+        "Customer Unit DESC": "GFS Ft Wayne Store #472 IN Cross Creek",
+        "Billed Case Qty": 1
+      },
+      {
+        "Fiscal Month": "August",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Healthcare",
+        "Customer Unit DESC": "MHC 51718 Dmc Harper Hutzel",
+        "Billed Case Qty": 3
+      },
+      {
+        "Fiscal Month": "July",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Healthcare",
+        "Customer Unit DESC": "SPECIAL TREE NEUROCARE CENTER",
+        "Billed Case Qty": 1
+      },
+      {
+        "Fiscal Month": "September",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Healthcare",
+        "Customer Unit DESC": "MILLERS MERRY MNR-GARRETT",
+        "Billed Case Qty": 1
+      },
+      {
+        "Fiscal Month": "August",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Independent",
+        "Customer Unit DESC": "HICKORY BBQ & GRILL",
+        "Billed Case Qty": 1
+      },
+      {
+        "Fiscal Month": "August",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Independent",
+        "Customer Unit DESC": "Prestige Hall",
+        "Billed Case Qty": 1
+      },
+      {
+        "Fiscal Month": "September",
+        "Customer Delivering Plant": "Brighton, MI",
+        "Customer Market Segment": "Independent",
+        "Customer Unit DESC": "HICKORY BBQ & GRILL",
+        "Billed Case Qty": 1
+      }
+    ]
+  },
+  {
+    "name": "HPS CONTRACT MGMNT",
+    "rowCount": 33,
+    "columnCount": 1,
+    "headers": [
+      "AVI Foodsystems, Inc."
+    ],
+    "dataTypes": {
+      "AVI Foodsystems, Inc.": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {
+        "AVI Foodsystems, Inc.": "AVI Foodsystems, Inc."
+      },
+      {
+        "AVI Foodsystems, Inc.": "AVI St. Thomas Aquinas  HS/MS"
+      },
+      {
+        "AVI Foodsystems, Inc.": "BF Food Systems, LLC"
+      },
+      {
+        "AVI Foodsystems, Inc.": "BMG Consulting LLC"
+      },
+      {
+        "AVI Foodsystems, Inc.": "Capital Catering & Food Service"
+      },
+      {
+        "AVI Foodsystems, Inc.": "Catering On Call"
+      },
+      {
+        "AVI Foodsystems, Inc.": "Country Kitchen Catering LLC"
+      },
+      {
+        "AVI Foodsystems, Inc.": "Edibles Rex School Program"
+      },
+      {
+        "AVI Foodsystems, Inc.": "Forefront Culinary & Support Svcs."
+      },
+      {
+        "AVI Foodsystems, Inc.": "Fresh and Safe Inc."
+      }
+    ]
+  },
+  {
+    "name": "HPSC&U",
+    "rowCount": 26,
+    "columnCount": 1,
+    "headers": [
+      "Ashland University"
+    ],
+    "dataTypes": {
+      "Ashland University": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {
+        "Ashland University": "AVI - University of Akron Concessions"
+      },
+      {
+        "Ashland University": "Central Michigan University"
+      },
+      {
+        "Ashland University": "Cleary University"
+      },
+      {
+        "Ashland University": "Delta College"
+      },
+      {
+        "Ashland University": "Ferris State University"
+      },
+      {
+        "Ashland University": "Gogebic Community College"
+      },
+      {
+        "Ashland University": "Grand Valley State Univ. Dining Svcs."
+      },
+      {
+        "Ashland University": "Grand Valley State University"
+      },
+      {
+        "Ashland University": "Indiana University"
+      },
+      {
+        "Ashland University": "Kalamazoo Valley Community College"
+      }
+    ]
+  },
+  {
+    "name": "HPS K-12 Tristate",
+    "rowCount": 52,
+    "columnCount": 1,
+    "headers": [
+      "Bartholomew Cons. School Corp."
+    ],
+    "dataTypes": {
+      "Bartholomew Cons. School Corp.": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {
+        "Bartholomew Cons. School Corp.": "Bishop Dwenger High School"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Bishop Luers High School"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Blackhawk Christian School"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Blackhawk Christian School"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Brebeuf Jesuit Preparatory School"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Canterbury School - Quest"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Cardinal Ritter High School"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Christ the King Catholic School"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Columbus Christian School"
+      },
+      {
+        "Bartholomew Cons. School Corp.": "Columbus Christian School"
+      }
+    ]
+  },
+  {
+    "name": "Sheet1",
+    "rowCount": 79,
+    "columnCount": 1,
+    "headers": [
+      "Direct Food Services"
+    ],
+    "dataTypes": {
+      "Direct Food Services": [
+        "string"
+      ]
+    },
+    "sampleData": [
+      {
+        "Direct Food Services": "Earl G. Dumplins"
+      },
+      {
+        "Direct Food Services": "Lucrezia"
+      },
+      {
+        "Direct Food Services": "Mister B's Pizza and Wings Bowling Green KY"
+      },
+      {
+        "Direct Food Services": "Mister B's Pizza and Wings Murray KY"
+      },
+      {
+        "Direct Food Services": "Mugsy's Hideout Murray"
+      },
+      {
+        "Direct Food Services": "PFG=Jordan Gottlieb"
+      },
+      {
+        "Direct Food Services": "Portillo's"
+      },
+      {
+        "Direct Food Services": "Surf’s Up Franchising Corporation"
+      },
+      {
+        "Direct Food Services": "Sweeney Girl Sweets"
+      },
+      {
+        "Direct Food Services": "Syds Fine Foods"
+      }
+    ]
+  }
+]

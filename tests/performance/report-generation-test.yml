@@ -1,0 +1,341 @@
+# Artillery Report Generation Performance Testing for PantryCRM
+# Testing critical business reports for food service operations
+# Validates report generation times under concurrent load
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    # Sequential report generation testing
+    - duration: 30
+      arrivalRate: 1
+      name: "Sequential report generation"
+    
+    # Concurrent report generation (typical business scenario)
+    - duration: 120
+      arrivalRate: 2
+      name: "Concurrent report load"
+    
+    # Peak report generation (month-end scenario)
+    - duration: 60
+      arrivalRate: 4
+      name: "Peak report generation"
+
+  # Report-specific performance thresholds
+  ensure:
+    # Simple reports should complete within 5 seconds
+    - max: 5000
+      name: "Simple reports under 5s"
+    
+    # Complex reports (annual/territory-wide) should complete within 30 seconds
+    - max: 30000
+      name: "Complex reports under 30s"
+    
+    # P95 report generation under 15 seconds
+    - percentile: 95
+      max: 15000
+      name: "P95 report time under 15s"
+
+  # Report test variables
+  variables:
+    # Date ranges for report testing
+    dateRanges:
+      - "current_month"
+      - "last_month"
+      - "current_quarter"
+      - "last_quarter"
+      - "current_year"
+      - "last_year"
+    
+    # Territory options
+    territories: ["NORTHEAST", "SOUTHEAST", "MIDWEST", "WEST", "ALL"]
+    
+    # Export formats
+    exportFormats: ["json", "csv", "excel", "pdf"]
+    
+    # Report complexity levels
+    complexityLevels: ["summary", "detailed", "comprehensive"]
+    
+    # Organization types for filtering
+    orgTypes: ["FINE_DINING", "FAST_FOOD", "CASUAL_DINING", "CAFE", "ALL"]
+
+  # Enhanced monitoring for report generation
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+    cloudwatch:
+      region: "us-east-1"
+      namespace: "PantryCRM/ReportGeneration"
+
+scenarios:
+  # Scenario 1: Sales Performance Reports (30% of report generation)
+  - name: "Sales Performance Reports"
+    weight: 30
+    flow:
+      # Authenticate as manager
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "manager{{ $randomInt(1, 2) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Monthly sales summary report
+      - get:
+          url: "/api/reports/sales/summary?period={{ $pick(dateRanges) }}&territory={{ $pick(territories) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Monthly Sales Summary"
+      
+      # Detailed sales by organization type
+      - get:
+          url: "/api/reports/sales/by-org-type?period={{ $pick(dateRanges) }}&orgType={{ $pick(orgTypes) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Sales by Organization Type"
+      
+      # Territory comparison report
+      - get:
+          url: "/api/reports/sales/territory-comparison?period={{ $pick(dateRanges) }}&level={{ $pick(complexityLevels) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Territory Comparison Report"
+      
+      # Export sales report to Excel
+      - get:
+          url: "/api/reports/sales/export?period={{ $pick(dateRanges) }}&format=excel&territory={{ $pick(territories) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Sales Report Excel Export"
+
+  # Scenario 2: Commission Reports (25% of report generation)
+  - name: "Commission Reports"
+    weight: 25
+    flow:
+      # Authenticate as admin
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "admin@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Commission summary by broker
+      - get:
+          url: "/api/reports/commission/by-broker?period={{ $pick(dateRanges) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Commission by Broker"
+      
+      # Territory commission breakdown
+      - get:
+          url: "/api/reports/commission/by-territory?period={{ $pick(dateRanges) }}&territory={{ $pick(territories) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Territory Commission Breakdown"
+      
+      # Detailed commission calculations
+      - get:
+          url: "/api/reports/commission/detailed?period={{ $pick(dateRanges) }}&includeCalculations=true"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Detailed Commission Calculations"
+      
+      # Commission export for payroll
+      - get:
+          url: "/api/reports/commission/payroll-export?period={{ $pick(dateRanges) }}&format=csv"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Commission Payroll Export"
+      
+      # Year-over-year commission comparison
+      - get:
+          url: "/api/reports/commission/yoy-comparison?baseYear=2023&compareYear=2024"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Commission YoY Comparison"
+
+  # Scenario 3: Customer Interaction Reports (20% of report generation)
+  - name: "Customer Interaction Reports"
+    weight: 20
+    flow:
+      # Authenticate as broker
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "broker{{ $randomInt(1, 4) }}@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Interaction frequency report
+      - get:
+          url: "/api/reports/interactions/frequency?period={{ $pick(dateRanges) }}&territory={{ $pick(territories) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Interaction Frequency Report"
+      
+      # Customer touchpoint analysis
+      - get:
+          url: "/api/reports/interactions/touchpoint-analysis?period={{ $pick(dateRanges) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Customer Touchpoint Analysis"
+      
+      # Follow-up requirements report
+      - get:
+          url: "/api/reports/interactions/follow-ups?daysAhead=30&priority={{ $pick(['A', 'B', 'ALL']) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Follow-up Requirements"
+      
+      # Interaction outcome analysis
+      - get:
+          url: "/api/reports/interactions/outcomes?period={{ $pick(dateRanges) }}&groupBy=type"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Interaction Outcome Analysis"
+
+  # Scenario 4: Financial Performance Reports (15% of report generation)
+  - name: "Financial Performance Reports"
+    weight: 15
+    flow:
+      # Authenticate as finance manager
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "finance@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Revenue trend analysis
+      - get:
+          url: "/api/reports/financial/revenue-trends?period=last_12_months&granularity=monthly"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Revenue Trend Analysis"
+      
+      # Customer lifetime value report
+      - get:
+          url: "/api/reports/financial/customer-ltv?period={{ $pick(dateRanges) }}&segment={{ $pick(orgTypes) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Customer Lifetime Value"
+      
+      # Profitability by customer segment
+      - get:
+          url: "/api/reports/financial/profitability?period={{ $pick(dateRanges) }}&segmentBy=orgType"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Profitability by Segment"
+      
+      # Budget vs actual performance
+      - get:
+          url: "/api/reports/financial/budget-vs-actual?period={{ $pick(dateRanges) }}&territory={{ $pick(territories) }}"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Budget vs Actual Performance"
+      
+      # Financial summary dashboard export
+      - get:
+          url: "/api/reports/financial/dashboard-export?period={{ $pick(dateRanges) }}&format=pdf"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Financial Dashboard PDF Export"
+
+  # Scenario 5: Compliance and Audit Reports (10% of report generation)
+  - name: "Compliance and Audit Reports"
+    weight: 10
+    flow:
+      # Authenticate as compliance officer
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "compliance@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Data access audit log
+      - get:
+          url: "/api/reports/audit/data-access?period={{ $pick(dateRanges) }}&userId=all"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Data Access Audit Log"
+      
+      # Customer data changes report
+      - get:
+          url: "/api/reports/audit/customer-changes?period={{ $pick(dateRanges) }}&includeHistory=true"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Customer Data Changes"
+      
+      # System activity summary
+      - get:
+          url: "/api/reports/audit/system-activity?period={{ $pick(dateRanges) }}&level=summary"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "System Activity Summary"
+      
+      # Compliance checklist report
+      - get:
+          url: "/api/reports/compliance/checklist?period={{ $pick(dateRanges) }}&standard=SOX"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Compliance Checklist"
+      
+      # Full audit trail export
+      - get:
+          url: "/api/reports/audit/full-trail?period={{ $pick(dateRanges) }}&format=csv&compressed=true"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Full Audit Trail Export"
+
+  # Scenario 6: Large Data Export Operations (5% but high resource usage)
+  - name: "Large Data Exports"
+    weight: 5
+    flow:
+      # Authenticate as data analyst
+      - post:
+          url: "/api/auth/signin"
+          json:
+            email: "analyst@foodservice.com"
+            password: "testpassword"
+          capture:
+            - json: "$.sessionToken"
+              as: "sessionToken"
+      
+      # Complete customer database export
+      - get:
+          url: "/api/export/organizations/complete?format=excel&includeContacts=true&includeHistory=true"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Complete Customer Export"
+      
+      # Full interaction history export
+      - get:
+          url: "/api/export/interactions/complete?period=last_year&format=csv&includeDetails=true"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Full Interaction History"
+      
+      # Comprehensive financial data export
+      - get:
+          url: "/api/export/financial/comprehensive?period=last_year&format=excel&includeProjections=true"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Comprehensive Financial Export"
+      
+      # Territory performance data dump
+      - get:
+          url: "/api/export/territory/performance-dump?period=last_2_years&format=csv&compressed=true"
+          headers:
+            Authorization: "Bearer {{ sessionToken }}"
+          name: "Territory Performance Data Dump"

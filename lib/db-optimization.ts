@@ -156,7 +156,7 @@ export async function optimizedFindUnique<T>(
  * Batch operations for efficiency
  */
 export class BatchOperations {
-  private static readonly BATCH_SIZE = 50; // Reduced for B1 constraints
+  private static readonly BATCH_SIZE = 25; // Optimized for Azure Basic 5 DTU limit
 
   static async batchCreate<T>(
     model: any,

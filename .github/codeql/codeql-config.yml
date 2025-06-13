@@ -1,0 +1,91 @@
+# CodeQL Configuration for PantryCRM Security Scanning
+# Reference: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/customizing-code-scanning
+
+name: "PantryCRM CodeQL Config"
+
+# Disable default queries to use custom configuration
+disable-default-queries: false
+
+# Include additional query packs for comprehensive security analysis
+queries:
+  - name: security-extended
+    uses: security-extended
+  - name: security-and-quality  
+    uses: security-and-quality
+  - name: github-actions-security
+    uses: github/codeql/actions/ql/src/codeql-suites/actions-security.qls
+
+# Language-specific configurations
+javascript:
+  # Include TypeScript and JSX files
+  queries:
+    - security-extended
+    - security-and-quality
+  
+  # Paths to analyze
+  paths:
+    - src/
+    - pages/
+    - components/
+    - lib/
+    - app/
+    - scripts/
+  
+  # Paths to ignore for JavaScript/TypeScript analysis
+  paths-ignore:
+    - node_modules/
+    - .next/
+    - dist/
+    - build/
+    - coverage/
+    - "**/*.test.ts"
+    - "**/*.test.tsx"
+    - "**/*.spec.ts"
+    - "**/*.spec.tsx"
+    - "**/*.d.ts"
+
+typescript:
+  # TypeScript-specific security queries
+  queries:
+    - security-extended
+    - security-and-quality
+  
+  paths:
+    - src/
+    - lib/
+    - scripts/
+    - "**/*.ts"
+    - "**/*.tsx"
+  
+  paths-ignore:
+    - node_modules/
+    - .next/
+    - "**/*.test.ts"
+    - "**/*.test.tsx"
+    - "**/*.d.ts"
+
+# GitHub Actions workflow security analysis
+# Reference: https://github.blog/changelog/2024-12-17-find-and-fix-actions-workflows-vulnerabilities-with-codeql-public-preview/
+actions:
+  queries:
+    - security-extended
+  
+  paths:
+    - .github/workflows/
+    - .github/actions/
+  
+  paths-ignore:
+    - .github/ISSUE_TEMPLATE/
+    - .github/PULL_REQUEST_TEMPLATE/
+
+# External data for enhanced analysis
+external-repository-token-stdin: false
+
+# Pack downloads (for custom query packs)
+# packs:
+#   javascript:
+#     - github/codeql/javascript-queries
+#   typescript: 
+#     - github/codeql/typescript-queries
+#   actions:
+#     - github/codeql/actions-queries
