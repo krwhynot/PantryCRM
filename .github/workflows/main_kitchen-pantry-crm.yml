@@ -19,14 +19,28 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
+          cache: 'npm'
 
+      - name: Clean npm cache
+        run: npm cache clean --force
+      
       - name: npm install, build, and test
         run: |
-          npm install --legacy-peer-deps
+          npm ci --legacy-peer-deps --prefer-offline --no-audit --no-fund
           npm run build:azure --if-present
+        env:
+          NODE_ENV: production
+          CI: true
+          NEXT_TELEMETRY_DISABLED: 1
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+          GOOGLE_ID: "dummy"
+          GOOGLE_SECRET: "dummy"
+          GITHUB_ID: "dummy"
+          GITHUB_SECRET: "dummy"
+          JWT_SECRET: "dummy-secret-for-build"
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
