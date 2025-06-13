@@ -74,7 +74,7 @@ jobs:
       
       # Azure Login using OIDC (more secure than publish profiles)
       - name: "🔐 Azure Login"
-        uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.1
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2.1.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -82,7 +82,7 @@ jobs:
       
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@de617f46172a906d0617bb0e50d81e9e3aec24c8 # v3.0.1
+        uses: azure/webapps-deploy@2fdd5c3ebb4e540834e86ecc1f6fdcd5539023ee # v3.0.2
         with:
           app-name: 'kitchen-pantry-crm'
           slot-name: 'Production'
