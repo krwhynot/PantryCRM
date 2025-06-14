@@ -100,7 +100,7 @@
     "cmdk": "^1.0.4",
     "critters": "^0.0.20",
     "csv-parser": "^3.2.0",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.1.0",
     "dompurify": "^3.2.6",
     "eslint": "8.57.0",
     "is-ci": "^3.0.1",
