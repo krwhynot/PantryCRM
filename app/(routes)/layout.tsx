@@ -3,15 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
 import { SimpleErrorBoundary } from "@/components/ErrorBoundary";
-import dynamic from "next/dynamic";
-
-// Dynamically import SyncStatusIndicator for global sync status
-const SyncStatusIndicator = dynamic(
-  () => import('@/components/ui/sync-status-indicator'),
-  {
-    ssr: false
-  }
-);
+import SyncStatusIndicator from "@/components/ClientSyncStatusIndicator";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

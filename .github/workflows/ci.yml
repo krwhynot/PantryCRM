@@ -53,7 +53,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: TypeScript type checking
-        run: npm run typecheck
+        run: npm run typecheck:production
         continue-on-error: false
 
       - name: ESLint
