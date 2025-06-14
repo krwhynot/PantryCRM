@@ -11,7 +11,7 @@ interface NetworkStatus {
 
 export function useNetworkStatus(): NetworkStatus {
   const [networkStatus, setNetworkStatus] = useState<NetworkStatus>({
-    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+    isOnline: typeof window !== 'undefined' && typeof navigator !== 'undefined' ? navigator.onLine : true,
     isSlowConnection: false,
     connectionType: 'unknown',
     saveData: false
@@ -20,6 +20,10 @@ export function useNetworkStatus(): NetworkStatus {
   useEffect(() => {
     // Initial network status check
     const updateNetworkStatus = () => {
+      if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+        return; // Skip during SSR
+      }
+      
       const connection = (navigator as any).connection || 
                         (navigator as any).mozConnection || 
                         (navigator as any).webkitConnection;
@@ -57,7 +61,7 @@ export function useNetworkStatus(): NetworkStatus {
       updateNetworkStatus();
       
       // Trigger background sync if service worker is available
-      if ('serviceWorker' in navigator) {
+      if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then((registration) => {
           // Check if background sync is supported
           if ('sync' in registration) {
@@ -82,17 +86,19 @@ export function useNetworkStatus(): NetworkStatus {
     window.addEventListener('offline', handleOffline);
 
     // Listen for connection quality changes
-    const connection = (navigator as any).connection;
+    const connection = typeof window !== 'undefined' ? (navigator as any).connection : null;
     if (connection) {
       connection.addEventListener('change', handleConnectionChange);
     }
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-      
-      if (connection) {
-        connection.removeEventListener('change', handleConnectionChange);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+        
+        if (connection) {
+          connection.removeEventListener('change', handleConnectionChange);
+        }
       }
     };
   }, []);
@@ -108,9 +114,11 @@ export function useOfflineAwareFetch() {
     // If offline, try to get from cache first
     if (!isOnline) {
       try {
-        const cachedResponse = await caches.match(url);
-        if (cachedResponse) {
-          return cachedResponse;
+        if (typeof window !== 'undefined' && 'caches' in window) {
+          const cachedResponse = await caches.match(url);
+          if (cachedResponse) {
+            return cachedResponse;
+          }
         }
       } catch (error) {
         console.warn('[OfflineFetch] Cache access failed:', error);
@@ -132,7 +140,7 @@ export function useOfflineAwareFetch() {
       const response = await fetch(url, fetchOptions);
       
       // Cache successful responses for offline use
-      if (response.ok && 'caches' in window) {
+      if (typeof window !== 'undefined' && response.ok && 'caches' in window) {
         try {
           const cache = await caches.open('pantry-crm-data-v1');
           cache.put(url, response.clone());
@@ -145,10 +153,12 @@ export function useOfflineAwareFetch() {
     } catch (error) {
       // If network request fails, try cache as fallback
       try {
-        const cachedResponse = await caches.match(url);
-        if (cachedResponse) {
-          console.log('[OfflineFetch] Using cached fallback for:', url);
-          return cachedResponse;
+        if (typeof window !== 'undefined' && 'caches' in window) {
+          const cachedResponse = await caches.match(url);
+          if (cachedResponse) {
+            console.log('[OfflineFetch] Using cached fallback for:', url);
+            return cachedResponse;
+          }
         }
       } catch (cacheError) {
         console.warn('[OfflineFetch] Cache fallback failed:', cacheError);

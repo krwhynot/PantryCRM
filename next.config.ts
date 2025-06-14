@@ -135,6 +135,16 @@ const nextConfig: NextConfig = {
           "stream": false,
           "util": false
         };
+        
+        // Define global variables for server-side rendering
+        config.plugins.push(
+          new config.webpack.DefinePlugin({
+            'self': 'typeof self !== "undefined" ? self : globalThis',
+            'window': 'typeof window !== "undefined" ? window : globalThis',
+            'document': 'typeof document !== "undefined" ? document : {}',
+            'navigator': 'typeof navigator !== "undefined" ? navigator : {}'
+          })
+        );
       }
       
       // Memory and performance optimizations for B1

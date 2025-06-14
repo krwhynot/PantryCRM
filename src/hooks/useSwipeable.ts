@@ -188,7 +188,7 @@ export function usePullToRefresh(
     const deltaY = currentY.current - startY.current;
 
     // Only pull down when at top of page
-    if (window.scrollY === 0 && deltaY > 0) {
+    if (typeof window !== 'undefined' && window.scrollY === 0 && deltaY > 0) {
       pullDistance.current = deltaY / resistance;
       
       // Update visual indicator
