@@ -30,7 +30,11 @@
       "Bash(rg:*)",
       "Bash(npm uninstall:*)",
       "Bash(npm install:*)",
-      "Bash(npm run analyze:vendor:*)"
+      "Bash(npm run analyze:vendor:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(npm ls:*)",
+      "Bash(sudo rm:*)",
+      "Bash(npx prisma generate:*)"
     ],
     "deny": []
   }
