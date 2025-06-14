@@ -14,7 +14,10 @@
       "Bash(az extension add:*)",
       "Bash(az monitor app-insights metrics show:*)",
       "Bash(az monitor metrics list:*)",
-      "Bash(./scripts/capture-performance-baseline-working.sh:*)"
+      "Bash(./scripts/capture-performance-baseline-working.sh:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(node:*)"
     ],
     "deny": []
   }
