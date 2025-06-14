@@ -447,3 +447,7 @@ bin/
 #==============================================================================
 # END OF .GITIGNORE
 #==============================================================================public/tmp/
+
+# Performance baseline files
+performance_baselines/
+perf-metrics.json

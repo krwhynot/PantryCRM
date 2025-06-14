@@ -1,0 +1,91 @@
+name: Security Scanning
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday at 2AM
+  push:
+    branches: [main, production]
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/security-scan.yml'
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+      
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+      
+      - name: Detect secrets in code
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Run ESLint security plugin
+        run: |
+          npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-security
+          npx eslint . --ext .js,.jsx,.ts,.tsx --config .eslintrc.js
+        
+      - name: Generate security report
+        if: always()
+        run: |
+          echo "# Security Scan Report" > security-report.md
+          echo "## Date: $(date)" >> security-report.md
+          echo "## Branch: ${{ github.ref }}" >> security-report.md
+          echo "## Workflow Run ID: ${{ github.run_id }}" >> security-report.md
+          echo "## Workflow URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> security-report.md
+          
+          # Attach reports if they exist
+          if [ -f "npm-audit.json" ]; then
+            echo "## NPM Audit Results" >> security-report.md
+            echo '```json' >> security-report.md
+            cat npm-audit.json >> security-report.md
+            echo '```' >> security-report.md
+          fi
+          
+          if [ -f "snyk-report.json" ]; then
+            echo "## Snyk Results" >> security-report.md
+            echo '```json' >> security-report.md
+            cat snyk-report.json >> security-report.md
+            echo '```' >> security-report.md
+          fi
+      
+      - name: Upload security report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-report
+          path: security-report.md
+          
+      - name: Send notification on failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            github.rest.issues.create({
+              owner,
+              repo,
+              title: `Security Scan Failed - ${{ github.sha.substring(0, 7) }}`,
+              body: `Security scan failed on commit ${{ github.sha }}.\n\nView the detailed results here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`
+            });
