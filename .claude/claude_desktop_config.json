@@ -63,7 +63,7 @@
                 "@modelcontextprotocol/server-tavily"
             ],
             "env": {
-                "TAVILY_API_KEY": "your_api_key",
+                "TAVILY_API_KEY": "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",
                 "RATE_LIMIT": "100",
                 "CONCURRENT_REQUESTS": "8",
                 "CACHE_TTL": "3600"
@@ -72,10 +72,9 @@
         "context7": {
             "command": "npx",
             "args": [
-                "@modelcontextprotocol/server-context7"
+                "-y", "@upstash/context7-mcp"
             ],
             "env": {
-                "CONTEXT7_API_KEY": "your_api_key",
                 "DOC_CACHE_SIZE": "512",
                 "PARALLEL_QUERIES": "4"
             }
@@ -86,7 +85,7 @@
                 "@modelcontextprotocol/server-exa"
             ],
             "env": {
-                "EXA_API_KEY": "your_api_key",
+                "EXA_API_KEY": "a9b28749-adac-4675-ac21-b6d6afbb65f1",
                 "SEARCH_CONCURRENCY": "6",
                 "RESULT_CACHE_SIZE": "256"
             }
@@ -101,6 +100,18 @@
                 "MAX_CONCURRENT_COMMANDS": "4",
                 "COMMAND_TIMEOUT": "300",
                 "OUTPUT_BUFFER_SIZE": "1048576"
+            }
+        },
+        "perplexity": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-perplexity"
+            ],
+            "env": {
+                "PERPLEXITY_API_KEY": "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",
+                "MAX_CONCURRENT_QUERIES": "3",
+                "RESPONSE_CACHE_SIZE": "256",
+                "QUERY_TIMEOUT": "30"
             }
         }
     }

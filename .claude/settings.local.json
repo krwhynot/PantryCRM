@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(az extension list:*)",
+      "Bash(az account show:*)",
+      "Bash(az monitor app-insights component show:*)",
+      "Bash(az account list:*)",
+      "Bash(az account set:*)",
+      "Bash(az group:*)",
+      "Bash(git config:*)",
+      "Bash(chmod:*)",
+      "Bash(./scripts/manage-git-azure-configs.sh:*)",
+      "Bash(az monitor app-insights component list:*)",
+      "Bash(az extension add:*)",
+      "Bash(az monitor app-insights metrics show:*)",
+      "Bash(az monitor metrics list:*)",
+      "Bash(./scripts/capture-performance-baseline-working.sh:*)"
+    ],
+    "deny": []
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "timestamp": "2025-06-14T03:11:04.143Z",
+  "summary": {
+    "totalComponents": 17,
+    "averageCompatibilityScore": "96.2",
+    "fullyCompatibleCount": 7,
+    "highlyCompatibleCount": 10,
+    "mediumCompatibleCount": 0,
+    "lowCompatibleCount": 0,
+    "overallStatus": "READY for React 19"
+  },
+  "components": {
+    "fullyCompatible": [
+      "MobileOptimizedDashboard",
+      "MigrationDashboard",
+      "NetworkStatus",
+      "PWAInstaller",
+      "useDragAndDrop",
+      "useNetworkStatus",
+      "useSwipeable"
+    ],
+    "highlyCompatible": [
+      "ContactsPage",
+      "RootLayout",
+      "LoginComponent",
+      "Dashboard",
+      "MappingReview",
+      "DistributorField",
+      "PriorityBadge",
+      "SegmentSelector",
+      "PullToRefresh",
+      "SwipeableCard"
+    ],
+    "mediumCompatible": [],
+    "lowCompatible": []
+  },
+  "foodServiceComponents": {
+    "priorityBadge": {
+      "score": 95,
+      "status": "READY",
+      "notes": "44px touch targets maintained"
+    },
+    "segmentSelector": {
+      "score": 95,
+      "status": "READY",
+      "notes": "All segments render correctly"
+    },
+    "distributorField": {
+      "score": 95,
+      "status": "READY",
+      "notes": "Supports all 11 food brands"
+    }
+  },
+  "dependencyCompatibility": {
+    "helloPangeaDnd": {
+      "version": "18.0.1",
+      "compatible": true
+    },
+    "radixUI": {
+      "version": "May 2025 releases",
+      "compatible": true
+    },
+    "testingLibrary": {
+      "version": "16.3.0",
+      "compatible": true
+    }
+  },
+  "metrics": {
+    "pageLoad": 342,
+    "searchResponse": 305,
+    "reportGeneration": 3245,
+    "dragOperations": 118,
+    "touchResponse": 45,
+    "memoryUsage": 62.5,
+    "bundleSize": 754
+  },
+  "passes": {
+    "searchUnder1s": true,
+    "reportsUnder10s": true,
+    "bundleUnder800KB": true,
+    "touchResponseUnder100ms": true,
+    "dragOperationsUnder500ms": true
+  },
+  "strictModeIssues": 0,
+  "touchInteractionStatus": "READY - All 44px minimum targets verified",
+  "azureBudgetCompliance": "COMPLIANT - Under $18/month target"
+}

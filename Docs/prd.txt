@@ -1,0 +1,239 @@
+# Kitchen Pantry CRM - Product Requirements Document
+
+## Context
+
+### Overview  
+Kitchen Pantry CRM is a specialized Customer Relationship Management system designed specifically for the food service industry. Built to replace an Excel-based tracking system, it serves a family company with 4 sales representatives who manage relationships with restaurants, healthcare facilities, and institutional food service operations. The system focuses on rapid interaction logging (30-second target), streamlined sales pipeline management, and multi-device accessibility for field sales teams.
+
+The CRM addresses the unique needs of food service sales including distributor relationship tracking (Sysco, USF, PFG), specialized contact roles (Executive Chefs, Kitchen Managers, Buyers), and food service industry-specific interaction types (sampling, demos, pricing quotes). With strict budget constraints ($18/month Azure hosting), the solution maximizes value through strategic technology choices and performance optimization.
+
+### Core Features  
+
+**Organization Management**
+- **What it does**: Comprehensive restaurant and food service business profiles with industry-specific fields including priority levels (A-D), market segments (Fine Dining, Fast Food, Healthcare, Catering, Institutional), and distributor relationships
+- **Why it's important**: Enables strategic account prioritization and targeted sales approaches based on business type and existing distributor partnerships
+- **How it works**: Dynamic dropdown systems powered by Settings Management, searchable directory with sub-second response times, integrated contact hierarchy
+
+**Contact Management with Role Hierarchy**
+- **What it does**: Multiple contacts per organization with food service-specific roles (Executive Chef, Buyer, Manager, Owner, Kitchen Manager) and primary contact designation
+- **Why it's important**: Food service decisions involve multiple stakeholders; tracking the right person for each interaction type is critical for sales success
+- **How it works**: Hierarchical contact structure with role-based filtering, quick contact switching during interaction entry
+
+**Rapid Interaction Logging**
+- **What it does**: Six interaction types (Email, Call, In Person, Demo/sampled, Quoted price, Follow-up) with streamlined 30-second entry process
+- **Why it's important**: Field sales teams need to log interactions immediately while details are fresh, without interrupting sales momentum
+- **How it works**: Auto-complete fields, pre-populated contact selection, mobile-optimized forms with large touch targets
+
+**Sales Pipeline Management**
+- **What it does**: Five-stage sales process (Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close) with opportunity tracking across 11 food service principals
+- **Why it's important**: Provides clear visibility into sales progression and revenue forecasting for multiple product lines
+- **How it works**: Visual pipeline boards, drag-and-drop stage updates, probability tracking per principal
+
+**Dynamic Settings Management**
+- **What it does**: Administrative control over all dropdown values and business logic without code deployment
+- **Why it's important**: Business users can adapt the system to changing market conditions, new distributors, or organizational changes
+- **How it works**: Database-driven configuration system replacing hard-coded enums, with validation to prevent deletion of settings in use
+
+**Performance-Optimized Reporting**
+- **What it does**: Simple reports (<10 seconds), complex analytical reports (<30 seconds), with intelligent caching for repeated queries
+- **Why it's important**: Quick decision-making requires immediate access to sales data and performance metrics
+- **How it works**: Optimized SQL queries designed for Azure Basic tier constraints, progressive loading for large datasets
+
+### User Experience  
+
+**User Personas**
+- **Primary**: Field Sales Representatives - mobile-first users requiring rapid data entry between client visits
+- **Secondary**: Sales Manager - dashboard oversight with reporting and pipeline analysis needs  
+- **Tertiary**: Administrative Users - settings management and system configuration capabilities
+
+**Key User Flows**
+1. **Mobile Interaction Entry**: Touch-optimized form completion in 30 seconds or less
+2. **Pipeline Review**: Visual overview of opportunities with one-click stage updates
+3. **Contact Search**: Sub-second organization and contact lookup with auto-complete
+4. **Report Generation**: One-click access to performance dashboards and analytics
+5. **Settings Administration**: Self-service configuration changes without technical support
+
+**UI/UX Considerations**
+- **Multi-Device Priority**: Windows touch laptop primary, iPad Safari compatibility, smartphone emergency access
+- **Touch Interface**: 44px minimum touch targets, finger-friendly form controls
+- **Performance Focus**: <3 second page loads on 3G connections, progressive loading for data-heavy views
+- **Error Prevention**: Auto-save functionality, network retry mechanisms, clear validation messaging
+- **Accessibility**: High contrast mode support, semantic HTML structure, keyboard navigation
+
+## PRD
+
+### Technical Architecture  
+
+**System Components**
+- **Frontend**: Next.js 15 with React 18.2.0 stable, TypeScript, shadcn/ui components, Tremor charts
+- **Backend**: Node.js with Express server, NextCRM foundation providing 60-70% development acceleration
+- **Database**: Azure SQL Server with Prisma ORM for all database operations
+- **Authentication**: NextCRM integrated auth system with role-based access control
+- **Error Handling**: React Error Boundaries, Zod validation schemas, comprehensive retry mechanisms
+
+**Data Models**
+```sql
+Organizations: priority_id, segment_id, distributor_id (FK to Settings)
+Contacts: organization_id FK, role, is_primary, contact details
+Interactions: type (6 types), organization_id FK, contact_id FK, notes, date
+Opportunities: principal (11 brands), stage (5 stages), probability, value
+Settings: category, key, label, color, sort_order, active (dynamic configuration)
+```
+
+**APIs and Integrations**
+- **REST API**: Standard CRUD operations with Prisma-generated endpoints
+- **Search API**: Optimized full-text search with auto-complete for organizations and contacts
+- **Reporting API**: Cached query results with intelligent refresh logic
+- **Settings API**: Administrative interface for dropdown management
+- **Export API**: Excel export functionality for migration and backup
+
+**Infrastructure Requirements**
+- **Azure SQL Database Basic**: $5/month, 2GB storage, 5 DTU capacity
+- **Azure App Service Basic B1**: $13/month, supports 4 concurrent users
+- **Total Budget**: $18/month operational cost constraint
+- **Performance Targets**: Bundle size <800KB, search <1 second, reports <10-30 seconds
+
+### Development Roadmap  
+
+**Phase 1: Foundation and Infrastructure** ✅ COMPLETED
+- NextCRM integration and component resolution
+- Azure SQL database setup and schema migration
+- React 18.2.0 stable implementation
+- Bundle size optimization foundation
+- Multi-device testing framework establishment
+
+**Phase 2: Core CRM Functionality** 🎯 CURRENT PHASE
+- Organization Management with full CRUD operations
+- Contact Management with role hierarchy
+- Settings Management system implementation
+- Basic search functionality with auto-complete
+- Interaction logging with 30-second entry optimization
+
+**Phase 3: Sales Pipeline and Opportunities**
+- Five-stage pipeline implementation
+- Opportunity tracking across 11 principals
+- Visual pipeline boards with drag-and-drop
+- Probability calculation and forecasting
+- Pipeline analytics and conversion reporting
+
+**Phase 4: Advanced Reporting and Analytics**
+- Performance dashboard implementation
+- Custom report builder interface
+- Export functionality for external analysis
+- Cached reporting with intelligent refresh
+- Historical trend analysis and insights
+
+**Phase 5: Mobile Optimization and Performance**
+- Progressive Web App (PWA) capabilities
+- Offline functionality for field sales
+- Advanced caching strategies
+- Performance monitoring and optimization
+- A/B testing framework for UX improvements
+
+**Phase 6: Integration and Data Import**
+- Excel data migration tools
+- External system integration capabilities
+- API documentation and developer tools
+- Backup and disaster recovery procedures
+- Advanced security and compliance features
+
+### Logical Dependency Chain
+
+**Foundation Layer (Phase 1)** ✅
+- NextCRM component integration must be completed first
+- Azure infrastructure provisioning and database setup
+- React stability and bundle optimization baseline
+- Development environment and testing framework
+
+**Data Management Core (Phase 2)**
+- Settings Management system is foundational for all dropdown functionality
+- Organization Management provides the core entity structure
+- Contact Management builds upon Organization relationships
+- Interaction logging depends on both Organizations and Contacts being functional
+
+**Business Logic Layer (Phase 3)**
+- Pipeline functionality requires completed Organization and Contact systems
+- Opportunity tracking builds upon Interaction history
+- Sales forecasting needs pipeline data and historical interactions
+- Visual pipeline requires stable CRUD operations from Phase 2
+
+**Intelligence Layer (Phase 4)**
+- Reporting requires completed data collection from Phases 2-3
+- Analytics need sufficient historical data for meaningful insights
+- Export functionality builds upon established data models
+- Performance dashboards require optimized query patterns
+
+**Optimization Layer (Phase 5)**
+- Mobile optimization builds upon proven core functionality
+- Offline capabilities require stable synchronization patterns
+- PWA features need established performance baselines
+- Advanced caching depends on usage pattern analysis
+
+**Integration Layer (Phase 6)**
+- Data migration tools require stable data models and validation
+- External integrations build upon proven API patterns
+- Security enhancements require established user management
+- Disaster recovery needs proven backup procedures
+
+### Risks and Mitigations  
+
+**Technical Challenges**
+- **Risk**: Azure SQL Basic tier DTU limitations causing performance issues
+  - **Mitigation**: Query optimization strategies, intelligent caching, progressive loading
+- **Risk**: Bundle size exceeding performance targets on mobile devices
+  - **Mitigation**: Code splitting, lazy loading, dependency audit and optimization
+- **Risk**: NextCRM component compatibility issues during development
+  - **Mitigation**: Component-by-component validation, fallback implementations, comprehensive testing
+
+**MVP Definition and Scope**
+- **Risk**: Feature creep expanding beyond budget and timeline constraints
+  - **Mitigation**: Strict Phase 2 scope definition, user validation before Phase 3, iterative feedback loops
+- **Risk**: Performance expectations exceeding Azure Basic tier capabilities
+  - **Mitigation**: Realistic target setting, early performance testing, optimization-first development
+
+**Resource Constraints**
+- **Risk**: $18/month budget limiting scalability options
+  - **Mitigation**: Efficient architecture design, usage monitoring, scaling plan preparation
+- **Risk**: Single developer bandwidth limiting parallel development streams
+  - **Mitigation**: Sequential phase development, clear dependency management, automated testing
+- **Risk**: User adoption challenges from Excel transition
+  - **Mitigation**: Gradual migration strategy, comprehensive training, Excel export capabilities
+
+**Data Migration and Quality**
+- **Risk**: Excel data quality issues during migration
+  - **Mitigation**: Data validation tools, cleanup procedures, manual verification process
+- **Risk**: Loss of historical interaction data during transition
+  - **Mitigation**: Comprehensive export functionality, parallel system operation, verification procedures
+
+### Appendix  
+
+**Research Findings**
+- NextCRM provides 60-70% development time reduction when properly implemented
+- Azure SQL Basic tier supports 4 concurrent users with optimized queries
+- Food service industry requires specialized contact roles and interaction types
+- 30-second interaction entry is critical for field sales adoption
+- Multi-device compatibility essential for restaurant environment usage
+
+**Technical Specifications**
+- **Performance Targets**: Search <1s, Simple Reports <10s, Complex Reports <30s, Page Load <3s on 3G
+- **Compatibility**: Windows touch laptop (primary), iPad Safari, smartphone emergency access
+- **Security**: Role-based access control, data encryption at rest and in transit
+- **Backup**: Daily automated backups with 30-day retention
+- **Monitoring**: Application performance monitoring, error tracking, usage analytics
+
+**Business Process Documentation**
+- **Sales Process**: Lead-discovery → Contacted → Sampled/Visited → Follow-up → Close
+- **Interaction Types**: Email, Call, In Person, Demo/sampled, Quoted price, Follow-up
+- **Priority Levels**: A (High Priority), B (Medium Priority), C (Low Priority), D (Inactive)
+- **Market Segments**: Fine Dining, Fast Food, Healthcare, Catering, Institutional
+- **Distributor Types**: Sysco, USF, PFG, Direct, Other
+- **Contact Roles**: Executive Chef, Buyer, Manager, Owner, Kitchen Manager
+- **Principals**: Kaufholds, Frites Street, Better Balance, VAF, Ofk, Annasea, Wicks, RJC, Kayco, Abdale, Land Lovers
+
+**Success Metrics**
+- 100% Excel data migration accuracy
+- 50% faster data entry compared to Excel
+- 80% faster report generation
+- <1 second search performance maintained
+- 100% user adoption within 3 months
+- $18/month Azure cost constraint maintained

@@ -1,0 +1,132 @@
+{
+  "timestamp": "2025-06-14T02:41:55.513Z",
+  "summary": {
+    "totalFiles": 17,
+    "averageScore": 96,
+    "highRiskCount": 0,
+    "mediumRiskCount": 0,
+    "lowRiskCount": 10,
+    "compatibleCount": 7
+  },
+  "componentScores": [
+    {
+      "component": "Dashboard",
+      "path": "src\\components\\dashboard\\Dashboard.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": ""
+    },
+    {
+      "component": "DistributorField",
+      "path": "src\\components\\food-service\\DistributorField.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": ""
+    },
+    {
+      "component": "layout",
+      "path": "src\\app\\layout.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": ""
+    },
+    {
+      "component": "LoginComponent",
+      "path": "src\\components\\auth\\LoginComponent.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": "Uses React hooks (good compatibility) (2×)"
+    },
+    {
+      "component": "MappingReview",
+      "path": "src\\components\\excel-migration\\MappingReview.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": "Uses React hooks (good compatibility) (1×)"
+    },
+    {
+      "component": "MigrationDashboard",
+      "path": "src\\components\\excel-migration\\MigrationDashboard.tsx",
+      "score": 98,
+      "compatibility": "Full Compatibility",
+      "issues": "Uses React hooks (good compatibility) (4×)"
+    },
+    {
+      "component": "MobileOptimizedDashboard",
+      "path": "src\\components\\examples\\MobileOptimizedDashboard.tsx",
+      "score": 98,
+      "compatibility": "Full Compatibility",
+      "issues": "Uses React hooks (good compatibility) (4×)"
+    },
+    {
+      "component": "NetworkStatus",
+      "path": "src\\components\\NetworkStatus.tsx",
+      "score": 98,
+      "compatibility": "Full Compatibility",
+      "issues": "Uses React hooks (good compatibility) (5×)"
+    },
+    {
+      "component": "page",
+      "path": "src\\app\\contacts\\page.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": ""
+    },
+    {
+      "component": "PriorityBadge",
+      "path": "src\\components\\food-service\\PriorityBadge.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": ""
+    },
+    {
+      "component": "PullToRefresh",
+      "path": "src\\components\\ui\\PullToRefresh.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": "Uses React hooks (good compatibility) (1×)"
+    },
+    {
+      "component": "PWAInstaller",
+      "path": "src\\components\\PWAInstaller.tsx",
+      "score": 98,
+      "compatibility": "Full Compatibility",
+      "issues": "Uses React hooks (good compatibility) (3×)"
+    },
+    {
+      "component": "SegmentSelector",
+      "path": "src\\components\\food-service\\SegmentSelector.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": ""
+    },
+    {
+      "component": "SwipeableCard",
+      "path": "src\\components\\ui\\SwipeableCard.tsx",
+      "score": 95,
+      "compatibility": "High Compatibility",
+      "issues": "Uses React hooks (good compatibility) (2×)"
+    },
+    {
+      "component": "useDragAndDrop",
+      "path": "src\\hooks\\useDragAndDrop.ts",
+      "score": 98,
+      "compatibility": "Full Compatibility",
+      "issues": "Uses React hooks (good compatibility) (13×)"
+    },
+    {
+      "component": "useNetworkStatus",
+      "path": "src\\hooks\\useNetworkStatus.ts",
+      "score": 98,
+      "compatibility": "Full Compatibility",
+      "issues": "Uses React hooks (good compatibility) (4×)"
+    },
+    {
+      "component": "useSwipeable",
+      "path": "src\\hooks\\useSwipeable.ts",
+      "score": 98,
+      "compatibility": "Full Compatibility",
+      "issues": "Uses React hooks (good compatibility) (11×)"
+    }
+  ]
+}
