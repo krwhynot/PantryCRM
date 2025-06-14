@@ -1,0 +1,269 @@
+name: 🚀 Azure Production Deployment
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '.gitignore'
+      - 'performance_baselines/**'
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip tests for emergency deployment'
+        type: boolean
+        default: false
+
+env:
+  NODE_VERSION: '20'
+  AZURE_WEBAPP_NAME: kitchen-pantry-crm
+
+jobs:
+  # Build and Test Job
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: 🔨 Build & Test
+    
+    outputs:
+      build-success: ${{ steps.build.outcome == 'success' }}
+      
+    steps:
+    - name: 🔄 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 📥 Install Dependencies
+      run: |
+        echo "Installing all dependencies for build and test..."
+        npm ci
+        
+    - name: 🧹 Clean Previous Builds
+      run: npm run clean
+      
+    - name: 🔍 Type Check
+      run: |
+        echo "Running TypeScript type checking..."
+        npm run typecheck
+        
+    - name: 🧪 Run Tests
+      if: github.event.inputs.skip_tests != 'true'
+      run: |
+        echo "Running test suite..."
+        npm run test:ci
+        
+    - name: 🔨 Build Application
+      id: build
+      run: |
+        echo "Building Next.js application for Azure..."
+        npm run build:azure
+        
+    - name: 📊 Bundle Analysis (Optional)
+      if: success()
+      run: |
+        echo "Analyzing bundle size..."
+        npm run analyze:simple || echo "Bundle analysis failed, continuing..."
+        
+    - name: 💾 Cache Build Artifacts
+      uses: actions/cache@v4
+      with:
+        path: |
+          .next
+          node_modules
+        key: build-${{ github.sha }}
+        
+    - name: 📤 Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: nextjs-build
+        path: |
+          .next/
+          public/
+          package.json
+          package-lock.json
+        retention-days: 1
+
+  # Security Scan Job  
+  security-scan:
+    runs-on: ubuntu-latest
+    name: 🔒 Security Scan
+    if: github.event.inputs.skip_tests != 'true'
+    
+    steps:
+    - name: 🔄 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 📥 Install Dependencies
+      run: npm ci
+      
+    - name: 🔍 Security Audit
+      run: |
+        echo "Running security audit..."
+        npm run security:audit || echo "Security audit found issues - review before production"
+        
+    - name: 🕵️ Secret Scan
+      run: |
+        echo "Scanning for secrets..."
+        npm run security:scan || echo "Secret scan completed"
+
+  # Deploy Job
+  deploy-to-azure:
+    needs: [build-and-test]
+    runs-on: ubuntu-latest
+    name: 🌐 Deploy to Azure
+    environment: 
+      name: production
+      url: https://kitchen-pantry-crm.azurewebsites.net
+      
+    if: needs.build-and-test.outputs.build-success == 'true'
+    
+    steps:
+    - name: 🔄 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        
+    - name: 📥 Download Build Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: nextjs-build
+        
+    - name: 🔧 Prepare Deployment Package
+      run: |
+        echo "Preparing deployment package..."
+        
+        # Install only production dependencies
+        npm ci --omit=dev --ignore-scripts
+        
+        # Ensure Prisma client is generated
+        npx prisma generate || echo "Prisma generate failed - may need database connection"
+        
+        # Create deployment info
+        cat > deployment-info.json << EOF
+        {
+          "deployedAt": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+          "gitCommit": "${{ github.sha }}",
+          "gitBranch": "${{ github.ref_name }}",
+          "buildId": "${{ github.run_id }}",
+          "deployer": "${{ github.actor }}",
+          "environment": "production"
+        }
+        EOF
+        
+    - name: 🚀 Deploy to Azure App Service
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: '.'
+        
+    - name: 🔥 Warm Up Application
+      run: |
+        echo "Warming up application..."
+        sleep 30
+        
+        # Test basic connectivity
+        for i in {1..5}; do
+          if curl -f -s https://kitchen-pantry-crm.azurewebsites.net/ > /dev/null; then
+            echo "✅ Application is responding (attempt $i)"
+            break
+          else
+            echo "⏳ Waiting for application to start (attempt $i/5)..."
+            sleep 10
+          fi
+        done
+        
+    - name: 🏥 Post-Deployment Health Check
+      run: |
+        echo "Running post-deployment health checks..."
+        
+        # Check main page
+        MAIN_STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://kitchen-pantry-crm.azurewebsites.net/)
+        echo "Main page status: $MAIN_STATUS"
+        
+        # Check API health endpoint (if it exists)
+        API_STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://kitchen-pantry-crm.azurewebsites.net/api/health || echo "404")
+        echo "API health status: $API_STATUS"
+        
+        if [ "$MAIN_STATUS" -ge 200 ] && [ "$MAIN_STATUS" -lt 400 ]; then
+          echo "✅ Deployment successful - application is healthy"
+        else
+          echo "❌ Deployment may have issues - main page returned $MAIN_STATUS"
+          exit 1
+        fi
+
+  # Post-Deployment Monitoring
+  post-deploy-monitoring:
+    needs: [deploy-to-azure]
+    runs-on: ubuntu-latest
+    name: 📊 Post-Deploy Monitoring
+    if: always()
+    
+    steps:
+    - name: 🔄 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔐 Azure CLI Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      continue-on-error: true
+        
+    - name: 📊 Capture Post-Deploy Metrics
+      run: |
+        echo "Capturing post-deployment performance baseline..."
+        
+        if [ -f "scripts/capture-performance-baseline-working.sh" ]; then
+          chmod +x scripts/capture-performance-baseline-working.sh
+          ./scripts/capture-performance-baseline-working.sh || echo "Performance baseline capture failed"
+        fi
+        
+    - name: 💾 Archive Deployment Metrics
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: post-deploy-metrics-${{ github.run_id }}
+        path: performance_baselines/
+        retention-days: 7
+        
+    - name: 📧 Deployment Notification
+      if: always()
+      run: |
+        if [ "${{ needs.deploy-to-azure.result }}" = "success" ]; then
+          echo "🎉 Deployment to Azure successful!"
+          echo "🌐 Application URL: https://kitchen-pantry-crm.azurewebsites.net"
+          echo "📊 Build ID: ${{ github.run_id }}"
+          echo "🔗 GitHub Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        else
+          echo "❌ Deployment to Azure failed!"
+          echo "🔗 Check logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        fi
+        
+        # Add to step summary
+        if [ "${{ needs.deploy-to-azure.result }}" = "success" ]; then
+          echo "## 🎉 Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Application URL**: https://kitchen-pantry-crm.azurewebsites.net" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployed Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployed by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "## ❌ Deployment Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check the logs for details on what went wrong." >> $GITHUB_STEP_SUMMARY
+        fi

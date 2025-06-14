@@ -139,10 +139,29 @@ jobs:
           echo "❌ Website: $WEBSITE_URL returned HTTP $HTTP_STATUS"
         fi
         
-        # Test key endpoints (if they exist)
+        # Test health endpoint with detailed response
         API_URL="$WEBSITE_URL/api/health"
         API_STATUS=$(curl -o /dev/null -s -w "%{http_code}" $API_URL || echo "000")
         echo "api_status=$API_STATUS" >> $GITHUB_OUTPUT
+        
+        if [ "$API_STATUS" -eq 200 ]; then
+          echo "✅ Health endpoint: $API_URL (HTTP $API_STATUS)"
+          
+          # Get health details for summary
+          HEALTH_RESPONSE=$(curl -s $API_URL || echo '{"error":"failed to fetch"}')
+          HEALTH_STATUS=$(echo "$HEALTH_RESPONSE" | jq -r '.status // "unknown"')
+          DB_STATUS=$(echo "$HEALTH_RESPONSE" | jq -r '.database.status // "unknown"')
+          UPTIME=$(echo "$HEALTH_RESPONSE" | jq -r '.uptime // "unknown"')
+          
+          echo "health_status=$HEALTH_STATUS" >> $GITHUB_OUTPUT
+          echo "db_health_status=$DB_STATUS" >> $GITHUB_OUTPUT
+          echo "app_uptime=$UPTIME" >> $GITHUB_OUTPUT
+        else
+          echo "❌ Health endpoint: $API_URL returned HTTP $API_STATUS"
+          echo "health_status=error" >> $GITHUB_OUTPUT
+          echo "db_health_status=unknown" >> $GITHUB_OUTPUT
+          echo "app_uptime=unknown" >> $GITHUB_OUTPUT
+        fi
         
     - name: 💰 Cost Analysis
       id: cost-analysis

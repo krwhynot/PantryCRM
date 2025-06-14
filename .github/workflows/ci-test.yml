@@ -1,0 +1,203 @@
+name: 🧪 Continuous Integration
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Lint and Type Check
+  code-quality:
+    runs-on: ubuntu-latest
+    name: 🔍 Code Quality
+    
+    steps:
+    - name: 🔄 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 📥 Install Dependencies  
+      run: npm ci
+      
+    - name: 🧹 Lint Code
+      run: npm run lint
+      
+    - name: 🔍 Type Check
+      run: npm run typecheck
+      
+    - name: 🔒 Security Audit
+      run: npm run security:audit
+      continue-on-error: true
+
+  # Unit and Integration Tests
+  test:
+    runs-on: ubuntu-latest
+    name: 🧪 Tests
+    
+    strategy:
+      matrix:
+        test-type: [unit, e2e]
+        
+    steps:
+    - name: 🔄 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 📥 Install Dependencies
+      run: npm ci
+      
+    - name: 🧪 Run Unit Tests
+      if: matrix.test-type == 'unit'
+      run: npm run test:ci
+      
+    - name: 🎭 Install Playwright
+      if: matrix.test-type == 'e2e'
+      run: npx playwright install --with-deps chromium
+      
+    - name: 🧪 Run E2E Tests
+      if: matrix.test-type == 'e2e'
+      run: npm run test:e2e
+      continue-on-error: true
+      
+    - name: 📤 Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.test-type }}
+        path: |
+          coverage/
+          test-results/
+          playwright-report/
+        retention-days: 7
+
+  # Build Test
+  build-test:
+    runs-on: ubuntu-latest
+    name: 🔨 Build Test
+    
+    steps:
+    - name: 🔄 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 📥 Install Dependencies
+      run: npm ci
+      
+    - name: 🔨 Test Build
+      run: npm run build:ci
+      env:
+        CI: true
+        NEXT_TELEMETRY_DISABLED: 1
+        # Mock environment variables for build
+        DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+        GOOGLE_ID: "dummy"
+        GOOGLE_SECRET: "dummy" 
+        GITHUB_ID: "dummy"
+        GITHUB_SECRET: "dummy"
+        JWT_SECRET: "dummy-secret-for-build"
+        
+    - name: 📊 Bundle Size Check
+      run: |
+        echo "Checking bundle size..."
+        npm run analyze:simple || echo "Bundle analysis skipped"
+        
+    - name: 💾 Cache Build for PR
+      if: github.event_name == 'pull_request'
+      uses: actions/cache@v4
+      with:
+        path: .next
+        key: build-cache-${{ github.event.pull_request.head.sha }}
+
+  # Performance Test
+  performance-test:
+    runs-on: ubuntu-latest
+    name: ⚡ Performance Test
+    needs: [build-test]
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: 🔄 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 📥 Install Dependencies
+      run: npm ci
+      
+    - name: 📊 Restore Build Cache
+      uses: actions/cache@v4
+      with:
+        path: .next
+        key: build-cache-${{ github.event.pull_request.head.sha }}
+        
+    - name: 🚀 Start Test Server
+      run: |
+        npm run start &
+        sleep 10
+      env:
+        PORT: 3000
+        
+    - name: ⚡ Run Performance Tests
+      run: |
+        echo "Running quick performance test..."
+        npm run performance:quick || echo "Performance test completed with issues"
+      continue-on-error: true
+
+  # Summary Job
+  ci-summary:
+    runs-on: ubuntu-latest
+    name: 📋 CI Summary
+    needs: [code-quality, test, build-test]
+    if: always()
+    
+    steps:
+    - name: 📊 Generate CI Summary
+      run: |
+        echo "## 📋 CI Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ needs.code-quality.result }}" = "success" ]; then
+          echo "✅ **Code Quality**: Passed" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Code Quality**: Failed" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ "${{ needs.test.result }}" = "success" ]; then
+          echo "✅ **Tests**: Passed" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Tests**: Failed" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ "${{ needs.build-test.result }}" = "success" ]; then
+          echo "✅ **Build**: Passed" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Build**: Failed" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY

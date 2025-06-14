@@ -7,6 +7,7 @@
     "build": "cross-env prisma generate && cross-env prisma db push && cross-env prisma db seed && cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" next build",
     "build:safe": "cross-env prisma generate && cross-env prisma db push && cross-env prisma db seed && cross-env NODE_OPTIONS=\"--max-old-space-size=4096 --no-warnings\" NEXT_TELEMETRY_DISABLED=1 next build",
     "build:azure": "prisma generate && NODE_OPTIONS=\"--max-old-space-size=2048\" NEXT_TELEMETRY_DISABLED=1 CI=true DATABASE_URL=\"postgresql://dummy:dummy@localhost:5432/dummy\" GOOGLE_ID=\"dummy\" GOOGLE_SECRET=\"dummy\" GITHUB_ID=\"dummy\" GITHUB_SECRET=\"dummy\" JWT_SECRET=\"dummy-secret-for-build\" next build",
+    "build:ci": "npm run clean && prisma generate && NODE_OPTIONS=\"--max-old-space-size=4096\" NEXT_TELEMETRY_DISABLED=1 CI=true next build",
     "start": "next start",
     "start:azure": "next start -p $PORT",
     "lint": "next lint",
@@ -35,8 +36,8 @@
     "analyze:bundle": "node ./scripts/analyze-bundle.js",
     "analyze:simple": "node ./scripts/simple-bundle-analyzer.js",
     "optimize": "npm dedupe && npm prune",
-    "clean": "if exist .next rmdir /s /q .next",
-    "prebuild": "rimraf .next",
+    "clean": "rimraf .next 2>/dev/null || rm -rf .next 2>/dev/null || (if exist .next rmdir /s /q .next) || true",
+    "prebuild": "npm run clean",
     "build:prod": "npm run prebuild && npm run build",
     "security:audit": "npm audit --audit-level moderate",
     "security:fix": "npm audit fix",
@@ -51,7 +52,8 @@
     "setup:monitoring": "./scripts/azure-monitor-setup.sh",
     "backup:create": "./scripts/automated-backup.sh",
     "security:scan": "trufflehog filesystem --directory=. --config=.trufflehog.yml",
-    "prepare": "husky install || true"
+    "prepare": "is-ci || husky install || true",
+    "postinstall": "prisma generate || true"
   },
   "prisma": {
     "seed": "node ./prisma/seed.js"
@@ -98,6 +100,7 @@
     "date-fns": "^3.6.0",
     "dompurify": "^3.2.6",
     "eslint": "8.57.0",
+    "is-ci": "^3.0.1",
     "exceljs": "^4.4.0",
     "ioredis": "^5.4.1",
     "isomorphic-dompurify": "^2.25.0",
@@ -115,6 +118,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
     "react-resizable-panels": "^2.1.6",
+    "rimraf": "^6.0.1",
     "sharp": "^0.33.5",
     "sonner": "^1.7.0",
     "swr": "^2.2.5",
@@ -156,7 +160,6 @@
     "jest-environment-jsdom": "^29.7.0",
     "ora": "^8.2.0",
     "prisma": "^5.22.0",
-    "rimraf": "^6.0.1",
     "source-map-explorer": "^2.5.3",
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",

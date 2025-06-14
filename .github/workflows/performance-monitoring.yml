@@ -151,6 +151,28 @@ jobs:
         path: performance_baselines/github-actions/
         retention-days: 30
         
+    - name: 🌐 Application Health Check
+      run: |
+        echo "Testing application health endpoint..."
+        
+        # Test health endpoint
+        HEALTH_STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://kitchen-pantry-crm.azurewebsites.net/api/health || echo "000")
+        
+        if [ "$HEALTH_STATUS" -eq 200 ]; then
+          echo "✅ Application health check passed (HTTP $HEALTH_STATUS)"
+          
+          # Get detailed health info
+          curl -s https://kitchen-pantry-crm.azurewebsites.net/api/health | jq -r '
+            "🏥 Health Status: " + .status +
+            "\n⏰ Uptime: " + (.uptime | tostring) + " seconds" +
+            "\n💾 Memory Used: " + (.system.memory.used | tostring) + "MB" +
+            "\n📊 Response Time: " + (.responseTime | tostring) + "ms" +
+            "\n🗄️ Database: " + .database.status
+          ' || echo "Health endpoint responded but JSON parsing failed"
+        else
+          echo "❌ Application health check failed (HTTP $HEALTH_STATUS)"
+        fi
+        
     - name: 🔔 Teams/Slack Notification (Optional)
       if: env.has_alerts == 'true' && vars.TEAMS_WEBHOOK_URL != ''
       run: |
