@@ -1,9 +1,20 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import PWAInstaller from '@/components/PWAInstaller'
-import NetworkStatus from '@/components/NetworkStatus'
-import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
+import dynamic from 'next/dynamic'
+
+// Dynamically import client-side components to prevent SSR issues
+const PWAInstaller = dynamic(() => import('@/components/PWAInstaller'), {
+  ssr: false
+})
+
+const NetworkStatus = dynamic(() => import('@/components/NetworkStatus'), {
+  ssr: false
+})
+
+const ServiceWorkerRegistration = dynamic(() => import('@/components/ServiceWorkerRegistration'), {
+  ssr: false
+})
 
 const inter = Inter({ subsets: ['latin'] })
 

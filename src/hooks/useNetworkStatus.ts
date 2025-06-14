@@ -11,7 +11,7 @@ interface NetworkStatus {
 
 export function useNetworkStatus(): NetworkStatus {
   const [networkStatus, setNetworkStatus] = useState<NetworkStatus>({
-    isOnline: typeof window !== 'undefined' && typeof navigator !== 'undefined' ? navigator.onLine : true,
+    isOnline: true, // Default to online during SSR
     isSlowConnection: false,
     connectionType: 'unknown',
     saveData: false
@@ -61,13 +61,13 @@ export function useNetworkStatus(): NetworkStatus {
       updateNetworkStatus();
       
       // Trigger background sync if service worker is available
-      if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      if (typeof window !== 'undefined' && 'serviceWorker' in navigator && navigator.serviceWorker) {
         navigator.serviceWorker.ready.then((registration) => {
           // Check if background sync is supported
           if ('sync' in registration) {
             (registration as any).sync.register('background-sync').catch(console.error);
           }
-        });
+        }).catch(console.error);
       }
     };
 
@@ -82,13 +82,15 @@ export function useNetworkStatus(): NetworkStatus {
       updateNetworkStatus();
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
 
-    // Listen for connection quality changes
-    const connection = typeof window !== 'undefined' ? (navigator as any).connection : null;
-    if (connection) {
-      connection.addEventListener('change', handleConnectionChange);
+      // Listen for connection quality changes
+      const connection = (navigator as any).connection;
+      if (connection) {
+        connection.addEventListener('change', handleConnectionChange);
+      }
     }
 
     return () => {
@@ -96,6 +98,7 @@ export function useNetworkStatus(): NetworkStatus {
         window.removeEventListener('online', handleOnline);
         window.removeEventListener('offline', handleOffline);
         
+        const connection = (navigator as any).connection;
         if (connection) {
           connection.removeEventListener('change', handleConnectionChange);
         }

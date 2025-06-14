@@ -17,10 +17,11 @@ export default function PWAInstaller() {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     // Check if app is already installed
     const checkInstalled = () => {
-      if (typeof window === 'undefined') return;
-      
       const isRunningStandalone = window.matchMedia('(display-mode: standalone)').matches;
       const isIOSStandalone = (window.navigator as any).standalone === true;
       setIsInstalled(isRunningStandalone || isIOSStandalone);

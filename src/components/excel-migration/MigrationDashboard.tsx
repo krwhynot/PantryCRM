@@ -64,6 +64,9 @@ export function MigrationDashboard() {
 
   // Connect to SSE for real-time updates
   useEffect(() => {
+    // Only run on client side to prevent SSR issues
+    if (typeof window === 'undefined') return;
+    
     if (migrationState.status === 'analyzing' || migrationState.status === 'migrating') {
       const eventSource = new EventSource('/api/migration/progress');
       eventSourceRef.current = eventSource;
