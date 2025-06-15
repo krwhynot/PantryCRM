@@ -1,7 +1,7 @@
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { ReactPlugin } from '@microsoft/applicationinsights-react-js';
 import { createBrowserHistory } from 'history';
-import { getFID, getLCP, getCLS, getFCP, getTTFB, Metric } from 'web-vitals';
+import { onFID, onLCP, onCLS, onFCP, onTTFB, Metric } from 'web-vitals';
 
 const browserHistory = createBrowserHistory();
 const reactPlugin = new ReactPlugin();
@@ -79,12 +79,11 @@ const addHydrationMetricsTracking = () => {
     });
     
     // Track time to hydration metrics using web vitals
-    // Ensure functions exist before calling, though static imports should guarantee this if module resolves
-    if (typeof getFID === 'function') getFID((metric: Metric) => trackVitalMetric('FID', metric));
-    if (typeof getLCP === 'function') getLCP((metric: Metric) => trackVitalMetric('LCP', metric));
-    if (typeof getCLS === 'function') getCLS((metric: Metric) => trackVitalMetric('CLS', metric));
-    if (typeof getFCP === 'function') getFCP((metric: Metric) => trackVitalMetric('FCP', metric));
-    if (typeof getTTFB === 'function') getTTFB((metric: Metric) => trackVitalMetric('TTFB', metric));
+    onFID((metric: Metric) => trackVitalMetric('FID', metric));
+    onLCP((metric: Metric) => trackVitalMetric('LCP', metric));
+    onCLS((metric: Metric) => trackVitalMetric('CLS', metric));
+    onFCP((metric: Metric) => trackVitalMetric('FCP', metric));
+    onTTFB((metric: Metric) => trackVitalMetric('TTFB', metric));
   } catch (e) {
     console.warn('[AppInsights] Error setting up hydration metrics tracking:', e);
   }
