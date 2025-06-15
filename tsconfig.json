@@ -46,9 +46,10 @@
     "**/*.cy.tsx",
     "backup-removed",
     "lib/excel-migration/**",
-    "src/lib/excel-migration/**", 
-    "app/api/migration/**",
+    "src/lib/excel-migration/**",
     "src/components/excel-migration/**",
-    "components/excel-migration/**"
+    "app/api/migration/**",
+    "components/excel-migration/**",
+    "prisma/seed-positions.ts"
   ]
 }
