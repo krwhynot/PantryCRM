@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismadb } from '@/lib/prisma';
-import { OrganizationValidation } from '@/lib/validations/organization';
-import { withErrorHandler, dbOperation, ErrorTypes } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/security';
-
 import { processSearchInput } from '@/lib/input-sanitization';
 
-async function handleGET(req: NextRequest): Promise<NextResponse> {
+// Import validation and API helpers as required by TODO-WS-001
+import { validateCreateOrganization, validateUpdateOrganization } from '@/lib/types/validation';
+import { parseRequestBody, createSuccessResponse, createErrorResponse, handleValidationError, handlePrismaError } from '@/lib/types/api-helpers';
+import type { APIResponse, OrganizationWithDetails, OrganizationSummary } from '@/types/crm';
+
+async function GET(req: NextRequest): Promise<NextResponse<APIResponse<OrganizationSummary[]>>> {
   // Check authentication
   const { user, error } = await requireAuth(req);
-  if (error) return error;
+  if (error) return error as NextResponse<APIResponse<OrganizationSummary[]>>;
 
   const { searchParams } = new URL(req.url);
   const q = searchParams.get('q');
@@ -36,8 +38,8 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
   if (priority) where.priority = priority;
   if (segment) where.segment = segment;
 
-  const organizations = await dbOperation(async () => {
-    return await prismadb.organization.findMany({
+  try {
+    const organizations = await prismadb.organization.findMany({
       where,
       orderBy: [
         { priority: 'asc' },
@@ -57,44 +59,58 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
         createdAt: true,
       }
     });
-  });
 
-  return NextResponse.json({
-    organizations,
-    count: organizations.length,
-    query: q || '',
-    filters: { priority, segment, distributor }
-  });
+    return createSuccessResponse({
+      organizations,
+      count: organizations.length,
+      query: q || '',
+      filters: { priority, segment, distributor }
+    });
+  } catch (err) {
+    return handlePrismaError(err);
+  }
 }
 
-async function handlePOST(req: NextRequest): Promise<NextResponse> {
+async function POST(req: NextRequest): Promise<NextResponse<APIResponse<OrganizationWithDetails>>> {
   // Check authentication
   const { user, error } = await requireAuth(req);
-  if (error) return error;
+  if (error) return error as NextResponse<APIResponse<OrganizationWithDetails>>;
 
-  const body = await req.json();
-  const validatedData = OrganizationValidation.parse(body);
+  // 1. Validate request using provided validation helpers
+  const { success, data, error: validationError } = await parseRequestBody(req, validateCreateOrganization);
+  if (!success) return handleValidationError([{ field: 'body', message: validationError.message }]);
 
-  const organization = await dbOperation(async () => {
-    return await prismadb.organization.create({
+  // 2. Database operation with error handling
+  try {
+    const organization = await prismadb.organization.create({
       data: {
-        name: validatedData.name,
-        phone: validatedData.phone,
-        email: validatedData.email,
-        address: validatedData.addressLine1,
-        priority: validatedData.priority || "C",
-        segment: validatedData.segment || "GENERAL",
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        address: data.address, // Changed from addressLine1 to address per schema
+        priority: data.priority || "C",
+        segment: data.segment || "CASUAL_DINING", // Default segment value
         type: "PROSPECT",
         status: "ACTIVE",
+        notes: data.notes, // Changed from description to notes per schema
+        zipCode: data.zipCode, // Changed from postalCode to zipCode per schema
+        city: data.city,
+        state: data.state,
+        website: data.website,
+        estimatedRevenue: data.estimatedRevenue,
+        employeeCount: data.employeeCount,
+        primaryContact: data.primaryContact,
+        // isActive field removed as it doesn't exist in the schema
       },
     });
-  });
-
-  return NextResponse.json(organization, { status: 201 });
+    
+    return createSuccessResponse(organization);
+  } catch (err) {
+    return handlePrismaError(err);
+  }
 }
 
-// Export with error handling
-export const GET = withErrorHandler(handleGET);
-export const POST = withErrorHandler(handlePOST);
+// Export the API route handlers directly
+export { GET, POST };
 
 
