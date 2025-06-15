@@ -185,7 +185,7 @@ export const createOpportunitySchema = z.object({
   contactId: z.string().cuid('Invalid contact ID').optional(),
   value: z.number().min(0).optional(),
   stage: opportunityStageSchema,
-  probability: z.number().int().min(0).max(100).optional().default(50),
+  probability: z.number().int().min(0).max(100).optional(),
   expectedCloseDate: z.string().datetime().optional().or(z.date().optional()),
   notes: z.string().max(2000).optional(),
   principal: foodServicePrincipalSchema.optional()
@@ -208,10 +208,10 @@ export const organizationFiltersSchema = z.object({
   lastContactedBefore: z.date().optional(),
   estimatedRevenueMin: z.number().min(0).optional(),
   estimatedRevenueMax: z.number().min(0).optional(),
-  page: z.number().int().min(1).optional().default(1),
-  limit: z.number().int().min(1).max(100).optional().default(20),
+  page: z.number().int().min(1).optional(),
+  limit: z.number().int().min(1).max(100).optional(),
   sortBy: z.enum(['name', 'priority', 'lastContactDate', 'estimatedRevenue', 'createdAt']).optional(),
-  sortOrder: z.enum(['asc', 'desc']).optional().default('desc')
+  sortOrder: z.enum(['asc', 'desc']).optional()
 });
 
 // =============================================================================

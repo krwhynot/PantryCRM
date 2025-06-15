@@ -79,8 +79,9 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
           v: 0
         })}`,
         
-        // Set default priority and type
+        // Set required fields with defaults
         priority: "B",
+        segment: "CASUAL_DINING", // Required field
         type: "PROSPECT"
       },
     });
@@ -167,8 +168,8 @@ async function handlePUT(req: NextRequest, context: { params: Promise<Record<str
           v: 0
         })}`,
         
-        // Default values for required fields
-        isActive: status === "Inactive" ? false : true
+        // Map status correctly - use status field instead of isActive
+        status: status === "Inactive" ? "INACTIVE" : "ACTIVE"
       },
     });
 
@@ -205,11 +206,15 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
 
     // Transform organizations to match expected crm_Accounts structure
     const accounts = organizations.map(org => {
-      // Parse additional fields from description if available
+      // Parse additional fields from notes if available
       let additionalFields = {};
       try {
-        if (org.description) {
-          additionalFields = JSON.parse(org.description);
+        if (org.notes) {
+          // Extract JSON from notes if it exists
+          const jsonMatch = org.notes.match(/Additional Data: (\{.*\})/);
+          if (jsonMatch) {
+            additionalFields = JSON.parse(jsonMatch[1]);
+          }
         }
       } catch (e) {
         // Ignore parsing errors
@@ -221,16 +226,16 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
         email: org.email,
         office_phone: org.phone,
         website: org.website,
-        shipping_street: org.addressLine1,
+        shipping_street: org.address,
         shipping_city: org.city,
         shipping_state: org.state,
-        shipping_postal_code: org.postalCode,
-        shipping_country: org.country,
-        assigned_to: org.accountManagerId,
-        status: org.isActive ? "Active" : "Inactive",
+        shipping_postal_code: org.zipCode,
+        shipping_country: "", // Not in schema
+        assigned_to: null, // Not in schema
+        status: org.status === "ACTIVE" ? "Active" : "Inactive",
         createdAt: org.createdAt,
         updatedAt: org.updatedAt,
-        accountManager: org.accountManager,
+        accountManager: null, // Not in schema
         ...additionalFields
       };
     });

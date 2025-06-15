@@ -72,7 +72,7 @@ async function handlePOST(req: NextRequest): Promise<NextResponse> {
         lastName: last_name,
         email,
         phone: mobile_phone || office_phone || "",
-        title: type || "",
+        position: type || "", // Use position instead of title
         
         // Store additional information in notes field as JSON
         notes: JSON.stringify({
@@ -102,7 +102,7 @@ async function handlePOST(req: NextRequest): Promise<NextResponse> {
         },
         
         // Default values for required fields
-        isActive: true
+        // isActive field doesn't exist in Contact model - removing
       },
     });
 
@@ -201,7 +201,7 @@ async function handlePUT(req: NextRequest): Promise<NextResponse> {
         lastName: last_name,
         email,
         phone: mobile_phone || office_phone || "",
-        title: type || "",
+        position: type || "", // Use position instead of title
         
         // Store additional information in notes field as JSON
         notes: JSON.stringify({
@@ -232,7 +232,7 @@ async function handlePUT(req: NextRequest): Promise<NextResponse> {
         } : {}),
         
         // Default values for required fields
-        isActive: true
+        // isActive field doesn't exist in Contact model - removing
       },
     });
 
