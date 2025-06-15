@@ -3,6 +3,7 @@ import { prismadb } from '@/lib/prisma';
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
 import { requireOrganizationAccess } from '@/lib/authorization';
+import type { APIResponse, ContactWithDetails } from '@/types/crm';
 
 /**
  * GET handler for retrieving contacts by organization ID
@@ -11,7 +12,7 @@ import { requireOrganizationAccess } from '@/lib/authorization';
 async function handleGET(
   request: NextRequest,
   { params }: { params: Promise<{ orgId: string }> }
-): Promise<NextResponse> {
+): Promise<NextResponse<APIResponse<ContactWithDetails[]>>> {
   // Critical: await the params Promise
   const { orgId } = await params;
   
@@ -99,7 +100,7 @@ async function handleGET(
 async function handlePOST(
   request: NextRequest,
   { params }: { params: Promise<{ orgId: string }> }
-): Promise<NextResponse> {
+): Promise<NextResponse<APIResponse<ContactWithDetails>>> {
   // Critical: await the params Promise
   const { orgId } = await params;
   

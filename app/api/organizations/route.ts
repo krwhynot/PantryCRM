@@ -8,7 +8,7 @@ import { validateCreateOrganization, validateUpdateOrganization } from '../../..
 import { parseRequestBody, createSuccessResponse, createErrorResponse, handleValidationError, handlePrismaError } from '../../../lib/types/api-helpers';
 import type { APIResponse, OrganizationWithDetails, OrganizationSummary } from '../../../types/crm';
 
-async function GET(req: NextRequest): Promise<NextResponse<APIResponse<any>>> {
+async function GET(req: NextRequest): Promise<NextResponse<APIResponse<OrganizationSummary[]>>> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error as NextResponse<APIResponse<OrganizationSummary[]>>;
@@ -19,7 +19,7 @@ async function GET(req: NextRequest): Promise<NextResponse<APIResponse<any>>> {
   const segment = searchParams.get('segment');
   const distributor = searchParams.get('distributor');
 
-  const where: any = {
+  const where: Record<string, any> = {
     status: "ACTIVE", // Only fetch active organizations by default
   };
 

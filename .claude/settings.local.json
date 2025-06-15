@@ -55,7 +55,10 @@
       "Bash(for file in app/api/user/[userId]/set-language/route.ts app/api/user/[userId]/setOpenAi/route.ts app/api/user/[userId]/setnewpass/route.ts app/api/user/[userId]/setnotiondb/route.ts)",
       "Bash(for file in app/api/user/activate/[userId]/route.ts app/api/user/activateAdmin/[userId]/route.ts app/api/user/deactivate/[userId]/route.ts app/api/user/deactivateAdmin/[userId]/route.ts)",
       "Bash(for file in \"app/api/crm/account/[accountId]/unwatch/route.ts\" \"app/api/crm/account/[accountId]/watch/route.ts\")",
-      "mcp__filesystem__directory_tree"
+      "mcp__filesystem__directory_tree",
+      "Bash(ls:*)",
+      "Bash(mv:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }

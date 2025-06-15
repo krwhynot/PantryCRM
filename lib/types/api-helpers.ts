@@ -9,9 +9,9 @@ import { NextResponse } from 'next/server';
 import type { 
   APIResponse, 
   AppError, 
-  ErrorCode,
   PaginatedResponse 
 } from '@/types/crm';
+import { ErrorCode } from '@/types/crm';
 
 // =============================================================================
 // RESPONSE BUILDERS

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
 import { StaticDataCache } from '@/lib/cache';
+import type { APIResponse, InteractionWithDetails } from '@/types/crm';
 import crypto from "crypto";
 
 // Use cached static data for improved Azure SQL Basic performance
@@ -34,7 +35,7 @@ const createBulkInteractionsSchema = z.object({
 });
 
 // Bulk interaction creation handler for improved Azure SQL Basic performance
-async function handleBulkInteractionCreation(body: any, userId: string): Promise<NextResponse> {
+async function handleBulkInteractionCreation(body: z.infer<typeof createBulkInteractionsSchema>, userId: string): Promise<NextResponse> {
   try {
     // Validate bulk request
     const validation = createBulkInteractionsSchema.safeParse(body);
@@ -102,7 +103,7 @@ async function handleBulkInteractionCreation(body: any, userId: string): Promise
   }
 }
 
-async function handlePOST(req: NextRequest): Promise<NextResponse> {
+async function handlePOST(req: NextRequest): Promise<NextResponse<APIResponse<InteractionWithDetails>>> {
   // Check authentication using the standardized method
   const { user, error } = await requireAuth(req);
   if (error) return error;

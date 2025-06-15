@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import SSRChartWrapper from '@/components/charts/SSRChartWrapper';
+import type { ChartDataPoint } from '@/types/crm';
 
 interface ChartData {
   segment: string;
@@ -40,61 +41,33 @@ const OptimizedDonutChart: React.FC<OptimizedDonutChartProps> = ({
   enableTooltip = true,
   showLabel = false
 }) => {
-  // Transform data for Recharts format
-  const chartData = data.map((item, index) => ({
+  // Transform data to ChartDataPoint format
+  const chartData: ChartDataPoint[] = data.map((item, index) => ({
     name: item.segment,
     value: item.count,
-    color: item.color || colors[index % colors.length]
+    category: 'segment'
   }));
-
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0];
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded shadow-lg">
-          <p className="font-medium">{data.name}</p>
-          <p className="text-sm text-gray-600">
-            Count: <span className="font-medium">{data.value}</span>
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <div className={`bg-white rounded-lg border border-gray-200 p-6 ${className}`}>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">{title}</h3>
       
       <div className="h-80">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={120}
-              paddingAngle={2}
-              dataKey="value"
-              label={showLabel ? ({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%` : false}
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            {enableTooltip && <Tooltip content={<CustomTooltip />} />}
-            {showLegend && (
-              <Legend 
-                verticalAlign="bottom" 
-                height={36}
-                formatter={(value) => (
-                  <span className="text-sm text-gray-700">{value}</span>
-                )}
-              />
-            )}
-          </PieChart>
-        </ResponsiveContainer>
+        <SSRChartWrapper
+          type="donut"
+          data={chartData}
+          height={320}
+          colors={colors}
+          legend={showLegend}
+          tooltip={enableTooltip}
+          enableVirtualization={true}
+          maxDataPoints={10}
+          pieConfig={{
+            innerRadius: 60,
+            outerRadius: 120
+          }}
+          className="w-full"
+        />
       </div>
       
       {/* Fallback data display for SSR */}

@@ -1,7 +1,9 @@
 "use client";
 
-import { DonutChart, Card, Title, Legend } from "@tremor/react";
+import { Card, Title, Legend } from "@tremor/react";
 import { memo, useMemo } from "react";
+import SSRChartWrapper from '@/components/charts/SSRChartWrapper';
+import type { ChartDataPoint } from '@/types/crm';
 import { useChartCleanup, useChartDimensions, useChartPerformance } from "@/hooks/useChartOptimization";
 import { dataFormatter, useSegmentData } from "@/utils/chartDataProcessor";
 
@@ -67,18 +69,23 @@ export const OptimizedDonutChart = memo<OptimizedDonutChartProps>(({
     <Card className={`tremor-chart-container ${className}`} ref={chartRef}>
       <Title className="text-sm sm:text-base">{title}</Title>
       
-      <DonutChart
-        className="mt-6"
-        data={chartData}
-        category="value"
-        index="name"
-        colors={colors}
-        valueFormatter={dataFormatter}
-        height={chartConfig.height}
-        showLabel={chartConfig.showLabel}
-        showAnimation={false} // Disabled for performance
-        showTooltip={enableTooltip}
-      />
+      <div className="mt-6">
+        <SSRChartWrapper
+          type="donut"
+          data={chartData}
+          height={chartConfig.height}
+          colors={colors}
+          legend={chartConfig.showLegend}
+          tooltip={enableTooltip}
+          enableVirtualization={true}
+          maxDataPoints={10}
+          pieConfig={{
+            innerRadius: 60,
+            outerRadius: Math.min(chartConfig.height / 2 - 10, 100)
+          }}
+          className="w-full"
+        />
+      </div>
       
       {chartConfig.showLegend && (
         <Legend

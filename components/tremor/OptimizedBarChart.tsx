@@ -1,9 +1,11 @@
 "use client";
 
-import { BarChart, Card, Title } from "@tremor/react";
+import { Card, Title } from "@tremor/react";
 import { memo, useMemo } from "react";
+import SSRChartWrapper from '@/components/charts/SSRChartWrapper';
+import type { ChartDataPoint } from '@/types/crm';
 import { useChartCleanup, useChartDimensions, useChartPerformance, useChartAnimation } from "@/hooks/useChartOptimization";
-import { dataFormatter, type ChartDataPoint } from "@/utils/chartDataProcessor";
+import { dataFormatter } from "@/utils/chartDataProcessor";
 
 interface OptimizedBarChartProps {
   data: ChartDataPoint[];
@@ -76,25 +78,24 @@ export const OptimizedBarChart = memo<OptimizedBarChartProps>(({
   return (
     <Card className={`tremor-chart-container ${className}`} ref={chartRef}>
       <Title className="text-sm sm:text-base">{title}</Title>
-      <BarChart
-        className="mt-6"
-        data={chartData}
-        index="name"
-        categories={categories}
-        colors={colors}
-        valueFormatter={dataFormatter}
-        showLegend={chartConfig.showLegend}
-        showGridLines={chartConfig.showGridLines}
-        showXAxis={chartConfig.showXAxis}
-        showYAxis={chartConfig.showYAxis}
-        autoMinValue={chartConfig.autoMinValue}
-        minValue={chartConfig.minValue}
-        height={chartConfig.height}
-        showAnimation={chartConfig.showAnimation}
-        enableTouchEvents={chartConfig.enableTouchEvents}
-        showTooltip={enableTooltip}
-        layout={chartConfig.layout}
-      />
+      <div className="mt-6">
+        <SSRChartWrapper
+          type="bar"
+          data={chartData}
+          height={chartConfig.height}
+          colors={colors}
+          legend={chartConfig.showLegend}
+          tooltip={enableTooltip}
+          enableVirtualization={true}
+          maxDataPoints={100}
+          barConfig={{
+            orientation: layout,
+            stacked: false,
+            groupPadding: 0.1
+          }}
+          className="w-full"
+        />
+      </div>
     </Card>
   );
 });

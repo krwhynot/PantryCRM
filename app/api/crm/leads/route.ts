@@ -1,59 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import sendEmail from "@/lib/sendmail";
+
+import { validateCreateOpportunity } from '@/lib/types/validation';
+import { 
+  parseRequestBody,
+  createSuccessResponse,
+  createErrorResponse,
+  handleValidationError,
+  handlePrismaError,
+  addPerformanceHeaders
+} from '@/lib/types/api-helpers';
+import { getOptimizedPrisma } from '@/lib/performance/optimized-prisma';
+import type { APIResponse, OpportunityWithDetails } from '@/types/crm';
 
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
 
 //Create a new Opportunity (formerly Lead)
-async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
-  // Check authentication
-  const { user, error } = await requireAuth(req);
-  if (error) return error;
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse("Unauthenticated", { status: 401 });
-  }
+async function handlePOST(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse<APIResponse<OpportunityWithDetails>>> {
+  const startTime = performance.now();
+  
   try {
-    const body = await req.json();
-    const sessionUserId = session.user.id;
-
-    if (!body) {
-      return new NextResponse("No form data", { status: 400 });
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return createErrorResponse({
+        code: 'UNAUTHORIZED',
+        message: 'Authentication required'
+      }, 401);
     }
 
-    const {
-      first_name,
-      last_name,
-      company,
-      jobTitle,
-      email,
-      phone,
-      description,
-      lead_source,
-      refered_by,
-      campaign,
-      assigned_to, // This will be the Opportunity.userId
-      accountIDs, // Legacy, store in notes
-      status, // Maps to Opportunity.status
-      type, // Maps to Opportunity.stage (e.g., "DEMO")
-    } = body;
-
-    // --- Organization Handling Start ---
-    if (!company || company.trim() === "") {
-      // It's crucial to have a company name to link or create an organization.
-      // The Opportunity model requires a non-null organizationId according to the schema.
-      return new NextResponse("Company name is required to associate with an organization.", { status: 400 });
+    // Validate request body
+    const { success, data, error } = await parseRequestBody(
+      req, 
+      validateCreateOpportunity
+    );
+    if (!success) {
+      return handleValidationError([{ field: 'body', message: error.message }]);
     }
 
-    let organizationId: string;
-    // Attempt to find an existing organization by name.
-    // Using findFirst since name is not a unique field in the schema.
-    const existingOrganization = await prismadb.organization.findFirst({
-      where: { name: company }, // `company` is from the destructured request body
-    });
+    // Database operation
+    const prisma = getOptimizedPrisma();
+
 
     if (existingOrganization) {
       organizationId = existingOrganization.id;
@@ -275,67 +265,75 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
         }),
         isActive: true,
       },
+      include: {
+        organization: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        contact: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
     });
 
-    if (assigned_to && assigned_to !== sessionUserId) {
-      const notifyRecipient = await prismadb.user.findFirst({
-        where: {
-          id: assigned_to,
-        },
-      });
+    // Response
+    const response = createSuccessResponse(newOpportunity);
+    addPerformanceHeaders(response, performance.now() - startTime);
+    
+    return response;
 
-      if (notifyRecipient && notifyRecipient.email) {
-        await sendEmail({
-          from: process.env.EMAIL_FROM as string,
-          to: notifyRecipient.email, // Removed || "info@softbase.cz" fallback, ensure valid email
-          subject: `New Opportunity Assigned: ${first_name || ""} ${last_name || ""}`,
-          text: `A new opportunity, created from a lead (${first_name || ""} ${last_name || ""}), has been assigned to you. You can click here for detail: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${newOpportunity.id}`,
-        });
-      } else {
-      }
-    }
-
-    return NextResponse.json({ newOpportunity }, { status: 200 });
   } catch (error) {
-    return new NextResponse("Internal error creating opportunity from lead", { status: 500 });
+    return handlePrismaError(error);
   }
 }
 
 //Get all Opportunities (formerly Leads)
-async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
-  // Check authentication
-  const { user, error } = await requireAuth(req);
-  if (error) return error;
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse("Unauthenticated", { status: 401 });
-  }
+async function handleGET(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse<APIResponse<OpportunityWithDetails[]>>> {
+  const startTime = performance.now();
+  
   try {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return createErrorResponse({
+        code: 'UNAUTHORIZED',
+        message: 'Authentication required'
+      }, 401);
+    }
+    
+    // Database operations
+    const prisma = getOptimizedPrisma();
     const url = new URL(req.url);
-    const status = url.searchParams.get("status"); // Maps to Opportunity.status
-    const assigned_to = url.searchParams.get("assigned_to"); // Maps to Opportunity.userId
-    const lead_source = url.searchParams.get("lead_source"); // Maps to Opportunity.source
-    const campaign = url.searchParams.get("campaign"); // Campaign is in notes
+    const status = url.searchParams.get("status");
+    const assigned_to = url.searchParams.get("assigned_to");
+    const lead_source = url.searchParams.get("lead_source");
+    const campaign = url.searchParams.get("campaign");
 
-    let whereClause: any = {};
+    const whereClause: any = {};
 
     if (status) {
       whereClause.status = status;
     }
     if (assigned_to) {
-      whereClause.userId = assigned_to; // Corrected: Maps to Opportunity.userId
+      whereClause.userId = assigned_to;
     }
     if (lead_source) {
-      whereClause.source = lead_source; // Corrected: Maps to Opportunity.source
+      whereClause.source = lead_source;
     }
     if (campaign) {
-      // Filtering by campaign stored in the JSON 'notes' field.
       whereClause.notes = {
         contains: `"campaign":"${campaign}"`, 
       };
     }
 
-    const opportunities = await prismadb.opportunity.findMany({
+    const opportunities = await prisma.opportunity.findMany({
       where: whereClause,
       orderBy: {
         createdAt: 'desc',
@@ -347,59 +345,59 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
       }
     });
     
-    return NextResponse.json(opportunities);
+    // Response
+    const response = createSuccessResponse(opportunities);
+    addPerformanceHeaders(response, performance.now() - startTime);
+    
+    return response;
+
   } catch (error) {
-    return new NextResponse("Internal error retrieving opportunities", { status: 500 });
+    return handlePrismaError(error);
   }
 }
 
-//Update an Opportunity (formerly Lead)
-async function handlePUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse> {
-  // Check authentication
-  const { user, error } = await requireAuth(req);
-  if (error) return error;
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse("Unauthenticated", { status: 401 });
-  }
+// Update an Opportunity (formerly Lead)
+async function handlePUT(req: NextRequest, context: { params: Promise<Record<string, string>> }): Promise<NextResponse<APIResponse<OpportunityWithDetails>>> {
+  const startTime = performance.now();
+  
   try {
-    const body = await req.json();
-    const sessionUserId = session.user.id;
-
-    if (!body) {
-      return new NextResponse("No form data", { status: 400 });
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return createErrorResponse({
+        code: 'UNAUTHORIZED',
+        message: 'Authentication required'
+      }, 401);
     }
 
-    const {
-      id, // Opportunity ID
-      firstName,
-      lastName,
-      company,
-      jobTitle,
-      email,
-      phone,
-      description,
-      lead_source, // Maps to Opportunity.source
-      refered_by,
-      campaign,
-      assigned_to, // Maps to Opportunity.userId
-      accountIDs, // Legacy, store in notes
-      status, // Maps to Opportunity.status
-      type, // Maps to Opportunity.stage
-    } = body;
+    // Validate request body
+    const { success, data, error } = await parseRequestBody(
+      req, 
+      validateCreateOpportunity
+    );
+    if (!success) {
+      return handleValidationError([{ field: 'body', message: error.message }]);
+    }
+
+    const prisma = getOptimizedPrisma();
+    const { id, ...updateData } = data;
 
     if (!id) {
-      return new NextResponse("Opportunity ID is required for update", { status: 400 });
+      return createErrorResponse({
+        code: 'VALIDATION_ERROR',
+        message: 'Opportunity ID is required for update'
+      }, 400);
     }
 
-    const opportunityUserId = assigned_to || sessionUserId;
-
-    const existingOpportunity = await prismadb.opportunity.findUnique({
+    const existingOpportunity = await prisma.opportunity.findUnique({
       where: { id },
     });
 
     if (!existingOpportunity) {
-      return new NextResponse("Opportunity not found for update", { status: 404 });
+      return createErrorResponse({
+        code: 'NOT_FOUND',
+        message: 'Opportunity not found for update'
+      }, 404);
     }
 
     // --- Stage Validation (from body.type) ---
@@ -475,30 +473,32 @@ async function handlePUT(req: NextRequest, context: { params: Promise<Record<str
       where: {
         id,
       },
-      data: updateData,
+      include: {
+        organization: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        contact: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
     });
 
-    if (assigned_to && assigned_to !== sessionUserId) {
-      const notifyRecipient = await prismadb.user.findFirst({
-        where: {
-          id: assigned_to,
-        },
-      });
+    // Response
+    const response = createSuccessResponse(updatedOpportunity);
+    addPerformanceHeaders(response, performance.now() - startTime);
+    
+    return response;
 
-      if (notifyRecipient && notifyRecipient.email) {
-        await sendEmail({
-          from: process.env.EMAIL_FROM as string,
-          to: notifyRecipient.email,
-          subject: `Opportunity Updated & Assigned: ${firstName || ""} ${lastName || ""}`,
-          text: `An opportunity, (${firstName || ""} ${lastName || ""}), has been updated and assigned to you. You can click here for detail: ${process.env.NEXT_PUBLIC_APP_URL}/crm/opportunities/${updatedOpportunity.id}`,
-        });
-      } else {
-      }
-    }
-
-    return NextResponse.json({ updatedOpportunity }, { status: 200 });
   } catch (error) {
-    return new NextResponse("Internal error updating opportunity from lead", { status: 500 });
+    return handlePrismaError(error);
   }
 }
 

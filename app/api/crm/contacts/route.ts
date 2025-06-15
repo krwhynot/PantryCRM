@@ -1,270 +1,135 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import sendEmail from "@/lib/sendmail";
+
+import { validateCreateContact } from '@/lib/types/validation';
+import { 
+  parseRequestBody,
+  createSuccessResponse,
+  createErrorResponse,
+  handleValidationError,
+  handlePrismaError,
+  addPerformanceHeaders
+} from '@/lib/types/api-helpers';
+import { getOptimizedPrisma } from '@/lib/performance/optimized-prisma';
+import type { APIResponse, ContactWithDetails } from '@/types/crm';
 
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
 
 //Create route
-async function handlePOST(req: NextRequest): Promise<NextResponse> {
-  // Check authentication
-  const { user, error } = await requireAuth(req);
-  if (error) return error;
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse("Unauthenticated", { status: 401 });
-  }
+async function handlePOST(req: NextRequest): Promise<NextResponse<APIResponse<ContactWithDetails>>> {
+  const startTime = performance.now();
+  
   try {
-    const body = await req.json();
-    const userId = session.user.id;
-
-    if (!body) {
-      return new NextResponse("No form data", { status: 400 });
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return createErrorResponse({
+        code: 'UNAUTHORIZED',
+        message: 'Authentication required'
+      }, 401);
     }
 
-    const {
-      assigned_to,
-      assigned_account,
-      birthday_day,
-      birthday_month,
-      birthday_year,
-      description,
-      email,
-      personal_email,
-      first_name,
-      last_name,
-      office_phone,
-      mobile_phone,
-      website,
-      status,
-      social_twitter,
-      social_facebook,
-      social_linkedin,
-      social_skype,
-      social_instagram,
-      social_youtube,
-      social_tiktok,
-      type,
-    } = body;
+    // Validate request body
+    const { success, data, error } = await parseRequestBody(
+      req, 
+      validateCreateContact
+    );
+    if (!success) {
+      return handleValidationError([{ field: 'body', message: error.message }]);
+    }
 
-    // Use Contact model as proxy for crm_Contacts
-    // First, need to ensure we have a valid organization
-    if (!assigned_account) {
-      return new NextResponse("Organization ID is required", { status: 400 });
-    }
-    
-    // Check if the organization exists
-    const organization = await prismadb.organization.findUnique({
-      where: { id: assigned_account }
-    });
-    
-    if (!organization) {
-      return new NextResponse("Organization not found", { status: 404 });
-    }
-    
-    // Create the contact using the Contact model
-    const newContact = await prismadb.contact.create({
+    // Database operation
+    const prisma = getOptimizedPrisma();
+    const newContact = await prisma.contact.create({
       data: {
-        // Map fields from crm_Contacts to Contact model
-        firstName: first_name,
-        lastName: last_name,
-        email,
-        phone: mobile_phone || office_phone || "",
-        position: type || "", // Use position instead of title
-        
-        // Store additional information in notes field as JSON
-        notes: JSON.stringify({
-          birthday: birthday_day + "/" + birthday_month + "/" + birthday_year,
-          description,
-          personal_email,
-          office_phone,
-          website,
-          status,
-          social_twitter,
-          social_facebook,
-          social_linkedin,
-          social_skype,
-          social_instagram,
-          social_youtube,
-          social_tiktok,
-          createdBy: userId,
-          updatedBy: userId,
-          v: 0
-        }),
-        
-        // Connect to organization
+        ...data,
+        // Use position instead of title
+        position: data.position
+      },
+      include: {
         organization: {
-          connect: {
-            id: assigned_account
+          select: {
+            id: true,
+            name: true
           }
         },
-        
-        // Default values for required fields
-        // isActive field doesn't exist in Contact model - removing
-      },
+        interactions: {
+          take: 5,
+          orderBy: { date: 'desc' }
+        }
+      }
     });
 
-    // Email notification will be implemented in Task 7 with Azure Communication Services
-    if (assigned_to !== userId) {
-      // Use user model instead of non-existent users model
-      const notifyRecipient = await prismadb.user.findUnique({
-        where: {
-          id: assigned_to,
-        },
-      });
+    // Response
+    const response = createSuccessResponse(newContact);
+    addPerformanceHeaders(response, performance.now() - startTime);
+    
+    return response;
 
-      if (!notifyRecipient) {
-        return new NextResponse("No user found", { status: 400 });
-      }
-
-      // Use placeholder implementation until Task 7 (Azure Communication Services)
-      
-      // Call with required parameters as per the function signature
-      await sendEmail({
-        from: process.env.EMAIL_FROM as string,
-        to: notifyRecipient.email || "info@softbase.cz",
-        subject: `New contact ${first_name} ${last_name} notification (placeholder)`,
-        text: `This is a placeholder email. Email functionality will be migrated to Azure Communication Services in Task 7.`
-      });
-    }
-
-    return NextResponse.json({ newContact }, { status: 200 });
   } catch (error) {
-    return new NextResponse("Initial error", { status: 500 });
+    return handlePrismaError(error);
   }
 }
 
 //Update route
-async function handlePUT(req: NextRequest): Promise<NextResponse> {
-  // Check authentication
-  const { user, error } = await requireAuth(req);
-  if (error) return error;
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse("Unauthenticated", { status: 401 });
-  }
+async function handlePUT(req: NextRequest): Promise<NextResponse<APIResponse<ContactWithDetails>>> {
+  const startTime = performance.now();
+  
   try {
-    const body = await req.json();
-    const userId = session.user.id;
-
-    if (!body) {
-      return new NextResponse("No form data", { status: 400 });
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return createErrorResponse({
+        code: 'UNAUTHORIZED',
+        message: 'Authentication required'
+      }, 401);
     }
 
-    const {
-      id,
-      assigned_account,
-      assigned_to,
-      birthday_day,
-      birthday_month,
-      birthday_year,
-      description,
-      email,
-      personal_email,
-      first_name,
-      last_name,
-      office_phone,
-      mobile_phone,
-      website,
-      status,
-      social_twitter,
-      social_facebook,
-      social_linkedin,
-      social_skype,
-      social_instagram,
-      social_youtube,
-      social_tiktok,
-      type,
-    } = body;
-
-
-    // Use Contact model as proxy for crm_Contacts
-    // First, check if the contact exists
-    const existingContact = await prismadb.contact.findUnique({
-      where: { id }
-    });
-    
-    if (!existingContact) {
-      return new NextResponse("Contact not found", { status: 404 });
+    // Validate request body
+    const { success, data, error } = await parseRequestBody(
+      req, 
+      validateCreateContact
+    );
+    if (!success) {
+      return handleValidationError([{ field: 'body', message: error.message }]);
     }
+
+    // Database operation
+    const prisma = getOptimizedPrisma();
+    const { id, ...updateData } = data;
     
-    // Update the contact using the Contact model
-    const newContact = await prismadb.contact.update({
-      where: {
-        id,
-      },
+    const updatedContact = await prisma.contact.update({
+      where: { id },
       data: {
-        // Map fields from crm_Contacts to Contact model
-        firstName: first_name,
-        lastName: last_name,
-        email,
-        phone: mobile_phone || office_phone || "",
-        position: type || "", // Use position instead of title
-        
-        // Store additional information in notes field as JSON
-        notes: JSON.stringify({
-          birthday: birthday_day + "/" + birthday_month + "/" + birthday_year,
-          description,
-          personal_email,
-          office_phone,
-          website,
-          status,
-          social_twitter,
-          social_facebook,
-          social_linkedin,
-          social_skype,
-          social_instagram,
-          social_youtube,
-          social_tiktok,
-          updatedBy: userId,
-          v: 0
-        }),
-        
-        // Update organization if provided
-        ...(assigned_account ? {
-          organization: {
-            connect: {
-              id: assigned_account
-            }
-          }
-        } : {}),
-        
-        // Default values for required fields
-        // isActive field doesn't exist in Contact model - removing
+        ...updateData,
+        // Use position instead of title
+        position: updateData.position
       },
+      include: {
+        organization: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        interactions: {
+          take: 5,
+          orderBy: { date: 'desc' }
+        }
+      }
     });
 
-    /* 
-    // Email notification is commented out since it will be implemented in Task 7 with Azure Communication Services
-    if (assigned_to !== userId) {
-      // Use user model instead of non-existent users model
-      const notifyRecipient = await prismadb.user.findUnique({
-        where: {
-          id: assigned_to,
-        },
-      });
+    // Response
+    const response = createSuccessResponse(updatedContact);
+    addPerformanceHeaders(response, performance.now() - startTime);
+    
+    return response;
 
-      if (!notifyRecipient) {
-        return new NextResponse("No user found", { status: 400 });
-      }
-
-      // Use placeholder implementation until Task 7 (Azure Communication Services)
-      
-      // Call with required parameters as per the function signature
-      await sendEmail({
-        from: process.env.EMAIL_FROM as string,
-        to: notifyRecipient.email || "info@softbase.cz",
-        subject: `New contact ${first_name} ${last_name} notification (placeholder)`,
-        text: `This is a placeholder email. Email functionality will be migrated to Azure Communication Services in Task 7.`
-      });
-    } 
-    */
-
-    return NextResponse.json({ newContact }, { status: 200 });
   } catch (error) {
-    return new NextResponse("Initial error", { status: 500 });
+    return handlePrismaError(error);
   }
 }
 

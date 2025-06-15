@@ -1,9 +1,11 @@
 "use client";
 
-import { AreaChart, Card, Title } from "@tremor/react";
+import { Card, Title } from "@tremor/react";
 import { memo, useMemo } from "react";
+import SSRChartWrapper from '@/components/charts/SSRChartWrapper';
+import type { ChartDataPoint } from '@/types/crm';
 import { useChartCleanup, useChartDimensions, useChartPerformance, useChartAnimation } from "@/hooks/useChartOptimization";
-import { dataFormatter, type ChartDataPoint } from "@/utils/chartDataProcessor";
+import { dataFormatter } from "@/utils/chartDataProcessor";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 
 interface OptimizedAreaChartProps {
@@ -75,25 +77,24 @@ export const OptimizedAreaChart = memo<OptimizedAreaChartProps>(({
     <ErrorBoundary>
       <Card className={`tremor-chart-container ${className}`} ref={chartRef}>
         <Title className="text-sm sm:text-base">{title}</Title>
-        <AreaChart
-          className="mt-6"
-          data={chartData}
-          index="date"
-          categories={categories}
-          colors={colors}
-          valueFormatter={dataFormatter}
-          showLegend={chartConfig.showLegend}
-          showGridLines={chartConfig.showGridLines}
-          showXAxis={chartConfig.showXAxis}
-          showYAxis={chartConfig.showYAxis}
-          autoMinValue={chartConfig.autoMinValue}
-          minValue={chartConfig.minValue}
-          height={chartConfig.height}
-          connectNulls={chartConfig.connectNulls}
-          showAnimation={chartConfig.showAnimation}
-          enableTouchEvents={chartConfig.enableTouchEvents}
-          showTooltip={enableTooltip}
-        />
+        <div className="mt-6">
+          <SSRChartWrapper
+            type="area"
+            data={chartData}
+            height={chartConfig.height}
+            colors={colors}
+            legend={chartConfig.showLegend}
+            tooltip={enableTooltip}
+            enableVirtualization={true}
+            maxDataPoints={100}
+            lineConfig={{
+              smooth: true,
+              fill: true,
+              showPoints: false
+            }}
+            className="w-full"
+          />
+        </div>
       </Card>
     </ErrorBoundary>
   );
