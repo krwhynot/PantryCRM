@@ -45,18 +45,10 @@
     "**/*.cy.ts",
     "**/*.cy.tsx",
     "backup-removed",
-<<<<<<< HEAD
-    "lib/excel-migration", // If there's a top-level lib/excel-migration
-    "src/lib/excel-migration/**", // Exclude all content under src/lib/excel-migration
-    "src/components/excel-migration/**", // Exclude all content under src/components/excel-migration
-    "app/api/migration/**", // Exclude all migration API routes
-    "prisma/seed-positions.ts" // Exclude old seed script
-=======
     "lib/excel-migration/**",
     "src/lib/excel-migration/**", 
     "app/api/migration/**",
     "src/components/excel-migration/**",
     "components/excel-migration/**"
->>>>>>> 74667080a3a0800cdb26ce614a1f0d5fe9a2c7e9
   ]
 }
