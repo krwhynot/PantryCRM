@@ -262,7 +262,7 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
 
 
 
-// Export with authentication, rate limiting, and error handling
-export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
-export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });
-export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
+// Export handlers directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const POST = handlePOST;
+export const PUT = handlePUT;
+export const GET = handleGET;

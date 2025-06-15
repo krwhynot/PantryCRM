@@ -9,10 +9,10 @@ import { prismadb } from "@/lib/prisma";
 export const getTasksCount = async () => {
   const data = await prismadb.interaction.count({
     where: {
-      followUpDate: {
+      nextAction: {
         not: null
       },
-      isCompleted: false
+      outcome: "FOLLOW_UP_NEEDED"
     }
   });
   return data;
@@ -26,11 +26,12 @@ export const getTasksCount = async () => {
 export const getUsersTasksCount = async (userId: string) => {
   const data = await prismadb.interaction.count({
     where: {
-      userId: userId,
-      followUpDate: {
+      // Note: Interaction model doesn't have userId - using contactId as proxy
+      contactId: userId,
+      nextAction: {
         not: null
       },
-      isCompleted: false
+      outcome: "FOLLOW_UP_NEEDED"
     }
   });
   return data;

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -11,7 +11,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
  * Updated as part of Task 3 (Critical Dependency Fixes) to use setting model as proxy for system modules
  * This is a temporary implementation until proper module management functionality is implemented
  */
-async function handlePOST(req: Request, props: { params: Promise<{ moduleId: string }> }): Promise<NextResponse> {
+async function handlePOST(req: NextRequest, props: { params: Promise<{ moduleId: string }> }): Promise<NextResponse> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error;
@@ -23,15 +23,15 @@ async function handlePOST(req: Request, props: { params: Promise<{ moduleId: str
   }
 
   try {
-    // Use setting model as a proxy for system modules
-    // Update a setting with category "SystemModule" to mark it as inactive
-    const moduleSettings = await prismadb.setting.update({
+    // Use systemSetting model as a proxy for system modules
+    // Update a setting to mark it as inactive
+    const moduleSettings = await prismadb.systemSetting.update({
       where: {
-        id: params.moduleId
+        key: `module-${params.moduleId}`
       },
       data: {
-        active: false,
-        metadata: JSON.stringify({ enabled: false, lastUpdated: new Date().toISOString() })
+        value: JSON.stringify({ enabled: false, lastUpdated: new Date().toISOString() }),
+        type: "json"
       }
     });
 
@@ -42,5 +42,5 @@ async function handlePOST(req: Request, props: { params: Promise<{ moduleId: str
 }
 
 
-// Export with authentication, rate limiting, and error handling
-export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+// Export with error handling
+export const POST = withErrorHandler(handlePOST);

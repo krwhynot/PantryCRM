@@ -368,7 +368,7 @@ describe('Data Validation Rules', () => {
 
     test('should validate contact-organization relationship', async () => {
       const mockContact = { organizationId: 'org123' };
-      (mockPrisma.contact.findUnique as jest.Mock).mockResolvedValue(mockContact);
+      (mockPrisma.contact.findUnique as jest.Mock).mockResolvedValue(mockContact as any);
 
       await expect(
         CrossEntityValidations.validateContactOrganization('contact123', 'org123', mockPrisma)
@@ -517,9 +517,9 @@ describe('Validation Service', () => {
         }
       ];
 
-      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([]);
+      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([] as any);
 
-      const result = await validationService.validateOrganizations(organizations);
+      const result = await validationService.validateOrganizations(organizations as any);
 
       expect(result.processedCount).toBe(2);
       expect(result.errorCount).toBe(0);
@@ -535,7 +535,7 @@ describe('Validation Service', () => {
         }
       ];
 
-      const result = await validationService.validateOrganizations(organizations);
+      const result = await validationService.validateOrganizations(organizations as any);
 
       expect(result.isValid).toBe(false);
       expect(result.errorCount).toBeGreaterThan(0);
@@ -576,9 +576,9 @@ describe('Validation Service', () => {
         }
       ];
 
-      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([]);
+      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([] as any);
 
-      const result = await validationService.validateOrganizations(organizations);
+      const result = await validationService.validateOrganizations(organizations as any);
 
       expect(result.warningCount).toBeGreaterThan(0);
       expect(result.warnings[0].suggestion).toBeDefined();
@@ -598,9 +598,9 @@ describe('Validation Service', () => {
       (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([
         { id: 'valid-org-id' }
       ]);
-      (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([]);
+      (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([] as any);
 
-      const result = await validationService.validateContacts(contacts);
+      const result = await validationService.validateContacts(contacts as any);
 
       expect(result.isValid).toBe(true);
       expect(result.errorCount).toBe(0);
@@ -615,10 +615,10 @@ describe('Validation Service', () => {
         }
       ];
 
-      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([]);
-      (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([]);
+      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([] as any);
+      (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([] as any);
 
-      const result = await validationService.validateContacts(contacts);
+      const result = await validationService.validateContacts(contacts as any);
 
       expect(result.isValid).toBe(false);
       expect(result.errors[0].errorType).toBe('REFERENCE');
@@ -636,9 +636,9 @@ describe('Validation Service', () => {
         }
       ];
 
-      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([]);
+      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([] as any);
 
-      const result = await validationService.validateOrganizations(organizations);
+      const result = await validationService.validateOrganizations(organizations as any);
 
       const businessRuleErrors = result.errors.filter(e => e.errorType === 'BUSINESS_RULE');
       expect(businessRuleErrors.length).toBeGreaterThan(0);
@@ -657,10 +657,10 @@ describe('Validation Service', () => {
 
       (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([
         { id: 'org123' }
-      ]);
-      (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([]);
+      ] as any);
+      (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([] as any);
 
-      const result = await validationService.validateInteractions(interactions);
+      const result = await validationService.validateInteractions(interactions as any);
 
       const businessRuleErrors = result.errors.filter(e => e.errorType === 'BUSINESS_RULE');
       expect(businessRuleErrors.length).toBeGreaterThan(0);
@@ -679,10 +679,10 @@ describe('Validation Service', () => {
 
       (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([
         { id: 'org123' }
-      ]);
-      (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([]);
+      ] as any);
+      (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([] as any);
 
-      const result = await validationService.validateOpportunities(opportunities);
+      const result = await validationService.validateOpportunities(opportunities as any);
 
       const businessRuleErrors = result.errors.filter(e => e.errorType === 'BUSINESS_RULE');
       expect(businessRuleErrors.length).toBeGreaterThan(0);
@@ -750,7 +750,7 @@ describe('Validation Service', () => {
         email: `restaurant${i}@test.com`
       }));
 
-      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([]);
+      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([] as any);
 
       const startTime = Date.now();
       const result = await validationService.validateOrganizations(largeDataset, {
@@ -797,7 +797,7 @@ describe('Validation Service', () => {
         }
       ];
 
-      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([]);
+      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([] as any);
 
       const result = await validationService.validateOrganizations(data);
 
@@ -814,7 +814,7 @@ describe('Validation Service', () => {
         }
       ];
 
-      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([]);
+      (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([] as any);
 
       const result = await validationService.validateOrganizations(data);
 
@@ -846,7 +846,7 @@ describe('Validation Service', () => {
         }
       ];
 
-      const result = await validationService.validateInteractions(interactions);
+      const result = await validationService.validateInteractions(interactions as any);
 
       expect(result.isValid).toBe(false);
       expect(result.errors[0].message).toContain('more than 5 years in the past');
@@ -862,13 +862,13 @@ describe('Validation Service', () => {
 
       (mockPrisma.organization.findMany as jest.Mock).mockResolvedValue([
         { id: 'org123' }
-      ]);
+      ] as any);
       (mockPrisma.contact.findMany as jest.Mock).mockResolvedValue([
         { id: 'contact123' }
       ]);
       (mockPrisma.contact.findUnique as jest.Mock).mockResolvedValue({
         organizationId: 'wrong-org' // Contact belongs to different org
-      });
+      } as any);
 
       const result = await validationService.validateOpportunities([opportunity]);
 

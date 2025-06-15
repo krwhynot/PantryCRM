@@ -23,6 +23,12 @@ jest.mock('@/lib/prisma', () => ({
   },
 }));
 
+// Create properly typed mocks
+const mockOrganizationFindUnique = jest.fn();
+const mockContactFindUnique = jest.fn();
+const mockInteractionCreate = jest.fn();
+const mockInteractionFindMany = jest.fn();
+
 jest.mock('next-auth', () => ({
   getServerSession: jest.fn(),
 }));
@@ -31,7 +37,11 @@ jest.mock('@/lib/auth', () => ({
   authOptions: {},
 }));
 
-const mockPrisma = prismadb as jest.Mocked<typeof prismadb>;
+// Override the mock implementation with properly typed functions
+(prismadb.organization.findUnique as jest.Mock) = mockOrganizationFindUnique;
+(prismadb.contact.findUnique as jest.Mock) = mockContactFindUnique;
+(prismadb.interaction.create as jest.Mock) = mockInteractionCreate;
+(prismadb.interaction.findMany as jest.Mock) = mockInteractionFindMany;
 const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
 
 describe('/api/interactions', () => {
@@ -64,9 +74,9 @@ describe('/api/interactions', () => {
         updatedAt: new Date(),
       };
 
-      mockPrisma.organization.findUnique.mockResolvedValue(mockOrganization as any);
-      mockPrisma.contact.findUnique.mockResolvedValue(mockContact as any);
-      mockPrisma.interaction.create.mockResolvedValue(mockCreatedInteraction as any);
+      mockOrganizationFindUnique.mockResolvedValue(mockOrganization as any);
+      mockContactFindUnique.mockResolvedValue(mockContact as any);
+      mockInteractionCreate.mockResolvedValue(mockCreatedInteraction as any);
 
       const requestBody = {
         organizationId: 'org-1',
@@ -87,10 +97,10 @@ describe('/api/interactions', () => {
 
       expect(response.status).toBe(200);
       expect(data.id).toBe('interaction-1');
-      expect(mockPrisma.organization.findUnique).toHaveBeenCalledWith({
+      expect(mockOrganizationFindUnique).toHaveBeenCalledWith({
         where: { id: 'org-1' },
       });
-      expect(mockPrisma.interaction.create).toHaveBeenCalledWith({
+      expect(mockInteractionCreate).toHaveBeenCalledWith({
         data: expect.objectContaining({
           organizationId: 'org-1',
           contactId: 'contact-1',
@@ -130,7 +140,7 @@ describe('/api/interactions', () => {
     });
 
     it('should return 404 when organization not found', async () => {
-      mockPrisma.organization.findUnique.mockResolvedValue(null);
+      mockOrganizationFindUnique.mockResolvedValue(null);
 
       const request = new NextRequest('http://localhost:3000/api/interactions', {
         method: 'POST',
@@ -149,8 +159,8 @@ describe('/api/interactions', () => {
 
     it('should return 404 when contact not found', async () => {
       const mockOrganization = { id: 'org-1', name: 'Test Restaurant' };
-      mockPrisma.organization.findUnique.mockResolvedValue(mockOrganization as any);
-      mockPrisma.contact.findUnique.mockResolvedValue(null);
+      mockOrganizationFindUnique.mockResolvedValue(mockOrganization as any);
+      mockContactFindUnique.mockResolvedValue(null);
 
       const request = new NextRequest('http://localhost:3000/api/interactions', {
         method: 'POST',
@@ -169,7 +179,7 @@ describe('/api/interactions', () => {
     });
 
     it('should handle database errors gracefully', async () => {
-      mockPrisma.organization.findUnique.mockRejectedValue(new Error('Database connection error'));
+      mockOrganizationFindUnique.mockRejectedValue(new Error('Database connection error'));
 
       const request = new NextRequest('http://localhost:3000/api/interactions', {
         method: 'POST',
@@ -202,7 +212,7 @@ describe('/api/interactions', () => {
         },
       ];
 
-      mockPrisma.interaction.findMany.mockResolvedValue(mockInteractions as any);
+      mockInteractionFindMany.mockResolvedValue(mockInteractions as any);
 
       const request = new NextRequest('http://localhost:3000/api/interactions?organizationId=org-1');
       const response = await GET(request);
@@ -210,7 +220,7 @@ describe('/api/interactions', () => {
 
       expect(response.status).toBe(200);
       expect(data).toEqual(mockInteractions);
-      expect(mockPrisma.interaction.findMany).toHaveBeenCalledWith({
+      expect(mockInteractionFindMany).toHaveBeenCalledWith({
         where: { organizationId: 'org-1' },
         include: { Contact: true },
         orderBy: { interactionDate: 'desc' },
@@ -245,14 +255,14 @@ describe('/api/interactions', () => {
     });
 
     it('should filter interactions by contactId and typeId', async () => {
-      mockPrisma.interaction.findMany.mockResolvedValue([]);
+      mockInteractionFindMany.mockResolvedValue([]);
 
       const request = new NextRequest(
         'http://localhost:3000/api/interactions?organizationId=org-1&contactId=contact-1&typeId=email'
       );
       const response = await GET(request);
 
-      expect(mockPrisma.interaction.findMany).toHaveBeenCalledWith({
+      expect(mockInteractionFindMany).toHaveBeenCalledWith({
         where: {
           organizationId: 'org-1',
           contactId: 'contact-1',

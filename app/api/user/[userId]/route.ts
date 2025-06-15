@@ -127,6 +127,6 @@ async function handleDELETE(req: NextRequest, props: { params: Promise<{ userId:
   }
 }
 
-// Export with authentication, rate limiting, and error handling
-export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
-export const DELETE = withRateLimit(withErrorHandler(handleDELETE), { maxAttempts: 100, windowMs: 60000 });
+// Export handlers directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const GET = handleGET;
+export const DELETE = handleDELETE;

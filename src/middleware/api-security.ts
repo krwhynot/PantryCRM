@@ -51,7 +51,7 @@ export function apiSecurityMiddleware(request: NextRequest) {
   
   // Get client IP address
   const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 
-                   request.ip || 
+                   request.headers.get('x-real-ip') || 
                    '0.0.0.0';
                    
   // Set standard CORS headers for all API responses
@@ -69,7 +69,7 @@ export function apiSecurityMiddleware(request: NextRequest) {
     
     if (!isIpAllowed) {
       // Log unauthorized admin access attempt
-      logSecurityEvent('unauthorized_admin_access', {
+      logSecurityEvent('unauthorized_access_attempt', {
         path,
         ip: clientIp,
         userAgent: request.headers.get('user-agent') || 'unknown'

@@ -55,7 +55,7 @@ export async function createContactAction(
         lastName: validatedData.lastName,
         email: validatedData.email || null,
         phone: validatedData.phone || null,
-        positionKey: validatedData.positionKey || null,
+        position: validatedData.positionKey || null,
         organizationId: validatedData.organizationId,
         isPrimary: validatedData.isPrimary,
         notes: validatedData.notes || null,

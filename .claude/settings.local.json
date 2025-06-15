@@ -34,7 +34,27 @@
       "Bash(npm cache clean:*)",
       "Bash(npm ls:*)",
       "Bash(sudo rm:*)",
-      "Bash(npx prisma generate:*)"
+      "Bash(npx prisma generate:*)",
+      "Bash(npm run dev:*)",
+      "Bash(lsof:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(timeout 30 npm run lint:*)",
+      "Bash(npx prisma:*)",
+      "Bash(source:*)",
+      "Bash(DATABASE_URL=\"file:./dev.db\" npx prisma db push)",
+      "Bash(DATABASE_URL=\"file:/tmp/pantrycrm.db\" npx prisma db push)",
+      "Bash(npx tsc:*)",
+      "Bash(for file in app/api/crm/account/[accountId]/unwatch/route.ts app/api/crm/account/[accountId]/watch/route.ts app/api/crm/contacts/unlink-opportunity/[contactId]/route.ts)",
+      "Bash(do)",
+      "Bash(if grep -q \"import { NextResponse }\" \"$file\")",
+      "Bash(then)",
+      "Bash(sed:*)",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(for file in app/api/crm/leads/[leadId]/route.ts app/api/crm/opportunity/[opportunityId]/route.ts app/api/crm/tasks/addCommentToTask/[taskId]/route.ts)",
+      "Bash(for file in app/api/user/[userId]/set-language/route.ts app/api/user/[userId]/setOpenAi/route.ts app/api/user/[userId]/setnewpass/route.ts app/api/user/[userId]/setnotiondb/route.ts)",
+      "Bash(for file in app/api/user/activate/[userId]/route.ts app/api/user/activateAdmin/[userId]/route.ts app/api/user/deactivate/[userId]/route.ts app/api/user/deactivateAdmin/[userId]/route.ts)",
+      "Bash(for file in \"app/api/crm/account/[accountId]/unwatch/route.ts\" \"app/api/crm/account/[accountId]/watch/route.ts\")"
     ],
     "deny": []
   }

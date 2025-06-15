@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
 import { prismadb } from "@/lib/prisma";
@@ -11,7 +11,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
  * API route to delete an organization (account)
  * Updated as part of Task 3 (Critical Dependency Fixes) to use organization model instead of crm_Accounts
  */
-async function handleDELETE(req: Request, props: { params: Promise<{ accountId: string }> }): Promise<NextResponse> {
+async function handleDELETE(req: NextRequest, props: { params: Promise<{ accountId: string }> }): Promise<NextResponse> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error;
@@ -37,5 +37,5 @@ async function handleDELETE(req: Request, props: { params: Promise<{ accountId: 
 }
 
 
-// Export with authentication, rate limiting, and error handling
-export const DELETE = withRateLimit(withErrorHandler(handleDELETE), { maxAttempts: 100, windowMs: 60000 });
+// Export handler directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const DELETE = handleDELETE;

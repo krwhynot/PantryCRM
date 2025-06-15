@@ -10,7 +10,7 @@ export const getContractsCount = async () => {
   // This is a temporary solution until a proper Contract model is implemented in Task 7
   const data = await prismadb.opportunity.count({
     where: {
-      status: "won",
+      stage: "CLOSED_WON",
       isActive: true
     }
   });

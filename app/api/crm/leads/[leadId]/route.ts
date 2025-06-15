@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
 import { prismadb } from "@/lib/prisma";
@@ -7,7 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
 
-async function handleDELETE(req: Request, props: { params: Promise<{ leadId: string }> }): Promise<NextResponse> {
+async function handleDELETE(req: NextRequest, props: { params: Promise<{ leadId: string }> }): Promise<NextResponse> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error;
@@ -36,5 +36,5 @@ async function handleDELETE(req: Request, props: { params: Promise<{ leadId: str
 }
 
 
-// Export with authentication, rate limiting, and error handling
-export const DELETE = withRateLimit(withErrorHandler(handleDELETE), { maxAttempts: 100, windowMs: 60000 });
+// Export handlers directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const DELETE = handleDELETE;

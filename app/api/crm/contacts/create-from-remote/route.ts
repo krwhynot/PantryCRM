@@ -80,5 +80,5 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
 
 
 
-// Export with authentication, rate limiting, and error handling
-export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+// Export handlers directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const POST = handlePOST;

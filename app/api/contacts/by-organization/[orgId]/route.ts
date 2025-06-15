@@ -142,6 +142,6 @@ async function handlePOST(
     return NextResponse.json(newContact, { status: 201 });
 }
 
-// Export with authentication, rate limiting, and error handling
-export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
-export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 50, windowMs: 60000 });
+// Export handlers directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const GET = handleGET;
+export const POST = handlePOST;

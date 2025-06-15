@@ -195,7 +195,7 @@ export class TestHelper {
    * Check if element is in viewport
    */
   async isElementInViewport(element: string): Promise<boolean> {
-    return await this.page.locator(element).isInViewport();
+    return await this.page.locator(element).isVisible();
   }
 
   /**

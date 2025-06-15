@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -15,7 +15,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
  * Updated as part of Task 3 (Critical Dependency Fixes) to use interaction model as proxy for crm_Accounts_Tasks
  * This is a temporary implementation until proper task management functionality is implemented
  */
-async function handlePOST(req: Request): Promise<NextResponse> {
+async function handlePOST(req: NextRequest): Promise<NextResponse> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error;
@@ -38,40 +38,36 @@ async function handlePOST(req: Request): Promise<NextResponse> {
 
   try {
     // First, get a valid interaction type ID to use for tasks
-    const taskInteractionType = await prismadb.setting.findFirst({
+    const taskInteractionType = await prismadb.systemSetting.findFirst({
       where: {
-        category: "InteractionType",
-        key: "Task" // Using "Task" as the interaction type
+        key: "InteractionType_Task" // Using consistent key format
       }
     });
 
     // If no Task interaction type exists, create one
     const typeId = taskInteractionType?.id || 
-      (await prismadb.setting.create({
+      (await prismadb.systemSetting.create({
         data: {
-          category: "InteractionType",
-          key: "Task",
-          label: "Task",
-          sortOrder: 100,
-          active: true
+          key: "InteractionType_Task",
+          value: "Task",
+          type: "string"
         }
       })).id;
     
     // Use interaction model as a proxy for crm_Accounts_Tasks
     const task = await prismadb.interaction.create({
       data: {
-        // Store task content and metadata in notes field
-        notes: `[TASK] ${title}\n\n${content}\n\n---\nTask Priority: ${priority}`,
-        followUpDate: dueDateAt,
-        isCompleted: false,
-        userId: assignedUserId,
+        // Store task content and metadata in description field
+        subject: `[TASK] ${title}`,
+        description: `${content}\n\n---\nTask Priority: ${priority}\nAssigned to: ${assignedUserId}`,
+        type: "TASK",
         organizationId: account,
-        interactionDate: new Date(), // Required field based on our schema
-        typeId: typeId // Required field based on our schema
+        date: new Date(), // Required field based on our schema
+        nextAction: dueDateAt ? `Follow up on ${dueDateAt}` : null
       },
       include: {
-        user: true,
-        organization: true
+        organization: true,
+        contact: true
       }
     });
 

@@ -3,10 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 
 // Dynamically import the favorites component
-const FavoriteOrganizations = dynamic(
+const FavoriteOrganizations = dynamicImport(
   () => import('@/components/organizations/FavoriteOrganizations'),
   {
     loading: () => <div className="h-64 animate-pulse bg-gray-200 rounded-lg"></div>,

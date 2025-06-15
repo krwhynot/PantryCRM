@@ -18,7 +18,6 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
   const contacts = await prismadb.contact.findMany({
       where: {
         organizationId,
-        isActive: true,
       },
       select: {
         id: true,

@@ -153,7 +153,7 @@ test.describe('Food Service Industry Workflows', () => {
       await page.goto('/');
       
       // Navigate to organization details
-      await page.click('[data-testid="organization-card"]').first();
+      await page.locator('[data-testid="organization-card"]').first().click();
       
       // Add customer preferences
       await page.click('[data-testid="preferences-tab"]');
@@ -322,7 +322,7 @@ test.describe('Food Service Industry Workflows', () => {
       // Fill order form offline
       await page.selectOption('[data-testid="customer-select"]', 'org-1');
       await page.fill('[data-testid="product-search"]', 'Cheese');
-      await page.click('[data-testid="product-option"]').first();
+      await page.locator('[data-testid="product-option"]').first().click();
       await page.fill('[data-testid="quantity"]', '10');
       
       await page.click('[data-testid="save-order-btn"]');

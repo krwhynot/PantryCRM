@@ -60,8 +60,7 @@ describe('ErrorBoundary', () => {
   });
 
   it('should show error details in development mode', () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
+    const mockEnv = jest.replaceProperty(process.env, 'NODE_ENV', 'development');
 
     render(
       <ErrorBoundary showError={true}>
@@ -72,12 +71,11 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Error Details:')).toBeInTheDocument();
     expect(screen.getByText('Test error')).toBeInTheDocument();
 
-    process.env.NODE_ENV = originalEnv;
+    mockEnv.restore();
   });
 
   it('should hide error details in production mode', () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'production';
+    const mockEnv = jest.replaceProperty(process.env, 'NODE_ENV', 'production');
 
     render(
       <ErrorBoundary showError={false}>
@@ -88,7 +86,7 @@ describe('ErrorBoundary', () => {
     expect(screen.queryByText('Error Details:')).not.toBeInTheDocument();
     expect(screen.queryByText('Test error')).not.toBeInTheDocument();
 
-    process.env.NODE_ENV = originalEnv;
+    mockEnv.restore();
   });
 
   it('should allow retrying after error', () => {

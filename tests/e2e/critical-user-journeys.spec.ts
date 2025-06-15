@@ -79,7 +79,7 @@ test.describe('Critical User Journeys - Food Service CRM', () => {
       await expect(page.locator('[data-testid="opportunity-card"]').first()).toBeVisible();
       
       // Step 2: Quote generation
-      await page.click('[data-testid="opportunity-card"]').first();
+      await page.locator('[data-testid="opportunity-card"]').first().click();
       await page.click('[data-testid="generate-quote-btn"]');
       
       await page.fill('[data-testid="quote-products"]', 'Artisanal Cheese Selection');
@@ -157,7 +157,7 @@ test.describe('Critical User Journeys - Food Service CRM', () => {
       // Verify organization data is available from cache
       await expect(page.locator('[data-testid="organization-card"]').first()).toBeVisible();
       
-      await page.click('[data-testid="organization-card"]').first();
+      await page.locator('[data-testid="organization-card"]').first().click();
       await page.click('[data-testid="log-visit-btn"]');
       
       await page.fill('[data-testid="visit-notes"]', 'Met with chef to discuss new spring menu items');

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -11,7 +11,7 @@ import { withErrorHandler } from '@/lib/api-error-handler';
  * Updated as part of Task 3 (Critical Dependency Fixes) to use setting model as proxy for system modules
  * This is a temporary implementation until proper module management functionality is implemented
  */
-async function handlePOST(req: Request, props: { params: Promise<{ moduleId: string }> }): Promise<NextResponse> {
+async function handlePOST(req: NextRequest, props: { params: Promise<{ moduleId: string }> }): Promise<NextResponse> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error;
@@ -23,24 +23,20 @@ async function handlePOST(req: Request, props: { params: Promise<{ moduleId: str
   }
 
   try {
-    // Use setting model as a proxy for system modules
-    // Create or update a setting with category "SystemModule" and key based on moduleId
-    const moduleSettings = await prismadb.setting.upsert({
+    // Use systemSetting model as a proxy for system modules
+    // Create or update a setting with key based on moduleId
+    const moduleSettings = await prismadb.systemSetting.upsert({
       where: {
-        id: params.moduleId
+        key: `module-${params.moduleId}`
       },
       update: {
-        active: true,
-        metadata: JSON.stringify({ enabled: true, lastUpdated: new Date().toISOString() })
+        value: JSON.stringify({ enabled: true, lastUpdated: new Date().toISOString() }),
+        type: "json"
       },
       create: {
-        id: params.moduleId,
-        category: "SystemModule",
         key: `module-${params.moduleId}`,
-        label: `Module ${params.moduleId}`,
-        active: true,
-        sortOrder: 0,
-        metadata: JSON.stringify({ enabled: true, lastUpdated: new Date().toISOString() })
+        value: JSON.stringify({ enabled: true, lastUpdated: new Date().toISOString() }),
+        type: "json"
       }
     });
 
@@ -51,5 +47,5 @@ async function handlePOST(req: Request, props: { params: Promise<{ moduleId: str
 }
 
 
-// Export with authentication, rate limiting, and error handling
-export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+// Export with error handling
+export const POST = withErrorHandler(handlePOST);

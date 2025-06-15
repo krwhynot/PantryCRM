@@ -324,9 +324,10 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
       await page.goto('/');
       
       const connectionAPI = await page.evaluate(() => {
-        const connection = navigator.connection || 
-                          navigator.mozConnection || 
-                          navigator.webkitConnection;
+        const nav = navigator as any;
+        const connection = nav.connection || 
+                          nav.mozConnection || 
+                          nav.webkitConnection;
         
         return {
           available: !!connection,
@@ -362,12 +363,12 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
       
       // Check for validation message
       const validationMessage = await nameInput.evaluate(input => {
-        return input.validationMessage;
+        return (input as HTMLInputElement).validationMessage;
       });
       
       if (browserName === 'webkit') {
         // Safari may have different validation messages
-        expect(validationMessage).toContain('required' || 'fill' || 'valid');
+        expect(['required', 'fill', 'valid'].some(keyword => validationMessage.includes(keyword))).toBe(true);
       } else {
         expect(validationMessage).toBeTruthy();
       }
@@ -382,7 +383,7 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
       await emailInput.fill('invalid-email');
       
       const isValid = await emailInput.evaluate(input => {
-        return input.checkValidity();
+        return (input as HTMLInputElement).checkValidity();
       });
       
       expect(isValid).toBe(false);
@@ -390,7 +391,7 @@ test.describe('Cross-Browser Compatibility - Food Service CRM', () => {
       await emailInput.fill('valid@email.com');
       
       const isValidNow = await emailInput.evaluate(input => {
-        return input.checkValidity();
+        return (input as HTMLInputElement).checkValidity();
       });
       
       expect(isValidNow).toBe(true);

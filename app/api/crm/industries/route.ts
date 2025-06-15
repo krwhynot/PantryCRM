@@ -18,9 +18,9 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
   }
 
   try {
-    const data = await prismadb.setting.findMany({
+    const data = await prismadb.systemSetting.findMany({
       where: {
-        category: "INDUSTRY_TYPE", // Assuming this is the category for industry types
+        key: { startsWith: "INDUSTRY_TYPE_" }, // Adapt to key-based filtering
       },
     });
 

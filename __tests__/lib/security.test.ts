@@ -12,6 +12,9 @@ jest.mock('@/lib/prisma', () => ({
   },
 }));
 
+// Create properly typed mocks
+const mockUserFindFirst = jest.fn();
+
 jest.mock('next-auth', () => ({
   getServerSession: jest.fn(),
 }));
@@ -20,7 +23,8 @@ jest.mock('@/lib/auth', () => ({
   authOptions: {},
 }));
 
-const mockPrisma = prismadb as jest.Mocked<typeof prismadb>;
+// Override the mock implementation with properly typed functions
+(prismadb.user.findFirst as jest.Mock) = mockUserFindFirst;
 const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
 
 describe('Security Utils', () => {
@@ -141,7 +145,7 @@ describe('Security Utils', () => {
       mockGetServerSession.mockResolvedValue({
         user: { email: 'test@example.com' },
       } as any);
-      mockPrisma.user.findFirst.mockResolvedValue(mockUser as any);
+      mockUserFindFirst.mockResolvedValue(mockUser as any);
 
       const result = await requireAuth();
 
@@ -169,7 +173,7 @@ describe('Security Utils', () => {
       mockGetServerSession.mockResolvedValue({
         user: { email: 'test@example.com' },
       } as any);
-      mockPrisma.user.findFirst.mockResolvedValue(mockUser as any);
+      mockUserFindFirst.mockResolvedValue(mockUser as any);
 
       const result = await requireAuth();
 
@@ -190,7 +194,7 @@ describe('Security Utils', () => {
       mockGetServerSession.mockResolvedValue({
         user: { email: 'admin@example.com' },
       } as any);
-      mockPrisma.user.findFirst.mockResolvedValue(mockAdmin as any);
+      mockUserFindFirst.mockResolvedValue(mockAdmin as any);
 
       const result = await requireAdmin();
 
@@ -218,7 +222,7 @@ describe('Security Utils', () => {
       mockGetServerSession.mockResolvedValue({
         user: { email: 'user@example.com' },
       } as any);
-      mockPrisma.user.findFirst.mockResolvedValue(mockUser as any);
+      mockUserFindFirst.mockResolvedValue(mockUser as any);
 
       const result = await requireAdmin();
 

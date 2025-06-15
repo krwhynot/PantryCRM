@@ -108,14 +108,9 @@ export const getSearch = async (search: string, limit: number = 10, userId?: str
                 phone: true,
                 position: true,
                 organizationId: true,
-                organization: {
-                  select: {
-                    name: true,
-                  },
-                },
+                organization: true,
               },
               orderBy: { lastName: 'asc' },
-              userId,
             }
           ).then(result => result.data),
 
@@ -156,14 +151,9 @@ export const getSearch = async (search: string, limit: number = 10, userId?: str
                 date: true,
                 nextAction: true,
                 organizationId: true,
-                organization: {
-                  select: {
-                    name: true,
-                  },
-                },
+                organization: true,
               },
               orderBy: { date: 'desc' },
-              userId,
             }
           ).then(result => result.data),
         ]);

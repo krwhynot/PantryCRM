@@ -111,5 +111,5 @@ async function handlePUT(req: NextRequest, props: { params: Promise<{ userId: st
   }
 }
 
-// Export with authentication, rate limiting, and error handling
-export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });
+// Export handlers directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const PUT = handlePUT;

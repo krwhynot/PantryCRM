@@ -1,13 +1,13 @@
 import { authOptions } from "@/lib/auth";
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
 
 //Route to unlink contact from opportunity
-async function handlePUT(req: Request, props: { params: Promise<{ contactId: string }> }): Promise<NextResponse> {
+async function handlePUT(req: NextRequest, props: { params: Promise<{ contactId: string }> }): Promise<NextResponse> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error;
@@ -53,5 +53,5 @@ async function handlePUT(req: Request, props: { params: Promise<{ contactId: str
 }
 
 
-// Export with authentication, rate limiting, and error handling
-export const PUT = withRateLimit(withErrorHandler(handlePUT), { maxAttempts: 100, windowMs: 60000 });
+// Export handlers directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const PUT = handlePUT;

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prismadb } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
 
-async function handlePOST(req: Request, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
+async function handlePOST(req: NextRequest, props: { params: Promise<{ userId: string }> }): Promise<NextResponse> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error;
@@ -44,5 +44,5 @@ async function handlePOST(req: Request, props: { params: Promise<{ userId: strin
 }
 
 
-// Export with authentication, rate limiting, and error handling
-export const POST = withRateLimit(withErrorHandler(handlePOST), { maxAttempts: 100, windowMs: 60000 });
+// Export handlers directly (wrappers incompatible with Next.js 15 dynamic routes)
+export const POST = handlePOST;

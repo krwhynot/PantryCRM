@@ -17,6 +17,10 @@ jest.mock('@/lib/prisma', () => ({
   },
 }));
 
+// Create properly typed mocks
+const mockOrganizationFindMany = jest.fn();
+const mockOrganizationCreate = jest.fn();
+
 jest.mock('next-auth', () => ({
   getServerSession: jest.fn(),
 }));
@@ -25,7 +29,9 @@ jest.mock('@/lib/auth', () => ({
   authOptions: {},
 }));
 
-const mockPrisma = prismadb as jest.Mocked<typeof prismadb>;
+// Override the mock implementation with properly typed functions
+(prismadb.organization.findMany as jest.Mock) = mockOrganizationFindMany;
+(prismadb.organization.create as jest.Mock) = mockOrganizationCreate;
 const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
 
 describe('/api/organizations', () => {
@@ -52,7 +58,7 @@ describe('/api/organizations', () => {
         },
       ];
 
-      mockPrisma.organization.findMany.mockResolvedValue(mockOrganizations as any);
+      mockOrganizationFindMany.mockResolvedValue(mockOrganizations as any);
 
       const request = new NextRequest('http://localhost:3000/api/organizations');
       const response = await GET(request);
@@ -61,7 +67,7 @@ describe('/api/organizations', () => {
       expect(response.status).toBe(200);
       expect(data.organizations).toEqual(mockOrganizations);
       expect(data.count).toBe(1);
-      expect(mockPrisma.organization.findMany).toHaveBeenCalledWith({
+      expect(mockOrganizationFindMany).toHaveBeenCalledWith({
         where: { status: 'ACTIVE' },
         orderBy: [{ priority: 'asc' }, { name: 'asc' }],
         take: 50,
@@ -81,12 +87,12 @@ describe('/api/organizations', () => {
     });
 
     it('should filter organizations by search query', async () => {
-      mockPrisma.organization.findMany.mockResolvedValue([]);
+      mockOrganizationFindMany.mockResolvedValue([]);
 
       const request = new NextRequest('http://localhost:3000/api/organizations?q=restaurant');
       const response = await GET(request);
 
-      expect(mockPrisma.organization.findMany).toHaveBeenCalledWith({
+      expect(mockOrganizationFindMany).toHaveBeenCalledWith({
         where: {
           status: 'ACTIVE',
           OR: [
@@ -110,7 +116,7 @@ describe('/api/organizations', () => {
     });
 
     it('should handle database errors gracefully', async () => {
-      mockPrisma.organization.findMany.mockRejectedValue(new Error('Database error'));
+      mockOrganizationFindMany.mockRejectedValue(new Error('Database error'));
 
       const request = new NextRequest('http://localhost:3000/api/organizations');
       const response = await GET(request);
@@ -121,12 +127,12 @@ describe('/api/organizations', () => {
     });
 
     it('should sanitize search input to prevent XSS', async () => {
-      mockPrisma.organization.findMany.mockResolvedValue([]);
+      mockOrganizationFindMany.mockResolvedValue([]);
 
       const request = new NextRequest('http://localhost:3000/api/organizations?q=<script>alert("xss")</script>');
       const response = await GET(request);
 
-      expect(mockPrisma.organization.findMany).toHaveBeenCalledWith({
+      expect(mockOrganizationFindMany).toHaveBeenCalledWith({
         where: {
           status: 'ACTIVE',
           OR: [
@@ -155,7 +161,7 @@ describe('/api/organizations', () => {
         status: 'ACTIVE',
       };
 
-      mockPrisma.organization.create.mockResolvedValue(mockCreatedOrg as any);
+      mockOrganizationCreate.mockResolvedValue(mockCreatedOrg as any);
 
       const requestBody = {
         name: 'New Restaurant',
@@ -174,7 +180,7 @@ describe('/api/organizations', () => {
 
       expect(response.status).toBe(201);
       expect(data).toEqual(mockCreatedOrg);
-      expect(mockPrisma.organization.create).toHaveBeenCalledWith({
+      expect(mockOrganizationCreate).toHaveBeenCalledWith({
         data: {
           name: 'New Restaurant',
           phone: '555-0123',
@@ -217,7 +223,7 @@ describe('/api/organizations', () => {
         { code: 'P2002', clientVersion: '5.0.0' }
       );
 
-      mockPrisma.organization.create.mockRejectedValue(constraintError);
+      mockOrganizationCreate.mockRejectedValue(constraintError);
 
       const request = new NextRequest('http://localhost:3000/api/organizations', {
         method: 'POST',
