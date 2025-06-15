@@ -47,7 +47,9 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
       organization = await prismadb.organization.create({
         data: {
           name: company,
-          isActive: true
+          priority: "C", // Default priority
+          segment: "CASUAL_DINING", // Required field
+          status: "ACTIVE" // Use status instead of isActive
         }
       });
     }
