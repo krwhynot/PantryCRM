@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks according to PantryCRM git workflow..."
+
+# Run TypeScript type checking
+echo "📝 Running TypeScript check..."
+npm run typecheck || { echo "❌ TypeScript check failed. Please fix the issues before committing."; exit 1; }
+
+# Verify changes work if applicable
+if [ -f "package.json" ]; then
+  if grep -q "\"build\":\" "package.json"; then
+    echo "🏗️ Running build check..."
+    npm run build || { echo "❌ Build failed. Please fix the issues before committing."; exit 1; }
+  fi
+fi
+
+echo "✅ Pre-commit checks passed successfully!"

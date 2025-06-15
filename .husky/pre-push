@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔄 Running pre-push checks according to PantryCRM git workflow..."
+
+# Ensure sync is current
+echo "🌐 Checking if branch is up-to-date with remote..."
+git fetch origin
+
+BRANCH=$(git symbolic-ref --short HEAD)
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse @{u})
+BASE=$(git merge-base @ @{u})
+
+if [ $LOCAL = $REMOTE ]; then
+    echo "✅ Branch is up-to-date with remote."
+elif [ $LOCAL = $BASE ]; then
+    echo "❌ Your branch is behind the remote. Run 'git pull --rebase origin $BRANCH' before pushing."
+    exit 1
+elif [ $REMOTE = $BASE ]; then
+    echo "⚠️ Your branch has diverged from remote, continuing with push..."
+else
+    echo "⚠️ Your branch has diverged from remote, continuing with push..."
+fi
+
+echo "✅ Pre-push checks passed successfully!"
