@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import ContactList from '@/components/contacts/ContactList'
-import ContactForm from '@/components/contacts/ContactForm'
+import { ContactForm } from '@/components/contacts/ContactForm'
 
 export default function ContactsPage() {
   return (

@@ -35,7 +35,7 @@ export function useSwipeable(
     preventDefaultOnSwipe = true
   } = config;
 
-  const elementRef = useRef<HTMLElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
   const startPoint = useRef<TouchPoint | null>(null);
   const isTracking = useRef(false);
 

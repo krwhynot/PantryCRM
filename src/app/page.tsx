@@ -33,7 +33,10 @@ export default function HomePage() {
         </div>
       </div>
       
-      <Dashboard />
+      <Dashboard 
+        organizationCount={0} 
+        recentInteractions={[]}
+      />
     </div>
   )
 }
