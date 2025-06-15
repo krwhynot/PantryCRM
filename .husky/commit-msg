@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-echo "📝 Checking commit message format according to PantryCRM git workflow..."
-
-# Use custom commitlint config
-npx commitlint --edit "$1"
