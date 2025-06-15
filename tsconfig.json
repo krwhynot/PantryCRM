@@ -24,8 +24,14 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@/ui/*": ["./components/ui/*"]
+      "@/*": [
+        "./src/*",
+        "./*"
+      ],
+      "@/ui/*": [
+        "./src/components/ui/*",
+        "./components/ui/*"
+      ]
     }
   },
   "ts-node": {
@@ -38,6 +44,10 @@
     "cypress.config.ts",
     "**/*.cy.ts",
     "**/*.cy.tsx",
-    "backup-removed"
+    "backup-removed",
+    "lib/excel-migration", // If there's a top-level lib/excel-migration
+    "src/lib/excel-migration/**", // Exclude all content under src/lib/excel-migration
+    "src/components/excel-migration/**", // Exclude all content under src/components/excel-migration
+    "app/api/migration/**", // Exclude all migration API routes
   ]
 }

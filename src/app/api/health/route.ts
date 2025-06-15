@@ -1,12 +1,47 @@
 // API Health Check Endpoint for Monitoring
 import { NextRequest, NextResponse } from 'next/server';
 
+interface HealthData {
+  status: string;
+  timestamp: string;
+  uptime: number;
+  version: string;
+  environment: string;
+  deployment: {
+    commit: string;
+    branch: string;
+    buildId: string;
+  };
+  system: {
+    platform: string;
+    arch: string;
+    cpuCores?: number;
+    totalMemoryMB?: number;
+    freeMemoryMB?: number;
+    loadAverage?: number[];
+    nodeVersion?: string; // Added nodeVersion
+    memory?: {
+      used: number;    // from process.memoryUsage().heapUsed
+      total: number;   // from process.memoryUsage().heapTotal
+      external: number; // from process.memoryUsage().external
+    };
+  };
+  database?: {
+    status: string;
+    type?: string; // Added type for database status
+    message?: string; // For successful connection
+    error?: string;   // For errors
+  };
+  responseTime?: number;
+}
+
+
 export async function GET(request: NextRequest) {
   try {
     const startTime = Date.now();
     
     // Basic health check data
-    const healthData = {
+    const healthData: HealthData = {
       status: 'healthy',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),

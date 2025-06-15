@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prismadb } from '@/lib/prisma';
-import { requireAuth } from '@/lib/security';
-import { processSearchInput } from '@/lib/input-sanitization';
+import { prismadb } from '../../../lib/prisma';
+import { requireAuth } from '../../../lib/security';
+import { processSearchInput } from '../../../lib/input-sanitization';
 
 // Import validation and API helpers as required by TODO-WS-001
-import { validateCreateOrganization, validateUpdateOrganization } from '@/lib/types/validation';
-import { parseRequestBody, createSuccessResponse, createErrorResponse, handleValidationError, handlePrismaError } from '@/lib/types/api-helpers';
-import type { APIResponse, OrganizationWithDetails, OrganizationSummary } from '@/types/crm';
+import { validateCreateOrganization, validateUpdateOrganization } from '../../../lib/types/validation';
+import { parseRequestBody, createSuccessResponse, createErrorResponse, handleValidationError, handlePrismaError } from '../../../lib/types/api-helpers';
+import type { APIResponse, OrganizationWithDetails, OrganizationSummary } from '../../../types/crm';
 
-async function GET(req: NextRequest): Promise<NextResponse<APIResponse<OrganizationSummary[]>>> {
+async function GET(req: NextRequest): Promise<NextResponse<APIResponse<any>>> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error as NextResponse<APIResponse<OrganizationSummary[]>>;
@@ -71,14 +71,17 @@ async function GET(req: NextRequest): Promise<NextResponse<APIResponse<Organizat
   }
 }
 
-async function POST(req: NextRequest): Promise<NextResponse<APIResponse<OrganizationWithDetails>>> {
+async function POST(req: NextRequest): Promise<NextResponse<APIResponse<any>>> {
   // Check authentication
   const { user, error } = await requireAuth(req);
   if (error) return error as NextResponse<APIResponse<OrganizationWithDetails>>;
 
   // 1. Validate request using provided validation helpers
-  const { success, data, error: validationError } = await parseRequestBody(req, validateCreateOrganization);
-  if (!success) return handleValidationError([{ field: 'body', message: validationError.message }]);
+  const parsed = await parseRequestBody(req, validateCreateOrganization);
+  if (parsed.success === false) {
+    return handleValidationError([{ field: 'body', message: parsed.error.message }]);
+  }
+  const data = parsed.data;
 
   // 2. Database operation with error handling
   try {

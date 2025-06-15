@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useSwipeable } from '../../hooks/useSwipeable';
-import { useNetworkStatus } from '../../hooks/useNetworkStatus';
-import PullToRefresh from '../ui/PullToRefresh';
-import SwipeableCard from '../ui/SwipeableCard';
-import { SyncStatus } from '../NetworkStatus';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
+import { useSwipeable } from '@/hooks/useSwipeable';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import PullToRefresh from '@/components/ui/PullToRefresh';
+import SwipeableCard from '@/components/ui/SwipeableCard';
+import { SyncStatus } from '@/components/NetworkStatus';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 // Example implementation showing all mobile UX enhancements
 export default function MobileOptimizedDashboard() {

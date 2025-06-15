@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 
 // Priority settings with color coding (A=Green, B=Yellow, C=Orange, D=Red)
-const prioritySettings: Prisma.SettingCreateInput[] = [
+const prioritySettings: Prisma.SystemSettingCreateInput[] = [
   {
     key: 'A',
     label: 'A - High Priority',
@@ -37,7 +37,7 @@ const prioritySettings: Prisma.SettingCreateInput[] = [
 ];
 
 // Market segment settings for food service industry
-const segmentSettings: Prisma.SettingCreateInput[] = [
+const segmentSettings: Prisma.SystemSettingCreateInput[] = [
   {
     key: 'FINE_DINING',
     label: 'Fine Dining',
@@ -76,7 +76,7 @@ const segmentSettings: Prisma.SettingCreateInput[] = [
 ];
 
 // Distributor settings for food service industry
-const distributorSettings: Prisma.SettingCreateInput[] = [
+const distributorSettings: Prisma.SystemSettingCreateInput[] = [
   {
     key: 'SYSCO',
     label: 'Sysco',
@@ -115,7 +115,7 @@ const distributorSettings: Prisma.SettingCreateInput[] = [
 ];
 
 // Contact role settings for food service industry
-const contactRoleSettings: Prisma.SettingCreateInput[] = [
+const contactRoleSettings: Prisma.SystemSettingCreateInput[] = [
   {
     key: 'EXEC_CHEF',
     label: 'Executive Chef',
@@ -154,7 +154,7 @@ const contactRoleSettings: Prisma.SettingCreateInput[] = [
 ];
 
 // Interaction type settings for food service industry
-const interactionSettings: Prisma.SettingCreateInput[] = [
+const interactionSettings: Prisma.SystemSettingCreateInput[] = [
   {
     key: 'EMAIL',
     label: 'Email',
@@ -200,7 +200,7 @@ const interactionSettings: Prisma.SettingCreateInput[] = [
 ];
 
 // Principal settings for food service industry
-const principalSettings: Prisma.SettingCreateInput[] = [
+const principalSettings: Prisma.SystemSettingCreateInput[] = [
   {
     key: 'KAUFHOLDS',
     label: 'Kaufholds',
@@ -281,7 +281,7 @@ const principalSettings: Prisma.SettingCreateInput[] = [
 ];
 
 // Combine all settings
-const allSettings: Prisma.SettingCreateInput[] = [
+const allSettings: Prisma.SystemSettingCreateInput[] = [
   ...prioritySettings,
   ...segmentSettings,
   ...distributorSettings,
@@ -301,20 +301,21 @@ export async function seedFoodServiceSettings(prisma: PrismaClient): Promise<voi
   
   // Create each setting, handling duplicates gracefully
   for (const setting of allSettings) {
-    await prisma.setting.upsert({
+    await prisma.systemSetting.upsert({
       where: {
-        category_key: {
-          category: setting.category,
-          key: setting.key,
-        },
+        key: setting.key, // Use the actual unique key of SystemSetting
       },
       update: {
-        label: setting.label,
-        sortOrder: setting.sortOrder,
-        color: setting.color,
-        active: setting.active,
+        // Only update fields that exist in SystemSetting
+        value: JSON.stringify({ label: setting.label, sortOrder: setting.sortOrder, color: setting.color, active: setting.active, category: setting.category }), // Store extra info as JSON in 'value'
+        type: 'json', // Indicate that 'value' is JSON
       },
-      create: setting,
+      create: {
+        key: setting.key,
+        // Store extra info as JSON in 'value'
+        value: JSON.stringify({ label: setting.label, sortOrder: setting.sortOrder, color: setting.color, active: setting.active, category: setting.category }),
+        type: 'json', // Indicate that 'value' is JSON
+      },
     });
   }
   

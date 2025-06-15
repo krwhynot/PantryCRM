@@ -1,8 +1,8 @@
 'use client';
 
-import { useSwipeable } from '../../hooks/useSwipeable';
+import { useSwipeable } from '@/hooks/useSwipeable';
 import { ReactNode, useState } from 'react';
-import { Card } from './card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface SwipeAction {
   icon: ReactNode;
