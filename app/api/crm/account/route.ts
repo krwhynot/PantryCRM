@@ -54,22 +54,13 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
         website: website || "",
         
         // Address fields - using correct field names from Organization model
-        addressLine1: shipping_street || billing_street || "",
-        addressLine2: "",  // No direct mapping, leaving empty
+        address: shipping_street || billing_street || "",
         city: shipping_city || billing_city || "",
         state: shipping_state || billing_state || "",
-        postalCode: shipping_postal_code || billing_postal_code || "",
-        country: shipping_country || billing_country || "",
+        zipCode: shipping_postal_code || billing_postal_code || "",
         
-        // Account manager
-        accountManager: {
-          connect: {
-            id: assigned_to || session.user.id
-          }
-        },
-        
-        // Store additional fields in description (as JSON string)
-        description: JSON.stringify({
+        // Notes field for additional info including account manager and extra data
+        notes: `Account Manager: ${assigned_to || session.user.id}\n\nAdditional Data: ${JSON.stringify({
           fax,
           company_id,
           vat,
@@ -86,10 +77,11 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
           createdBy: session.user.id,
           updatedBy: session.user.id,
           v: 0
-        }),
+        })}`,
         
-        // Default values for required fields
-        isActive: true
+        // Set default priority and type
+        priority: "B",
+        type: "PROSPECT"
       },
     });
 
@@ -151,24 +143,13 @@ async function handlePUT(req: NextRequest, context: { params: Promise<Record<str
         website: website || "",
         
         // Address fields - using correct field names from Organization model
-        addressLine1: shipping_street || billing_street || "",
-        addressLine2: "",  // No direct mapping, leaving empty
+        address: shipping_street || billing_street || "",
         city: shipping_city || billing_city || "",
         state: shipping_state || billing_state || "",
-        postalCode: shipping_postal_code || billing_postal_code || "",
-        country: shipping_country || billing_country || "",
+        zipCode: shipping_postal_code || billing_postal_code || "",
         
-        // Account manager - only update if provided
-        ...(assigned_to ? {
-          accountManager: {
-            connect: {
-              id: assigned_to
-            }
-          }
-        } : {}),
-        
-        // Store additional fields in description (as JSON string)
-        description: JSON.stringify({
+        // Store additional fields including account manager in notes (as JSON string)
+        notes: `Account Manager: ${assigned_to || 'Not assigned'}\n\nAdditional Data: ${JSON.stringify({
           fax,
           company_id,
           vat,
@@ -184,7 +165,7 @@ async function handlePUT(req: NextRequest, context: { params: Promise<Record<str
           status: status || "Active",
           updatedBy: session.user.id,
           v: 0
-        }),
+        })}`,
         
         // Default values for required fields
         isActive: status === "Inactive" ? false : true
@@ -210,12 +191,13 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
     // Use organization model as proxy for crm_Accounts
     const organizations = await prismadb.organization.findMany({
       include: {
-        accountManager: {
+        contacts: {
           select: {
             id: true,
-            name: true,
+            firstName: true,
+            lastName: true,
             email: true,
-            image: true
+            isPrimary: true
           }
         }
       }
