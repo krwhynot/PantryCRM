@@ -38,6 +38,11 @@
     "cypress.config.ts",
     "**/*.cy.ts",
     "**/*.cy.tsx",
-    "backup-removed"
+    "backup-removed",
+    "lib/excel-migration/**",
+    "src/lib/excel-migration/**", 
+    "app/api/migration/**",
+    "src/components/excel-migration/**",
+    "components/excel-migration/**"
   ]
 }
