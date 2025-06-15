@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
   // Next.js 15 compatible configuration with B1 optimizations
   serverExternalPackages: ['bcrypt', 'bcryptjs', '@prisma/client', 'react-hot-toast', '@hello-pangea/dnd'],
   // Temporary: disable SSG for pages to avoid vendor package SSR issues
-  trailingSlash: false,
+  // trailingSlash: false, // Removed duplicate property
   experimental: {
     // React 19 memory optimizations
     webpackMemoryOptimizations: true,
