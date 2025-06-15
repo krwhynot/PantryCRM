@@ -49,5 +49,6 @@
     "src/lib/excel-migration/**", // Exclude all content under src/lib/excel-migration
     "src/components/excel-migration/**", // Exclude all content under src/components/excel-migration
     "app/api/migration/**", // Exclude all migration API routes
+    "prisma/seed-positions.ts" // Exclude old seed script
   ]
 }

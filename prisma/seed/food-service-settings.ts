@@ -1,7 +1,19 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 
+// Define a type for the raw setting data structure used in this seed script
+interface RawSettingData {
+  key: string;
+  label: string;
+  category: string;
+  sortOrder: number;
+  color?: string; // Optional as not all settings have color
+  active: boolean;
+  // value and type will be constructed for SystemSetting model
+}
+
+
 // Priority settings with color coding (A=Green, B=Yellow, C=Orange, D=Red)
-const prioritySettings: Prisma.SystemSettingCreateInput[] = [
+const prioritySettings: RawSettingData[] = [
   {
     key: 'A',
     label: 'A - High Priority',
@@ -37,7 +49,7 @@ const prioritySettings: Prisma.SystemSettingCreateInput[] = [
 ];
 
 // Market segment settings for food service industry
-const segmentSettings: Prisma.SystemSettingCreateInput[] = [
+const segmentSettings: RawSettingData[] = [
   {
     key: 'FINE_DINING',
     label: 'Fine Dining',
@@ -76,7 +88,7 @@ const segmentSettings: Prisma.SystemSettingCreateInput[] = [
 ];
 
 // Distributor settings for food service industry
-const distributorSettings: Prisma.SystemSettingCreateInput[] = [
+const distributorSettings: RawSettingData[] = [
   {
     key: 'SYSCO',
     label: 'Sysco',
@@ -115,7 +127,7 @@ const distributorSettings: Prisma.SystemSettingCreateInput[] = [
 ];
 
 // Contact role settings for food service industry
-const contactRoleSettings: Prisma.SystemSettingCreateInput[] = [
+const contactRoleSettings: RawSettingData[] = [
   {
     key: 'EXEC_CHEF',
     label: 'Executive Chef',
@@ -154,7 +166,7 @@ const contactRoleSettings: Prisma.SystemSettingCreateInput[] = [
 ];
 
 // Interaction type settings for food service industry
-const interactionSettings: Prisma.SystemSettingCreateInput[] = [
+const interactionSettings: RawSettingData[] = [
   {
     key: 'EMAIL',
     label: 'Email',
@@ -200,7 +212,7 @@ const interactionSettings: Prisma.SystemSettingCreateInput[] = [
 ];
 
 // Principal settings for food service industry
-const principalSettings: Prisma.SystemSettingCreateInput[] = [
+const principalSettings: RawSettingData[] = [
   {
     key: 'KAUFHOLDS',
     label: 'Kaufholds',
@@ -281,7 +293,7 @@ const principalSettings: Prisma.SystemSettingCreateInput[] = [
 ];
 
 // Combine all settings
-const allSettings: Prisma.SystemSettingCreateInput[] = [
+const allSettings: RawSettingData[] = [
   ...prioritySettings,
   ...segmentSettings,
   ...distributorSettings,
