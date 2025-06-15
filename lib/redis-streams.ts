@@ -58,11 +58,9 @@ export class RedisStreamingCache {
       const redisUrl = process.env.REDIS_URL || process.env.AZURE_REDIS_URL;
       if (redisUrl) {
         this.redis = new Redis(redisUrl, {
-          retryDelayOnFailover: 100,
           maxRetriesPerRequest: 3,
           lazyConnect: true,
           // Optimized for Azure B1
-          maxConnections: 2,
           keepAlive: 30000,
           family: 4,
         });

@@ -131,10 +131,8 @@ export class PerformanceMetrics extends EventEmitter {
       const redisUrl = process.env.REDIS_URL || process.env.AZURE_REDIS_URL;
       if (redisUrl) {
         this.redis = new Redis(redisUrl, {
-          retryDelayOnFailover: 100,
           maxRetriesPerRequest: 3,
           lazyConnect: true,
-          maxConnections: 2,
           keepAlive: 30000,
           family: 4,
         });

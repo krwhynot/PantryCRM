@@ -18,6 +18,21 @@ import type {
   OpportunityFilters
 } from '@/types/crm';
 
+// Define a base type for queries that can be optimized
+interface OptimizableQuery {
+  include?: Record<string, any>;
+  where?: Record<string, any>;
+  orderBy?: Record<string, any> | Record<string, any>[];
+  take?: number;
+  skip?: number;
+  select?: Record<string, any>;
+  // Prisma specific fields that might be present
+  cursor?: Record<string, any>;
+  distinct?: string | string[];
+  // Allow any other properties as Prisma args can be extended
+  [key: string]: any;
+}
+
 // =============================================================================
 // QUERY OPTIMIZATION PATTERNS
 // =============================================================================
@@ -132,7 +147,7 @@ export class QueryComplexityAnalyzer {
   /**
    * Optimize query for Azure B1 constraints
    */
-  optimizeQuery<T extends Record<string, any>>(query: T): {
+  optimizeQuery<T extends OptimizableQuery>(query: T): {
     optimized: T;
     warnings: string[];
     complexity: number;
@@ -560,7 +575,7 @@ export class AzureB1PerformanceMonitor {
       avgTime: Math.round(metrics.avgTime),
       maxTime: Math.round(metrics.maxTime),
       errorRate: (metrics.errors / metrics.count) * 100,
-      recommendation: this.getRecommendation(metrics)
+      recommendation: this.getRecommendation({ avgTime: metrics.avgTime, maxTime: metrics.maxTime, errorRate: (metrics.errors / metrics.count) * 100 || 0 })
     }));
 
     const totalCount = operations.reduce((sum, op) => sum + op.count, 0);
@@ -598,19 +613,3 @@ export class AzureB1PerformanceMonitor {
     return 'Performance acceptable for Azure B1';
   }
 }
-
-// =============================================================================
-// EXPORT UTILITIES
-// =============================================================================
-
-export {
-  QueryComplexityAnalyzer,
-  AzureB1ConnectionManager,
-  QueryBatcher,
-  OrganizationQueryOptimizer,
-  AzureB1PerformanceMonitor
-};
-
-export type {
-  AzureB1QueryConfig
-};

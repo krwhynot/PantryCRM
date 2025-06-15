@@ -66,11 +66,9 @@ export class RedisReportCache {
       const redisUrl = process.env.REDIS_URL || process.env.AZURE_REDIS_URL;
       if (redisUrl) {
         this.redis = new Redis(redisUrl, {
-          retryDelayOnFailover: 100,
           maxRetriesPerRequest: 3,
           lazyConnect: true,
           // Optimized for Azure B1 constraints
-          maxConnections: 2, // Reserve 1 for emergency
           keepAlive: 30000,
           family: 4, // IPv4 only
         });

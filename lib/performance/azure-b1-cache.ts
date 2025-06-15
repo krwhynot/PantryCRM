@@ -511,13 +511,3 @@ export async function withCache<T>(
   cache.set(cacheName, key, result);
   return result;
 }
-
-// =============================================================================
-// EXPORTS
-// =============================================================================
-
-export {
-  AzureB1CacheManager,
-  cacheResult,
-  withCache
-};

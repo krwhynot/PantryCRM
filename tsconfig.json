@@ -37,7 +37,7 @@
   "ts-node": {
     "esm": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "app/**/*.ts", "app/**/*.tsx", "components/**/*.ts", "components/**/*.tsx", "lib/**/*.ts", "types/**/*.ts", ".next/types/**/*.ts"],
   "exclude": [
     "node_modules", 
     "cypress", 
@@ -45,11 +45,11 @@
     "**/*.cy.ts",
     "**/*.cy.tsx",
     "backup-removed",
-    "lib/excel-migration/**",
-    "src/lib/excel-migration/**",
-    "src/components/excel-migration/**",
-    "app/api/migration/**",
-    "components/excel-migration/**",
+    "**/lib/excel-migration/**/*",
+    "**/src/lib/excel-migration/**/*",
+    "**/src/components/excel-migration/**/*",
+    "**/app/api/migration/**/*",
+    "**/components/excel-migration/**/*",
     "prisma/seed-positions.ts"
   ]
 }

@@ -21,8 +21,10 @@ import type {
   InteractionWithDetails,
   OpportunityWithDetails,
   DashboardMetrics,
-  ChartDataPoint
+  ChartDataPoint,
+  InteractionOutcome
 } from '@/types/crm';
+import { INTERACTION_OUTCOMES } from '@/types/crm';
 
 // =============================================================================
 // OPTIMIZED PRISMA CLIENT
@@ -290,7 +292,9 @@ export class OptimizedPrismaClient {
             opportunities: opportunityStats,
             performance: {
               averageResponseTime: 0, // Will be filled by monitoring
-              topPerformingSegments: []
+              topPerformingSegments: [], // TODO: Implement calculation for topPerformingSegments
+              totalRevenue: opportunityStats.totalValue || 0,
+              leadSourceEffectiveness: [] // TODO: Implement calculation for leadSourceEffectiveness
             }
           };
         });
@@ -354,8 +358,8 @@ export class OptimizedPrismaClient {
           const organizations = await this.prisma.organization.findMany({
             where: {
               OR: [
-                { name: { contains: query, mode: 'insensitive' } },
-                { email: { contains: query, mode: 'insensitive' } },
+                { name: { contains: query } },
+                { email: { contains: query } },
                 { phone: { contains: query } }
               ]
             },
@@ -395,8 +399,8 @@ export class OptimizedPrismaClient {
     
     if (filters.search) {
       where.OR = [
-        { name: { contains: filters.search, mode: 'insensitive' } },
-        { email: { contains: filters.search, mode: 'insensitive' } }
+        { name: { contains: filters.search } },
+        { email: { contains: filters.search } }
       ];
     }
     
@@ -448,7 +452,17 @@ export class OptimizedPrismaClient {
   }
 
   private async getInteractionStats() {
-    const [total, thisWeek, byType] = await Promise.all([
+    const statsInitial = {
+      total: 0,
+      thisWeek: 0,
+      byType: {} as Record<string, number>,
+      byOutcome: INTERACTION_OUTCOMES.reduce((acc, outcome) => {
+        acc[outcome] = 0;
+        return acc;
+      }, {} as Record<InteractionOutcome, number>)
+    };
+
+    const [total, thisWeek, byTypeResults, byOutcomeResults] = await Promise.all([
       this.prisma.interaction.count(),
       this.prisma.interaction.count({
         where: {
@@ -458,18 +472,28 @@ export class OptimizedPrismaClient {
       this.prisma.interaction.groupBy({
         by: ['type'],
         _count: { type: true }
+      }),
+      this.prisma.interaction.groupBy({
+        by: ['outcome'],
+        _count: { outcome: true },
+        where: { outcome: { not: null } } // Only count interactions with an outcome
       })
     ]);
 
-    return {
-      total,
-      thisWeek,
-      byType: byType.reduce((acc, item) => {
-        acc[item.type as any] = item._count.type;
-        return acc;
-      }, {} as any),
-      byOutcome: {} // TODO: Add outcome grouping
-    };
+    statsInitial.total = total;
+    statsInitial.thisWeek = thisWeek;
+
+    for (const item of byTypeResults) {
+      statsInitial.byType[item.type as string] = item._count.type;
+    }
+
+    for (const item of byOutcomeResults) {
+      if (item.outcome) { // Ensure outcome is not null
+        statsInitial.byOutcome[item.outcome as InteractionOutcome] = item._count.outcome;
+      }
+    }
+
+    return statsInitial;
   }
 
   private async getOpportunityStats() {
@@ -701,5 +725,3 @@ export function getOptimizedPrisma(): OptimizedPrismaClient {
   }
   return optimizedPrismaInstance;
 }
-
-export { OptimizedPrismaClient };

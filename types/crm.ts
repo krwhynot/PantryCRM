@@ -358,6 +358,57 @@ export interface OrganizationFilters {
 /**
  * Quick search result for autocomplete
  */
+/**
+ * Contact search/filter parameters
+ */
+export interface ContactFilters {
+  search?: string;
+  organizationId?: string;
+  isPrimary?: boolean;
+  position?: string[];
+  page?: number;
+  limit?: number;
+  sortBy?: 'lastName' | 'firstName' | 'email' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
+}
+
+/**
+ * Interaction search/filter parameters
+ */
+export interface InteractionFilters {
+  search?: string;
+  organizationId?: string;
+  contactId?: string;
+  type?: InteractionType[];
+  outcome?: InteractionOutcome[];
+  dateAfter?: Date;
+  dateBefore?: Date;
+  page?: number;
+  limit?: number;
+  sortBy?: 'date' | 'type' | 'outcome' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
+}
+
+/**
+ * Opportunity search/filter parameters
+ */
+export interface OpportunityFilters {
+  search?: string;
+  organizationId?: string;
+  contactId?: string;
+  stage?: OpportunityStage[];
+  status?: OpportunityStatus[];
+  principal?: FoodServicePrincipal[];
+  minValue?: number;
+  maxValue?: number;
+  expectedCloseAfter?: Date;
+  expectedCloseBefore?: Date;
+  page?: number;
+  limit?: number;
+  sortBy?: 'name' | 'value' | 'stage' | 'expectedCloseDate' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
+}
+
 export interface QuickSearchResult {
   type: 'organization' | 'contact' | 'opportunity';
   id: string;
@@ -401,6 +452,13 @@ export interface DashboardMetrics {
       segment: OrganizationSegment;
       conversionRate: number;
       averageValue: number;
+    }>;
+    totalRevenue: number;
+    leadSourceEffectiveness: Array<{
+      source: string; // e.g., 'Website', 'Referral', 'Campaign'
+      count: number; // Number of leads/opportunities from this source
+      conversionRate: number; // (Converted from this source / count) * 100
+      value: number; // Total value of converted opportunities from this source
     }>;
   };
 }

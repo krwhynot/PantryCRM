@@ -118,7 +118,7 @@ export const createOrganizationSchema = z.object({
   name: z.string().min(1, 'Organization name is required').max(255),
   priority: organizationPrioritySchema,
   segment: organizationSegmentSchema,
-  type: organizationTypeSchema.optional().default('PROSPECT'),
+  type: organizationTypeSchema.optional(),
   address: z.string().max(500).optional(),
   city: z.string().max(100).optional(),
   state: z.string().max(50).optional(),
@@ -130,7 +130,7 @@ export const createOrganizationSchema = z.object({
   estimatedRevenue: z.number().min(0).optional(),
   employeeCount: z.number().int().min(1).optional(),
   primaryContact: z.string().max(255).optional(),
-  nextFollowUpDate: z.string().datetime().optional().or(z.date().optional())
+  nextFollowUpDate: z.date().optional()
 });
 
 /**
@@ -149,7 +149,7 @@ export const createContactSchema = z.object({
   email: z.string().email().optional().or(z.literal('')),
   phone: z.string().max(50).optional(),
   position: z.string().max(100).optional(),
-  isPrimary: z.boolean().optional().default(false),
+  isPrimary: z.boolean().optional(),
   notes: z.string().max(1000).optional(),
   organizationId: z.string().cuid('Invalid organization ID')
 });
@@ -168,7 +168,7 @@ export const createInteractionSchema = z.object({
   type: interactionTypeSchema,
   subject: z.string().min(1, 'Subject is required').max(255),
   description: z.string().max(2000).optional(),
-  date: z.string().datetime().or(z.date()),
+  date: z.date(),
   duration: z.number().int().min(1).max(1440).optional(), // Max 24 hours
   outcome: interactionOutcomeSchema.optional(),
   nextAction: z.string().max(500).optional(),
@@ -186,7 +186,7 @@ export const createOpportunitySchema = z.object({
   value: z.number().min(0).optional(),
   stage: opportunityStageSchema,
   probability: z.number().int().min(0).max(100).optional(),
-  expectedCloseDate: z.string().datetime().optional().or(z.date().optional()),
+  expectedCloseDate: z.date().optional(),
   notes: z.string().max(2000).optional(),
   principal: foodServicePrincipalSchema.optional()
 });
@@ -237,7 +237,7 @@ export interface ValidationResult<T> {
 export function validateCreateOrganization(data: unknown): ValidationResult<CreateOrganizationRequest> {
   try {
     const validated = createOrganizationSchema.parse(data);
-    return { success: true, data: validated };
+    return { success: true, data: validated as CreateOrganizationRequest };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -261,7 +261,7 @@ export function validateCreateOrganization(data: unknown): ValidationResult<Crea
 export function validateUpdateOrganization(data: unknown): ValidationResult<UpdateOrganizationRequest> {
   try {
     const validated = updateOrganizationSchema.parse(data);
-    return { success: true, data: validated };
+    return { success: true, data: validated as UpdateOrganizationRequest };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -285,7 +285,7 @@ export function validateUpdateOrganization(data: unknown): ValidationResult<Upda
 export function validateCreateContact(data: unknown): ValidationResult<CreateContactRequest> {
   try {
     const validated = createContactSchema.parse(data);
-    return { success: true, data: validated };
+    return { success: true, data: validated as CreateContactRequest };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -309,7 +309,7 @@ export function validateCreateContact(data: unknown): ValidationResult<CreateCon
 export function validateCreateInteraction(data: unknown): ValidationResult<CreateInteractionRequest> {
   try {
     const validated = createInteractionSchema.parse(data);
-    return { success: true, data: validated };
+    return { success: true, data: validated as CreateInteractionRequest };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -333,7 +333,7 @@ export function validateCreateInteraction(data: unknown): ValidationResult<Creat
 export function validateCreateOpportunity(data: unknown): ValidationResult<CreateOpportunityRequest> {
   try {
     const validated = createOpportunitySchema.parse(data);
-    return { success: true, data: validated };
+    return { success: true, data: validated as CreateOpportunityRequest };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
