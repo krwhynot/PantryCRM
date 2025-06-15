@@ -55,11 +55,7 @@ git commit -m "$(cat <<'EOF'
 
 Resolves: TODO-[ID] - [TODO description]
 
-🤖 Generated with [Claude Code](https://claude.ai/code)
 
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-)"
 ```
 
 #### Step D: Immediate Sync and Push

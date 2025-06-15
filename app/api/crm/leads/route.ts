@@ -62,10 +62,12 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
       const newOrganization = await prismadb.organization.create({
         data: {
           name: company,
-          accountManagerId: sessionUserId, // Default: the user creating the lead/opportunity also manages the new org.
+          priority: "C", // Default priority
+          segment: "CASUAL_DINING", // Required field
+          // Note: accountManagerId field doesn't exist in Organization model
           // TODO: Consider setting default values for other fields like priorityId, segmentId, distributorId.
           // These would involve fetching valid 'key' values from the Setting model, e.g.:
-          // priorityId: (await prismadb.setting.findFirst({ where: { category: "ORGANIZATION_PRIORITY", key: "DEFAULT_KEY_FROM_SETTINGS" } }))?.key,
+          // priorityId: (await prismadb.systemSetting.findFirst({ where: { category: "ORGANIZATION_PRIORITY", key: "DEFAULT_KEY_FROM_SETTINGS" } }))?.key,
           // Ensure these default keys exist in your Setting table and match the expected category.
         },
       });
@@ -78,7 +80,7 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
     const requestedPrincipalKey = body.principal_key; // Assuming the request might send 'principal_key'
 
     if (requestedPrincipalKey) {
-      const validPrincipal = await prismadb.setting.findFirst({
+      const validPrincipal = await prismadb.systemSetting.findFirst({
         where: {
           category: "PRINCIPAL",
           key: requestedPrincipalKey,
@@ -95,7 +97,7 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
       }
     } else {
       // If no principal_key is provided in the request, try to assign a default one.
-      const defaultPrincipal = await prismadb.setting.findFirst({
+      const defaultPrincipal = await prismadb.systemSetting.findFirst({
         where: {
           category: "PRINCIPAL",
           active: true,
@@ -145,10 +147,10 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
               firstName: first_name,
               lastName: last_name,
               phone: phone, // from lead data
-              title: jobTitle, // from lead data
+              position: jobTitle, // from lead data (use position instead of title)
               // TODO: Set default values for other Contact fields if necessary/possible.
               // e.g., source: lead_source (if applicable to contacts too)
-              isActive: true,
+              // Note: isActive field doesn't exist in Contact model
             },
           });
           contactId = newContact.id;
@@ -164,7 +166,7 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
     const requestedStageKey = type; // 'type' from lead data maps to Opportunity.stage
 
     if (requestedStageKey) {
-      const validStage = await prismadb.setting.findFirst({
+      const validStage = await prismadb.systemSetting.findFirst({
         where: { category: "OPPORTUNITY_STAGE", key: requestedStageKey, active: true },
       });
       if (validStage) {
@@ -176,7 +178,7 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
         );
       }
     } else {
-      const defaultStage = await prismadb.setting.findFirst({
+      const defaultStage = await prismadb.systemSetting.findFirst({
         where: { category: "OPPORTUNITY_STAGE", active: true, key: "NEW_LEAD" }, // Attempt to find a specific default key
         orderBy: [{ sortOrder: 'asc' }, { key: 'asc' }],
       });
@@ -184,7 +186,7 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
         validatedStageKey = defaultStage.key;
       } else {
          // Fallback: try any active stage if specific default 'NEW_LEAD' not found
-        const fallbackDefaultStage = await prismadb.setting.findFirst({
+        const fallbackDefaultStage = await prismadb.systemSetting.findFirst({
             where: { category: "OPPORTUNITY_STAGE", active: true },
             orderBy: [{ sortOrder: 'asc' }, { key: 'asc' }],
         });
@@ -203,7 +205,7 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
     const requestedStatusKey = status; // 'status' from lead data maps to Opportunity.status
 
     if (requestedStatusKey) {
-      const validStatus = await prismadb.setting.findFirst({
+      const validStatus = await prismadb.systemSetting.findFirst({
         where: { category: "OPPORTUNITY_STATUS", key: requestedStatusKey, active: true },
       });
       if (validStatus) {
@@ -215,7 +217,7 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
         );
       }
     } else {
-      const defaultStatus = await prismadb.setting.findFirst({
+      const defaultStatus = await prismadb.systemSetting.findFirst({
         where: { category: "OPPORTUNITY_STATUS", active: true, key: "OPEN" }, // Attempt to find a specific default key
         orderBy: [{ sortOrder: 'asc' }, { key: 'asc' }],
       });
@@ -223,7 +225,7 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
         validatedStatusKey = defaultStatus.key;
       } else {
         // Fallback: try any active status if specific default 'OPEN' not found
-        const fallbackDefaultStatus = await prismadb.setting.findFirst({
+        const fallbackDefaultStatus = await prismadb.systemSetting.findFirst({
             where: { category: "OPPORTUNITY_STATUS", active: true },
             orderBy: [{ sortOrder: 'asc' }, { key: 'asc' }],
         });
@@ -241,13 +243,14 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
 
     const newOpportunity = await prismadb.opportunity.create({
       data: {
+        name: `${first_name} ${last_name} - ${company}`, // Required field
         organizationId: organizationId, // Use the actual organizationId determined above
-        userId: opportunityUserId,
-        principal: principalKey, // Use the actual principalKey determined above
+        // Note: userId field doesn't exist in Opportunity model
+        // Note: principal field doesn't exist in Opportunity model
         contactId: contactId, // Use the contactId determined above, or null/undefined if not found/created
         stage: validatedStageKey, // Use validated stage key
-        status: validatedStatusKey, // Use validated status key
-        source: lead_source,
+        // Note: Opportunity model doesn't have 'status' field, only 'stage'
+        // Note: source field doesn't exist in Opportunity model
         probability: 10, // Default probability for a new opportunity from lead
         notes: JSON.stringify({
           originalLeadData: {
@@ -339,13 +342,7 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
       },
       include: {
         organization: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true
-          }
-        },
+        // Note: user relation doesn't exist in Opportunity model
         contact: true
       }
     });
@@ -408,7 +405,7 @@ async function handlePUT(req: NextRequest, context: { params: Promise<Record<str
     // --- Stage Validation (from body.type) ---
     let validatedStageKey = existingOpportunity.stage; // Default to existing opportunity's stage
     if (type !== undefined) { // Check if 'type' (for stage) was actually provided in the body
-      const validStage = await prismadb.setting.findFirst({
+      const validStage = await prismadb.systemSetting.findFirst({
         where: { category: "OPPORTUNITY_STAGE", key: type, active: true },
       });
       if (validStage) {
@@ -422,9 +419,9 @@ async function handlePUT(req: NextRequest, context: { params: Promise<Record<str
     }
 
     // --- Status Validation (from body.status) ---
-    let validatedStatusKey = existingOpportunity.status; // Default to existing opportunity's status
+    let validatedStatusKey = existingOpportunity.stage; // Default to existing opportunity's stage (not status)
     if (status !== undefined) { // Check if 'status' was actually provided in the body
-      const validStatus = await prismadb.setting.findFirst({
+      const validStatus = await prismadb.systemSetting.findFirst({
         where: { category: "OPPORTUNITY_STATUS", key: status, active: true },
       });
       if (validStatus) {
