@@ -1,4 +1,4 @@
-# Kitchen Pantry CRM: Complete PostgreSQL + Drizzle ORM Migration
+/# Kitchen Pantry CRM: Complete PostgreSQL + Drizzle ORM Migration
 ## Master Migration Plan with Component-Level TODOs
 
 > **Migration Overview**: Complete migration from Azure SQL Database + Prisma ORM to PostgreSQL + Drizzle ORM  
@@ -27,55 +27,55 @@
 **Duration**: 2-3 days  
 **Priority**: CRITICAL - Foundation for entire migration
 
-### 1.1 Database Components Assessment
-- [ ] **Review current Prisma schema.prisma**
-  - [ ] Document all 8+ models: Account, Session, User, VerificationToken, Organization, Contact, Interaction, Opportunity, Lead, Contract, Campaign, Task
-  - [ ] Export current schema: `npx prisma db pull && npx prisma generate`
-  - [ ] Backup schema: `cp prisma/schema.prisma prisma/schema.prisma.backup.$(date +%Y%m%d)`
-  - [ ] Analyze 47 indexes and performance characteristics
-  - [ ] Document foreign key relationships and cascade behaviors
+### 1.1 Database Components Assessment *(Windsurf can handle these analysis tasks)*
+- [ ] **Review current Prisma schema.prisma** *(Windsurf compatible)*
+  - [ ] Document all 8+ models: Account, Session, User, VerificationToken, Organization, Contact, Interaction, Opportunity, Lead, Contract, Campaign, Task *(Windsurf can analyze)*
+  - [ ] Export current schema: `npx prisma db pull && npx prisma generate` *(Windsurf can execute)*
+  - [ ] Backup schema: `cp prisma/schema.prisma prisma/schema.prisma.backup.$(date +%Y%m%d)` *(Windsurf can execute)*
+  - [ ] Analyze 47 indexes and performance characteristics *(Windsurf can analyze)*
+  - [ ] Document foreign key relationships and cascade behaviors *(Windsurf can analyze)*
 
-- [ ] **Review lib/prisma.ts database connection**
-  - [ ] Document current connection pooling configuration
-  - [ ] Review SSL and security settings
-  - [ ] Note performance optimizations for Azure SQL Basic tier
+- [ ] **Review lib/prisma.ts database connection** *(Windsurf compatible)*
+  - [ ] Document current connection pooling configuration *(Windsurf can analyze)*
+  - [ ] Review SSL and security settings *(Windsurf can analyze)*
+  - [ ] Note performance optimizations for Azure SQL Basic tier *(Windsurf can analyze)*
 
-### 1.2 API Routes Component Review
-- [ ] **app/api/ - Main API directory**
-  - [ ] **app/api/organizations/route.ts** - Organization CRUD operations
-  - [ ] **app/api/organizations/search/route.ts** - Organization search functionality
-  - [ ] **app/api/contacts/route.ts** - Contact management
-  - [ ] **app/api/contacts/by-organization/[orgId]/route.ts** - Organization-specific contacts
-  - [ ] **app/api/interactions/route.ts** - Interaction tracking (30-second entry target)
-  - [ ] **app/api/settings/route.ts** - Dynamic configuration management
+### 1.2 API Routes Component Review *(Windsurf can analyze and convert these)*
+- [ ] **app/api/ - Main API directory** *(Windsurf compatible)*
+  - [ ] **app/api/organizations/route.ts** - Organization CRUD operations *(Windsurf can convert)*
+  - [ ] **app/api/organizations/search/route.ts** - Organization search functionality *(Windsurf can convert)*
+  - [ ] **app/api/contacts/route.ts** - Contact management *(Windsurf can convert)*
+  - [ ] **app/api/contacts/by-organization/[orgId]/route.ts** - Organization-specific contacts *(Windsurf can convert)*
+  - [ ] **app/api/interactions/route.ts** - Interaction tracking (30-second entry target) *(Windsurf can convert)*
+  - [ ] **app/api/settings/route.ts** - Dynamic configuration management *(Windsurf can convert)*
 
-- [ ] **app/api/crm/ - CRM-specific APIs**
-  - [ ] **app/api/crm/account/[accountId]/route.ts** - Account management
-  - [ ] **app/api/crm/account/route.ts** - Account operations
-  - [ ] **app/api/crm/contacts/[contactId]/route.ts** - Contact details
-  - [ ] **app/api/crm/contacts/route.ts** - Contact operations
-  - [ ] **app/api/crm/leads/[leadId]/route.ts** - Lead management
-  - [ ] **app/api/crm/leads/route.ts** - Lead operations
-  - [ ] **app/api/crm/opportunity/[opportunityId]/route.ts** - Opportunity details
-  - [ ] **app/api/crm/opportunity/route.ts** - Opportunity management
-  - [ ] **app/api/crm/tasks/route.ts** - Task management system
-  - [ ] **app/api/crm/organizations-optimized/route.ts** - Optimized organization queries
+- [ ] **app/api/crm/ - CRM-specific APIs** *(Windsurf compatible)*
+  - [ ] **app/api/crm/account/[accountId]/route.ts** - Account management *(Windsurf can convert)*
+  - [ ] **app/api/crm/account/route.ts** - Account operations *(Windsurf can convert)*
+  - [ ] **app/api/crm/contacts/[contactId]/route.ts** - Contact details *(Windsurf can convert)*
+  - [ ] **app/api/crm/contacts/route.ts** - Contact operations *(Windsurf can convert)*
+  - [ ] **app/api/crm/leads/[leadId]/route.ts** - Lead management *(Windsurf can convert)*
+  - [ ] **app/api/crm/leads/route.ts** - Lead operations *(Windsurf can convert)*
+  - [ ] **app/api/crm/opportunity/[opportunityId]/route.ts** - Opportunity details *(Windsurf can convert)*
+  - [ ] **app/api/crm/opportunity/route.ts** - Opportunity management *(Windsurf can convert)*
+  - [ ] **app/api/crm/tasks/route.ts** - Task management system *(Windsurf can convert)*
+  - [ ] **app/api/crm/organizations-optimized/route.ts** - Optimized organization queries *(Windsurf can convert)*
 
-### 1.3 shadcn/ui Component Library Assessment (50+ Components)
+### 1.3 shadcn/ui Component Library Assessment (50+ Components) *(Windsurf can update for React 19)*
 
-#### 1.3.1 Core shadcn/ui Foundation Components
-- [ ] **components/ui/ - Complete shadcn/ui component library (50+ components)**
+#### 1.3.1 Core shadcn/ui Foundation Components *(Windsurf compatible)*
+- [ ] **components/ui/ - Complete shadcn/ui component library (50+ components)** *(Windsurf can update)*
   
-  **Form and Input Components (React 19 compatible)**
-  - [ ] **components/ui/input.tsx** - Text input fields with validation support
-  - [ ] **components/ui/textarea.tsx** - Multi-line text input areas
-  - [ ] **components/ui/select.tsx** - Dropdown selection menus with search
-  - [ ] **components/ui/checkbox.tsx** - Boolean selection controls
-  - [ ] **components/ui/radio-group.tsx** - Single selection from multiple options
-  - [ ] **components/ui/switch.tsx** - Toggle controls for binary states
-  - [ ] **components/ui/button.tsx** - Interactive action triggers with multiple variants
-  - [ ] **components/ui/label.tsx** - Accessible form field labels
-  - [ ] **components/ui/form.tsx** - Comprehensive form wrapper components
+  **Form and Input Components (React 19 compatible)** *(Windsurf can migrate)*
+  - [ ] **components/ui/input.tsx** - Text input fields with validation support *(Windsurf can update)*
+  - [ ] **components/ui/textarea.tsx** - Multi-line text input areas *(Windsurf can update)*
+  - [ ] **components/ui/select.tsx** - Dropdown selection menus with search *(Windsurf can update)*
+  - [ ] **components/ui/checkbox.tsx** - Boolean selection controls *(Windsurf can update)*
+  - [ ] **components/ui/radio-group.tsx** - Single selection from multiple options *(Windsurf can update)*
+  - [ ] **components/ui/switch.tsx** - Toggle controls for binary states *(Windsurf can update)*
+  - [ ] **components/ui/button.tsx** - Interactive action triggers with multiple variants *(Windsurf can update)*
+  - [ ] **components/ui/label.tsx** - Accessible form field labels *(Windsurf can update)*
+  - [ ] **components/ui/form.tsx** - Comprehensive form wrapper components *(Windsurf can update)*
   
   **Layout and Navigation Components**
   - [ ] **components/ui/card.tsx** - Content containers with consistent styling
@@ -161,20 +161,20 @@
   - [ ] **DELETE components/charts/optimized/TremorDonutChart.tsx** - Donut chart wrapper
   - [ ] **DELETE components/charts/optimized/TremorLineChart.tsx** - Line chart wrapper
 
-#### 1.5.2 TanStack React Charts - CREATE (React 19 Compatible)
-- [ ] **components/charts/ - NEW: TanStack React Charts implementation**
-  - [ ] **components/charts/base-chart-config.ts** - Base configuration for all charts
-  - [ ] **components/charts/TanStackAreaChart.tsx** - Revenue trend visualization
-  - [ ] **components/charts/TanStackBarChart.tsx** - Sales performance comparison
-  - [ ] **components/charts/TanStackLineChart.tsx** - Lead conversion time-series
-  - [ ] **components/charts/TanStackDonutChart.tsx** - Market segment proportions
-  - [ ] **components/charts/TanStackScatterChart.tsx** - Customer behavior correlation
-  - [ ] **components/charts/DashboardRevenueChart.tsx** - Revenue dashboard component
-  - [ ] **components/charts/InteractionDistributionChart.tsx** - Interaction analytics
-  - [ ] **components/charts/OrganizationGrowthChart.tsx** - Growth metrics visualization
-  - [ ] **components/charts/KPICard.tsx** - Key performance indicators with trends
-  - [ ] **components/charts/SSRChartWrapper.tsx** - Server-side rendering wrapper
-  - [ ] **components/charts/fallback/FallbackChart.tsx** - Error fallback component
+#### 1.5.2 TanStack React Charts - CREATE (React 19 Compatible) *(Windsurf can implement)*
+- [ ] **components/charts/ - NEW: TanStack React Charts implementation** *(Windsurf can create)*
+  - [ ] **components/charts/base-chart-config.ts** - Base configuration for all charts *(Windsurf can create)*
+  - [ ] **components/charts/TanStackAreaChart.tsx** - Revenue trend visualization *(Windsurf can create)*
+  - [ ] **components/charts/TanStackBarChart.tsx** - Sales performance comparison *(Windsurf can create)*
+  - [ ] **components/charts/TanStackLineChart.tsx** - Lead conversion time-series *(Windsurf can create)*
+  - [ ] **components/charts/TanStackDonutChart.tsx** - Market segment proportions *(Windsurf can create)*
+  - [ ] **components/charts/TanStackScatterChart.tsx** - Customer behavior correlation *(Windsurf can create)*
+  - [ ] **components/charts/DashboardRevenueChart.tsx** - Revenue dashboard component *(Windsurf can create)*
+  - [ ] **components/charts/InteractionDistributionChart.tsx** - Interaction analytics *(Windsurf can create)*
+  - [ ] **components/charts/OrganizationGrowthChart.tsx** - Growth metrics visualization *(Windsurf can create)*
+  - [ ] **components/charts/KPICard.tsx** - Key performance indicators with trends *(Windsurf can create)*
+  - [ ] **components/charts/SSRChartWrapper.tsx** - Server-side rendering wrapper *(Windsurf can create)*
+  - [ ] **components/charts/fallback/FallbackChart.tsx** - Error fallback component *(Windsurf can create)*
 
 #### 1.5.3 Dashboard Elements
 - [ ] **components/dashboard/ - Business intelligence dashboard components**
@@ -1036,10 +1036,10 @@
   export { db } from './database/connection';
   ```
 
-### 5.2 Component Migration: Database-Dependent Components
+### 5.2 Component Migration: Database-Dependent Components *(Windsurf can handle these conversions)*
 
-#### 5.2.1 API Routes Migration
-- [ ] **app/api/organizations/route.ts - Convert to Drizzle**
+#### 5.2.1 API Routes Migration *(Windsurf compatible)*
+- [ ] **app/api/organizations/route.ts - Convert to Drizzle** *(Windsurf can convert)*
   ```typescript
   import { db } from '@/lib/database/connection';
   import { organizations, contacts } from '@/drizzle/schema';
@@ -1062,23 +1062,23 @@
   }
   ```
 
-- [ ] **app/api/organizations/search/route.ts - Convert search functionality**
-- [ ] **app/api/contacts/route.ts - Convert contact management**
-- [ ] **app/api/contacts/by-organization/[orgId]/route.ts - Convert nested queries**
-- [ ] **app/api/interactions/route.ts - Convert interaction tracking**
-- [ ] **app/api/settings/route.ts - Convert settings management**
+- [ ] **app/api/organizations/search/route.ts - Convert search functionality** *(Windsurf can convert)*
+- [ ] **app/api/contacts/route.ts - Convert contact management** *(Windsurf can convert)*
+- [ ] **app/api/contacts/by-organization/[orgId]/route.ts - Convert nested queries** *(Windsurf can convert)*
+- [ ] **app/api/interactions/route.ts - Convert interaction tracking** *(Windsurf can convert)*
+- [ ] **app/api/settings/route.ts - Convert settings management** *(Windsurf can convert)*
 
-#### 5.2.2 CRM API Routes Migration
-- [ ] **app/api/crm/account/route.ts - Convert account operations**
-- [ ] **app/api/crm/account/[accountId]/route.ts - Convert account details**
-- [ ] **app/api/crm/contacts/route.ts - Convert CRM contact operations**
-- [ ] **app/api/crm/leads/route.ts - Convert lead management**
-- [ ] **app/api/crm/opportunity/route.ts - Convert opportunity management**
-- [ ] **app/api/crm/tasks/route.ts - Convert task management**
-- [ ] **app/api/crm/organizations-optimized/route.ts - Convert optimized queries**
+#### 5.2.2 CRM API Routes Migration *(Windsurf compatible)*
+- [ ] **app/api/crm/account/route.ts - Convert account operations** *(Windsurf can convert)*
+- [ ] **app/api/crm/account/[accountId]/route.ts - Convert account details** *(Windsurf can convert)*
+- [ ] **app/api/crm/contacts/route.ts - Convert CRM contact operations** *(Windsurf can convert)*
+- [ ] **app/api/crm/leads/route.ts - Convert lead management** *(Windsurf can convert)*
+- [ ] **app/api/crm/opportunity/route.ts - Convert opportunity management** *(Windsurf can convert)*
+- [ ] **app/api/crm/tasks/route.ts - Convert task management** *(Windsurf can convert)*
+- [ ] **app/api/crm/organizations-optimized/route.ts - Convert optimized queries** *(Windsurf can convert)*
 
-#### 5.2.3 Server Actions Migration
-- [ ] **actions/organizations/create-organization.ts - Convert organization creation**
+#### 5.2.3 Server Actions Migration *(Windsurf compatible)*
+- [ ] **actions/organizations/create-organization.ts - Convert organization creation** *(Windsurf can convert)*
   ```typescript
   import { db } from '@/lib/database/connection';
   import { organizations } from '@/drizzle/schema';
@@ -1097,45 +1097,45 @@
   }
   ```
 
-- [ ] **actions/contacts/create-contact.ts - Convert contact creation**
-- [ ] **actions/crm/get-accounts.ts - Convert account retrieval**
-- [ ] **actions/crm/get-contacts.ts - Convert contact retrieval**
-- [ ] **actions/crm/get-leads.ts - Convert lead management**
-- [ ] **actions/crm/get-opportunities.ts - Convert opportunity management**
-- [ ] **actions/crm/tasks/ - Convert all task management actions**
+- [ ] **actions/contacts/create-contact.ts - Convert contact creation** *(Windsurf can convert)*
+- [ ] **actions/crm/get-accounts.ts - Convert account retrieval** *(Windsurf can convert)*
+- [ ] **actions/crm/get-contacts.ts - Convert contact retrieval** *(Windsurf can convert)*
+- [ ] **actions/crm/get-leads.ts - Convert lead management** *(Windsurf can convert)*
+- [ ] **actions/crm/get-opportunities.ts - Convert opportunity management** *(Windsurf can convert)*
+- [ ] **actions/crm/tasks/ - Convert all task management actions** *(Windsurf can convert)*
 
-### 5.3 Component Migration: UI Components
+### 5.3 Component Migration: UI Components *(Windsurf can update these)*
 
-#### 5.3.1 Form Components (Database Integration)
-- [ ] **components/organizations/OrganizationForm.tsx - Update database calls**
+#### 5.3.1 Form Components (Database Integration) *(Windsurf compatible)*
+- [ ] **components/organizations/OrganizationForm.tsx - Update database calls** *(Windsurf can update)*
   ```typescript
   // Update form submission to use Drizzle API routes
   // Ensure validation schemas match new Drizzle schema
   // Test form validation and error handling
   ```
 
-- [ ] **components/contacts/ContactForm.tsx - Update contact form**
-- [ ] **components/interactions/QuickInteractionEntry.tsx - Update 30-second entry**
-- [ ] **components/organizations/OrganizationSearch.tsx - Update search functionality**
+- [ ] **components/contacts/ContactForm.tsx - Update contact form** *(Windsurf can update)*
+- [ ] **components/interactions/QuickInteractionEntry.tsx - Update 30-second entry** *(Windsurf can update)*
+- [ ] **components/organizations/OrganizationSearch.tsx - Update search functionality** *(Windsurf can update)*
 
-#### 5.3.2 List and Display Components
-- [ ] **components/organizations/OrganizationList.tsx - Update data fetching**
-- [ ] **components/contacts/ContactList.tsx - Update contact display**
-- [ ] **components/organizations/EnhancedOrganizationCard.tsx - Update card data**
-- [ ] **components/organizations/FavoriteOrganizations.tsx - Update favorites system**
+#### 5.3.2 List and Display Components *(Windsurf compatible)*
+- [ ] **components/organizations/OrganizationList.tsx - Update data fetching** *(Windsurf can update)*
+- [ ] **components/contacts/ContactList.tsx - Update contact display** *(Windsurf can update)*
+- [ ] **components/organizations/EnhancedOrganizationCard.tsx - Update card data** *(Windsurf can update)*
+- [ ] **components/organizations/FavoriteOrganizations.tsx - Update favorites system** *(Windsurf can update)*
 
-#### 5.3.3 Food Service Industry Components
-- [ ] **components/food-service/DistributorField.tsx - Update distributor data**
-- [ ] **components/food-service/PriorityBadge.tsx - Update priority display**
-- [ ] **components/food-service/SegmentSelector.tsx - Update segment data**
-- [ ] **components/food-service/dashboard/FoodServiceDashboard.tsx - Update dashboard data**
+#### 5.3.3 Food Service Industry Components *(Windsurf compatible)*
+- [ ] **components/food-service/DistributorField.tsx - Update distributor data** *(Windsurf can update)*
+- [ ] **components/food-service/PriorityBadge.tsx - Update priority display** *(Windsurf can update)*
+- [ ] **components/food-service/SegmentSelector.tsx - Update segment data** *(Windsurf can update)*
+- [ ] **components/food-service/dashboard/FoodServiceDashboard.tsx - Update dashboard data** *(Windsurf can update)*
 
-#### 5.3.4 Excel Migration Components
-- [ ] **src/components/excel-migration/MigrationDashboard.tsx - Update for Drizzle**
-- [ ] **src/components/excel-migration/MappingReview.tsx - Update field mapping**
+#### 5.3.4 Excel Migration Components *(Windsurf compatible)*
+- [ ] **src/components/excel-migration/MigrationDashboard.tsx - Update for Drizzle** *(Windsurf can update)*
+- [ ] **src/components/excel-migration/MappingReview.tsx - Update field mapping** *(Windsurf can update)*
 
-### 5.4 Settings Management Migration
-- [ ] **Convert Settings API for dynamic configuration**
+### 5.4 Settings Management Migration *(Windsurf compatible)*
+- [ ] **Convert Settings API for dynamic configuration** *(Windsurf can convert)*
   ```typescript
   // app/api/settings/route.ts
   import { db } from '@/lib/database/connection';
@@ -1168,8 +1168,8 @@
 **Duration**: 2-3 days  
 **Priority**: CRITICAL - Currently blocking build
 
-### 6.1 Chart Library Assessment & Replacement
-- [ ] **Remove incompatible chart libraries**
+### 6.1 Chart Library Assessment & Replacement *(Windsurf can handle)*
+- [ ] **Remove incompatible chart libraries** *(Windsurf can remove)*
   ```bash
   # Remove Recharts and Tremor (React 19 incompatible)
   npm uninstall recharts tremor @tremor/react
@@ -1178,18 +1178,18 @@
   grep -r "recharts\|tremor" src/ components/ app/ --exclude-dir=node_modules
   ```
 
-- [ ] **Remove all Tremor chart components**
-  - [ ] **DELETE components/tremor/AreaChart.tsx**
-  - [ ] **DELETE components/tremor/BarChart.tsx**
-  - [ ] **DELETE components/tremor/OptimizedAreaChart.tsx**
-  - [ ] **DELETE components/tremor/OptimizedBarChart.tsx**
-  - [ ] **DELETE components/tremor/OptimizedDonutChart.tsx**
-  - [ ] **DELETE components/tremor/index.ts**
-  - [ ] **DELETE components/charts/optimized/TremorBarChart.tsx**
-  - [ ] **DELETE components/charts/optimized/TremorDonutChart.tsx**
-  - [ ] **DELETE components/charts/optimized/TremorLineChart.tsx**
+- [ ] **Remove all Tremor chart components** *(Windsurf can delete)*
+  - [ ] **DELETE components/tremor/AreaChart.tsx** *(Windsurf can delete)*
+  - [ ] **DELETE components/tremor/BarChart.tsx** *(Windsurf can delete)*
+  - [ ] **DELETE components/tremor/OptimizedAreaChart.tsx** *(Windsurf can delete)*
+  - [ ] **DELETE components/tremor/OptimizedBarChart.tsx** *(Windsurf can delete)*
+  - [ ] **DELETE components/tremor/OptimizedDonutChart.tsx** *(Windsurf can delete)*
+  - [ ] **DELETE components/tremor/index.ts** *(Windsurf can delete)*
+  - [ ] **DELETE components/charts/optimized/TremorBarChart.tsx** *(Windsurf can delete)*
+  - [ ] **DELETE components/charts/optimized/TremorDonutChart.tsx** *(Windsurf can delete)*
+  - [ ] **DELETE components/charts/optimized/TremorLineChart.tsx** *(Windsurf can delete)*
 
-- [ ] **Install React 19 compatible chart library**
+- [ ] **Install React 19 compatible chart library** *(Windsurf can install)*
   ```bash
   # Install TanStack React Charts (recommended for enterprise)
   npm install @tanstack/react-charts
@@ -1198,8 +1198,8 @@
   npm ls react react-dom
   ```
 
-### 6.2 Implement TanStack React Charts Components (React 19 Compatible)
-- [ ] **Create comprehensive chart configuration system**
+### 6.2 Implement TanStack React Charts Components (React 19 Compatible) *(Windsurf can implement)*
+- [ ] **Create comprehensive chart configuration system** *(Windsurf can create)*
   ```typescript
   // components/charts/base-chart-config.ts
   import { ChartOptions } from '@tanstack/react-charts';
@@ -1238,35 +1238,35 @@
   };
   ```
 
-- [ ] **Create comprehensive replacement chart components**
-  - [ ] **components/charts/TanStackAreaChart.tsx** - Revenue trend visualization with real-time data
-  - [ ] **components/charts/TanStackBarChart.tsx** - Sales performance by territory/segment
-  - [ ] **components/charts/TanStackLineChart.tsx** - Lead conversion rates over time
-  - [ ] **components/charts/TanStackDonutChart.tsx** - Market segment distribution
-  - [ ] **components/charts/TanStackScatterChart.tsx** - Customer behavior correlation analysis
-  - [ ] **components/charts/DashboardRevenueChart.tsx** - Main dashboard revenue visualization
-  - [ ] **components/charts/InteractionDistributionChart.tsx** - Interaction type analysis
-  - [ ] **components/charts/OrganizationGrowthChart.tsx** - Customer acquisition trends
-  - [ ] **components/charts/PipelineChart.tsx** - Sales pipeline visualization
-  - [ ] **components/charts/KPICard.tsx** - Key performance indicators with trend arrows
-  - [ ] **components/charts/MetricsGrid.tsx** - Dashboard metrics layout
-  - [ ] **components/charts/ChartContainer.tsx** - Unified chart wrapper with loading states
+- [ ] **Create comprehensive replacement chart components** *(Windsurf can create)*
+  - [ ] **components/charts/TanStackAreaChart.tsx** - Revenue trend visualization with real-time data *(Windsurf can create)*
+  - [ ] **components/charts/TanStackBarChart.tsx** - Sales performance by territory/segment *(Windsurf can create)*
+  - [ ] **components/charts/TanStackLineChart.tsx** - Lead conversion rates over time *(Windsurf can create)*
+  - [ ] **components/charts/TanStackDonutChart.tsx** - Market segment distribution *(Windsurf can create)*
+  - [ ] **components/charts/TanStackScatterChart.tsx** - Customer behavior correlation analysis *(Windsurf can create)*
+  - [ ] **components/charts/DashboardRevenueChart.tsx** - Main dashboard revenue visualization *(Windsurf can create)*
+  - [ ] **components/charts/InteractionDistributionChart.tsx** - Interaction type analysis *(Windsurf can create)*
+  - [ ] **components/charts/OrganizationGrowthChart.tsx** - Customer acquisition trends *(Windsurf can create)*
+  - [ ] **components/charts/PipelineChart.tsx** - Sales pipeline visualization *(Windsurf can create)*
+  - [ ] **components/charts/KPICard.tsx** - Key performance indicators with trend arrows *(Windsurf can create)*
+  - [ ] **components/charts/MetricsGrid.tsx** - Dashboard metrics layout *(Windsurf can create)*
+  - [ ] **components/charts/ChartContainer.tsx** - Unified chart wrapper with loading states *(Windsurf can create)*
 
-### 6.3 React 19 Upgrade Process
-- [ ] **Update React to version 19**
+### 6.3 React 19 Upgrade Process *(Windsurf can handle)*
+- [ ] **Update React to version 19** *(Windsurf can update)*
   ```bash
   npm install react@19 react-dom@19
   npm install -D @types/react@19 @types/react-dom@19
   npm install next@latest
   ```
 
-- [ ] **Update NextCRM components for React 19 compatibility**
-  - [ ] **components/nextcrm/AvatarDropdown.tsx - Update React patterns**
-  - [ ] **components/nextcrm/Feedback.tsx - Update React patterns**
-  - [ ] **components/nextcrm/FulltextSearch.tsx - Update React patterns**
-  - [ ] **components/nextcrm/ModuleMenu.tsx - Update React patterns**
+- [ ] **Update NextCRM components for React 19 compatibility** *(Windsurf can update)*
+  - [ ] **components/nextcrm/AvatarDropdown.tsx - Update React patterns** *(Windsurf can update)*
+  - [ ] **components/nextcrm/Feedback.tsx - Update React patterns** *(Windsurf can update)*
+  - [ ] **components/nextcrm/FulltextSearch.tsx - Update React patterns** *(Windsurf can update)*
+  - [ ] **components/nextcrm/ModuleMenu.tsx - Update React patterns** *(Windsurf can update)*
 
-- [ ] **Update all function components for React 19**
+- [ ] **Update all function components for React 19** *(Windsurf can update)*
   ```bash
   # Check for deprecated React.FC patterns
   grep -r "React.FC\|React.FunctionComponent" components/
@@ -1275,8 +1275,8 @@
   # React.FC is deprecated in React 19, use direct function typing
   ```
 
-### 6.4 Build Configuration Optimization
-- [ ] **Update Next.js configuration for React 19**
+### 6.4 Build Configuration Optimization *(Windsurf can configure)*
+- [ ] **Update Next.js configuration for React 19** *(Windsurf can update)*
   ```typescript
   // next.config.js
   const nextConfig = {
@@ -1314,7 +1314,7 @@
   };
   ```
 
-- [ ] **Update package.json scripts for memory optimization**
+- [ ] **Update package.json scripts for memory optimization** *(Windsurf can update)*
   ```json
   {
     "scripts": {
