@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
-import { prismadb } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
-
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
+
+// Drizzle imports
+import { db } from '@/lib/db';
+import { organizations } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
 
 /**
  * API route to delete an organization (account)
@@ -23,15 +26,14 @@ async function handleDELETE(req: NextRequest, props: { params: Promise<{ account
   }
 
   try {
-    // Use organization model instead of crm_Accounts
-    await prismadb.organization.delete({
-      where: {
-        id: params.accountId,
-      },
-    });
+    // Use organization model with Drizzle
+    await db
+      .delete(organizations)
+      .where(eq(organizations.id, params.accountId));
 
     return NextResponse.json({ message: "Account deleted" }, { status: 200 });
   } catch (error) {
+    console.error('Database error:', error);
     return new NextResponse("Error deleting organization", { status: 500 });
   }
 }

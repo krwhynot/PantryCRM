@@ -26,11 +26,9 @@ import {
   createErrorResponse,
   createPaginatedResponse,
   handleValidationError,
-  handlePrismaError,
   calculatePagination,
   addPerformanceHeaders
 } from '@/lib/types/api-helpers';
-import { getOptimizedPrisma } from '@/lib/performance/optimized-prisma';
 import type { 
   APIResponse, 
   OrganizationWithDetails,
@@ -39,8 +37,10 @@ import type {
   RouteContext 
 } from '@/types/crm';
 
-// Initialize optimized Prisma client
-const prisma = getOptimizedPrisma();
+// Drizzle imports
+import { db } from '@/lib/db';
+import { organizations, contacts, interactions } from '@/lib/db/schema';
+import { eq, ilike, and, or, count, desc, asc } from 'drizzle-orm';
 
 // =============================================================================
 // GET: List Organizations with Filters
@@ -82,26 +82,80 @@ export async function GET(
       return handleValidationError([{ field: 'query', message: error.message }]);
     }
 
-    // 3. Execute optimized query with caching and monitoring
-    const result = await prisma.getOrganizations(filters);
-    
-    // 4. Calculate pagination metadata
-    const pagination = calculatePagination(
-      result.total,
-      filters.page || 1,
-      filters.limit || 20
-    );
+    // 3. Build query conditions
+    const conditions = [];
+    if (filters.search) {
+      conditions.push(
+        or(
+          ilike(organizations.name, `%${filters.search}%`),
+          ilike(organizations.email, `%${filters.search}%`)
+        )
+      );
+    }
+    if (filters.segment) {
+      conditions.push(eq(organizations.segment, filters.segment));
+    }
+    if (filters.priority) {
+      conditions.push(eq(organizations.priority, filters.priority));
+    }
+    if (filters.type) {
+      conditions.push(eq(organizations.type, filters.type));
+    }
+    if (filters.status) {
+      conditions.push(eq(organizations.status, filters.status));
+    }
 
-    // 5. Create paginated response
-    const response = createPaginatedResponse(result.organizations, pagination);
+    // 4. Execute optimized query with B1 performance limits
+    const page = filters.page || 1;
+    const limit = Math.min(filters.limit || 20, 50); // B1 performance limit
+    const offset = (page - 1) * limit;
+
+    const [organizationsList, totalCountResult] = await Promise.all([
+      db
+        .select({
+          id: organizations.id,
+          name: organizations.name,
+          website: organizations.website,
+          phone: organizations.phone,
+          email: organizations.email,
+          city: organizations.city,
+          state: organizations.state,
+          priority: organizations.priority,
+          segment: organizations.segment,
+          type: organizations.type,
+          status: organizations.status,
+          estimatedRevenue: organizations.estimatedRevenue,
+          lastContactDate: organizations.lastContactDate,
+          createdAt: organizations.createdAt,
+          updatedAt: organizations.updatedAt,
+        })
+        .from(organizations)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(asc(organizations.priority), asc(organizations.name))
+        .limit(limit)
+        .offset(offset),
+      
+      db
+        .select({ count: count() })
+        .from(organizations)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+    ]);
+
+    const total = totalCountResult[0].count;
     
-    // 6. Add performance headers
+    // 5. Calculate pagination metadata
+    const pagination = calculatePagination(total, page, limit);
+
+    // 6. Create paginated response
+    const response = createPaginatedResponse(organizationsList, pagination);
+    
+    // 7. Add performance headers
     const executionTime = performance.now() - startTime;
-    addPerformanceHeaders(response, executionTime, result.fromCache);
+    addPerformanceHeaders(response, executionTime, false); // No caching for now
     
-    // 7. Log performance metrics in development
+    // 8. Log performance metrics in development
     if (process.env.NODE_ENV === 'development') {
-      console.log(`GET /api/crm/organizations-optimized: ${executionTime.toFixed(2)}ms ${result.fromCache ? '(cached)' : '(db)'}`);
+      console.log(`GET /api/crm/organizations-optimized: ${executionTime.toFixed(2)}ms (db)`);
     }
 
     return response;
@@ -109,9 +163,13 @@ export async function GET(
   } catch (error) {
     console.error('GET /api/crm/organizations-optimized error:', error);
     
-    // Handle Prisma-specific errors
+    // Handle database-specific errors
     if (error && typeof error === 'object' && 'code' in error) {
-      return handlePrismaError(error);
+      console.error('Database error:', error);
+      return createErrorResponse({
+        code: 'DATABASE_ERROR',
+        message: 'Database query failed'
+      }, 500);
     }
     
     // Generic error handling
@@ -153,7 +211,12 @@ export async function POST(
     }
 
     // 3. Check for duplicate organization names (business rule)
-    const existingOrg = await prisma.searchOrganizations(data.name, 1);
+    const existingOrg = await db
+      .select({ id: organizations.id, name: organizations.name })
+      .from(organizations)
+      .where(ilike(organizations.name, data.name))
+      .limit(1);
+      
     if (existingOrg.length > 0 && existingOrg[0].name.toLowerCase() === data.name.toLowerCase()) {
       return createErrorResponse({
         code: 'DUPLICATE_ENTRY',
@@ -163,8 +226,8 @@ export async function POST(
       }, 409);
     }
 
-    // 4. Create organization with optimized query
-    const organization = await prisma.createOrganization({
+    // 4. Create organization with Drizzle
+    const [organization] = await db.insert(organizations).values({
       ...data,
       // Ensure required fields have defaults
       segment: data.segment || 'CASUAL_DINING',
@@ -172,7 +235,7 @@ export async function POST(
       status: 'ACTIVE',
       createdAt: new Date(),
       updatedAt: new Date()
-    });
+    }).returning();
 
     // 5. Create success response
     const response = createSuccessResponse(organization, {
@@ -191,9 +254,13 @@ export async function POST(
   } catch (error) {
     console.error('POST /api/crm/organizations-optimized error:', error);
     
-    // Handle Prisma-specific errors (unique constraints, etc.)
+    // Handle database-specific errors (unique constraints, etc.)
     if (error && typeof error === 'object' && 'code' in error) {
-      return handlePrismaError(error);
+      console.error('Database error:', error);
+      return createErrorResponse({
+        code: 'DATABASE_ERROR',
+        message: 'Failed to create organization'
+      }, 500);
     }
     
     return createErrorResponse({
@@ -234,7 +301,12 @@ export async function PUT(
     }
 
     // 3. Check if organization exists
-    const existingOrg = await prisma.getOrganizationById(data.id);
+    const [existingOrg] = await db
+      .select()
+      .from(organizations)
+      .where(eq(organizations.id, data.id))
+      .limit(1);
+      
     if (!existingOrg) {
       return createErrorResponse({
         code: 'NOT_FOUND',
@@ -245,7 +317,12 @@ export async function PUT(
 
     // 4. Check for duplicate names (if name is being changed)
     if (data.name && data.name !== existingOrg.name) {
-      const duplicateCheck = await prisma.searchOrganizations(data.name, 1);
+      const duplicateCheck = await db
+        .select({ id: organizations.id })
+        .from(organizations)
+        .where(ilike(organizations.name, data.name))
+        .limit(1);
+        
       if (duplicateCheck.length > 0 && duplicateCheck[0].id !== data.id) {
         return createErrorResponse({
           code: 'DUPLICATE_ENTRY',
@@ -256,12 +333,16 @@ export async function PUT(
       }
     }
 
-    // 5. Update organization with optimized query
+    // 5. Update organization with Drizzle
     const { id, ...updateData } = data;
-    const updatedOrganization = await prisma.updateOrganization(id, {
-      ...updateData,
-      updatedAt: new Date()
-    });
+    const [updatedOrganization] = await db
+      .update(organizations)
+      .set({
+        ...updateData,
+        updatedAt: new Date()
+      })
+      .where(eq(organizations.id, id))
+      .returning();
 
     // 6. Create success response
     const response = createSuccessResponse(updatedOrganization, {
@@ -281,7 +362,11 @@ export async function PUT(
     console.error('PUT /api/crm/organizations-optimized error:', error);
     
     if (error && typeof error === 'object' && 'code' in error) {
-      return handlePrismaError(error);
+      console.error('Database error:', error);
+      return createErrorResponse({
+        code: 'DATABASE_ERROR',
+        message: 'Failed to update organization'
+      }, 500);
     }
     
     return createErrorResponse({
@@ -308,16 +393,26 @@ export async function OPTIONS(
   }
 
   try {
-    const stats = prisma.getPerformanceStats();
+    // Basic performance stats without the custom Prisma methods
+    const stats = {
+      queries_executed: 'Not tracked yet',
+      avg_execution_time: 'Not tracked yet',
+      cache: {
+        memory: {
+          used: 'Not tracked yet',
+          usagePercent: 0
+        }
+      }
+    };
     
     return createSuccessResponse({
       performance: stats,
       azure_b1_recommendations: [
         'Monitor query execution times > 1000ms',
         'Keep cache hit rate > 70% for optimal performance',
-        'Limit concurrent connections to < 25 for Azure SQL Basic',
+        'Limit concurrent connections to < 25 for Azure PostgreSQL B1',
         'Use pagination for results > 50 items',
-        'Consider query optimization for DTU usage > 80%'
+        'Consider query optimization for high CPU usage'
       ],
       memory_usage: {
         cache_allocation: '700MB max',

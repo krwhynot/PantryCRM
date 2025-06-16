@@ -9,11 +9,14 @@ import {
   createSuccessResponse,
   createErrorResponse,
   handleValidationError,
-  handlePrismaError,
   addPerformanceHeaders
 } from '@/lib/types/api-helpers';
-import { getOptimizedPrisma } from '@/lib/performance/optimized-prisma';
 import type { APIResponse, OpportunityWithDetails } from '@/types/crm';
+
+// Drizzle imports
+import { db } from '@/lib/db';
+import { opportunities, organizations, contacts, users, systemSettings } from '@/lib/db/schema';
+import { eq, like } from 'drizzle-orm';
 
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
@@ -42,40 +45,55 @@ async function handlePOST(req: NextRequest): Promise<NextResponse<APIResponse<Op
     }
 
     // Database operation
-    const prisma = getOptimizedPrisma();
-    const newOpportunity = await prisma.opportunity.create({
-      data: {
-        ...data,
-        // Ensure proper type mapping
-        value: data.value || 0,
-        probability: data.probability || 10
-      },
-      include: {
-        organization: {
-          select: {
-            id: true,
-            name: true
-          }
-        },
-        contact: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true
-          }
-        }
-      }
-    });
+    const [newOpportunity] = await db.insert(opportunities).values({
+      ...data,
+      value: data.value || 0, // Ensure proper type mapping
+      probability: data.probability || 10,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }).returning();
+
+    // Get related data for response
+    const [organization] = await db
+      .select({
+        id: organizations.id,
+        name: organizations.name
+      })
+      .from(organizations)
+      .where(eq(organizations.id, newOpportunity.organizationId));
+
+    let contact = null;
+    if (newOpportunity.contactId) {
+      const [contactData] = await db
+        .select({
+          id: contacts.id,
+          firstName: contacts.firstName,
+          lastName: contacts.lastName,
+          email: contacts.email
+        })
+        .from(contacts)
+        .where(eq(contacts.id, newOpportunity.contactId));
+      contact = contactData;
+    }
+
+    const opportunityWithDetails = {
+      ...newOpportunity,
+      organization,
+      contact
+    };
 
     // Response
-    const response = createSuccessResponse(newOpportunity);
+    const response = createSuccessResponse(opportunityWithDetails);
     addPerformanceHeaders(response, performance.now() - startTime);
     
     return response;
 
   } catch (error) {
-    return handlePrismaError(error);
+    console.error('Database error:', error);
+    return createErrorResponse({
+      code: 'DATABASE_ERROR',
+      message: 'Failed to create opportunity'
+    }, 500);
   }
 }
 async function handlePUT(req: NextRequest): Promise<NextResponse<APIResponse<OpportunityWithDetails>>> {
@@ -101,40 +119,58 @@ async function handlePUT(req: NextRequest): Promise<NextResponse<APIResponse<Opp
     }
 
     // Database operation
-    const prisma = getOptimizedPrisma();
     const { id, ...updateData } = data;
     
-    const updatedOpportunity = await prisma.opportunity.update({
-      where: { id },
-      data: {
-        ...updateData
-      },
-      include: {
-        organization: {
-          select: {
-            id: true,
-            name: true
-          }
-        },
-        contact: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true
-          }
-        }
-      }
-    });
+    const [updatedOpportunity] = await db
+      .update(opportunities)
+      .set({
+        ...updateData,
+        updatedAt: new Date(),
+      })
+      .where(eq(opportunities.id, id))
+      .returning();
+
+    // Get related data for response
+    const [organization] = await db
+      .select({
+        id: organizations.id,
+        name: organizations.name
+      })
+      .from(organizations)
+      .where(eq(organizations.id, updatedOpportunity.organizationId));
+
+    let contact = null;
+    if (updatedOpportunity.contactId) {
+      const [contactData] = await db
+        .select({
+          id: contacts.id,
+          firstName: contacts.firstName,
+          lastName: contacts.lastName,
+          email: contacts.email
+        })
+        .from(contacts)
+        .where(eq(contacts.id, updatedOpportunity.contactId));
+      contact = contactData;
+    }
+
+    const opportunityWithDetails = {
+      ...updatedOpportunity,
+      organization,
+      contact
+    };
 
     // Response
-    const response = createSuccessResponse(updatedOpportunity);
+    const response = createSuccessResponse(opportunityWithDetails);
     addPerformanceHeaders(response, performance.now() - startTime);
     
     return response;
 
   } catch (error) {
-    return handlePrismaError(error);
+    console.error('Database error:', error);
+    return createErrorResponse({
+      code: 'DATABASE_ERROR',
+      message: 'Failed to update opportunity'
+    }, 500);
   }
 }
 
@@ -151,35 +187,33 @@ async function handleGET(req: NextRequest): Promise<NextResponse<APIResponse<any
       }, 401);
     }
 
-    // Database operation
-    const prisma = getOptimizedPrisma();
-    
+    // Database operation with B1 performance limits
     // OPTIMIZED: Execute all queries in parallel to avoid N+1 problem + add caching for settings
-    const [users, accounts, contacts, saleTypes, saleStages, industries] = await Promise.all([
-      prisma.user.findMany({}),
-      prisma.organization.findMany({}),
-      prisma.contact.findMany({}),
+    const [usersList, accountsList, contactsList, saleTypes, saleStages, industries] = await Promise.all([
+      db.select().from(users).limit(50), // B1 performance limit
+      db.select().from(organizations).limit(50), // B1 performance limit
+      db.select().from(contacts).limit(50), // B1 performance limit
       cachedQuery(
         CacheKeys.systemSettings('PRINCIPAL'),
-        () => prisma.systemSetting.findMany({ where: { key: { startsWith: "PRINCIPAL_" } } }),
+        () => db.select().from(systemSettings).where(like(systemSettings.key, "PRINCIPAL_%")),
         CacheStrategies.LONG
       ),
       cachedQuery(
         CacheKeys.systemSettings('STAGE'),
-        () => prisma.systemSetting.findMany({ where: { key: { startsWith: "STAGE_" } } }),
+        () => db.select().from(systemSettings).where(like(systemSettings.key, "STAGE_%")),
         CacheStrategies.LONG
       ),
       cachedQuery(
         CacheKeys.systemSettings('SEGMENT'),
-        () => prisma.systemSetting.findMany({ where: { key: { startsWith: "SEGMENT_" } } }),
+        () => db.select().from(systemSettings).where(like(systemSettings.key, "SEGMENT_%")),
         CacheStrategies.LONG
       )
     ]);
     
     const data = {
-      users,
-      accounts,
-      contacts,
+      users: usersList,
+      accounts: accountsList,
+      contacts: contactsList,
       saleTypes,
       saleStages,
       campaigns: [],
@@ -193,7 +227,11 @@ async function handleGET(req: NextRequest): Promise<NextResponse<APIResponse<any
     return response;
 
   } catch (error) {
-    return handlePrismaError(error);
+    console.error('Database error:', error);
+    return createErrorResponse({
+      code: 'DATABASE_ERROR',
+      message: 'Failed to fetch opportunity data'
+    }, 500);
   }
 }
 

@@ -9,11 +9,14 @@ import {
   createSuccessResponse,
   createErrorResponse,
   handleValidationError,
-  handlePrismaError,
   addPerformanceHeaders
 } from '@/lib/types/api-helpers';
-import { getOptimizedPrisma } from '@/lib/performance/optimized-prisma';
 import type { APIResponse, ContactWithDetails } from '@/types/crm';
+
+// Drizzle imports
+import { db } from '@/lib/db';
+import { contacts, organizations, interactions } from '@/lib/db/schema';
+import { eq, desc } from 'drizzle-orm';
 
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
@@ -42,35 +45,47 @@ async function handlePOST(req: NextRequest): Promise<NextResponse<APIResponse<Co
     }
 
     // Database operation
-    const prisma = getOptimizedPrisma();
-    const newContact = await prisma.contact.create({
-      data: {
-        ...data,
-        // Use position instead of title
-        position: data.position
-      },
-      include: {
-        organization: {
-          select: {
-            id: true,
-            name: true
-          }
-        },
-        interactions: {
-          take: 5,
-          orderBy: { date: 'desc' }
-        }
-      }
-    });
+    const [newContact] = await db.insert(contacts).values({
+      ...data,
+      position: data.position, // Use position instead of title
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }).returning();
+
+    // Get related data for response
+    const [organization] = await db
+      .select({
+        id: organizations.id,
+        name: organizations.name
+      })
+      .from(organizations)
+      .where(eq(organizations.id, newContact.organizationId));
+
+    const recentInteractions = await db
+      .select()
+      .from(interactions)
+      .where(eq(interactions.contactId, newContact.id))
+      .orderBy(desc(interactions.date))
+      .limit(5);
+
+    const contactWithDetails = {
+      ...newContact,
+      organization,
+      interactions: recentInteractions
+    };
 
     // Response
-    const response = createSuccessResponse(newContact);
+    const response = createSuccessResponse(contactWithDetails);
     addPerformanceHeaders(response, performance.now() - startTime);
     
     return response;
 
   } catch (error) {
-    return handlePrismaError(error);
+    console.error('Database error:', error);
+    return createErrorResponse({
+      code: 'DATABASE_ERROR',
+      message: 'Failed to create contact'
+    }, 500);
   }
 }
 
@@ -98,38 +113,52 @@ async function handlePUT(req: NextRequest): Promise<NextResponse<APIResponse<Con
     }
 
     // Database operation
-    const prisma = getOptimizedPrisma();
     const { id, ...updateData } = data;
     
-    const updatedContact = await prisma.contact.update({
-      where: { id },
-      data: {
+    const [updatedContact] = await db
+      .update(contacts)
+      .set({
         ...updateData,
-        // Use position instead of title
-        position: updateData.position
-      },
-      include: {
-        organization: {
-          select: {
-            id: true,
-            name: true
-          }
-        },
-        interactions: {
-          take: 5,
-          orderBy: { date: 'desc' }
-        }
-      }
-    });
+        position: updateData.position, // Use position instead of title
+        updatedAt: new Date(),
+      })
+      .where(eq(contacts.id, id))
+      .returning();
+
+    // Get related data for response
+    const [organization] = await db
+      .select({
+        id: organizations.id,
+        name: organizations.name
+      })
+      .from(organizations)
+      .where(eq(organizations.id, updatedContact.organizationId));
+
+    const recentInteractions = await db
+      .select()
+      .from(interactions)
+      .where(eq(interactions.contactId, id))
+      .orderBy(desc(interactions.date))
+      .limit(5);
+
+    const contactWithDetails = {
+      ...updatedContact,
+      organization,
+      interactions: recentInteractions
+    };
 
     // Response
-    const response = createSuccessResponse(updatedContact);
+    const response = createSuccessResponse(contactWithDetails);
     addPerformanceHeaders(response, performance.now() - startTime);
     
     return response;
 
   } catch (error) {
-    return handlePrismaError(error);
+    console.error('Database error:', error);
+    return createErrorResponse({
+      code: 'DATABASE_ERROR',
+      message: 'Failed to update contact'
+    }, 500);
   }
 }
 
