@@ -63,6 +63,7 @@
     "settings:test": "npx tsx scripts/test-settings-validation.ts",
     "settings:migrate": "npx tsx scripts/migrate-settings.ts",
     "models:test": "npx tsx scripts/test-core-models.ts",
+    "migrate:data": "npx tsx scripts/migrate-data-from-prisma.ts",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "drizzle-kit migrate",
     "drizzle:push": "drizzle-kit push",

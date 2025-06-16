@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prismadb } from '@/lib/prisma';
+import { db } from '@/lib/db';
+import { contacts } from '@/lib/db/schema';
+import { eq, asc } from 'drizzle-orm';
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
 
@@ -15,33 +17,31 @@ async function handleGET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Organization ID required' }, { status: 400 });
   }
 
-  const contacts = await prismadb.contact.findMany({
-      where: {
-        organizationId,
-      },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        phone: true,
-        position: true, // position is a string field, not a relation
-        isPrimary: true,
-        notes: true,
-        organizationId: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-      orderBy: [
-        { firstName: 'asc' },
-        { lastName: 'asc' },
-      ],
-    });
+  try {
+    const contactsList = await db
+      .select({
+        id: contacts.id,
+        firstName: contacts.firstName,
+        lastName: contacts.lastName,
+        email: contacts.email,
+        phone: contacts.phone,
+        position: contacts.position,
+        isPrimary: contacts.isPrimary,
+        notes: contacts.notes,
+        organizationId: contacts.organizationId,
+        createdAt: contacts.createdAt,
+        updatedAt: contacts.updatedAt,
+      })
+      .from(contacts)
+      .where(eq(contacts.organizationId, organizationId))
+      .orderBy(asc(contacts.firstName), asc(contacts.lastName));
 
-    return NextResponse.json(contacts);
+    return NextResponse.json(contactsList);
+  } catch (err) {
+    console.error('Database error:', err);
+    return NextResponse.json({ error: 'Database operation failed' }, { status: 500 });
+  }
 }
 
 // Export with authentication, rate limiting, and error handling
 export const GET = withRateLimit(withErrorHandler(handleGET), { maxAttempts: 100, windowMs: 60000 });
-
-

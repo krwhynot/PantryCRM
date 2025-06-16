@@ -1,12 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prismadb } from '../../../lib/prisma';
+import { db } from '../../../lib/db';
+import { organizations } from '../../../lib/db/schema';
+import { eq, and, or, ilike, desc, asc } from 'drizzle-orm';
 import { requireAuth } from '../../../lib/security';
 import { processSearchInput } from '../../../lib/input-sanitization';
 
-// Import validation and API helpers as required by TODO-WS-001
+// Import validation and API helpers
 import { validateCreateOrganization, validateUpdateOrganization } from '../../../lib/types/validation';
-import { parseRequestBody, createSuccessResponse, createErrorResponse, handleValidationError, handlePrismaError } from '../../../lib/types/api-helpers';
+import { parseRequestBody, createSuccessResponse, createErrorResponse, handleValidationError } from '../../../lib/types/api-helpers';
 import type { APIResponse, OrganizationWithDetails, OrganizationSummary } from '../../../types/crm';
+
+// Handle database errors for Drizzle
+function handleDrizzleError(err: any): NextResponse<APIResponse<any>> {
+  console.error('Database error:', err);
+  
+  if (err.code === '23505') { // Unique constraint violation
+    return createErrorResponse('Organization with this name or email already exists', 409);
+  }
+  
+  if (err.code === '23503') { // Foreign key constraint violation
+    return createErrorResponse('Referenced record does not exist', 400);
+  }
+  
+  return createErrorResponse('Database operation failed', 500);
+}
 
 async function GET(req: NextRequest): Promise<NextResponse<APIResponse<OrganizationSummary[]>>> {
   // Check authentication
@@ -19,55 +36,59 @@ async function GET(req: NextRequest): Promise<NextResponse<APIResponse<Organizat
   const segment = searchParams.get('segment');
   const distributor = searchParams.get('distributor');
 
-  const where: Record<string, any> = {
-    status: "ACTIVE", // Only fetch active organizations by default
-  };
-
-  // Text search across name and email with secure processing
-  if (q) {
-    const { query: sanitizedQuery, isValid } = processSearchInput(q);
-    if (isValid) {
-      where.OR = [
-        { name: { contains: sanitizedQuery, mode: 'insensitive' } },
-        { email: { contains: sanitizedQuery, mode: 'insensitive' } }
-      ];
-    }
-  }
-
-  // Filter by priority, segment, etc.
-  if (priority) where.priority = priority;
-  if (segment) where.segment = segment;
-
   try {
-    const organizations = await prismadb.organization.findMany({
-      where,
-      orderBy: [
-        { priority: 'asc' },
-        { name: 'asc' }
-      ],
-      take: 50, // Limit results for Azure SQL Basic performance
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        priority: true,
-        segment: true,
-        estimatedRevenue: true,
-        lastContactDate: true,
-        nextFollowUpDate: true,
-        createdAt: true,
+    // Build query conditions
+    const conditions = [
+      eq(organizations.status, 'ACTIVE') // Only fetch active organizations by default
+    ];
+
+    // Text search across name and email with secure processing
+    if (q) {
+      const { query: sanitizedQuery, isValid } = processSearchInput(q);
+      if (isValid) {
+        conditions.push(
+          or(
+            ilike(organizations.name, `%${sanitizedQuery}%`),
+            ilike(organizations.email, `%${sanitizedQuery}%`)
+          )!
+        );
       }
-    });
+    }
+
+    // Filter by priority, segment, etc.
+    if (priority) {
+      conditions.push(eq(organizations.priority, priority));
+    }
+    if (segment) {
+      conditions.push(eq(organizations.segment, segment));
+    }
+
+    const results = await db
+      .select({
+        id: organizations.id,
+        name: organizations.name,
+        email: organizations.email,
+        phone: organizations.phone,
+        priority: organizations.priority,
+        segment: organizations.segment,
+        estimatedRevenue: organizations.estimatedRevenue,
+        lastContactDate: organizations.lastContactDate,
+        nextFollowUpDate: organizations.nextFollowUpDate,
+        createdAt: organizations.createdAt,
+      })
+      .from(organizations)
+      .where(and(...conditions))
+      .orderBy(asc(organizations.priority), asc(organizations.name))
+      .limit(50); // Limit results for B1 performance
 
     return createSuccessResponse({
-      organizations,
-      count: organizations.length,
+      organizations: results,
+      count: results.length,
       query: q || '',
       filters: { priority, segment, distributor }
     });
   } catch (err) {
-    return handlePrismaError(err);
+    return handleDrizzleError(err);
   }
 }
 
@@ -85,35 +106,30 @@ async function POST(req: NextRequest): Promise<NextResponse<APIResponse<any>>> {
 
   // 2. Database operation with error handling
   try {
-    const organization = await prismadb.organization.create({
-      data: {
-        name: data.name,
-        phone: data.phone,
-        email: data.email,
-        address: data.address, // Changed from addressLine1 to address per schema
-        priority: data.priority || "C",
-        segment: data.segment || "CASUAL_DINING", // Default segment value
-        type: "PROSPECT",
-        status: "ACTIVE",
-        notes: data.notes, // Changed from description to notes per schema
-        zipCode: data.zipCode, // Changed from postalCode to zipCode per schema
-        city: data.city,
-        state: data.state,
-        website: data.website,
-        estimatedRevenue: data.estimatedRevenue,
-        employeeCount: data.employeeCount,
-        primaryContact: data.primaryContact,
-        // isActive field removed as it doesn't exist in the schema
-      },
-    });
+    const [organization] = await db.insert(organizations).values({
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      address: data.address,
+      priority: data.priority || "C",
+      segment: data.segment || "CASUAL_DINING",
+      type: "PROSPECT",
+      status: "ACTIVE",
+      notes: data.notes,
+      zipCode: data.zipCode,
+      city: data.city,
+      state: data.state,
+      website: data.website,
+      estimatedRevenue: data.estimatedRevenue,
+      employeeCount: data.employeeCount,
+      primaryContact: data.primaryContact,
+    }).returning();
     
     return createSuccessResponse(organization);
   } catch (err) {
-    return handlePrismaError(err);
+    return handleDrizzleError(err);
   }
 }
 
 // Export the API route handlers directly
 export { GET, POST };
-
-
