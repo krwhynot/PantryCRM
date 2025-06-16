@@ -455,3 +455,4 @@ perf-metrics.json
 # Azure Service Principal Credentials
 .env.local
 .azure/
+.env.azure.postgresql

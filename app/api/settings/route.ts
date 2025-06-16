@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prismadb } from '@/lib/prisma';
+import { settingsService } from '@/lib/services/settings-service';
+import { SettingCategories, SettingTypes } from '@/lib/db/schema/settings';
 
 import { requireAuth, withRateLimit } from '@/lib/security';
 import { withErrorHandler } from '@/lib/api-error-handler';
@@ -9,32 +10,44 @@ async function handleGET(req: NextRequest, context: { params: Promise<Record<str
   const { user, error } = await requireAuth(req);
   if (error) return error;
   try {
-    // Get all settings with optimized selection
-    const settings = await prismadb.setting.findMany({
-      select: {
-        id: true,
-        key: true,
-        label: true,
-        category: true,
-        sortOrder: true,
-        color: true,
-        active: true,
-        createdAt: true,
-        updatedAt: true
-      },
-      where: {
-        active: true
-      },
-      orderBy: [
-        { category: 'asc' },
-        { sortOrder: 'asc' }
-      ]
-    });
+    // Parse query parameters
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get('category');
+    const type = searchParams.get('type');
+    const searchTerm = searchParams.get('search');
+    const grouped = searchParams.get('grouped') === 'true';
 
-    return NextResponse.json({
-      settings,
-      count: settings.length
-    });
+    if (grouped) {
+      // Return settings grouped by category with metadata
+      const settingsWithMetadata = await settingsService.getSettingsWithMetadata();
+      const groupedSettings: Record<string, any[]> = {};
+      
+      settingsWithMetadata.forEach(setting => {
+        if (!groupedSettings[setting.category]) {
+          groupedSettings[setting.category] = [];
+        }
+        groupedSettings[setting.category].push(setting);
+      });
+
+      return NextResponse.json({
+        settings: groupedSettings,
+        categories: settingsService.getCategories(),
+        count: settingsWithMetadata.length
+      });
+    } else {
+      // Return flat list of settings
+      const settings = await settingsService.getSettings({
+        category: category as any,
+        type: type as any,
+        searchTerm: searchTerm || undefined,
+        active: true
+      });
+
+      return NextResponse.json({
+        settings,
+        count: settings.length
+      });
+    }
   } catch (error) {
     console.error('Settings API Error:', error);
     return NextResponse.json(
@@ -59,15 +72,43 @@ async function handlePOST(req: NextRequest, context: { params: Promise<Record<st
       );
     }
 
-    const setting = await prismadb.setting.create({
-      data: {
-        key: body.key,
-        label: body.label,
-        category: body.category,
-        sortOrder: body.sortOrder || 0,
-        color: body.color,
-        active: body.active ?? true
+    // Validate category
+    if (!Object.values(SettingCategories).includes(body.category)) {
+      return NextResponse.json(
+        { error: 'Invalid category' },
+        { status: 400 }
+      );
+    }
+
+    // Validate type if provided
+    if (body.type && !Object.values(SettingTypes).includes(body.type)) {
+      return NextResponse.json(
+        { error: 'Invalid type' },
+        { status: 400 }
+      );
+    }
+
+    // Validate value if provided
+    if (body.value && body.type) {
+      const validation = settingsService.validateSettingValue(body.value, body.type);
+      if (!validation.valid) {
+        return NextResponse.json(
+          { error: validation.error },
+          { status: 400 }
+        );
       }
+    }
+
+    const setting = await settingsService.upsertSetting({
+      key: body.key,
+      value: body.value || '',
+      label: body.label,
+      category: body.category,
+      type: body.type || SettingTypes.STRING,
+      sortOrder: body.sortOrder || 0,
+      color: body.color,
+      description: body.description,
+      active: body.active ?? true
     });
 
     return NextResponse.json(setting, { status: 201 });
