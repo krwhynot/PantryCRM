@@ -62,6 +62,7 @@
     "setup:mcp:windows": "powershell -ExecutionPolicy Bypass -File scripts/setup-mcp.ps1",
     "settings:test": "npx tsx scripts/test-settings-validation.ts",
     "settings:migrate": "npx tsx scripts/migrate-settings.ts",
+    "models:test": "npx tsx scripts/test-core-models.ts",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "drizzle-kit migrate",
     "drizzle:push": "drizzle-kit push",

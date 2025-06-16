@@ -8,6 +8,13 @@
       "when": 1750041853777,
       "tag": "0000_absurd_quentin_quire",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1750042704824,
+      "tag": "0001_wealthy_hulk",
+      "breakpoints": true
     }
   ]
 }

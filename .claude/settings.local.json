@@ -63,7 +63,8 @@
       "Bash(pip install:*)",
       "Bash(npm search:*)",
       "Bash(npm run setup:mcp:*)",
-      "Bash(claude mcp:*)"
+      "Bash(claude mcp:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

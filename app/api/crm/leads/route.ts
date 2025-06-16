@@ -380,7 +380,7 @@ async function handlePUT(req: NextRequest, context: { params: Promise<Record<str
     }
 
     const prisma = getOptimizedPrisma();
-    const { id, ...updateData } = data;
+    const { id, ...initialUpdateData } = data;
 
     if (!id) {
       return createErrorResponse({
