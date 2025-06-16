@@ -57,7 +57,9 @@
     "backup:create": "./scripts/automated-backup.sh",
     "security:scan": "trufflehog filesystem --directory=. --config=.trufflehog.yml",
     "prepare": "husky",
-    "postinstall": "prisma generate || true"
+    "postinstall": "prisma generate || true",
+    "setup:mcp": "bash scripts/setup-mcp.sh",
+    "setup:mcp:windows": "powershell -ExecutionPolicy Bypass -File scripts/setup-mcp.ps1"
   },
   "prisma": {
     "seed": "node ./prisma/seed.js"

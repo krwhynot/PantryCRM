@@ -59,7 +59,11 @@
       "Bash(ls:*)",
       "Bash(mv:*)",
       "Bash(mkdir:*)",
-      "mcp__sequential-thinking__sequentialthinking"
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(pip install:*)",
+      "Bash(npm search:*)",
+      "Bash(npm run setup:mcp:*)",
+      "Bash(claude mcp:*)"
     ],
     "deny": []
   }

@@ -95,9 +95,28 @@ model Setting {
 7. **Perplexity** - Technical validation and cross-referencing
 
 ### Tier 3: Support Tools
-8. **Prisma MCP** - Database schema and migration management
-9. **Desktop Commander** - Terminal operations and build processes
-10. **Brave Search** - Fallback research when other tools insufficient
+8. **Postgres MCP** - Database schema and migration management
+9. **Brave Search** - Fallback research when other tools insufficient
+10. **Google Maps** - Location and mapping services
+
+### MCP Server Installation & Setup
+**Automatic Setup Commands:**
+- `npm run setup:mcp` (Linux/Mac) - Installs all required MCP servers
+- `npm run setup:mcp:windows` (Windows) - PowerShell version for Windows users
+
+**Installed MCP Servers:**
+- `@modelcontextprotocol/server-memory` - Memory management with .windsurf/memory.json
+- `@modelcontextprotocol/server-sequential-thinking` - Complex problem solving
+- `@modelcontextprotocol/server-filesystem` - File operations and project navigation
+- `@upstash/context7-mcp` - Documentation search (Next.js, React, Azure, Prisma)
+- `tavily-mcp` - Web search and current information retrieval
+- `exa-mcp-server` - Academic research and GitHub code examples
+- `@jschuller/perplexity-mcp` - AI-powered search and technical validation
+- `@modelcontextprotocol/server-brave-search` - Alternative web search
+- `@modelcontextprotocol/server-postgres` - Database operations and schema management
+- `@modelcontextprotocol/server-google-maps` - Maps and location services
+
+**Configuration Location:** `/mnt/r/Projects/PantryCRM/.claude/claude_desktop_config.json`
 
 ### Tool Selection Logic
 ```
